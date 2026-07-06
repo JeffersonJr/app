@@ -1,0 +1,3 @@
+module.exports=[12498,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function({children:a}){return(0,b.jsx)("div",{className:"flex min-h-dvh justify-center bg-fog sm:items-center sm:py-8",children:(0,b.jsx)("div",{className:"relative flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background sm:h-auto sm:min-h-[600px] sm:rounded-[2.5rem] sm:border-8 sm:border-teal-shadow sm:shadow-2xl",children:a})})},"metadata",0,{title:"Microsistec — Acesso",description:"Faça login ou crie sua conta no CRM Imobiliário Microsistec."}])},86024,a=>{a.n(a.i(12498))}];
+
+//# sourceMappingURL=app_%28auth%29_layout_tsx_0.jbhx1._.js.map

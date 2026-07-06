@@ -1,0 +1,840 @@
+'use client'
+
+import { useRef, useState } from 'react'
+import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info } from 'lucide-react'
+import { featureFlags } from '@/lib/feature-flags'
+import { IAUpsellPage } from '@/components/app/ia-upsell-page'
+
+const FINALIDADES = ['Residencial', 'Comercial', 'Industrial', 'Rural'] as const
+type FinalidadeCategoria = typeof FINALIDADES[number]
+
+const TIPOS_POR_FINALIDADE: Record<FinalidadeCategoria, string[]> = {
+  Comercial: ['Armazém/Barracão', 'Casa', 'Conjunto Comercial', 'Fundo de comércio', 'Galeria', 'Galpão', 'Garagem', 'Laje Corporativa', 'Loja', 'Loteamento', 'Prédio', 'Sala', 'Salão', 'Sobrado', 'Sobreloja', 'Terreno', 'Área'],
+  Industrial: ['Armazém/Barracão', 'Conjunto Industrial', 'Galpão', 'Galpão em Condomínio', 'Indústria', 'Jazidas', 'Loteamento', 'Mineradora', 'PCH (Pequena Central Hidrelétrica)', 'Pedreira', 'Prédio', 'Terreno', 'UHE (Usina Hidrelétrica)', 'Usina', 'Área'],
+  Rural: ['Chácara', 'Chácara em Condomínio', 'Fazenda', 'Haras', 'Loteamento', 'Rancho', 'Sítio', 'Terreno'],
+  Residencial: ['Apartamento', 'Casa', 'Casa de Condomínio', 'Casa de Vila', 'Chácara', 'Chácara em Condomínio', 'Cobertura', 'Flat', 'Garagem', 'Kitnet', 'Loft', 'Loteamento', 'Penthouse', 'Prédio', 'Sala Living', 'Sobrado', 'Sobrado de Condomínio', 'Sobrado de Vila', 'Studio', 'Terreno', 'Terreno de Condomínio', 'Área'],
+}
+
+const STATUS_OPTIONS = ['Livre', 'Ocupado', 'Em reforma'] as const
+
+// Resultados simulados que a IA "detectaria" das fotos
+const AI_RESULTADOS = [
+  {
+    titulo: 'Apartamento 3 quartos com sacada',
+    tipo: 'Apartamento',
+    bairro: 'Jardins',
+    cidade: 'São Paulo',
+    area: '87',
+    quartos: '3',
+    valor: 'R$ 980.000',
+    finalidade: 'Residencial' as const,
+    operacao: 'Venda' as const,
+    observacoes: 'Imóvel com acabamento de alto padrão. Sacada ampla com vista para o parque. Cozinha americana integrada. Dois banheiros completos.',
+  },
+  {
+    titulo: 'Studio mobiliado próximo ao metrô',
+    tipo: 'Studio',
+    bairro: 'Vila Madalena',
+    cidade: 'São Paulo',
+    area: '42',
+    quartos: '1',
+    valor: 'R$ 3.200/mês',
+    finalidade: 'Residencial' as const,
+    operacao: 'Locação' as const,
+    observacoes: 'Studio bem localizado, mobiliado completo. Área de serviço separada. Próximo ao metrô e comércio.',
+  },
+  {
+    titulo: 'Casa em condomínio fechado',
+    tipo: 'Casa',
+    bairro: 'Alphaville',
+    cidade: 'Barueri',
+    area: '280',
+    quartos: '4',
+    valor: 'R$ 1.750.000',
+    finalidade: 'Residencial' as const,
+    operacao: 'Venda' as const,
+    observacoes: 'Casa ampla em condomínio com área de lazer completa. Churrasqueira coberta, piscina privativa, 3 suítes.',
+  },
+]
+
+type Fase = 'upload' | 'analisando' | 'resultado' | 'modo' | 'formulario_fast' | 'formulario'
+
+function AccordionSection({ title, icon, isOpen, onToggle, children }: { title: string, icon: React.ReactNode, isOpen: boolean, onToggle: () => void, children: React.ReactNode }) {
+  return (
+    <div className={`rounded-3xl bg-card shadow-soft border transition-all duration-300 ${isOpen ? 'border-primary/20 ring-1 ring-primary/10' : 'border-border'}`}>
+      <button type="button" onClick={onToggle} className="w-full flex items-center justify-between p-5 text-left rounded-3xl active:bg-muted/50 transition-colors">
+        <h3 className={`flex items-center gap-2 font-semibold ${isOpen ? 'text-primary' : 'text-foreground'}`}>
+          {icon}
+          {title}
+        </h3>
+        <span className={`flex size-6 items-center justify-center rounded-full text-lg leading-none transition-transform ${isOpen ? 'bg-primary/10 text-primary rotate-180' : 'bg-muted text-muted-foreground'}`}>
+          ↓
+        </span>
+      </button>
+      {isOpen && (
+        <div className="flex flex-col gap-4 px-5 pb-5 border-t border-border/30 pt-4 animate-in fade-in slide-in-from-top-2">
+          {children}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
+  const [fase, setFase] = useState<Fase>('upload')
+  const [fotosPreview, setFotosPreview] = useState<string[]>([])
+  const [progresso, setProgresso] = useState(0)
+  const [progressoTexto, setProgressoTexto] = useState('')
+  const [resultado, setResultado] = useState(AI_RESULTADOS[0])
+  const [mostrarUpsell, setMostrarUpsell] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [openSection, setOpenSection] = useState<number>(1)
+  const [showFastLink, setShowFastLink] = useState(false)
+
+  // Campos do formulário
+  // 1. Negociações e Tipos
+  const [titulo, setTitulo] = useState('')
+  const [operacao, setOperacao] = useState<'Venda' | 'Locação' | 'Temporada' | 'Arrendamento'>('Venda')
+  const [finalidade, setFinalidade] = useState<FinalidadeCategoria>('Residencial')
+  const [tipoImovel, setTipoImovel] = useState('Apartamento')
+  const [codigo, setCodigo] = useState('')
+  const [cib, setCib] = useState('')
+  const [situacaoImovel, setSituacaoImovel] = useState('Pronto')
+  const [statusImovel, setStatusImovel] = useState<(typeof STATUS_OPTIONS)[number]>('Livre')
+  const [exclusividade, setExclusividade] = useState(false)
+  const [validadeExclusividade, setValidadeExclusividade] = useState('')
+
+  // 2. Localização
+  const [endereco, setEndereco] = useState('')
+  const [cep, setCep] = useState('')
+  const [bairro, setBairro] = useState('')
+  const [cidade, setCidade] = useState('')
+  const [condominio, setCondominio] = useState('')
+  const [anoConstrucao, setAnoConstrucao] = useState('')
+  const [andar, setAndar] = useState('')
+
+  // 3. Composição
+  const [quartos, setQuartos] = useState('')
+  const [suites, setSuites] = useState('')
+  const [banheiros, setBanheiros] = useState('')
+  const [salas, setSalas] = useState('')
+  const [vagas, setVagas] = useState('')
+
+  // 4. Medidas
+  const [valor, setValor] = useState('')
+  const [area, setArea] = useState('') // Área Útil/Construída
+  const [areaTotal, setAreaTotal] = useState('')
+
+  // 5. Características
+  const [observacoes, setObservacoes] = useState('')
+
+  // 6. Proprietário
+  const [proprietario, setProprietario] = useState('')
+  const [emailProprietario, setEmailProprietario] = useState('')
+  const [telefoneProprietario, setTelefoneProprietario] = useState('')
+
+  // 7. Mídia
+  const [urlVideo, setUrlVideo] = useState('')
+  const [urlTour360, setUrlTour360] = useState('')
+
+  // 8. Informações Internas e Documentação
+  const [observacoesInternas, setObservacoesInternas] = useState('')
+  const [chaveDisponivel, setChaveDisponivel] = useState('Não')
+  const [localChaves, setLocalChaves] = useState('')
+  const [matricula, setMatricula] = useState('')
+  const [iptu, setIptu] = useState('')
+  const [incra, setIncra] = useState('')
+  const [energia, setEnergia] = useState('')
+  const [agua, setAgua] = useState('')
+  const [cartorio, setCartorio] = useState('')
+  const [situacaoEscritura, setSituacaoEscritura] = useState('')
+  const [captador1, setCaptador1] = useState('')
+  const [captador2, setCaptador2] = useState('')
+  const [indicador1, setIndicador1] = useState('')
+  const [indicador2, setIndicador2] = useState('')
+  const [filialImovel, setFilialImovel] = useState('')
+
+  // 9. Divulgação no Website
+  const [destaqueHome, setDestaqueHome] = useState(false)
+  const [destaqueBanner, setDestaqueBanner] = useState(false)
+  const [oportunidade, setOportunidade] = useState(false)
+
+  // 10. SEO e Otimização
+  const [seoTitulo, setSeoTitulo] = useState('')
+  const [seoPalavras, setSeoPalavras] = useState('')
+  const [seoDescricao, setSeoDescricao] = useState('')
+
+  function aplicarResultadoIA() {
+    setTitulo(resultado.titulo)
+    setBairro(resultado.bairro)
+    setCidade(resultado.cidade)
+    setFinalidade(resultado.finalidade)
+    setTipoImovel(resultado.tipo)
+    setOperacao(resultado.operacao)
+    setValor(resultado.valor)
+    setArea(resultado.area)
+    setQuartos(resultado.quartos)
+    setObservacoes(resultado.observacoes)
+    setFase('modo')
+  }
+
+  function handleFotos(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? [])
+    if (files.length === 0) return
+    const previews = files.slice(0, 5).map((f) => URL.createObjectURL(f))
+    setFotosPreview(previews)
+  }
+
+  async function iniciarAnaliseIA() {
+    setFase('analisando')
+    setProgresso(0)
+
+    const etapas = [
+      { texto: 'Carregando imagens...', delay: 600 },
+      { texto: 'Identificando tipo de imóvel...', delay: 800 },
+      { texto: 'Analisando cômodos e acabamentos...', delay: 900 },
+      { texto: 'Estimando metragem por visão computacional...', delay: 700 },
+      { texto: 'Detectando localização e bairro...', delay: 600 },
+      { texto: 'Calculando valor de mercado...', delay: 700 },
+      { texto: 'Gerando descrição automática...', delay: 500 },
+    ]
+
+    let totalDelay = 0
+    for (let i = 0; i < etapas.length; i++) {
+      totalDelay += etapas[i].delay
+      setTimeout(() => {
+        setProgresso(Math.round(((i + 1) / etapas.length) * 100))
+        setProgressoTexto(etapas[i].texto)
+      }, totalDelay)
+    }
+
+    // Escolhe um resultado aleatório para simular
+    const escolhido = AI_RESULTADOS[Math.floor(Math.random() * AI_RESULTADOS.length)]
+    setTimeout(() => {
+      setResultado(escolhido)
+      setFase('resultado')
+    }, totalDelay + 400)
+  }
+
+  // ── Upsell IA ─────────────────────────────────────────────────────────────
+  if (mostrarUpsell) {
+    return <IAUpsellPage onClose={() => setMostrarUpsell(false)} origem="imovel" />
+  }
+
+  // ── Fase 1: Upload de fotos ───────────────────────────────────────────────
+  if (fase === 'upload') {
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-serif text-xl font-semibold text-foreground">Captar imóvel</h2>
+          <button type="button" onClick={onClose} aria-label="Fechar" className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <X className="size-4" strokeWidth={1.5} />
+          </button>
+        </div>
+
+        {/* Banner IA */}
+        <div className="mb-5 flex items-start gap-3 rounded-2xl bg-gradient-to-br from-primary to-teal-deep p-4 text-primary-foreground">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-teal-shadow/40">
+            <Sparkles className="size-5" strokeWidth={1.5} />
+          </div>
+          <div>
+            <p className="text-sm font-semibold">Cadastro inteligente com IA</p>
+            <p className="mt-0.5 text-xs text-teal-light">
+              Tire fotos do imóvel e a IA preenche automaticamente: tipo, área, valor estimado, descrição e localização.
+            </p>
+          </div>
+        </div>
+
+        {/* Área de fotos */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={handleFotos}
+        />
+
+        {fotosPreview.length === 0 ? (
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex w-full flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-primary/30 bg-primary/5 py-10 transition-brand active:scale-[0.98]"
+          >
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10">
+              <Camera className="size-7 text-primary" strokeWidth={1.5} />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-semibold text-foreground">Selecionar fotos do imóvel</p>
+              <p className="text-xs text-muted-foreground">Fachada, sala, cozinha, quartos... (até 5 fotos)</p>
+            </div>
+            <span className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
+              Abrir câmera / galeria
+            </span>
+          </button>
+        ) : (
+          <div>
+            {/* Grid de preview */}
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {fotosPreview.map((src, i) => (
+                <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={src} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
+                  {i === 0 && (
+                    <span className="absolute left-1 top-1 rounded-md bg-black/60 px-1.5 py-0.5 text-[9px] font-semibold text-white">
+                      Principal
+                    </span>
+                  )}
+                </div>
+              ))}
+              {fotosPreview.length < 5 && (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex aspect-square flex-col items-center justify-center rounded-xl border-2 border-dashed border-border text-muted-foreground"
+                >
+                  <Camera className="size-5" strokeWidth={1.5} />
+                  <span className="text-[10px] mt-1">Mais</span>
+                </button>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mb-4">
+              {fotosPreview.length} foto{fotosPreview.length > 1 ? 's' : ''} selecionada{fotosPreview.length > 1 ? 's' : ''}
+            </p>
+          </div>
+        )}
+
+        <div className="mt-4 flex flex-col gap-3">
+          {fotosPreview.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                if (!featureFlags.temIA) {
+                  setMostrarUpsell(true)
+                  return
+                }
+                iniciarAnaliseIA()
+              }}
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
+            >
+              <Sparkles className="size-4" strokeWidth={1.5} />
+              Analisar com IA
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => setFase('formulario')}
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold text-muted-foreground transition-brand active:scale-[0.98]"
+          >
+            Preencher manualmente
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Fase 2: Analisando ────────────────────────────────────────────────────
+  if (fase === 'analisando') {
+    return (
+      <div className="flex flex-col items-center py-8 text-center">
+        <div className="relative flex size-24 items-center justify-center rounded-3xl bg-primary/10">
+          {/* Spinner animado */}
+          <svg className="absolute inset-0 size-24 -rotate-90" viewBox="0 0 96 96">
+            <circle cx="48" cy="48" r="44" fill="none" stroke="hsl(var(--border))" strokeWidth="4" />
+            <circle
+              cx="48" cy="48" r="44"
+              fill="none"
+              stroke="hsl(var(--primary))"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeDasharray={`${2 * Math.PI * 44}`}
+              strokeDashoffset={`${2 * Math.PI * 44 * (1 - progresso / 100)}`}
+              className="transition-all duration-500"
+            />
+          </svg>
+          <Sparkles className="size-10 text-primary" strokeWidth={1.5} />
+        </div>
+
+        <p className="mt-6 font-serif text-xl font-semibold text-foreground">IA analisando imóvel</p>
+        <p className="mt-2 text-sm text-muted-foreground">{progressoTexto || 'Iniciando análise...'}</p>
+
+        {/* Barra de progresso */}
+        <div className="mt-6 w-full max-w-xs">
+          <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-500"
+              style={{ width: `${progresso}%` }}
+            />
+          </div>
+          <p className="mt-2 font-mono text-xs text-muted-foreground">{progresso}%</p>
+        </div>
+
+        {/* Fotos sendo "processadas" */}
+        {fotosPreview.length > 0 && (
+          <div className="mt-6 flex gap-2">
+            {fotosPreview.slice(0, 3).map((src, i) => (
+              <div key={i} className={`relative size-16 overflow-hidden rounded-xl transition-all duration-700 ${progresso > i * 30 ? 'opacity-100 ring-2 ring-primary' : 'opacity-40'}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt="" className="h-full w-full object-cover" />
+                {progresso > (i + 1) * 30 && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-primary/40">
+                    <CheckCircle2 className="size-5 text-white" strokeWidth={2} />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-6 flex flex-wrap justify-center gap-2 px-4">
+          {['Visão computacional', 'OCR', 'Geolocalização', 'Avaliação de mercado'].map((tag) => (
+            <span key={tag} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // ── Fase 3: Resultado da IA ───────────────────────────────────────────────
+  if (fase === 'resultado') {
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-serif text-xl font-semibold text-foreground">Resultado da IA</h2>
+          <button type="button" onClick={onClose} aria-label="Fechar" className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <X className="size-4" strokeWidth={1.5} />
+          </button>
+        </div>
+
+        {/* Confiança */}
+        <div className="mb-4 flex items-center gap-3 rounded-2xl bg-teal-mid/10 border border-teal-mid/20 p-3">
+          <Sparkles className="size-5 text-teal-mid shrink-0" strokeWidth={1.5} />
+          <div>
+            <p className="text-sm font-semibold text-teal-deep">IA concluiu a análise</p>
+            <p className="text-xs text-muted-foreground">Confiança: 94% · Baseado em {fotosPreview.length > 0 ? fotosPreview.length : 3} foto{fotosPreview.length !== 1 ? 's' : ''}</p>
+          </div>
+          <div className="ml-auto flex items-center gap-1">
+            <span className="font-mono text-lg font-bold text-teal-mid">94%</span>
+          </div>
+        </div>
+
+        {/* Dados detectados */}
+        <div className="flex flex-col gap-2 mb-5">
+          {[
+            { label: 'Tipo detectado', value: resultado.tipo, emoji: '🏠' },
+            { label: 'Título sugerido', value: resultado.titulo, emoji: '📝' },
+            { label: 'Bairro / Cidade', value: `${resultado.bairro}, ${resultado.cidade}`, emoji: '📍' },
+            { label: 'Área estimada', value: `${resultado.area} m²`, emoji: '📐' },
+            { label: 'Quartos', value: resultado.quartos, emoji: '🛏️' },
+            { label: 'Valor de mercado', value: resultado.valor, emoji: '💰' },
+            { label: 'Operação', value: resultado.operacao, emoji: '🏷️' },
+            { label: 'Finalidade', value: resultado.finalidade, emoji: '🏢' },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center gap-3 rounded-2xl bg-card shadow-soft px-4 py-3">
+              <span className="text-base">{item.emoji}</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{item.label}</p>
+                <p className="text-sm font-semibold text-foreground truncate">{item.value}</p>
+              </div>
+              <Zap className="size-3.5 text-teal-mid shrink-0" strokeWidth={1.5} />
+            </div>
+          ))}
+        </div>
+
+        {/* Descrição gerada */}
+        <div className="mb-5 rounded-2xl bg-cream p-4">
+          <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+            <Sparkles className="size-3 text-primary" strokeWidth={1.5} />
+            Descrição gerada pela IA
+          </p>
+          <p className="text-sm text-foreground leading-relaxed">{resultado.observacoes}</p>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={aplicarResultadoIA}
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
+          >
+            <CheckCircle2 className="size-4" strokeWidth={2} />
+            Usar estes dados e revisar
+          </button>
+          <button
+            type="button"
+            onClick={() => setFase('modo')}
+            className="h-12 w-full rounded-2xl border border-border bg-card text-sm font-semibold text-muted-foreground transition-brand active:scale-[0.98]"
+          >
+            Pular, preencher manualmente
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Fase 4: Formulário (manual ou pré-preenchido pela IA) ─────────────────
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2">
+          <h2 className="font-serif text-xl font-semibold text-foreground">Cadastrar imóvel</h2>
+          {titulo && (
+            <span className="flex items-center gap-1 rounded-full bg-teal-mid/15 px-2 py-0.5 text-[10px] font-semibold text-teal-deep">
+              <Sparkles className="size-2.5" strokeWidth={2} />
+              IA
+            </span>
+          )}
+        </div>
+        <button type="button" onClick={onClose} aria-label="Fechar" className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
+          <X className="size-4" strokeWidth={1.5} />
+        </button>
+      </div>
+
+      {/* Preview das fotos (se houver) */}
+      {fotosPreview.length > 0 && (
+        <div className="mb-4 flex gap-2 overflow-x-auto scrollbar-none -mx-0">
+          {fotosPreview.map((src, i) => (
+            <div key={i} className="relative size-16 shrink-0 overflow-hidden rounded-xl">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex flex-col gap-5 pb-8">
+        
+        {/* BLOCO 1: NEGOCIAÇÕES E TIPOS */}
+        <AccordionSection title="Negociações e Tipos" icon={<FileText className="size-4" strokeWidth={2.5} />} isOpen={openSection === 1} onToggle={() => setOpenSection(openSection === 1 ? 0 : 1)}>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título do imóvel *</label>
+              <input
+                type="text"
+                value={titulo}
+                onChange={(e) => setTitulo(e.target.value)}
+                placeholder="Ex: Apartamento Jardins 3 quartos"
+                className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring ${titulo ? 'border-teal-mid/40' : 'border-border'}`}
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Código</label>
+                <input type="text" value={codigo} onChange={(e) => setCodigo(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">CIB</label>
+                <input type="text" value={cib} onChange={(e) => setCib(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Finalidade</label>
+                <select value={finalidade} onChange={(e) => {
+                  const newFin = e.target.value as FinalidadeCategoria
+                  setFinalidade(newFin)
+                  setTipoImovel(TIPOS_POR_FINALIDADE[newFin][0])
+                }} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none ${finalidade ? 'border-teal-mid/40' : 'border-border'}`}>
+                  {FINALIDADES.map((f) => <option key={f} value={f}>{f}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipo</label>
+                <select value={tipoImovel} onChange={(e) => setTipoImovel(e.target.value)} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none ${tipoImovel ? 'border-teal-mid/40' : 'border-border'}`}>
+                  {TIPOS_POR_FINALIDADE[finalidade].map((t) => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Operação</label>
+              <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1 py-1">
+                {(['Venda', 'Locação', 'Temporada', 'Arrendamento'] as const).map((o) => (
+                  <button key={o} type="button" onClick={() => setOperacao(o)} className={`shrink-0 rounded-2xl px-4 py-3 text-sm font-semibold transition-brand ${operacao === o ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'}`}>
+                    {o}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Situação</label>
+                <select value={situacaoImovel} onChange={(e) => setSituacaoImovel(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
+                  <option value="Pronto">Pronto</option>
+                  <option value="Na Planta">Na Planta</option>
+                  <option value="Em Obras">Em Obras</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Status</label>
+                <select value={statusImovel} onChange={(e) => setStatusImovel(e.target.value as (typeof STATUS_OPTIONS)[number])} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
+                  {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+            </div>
+            
+            <div className="mt-2 rounded-2xl bg-muted/40 p-4 border border-border/50">
+              <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3 cursor-pointer">
+                <input type="checkbox" checked={exclusividade} onChange={(e) => setExclusividade(e.target.checked)} className="size-4 rounded border-border text-primary focus:ring-primary" />
+                Contrato de Exclusividade
+              </label>
+              {exclusividade && (
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Validade (Dias)</label>
+                  <input type="number" value={validadeExclusividade} onChange={(e) => setValidadeExclusividade(e.target.value)} placeholder="Ex: 90" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+              )}
+            </div>
+        </AccordionSection>
+
+        {/* BLOCO 2: LOCALIZAÇÃO */}
+        <AccordionSection title="Localização e Prédio" icon={<MapPin className="size-4" strokeWidth={2.5} />} isOpen={openSection === 2} onToggle={() => setOpenSection(openSection === 2 ? 0 : 2)}>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="col-span-1">
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">CEP</label>
+                <input type="text" value={cep} onChange={(e) => setCep(e.target.value)} placeholder="00000-000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div className="col-span-2">
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Endereço</label>
+                <input type="text" value={endereco} onChange={(e) => setEndereco(e.target.value)} placeholder="Rua, número" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Bairro</label>
+                <input type="text" value={bairro} onChange={(e) => setBairro(e.target.value)} placeholder="Jardins" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cidade</label>
+                <input type="text" value={cidade} onChange={(e) => setCidade(e.target.value)} placeholder="São Paulo" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Condomínio/Empreendimento</label>
+              <input type="text" value={condominio} onChange={(e) => setCondominio(e.target.value)} placeholder="Nome do prédio ou loteamento" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Andar</label>
+                <input type="text" value={andar} onChange={(e) => setAndar(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Ano de Construção</label>
+                <input type="text" value={anoConstrucao} onChange={(e) => setAnoConstrucao(e.target.value)} placeholder="YYYY" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+        </AccordionSection>
+
+        {/* BLOCO 3: COMPOSIÇÃO (Condicional) */}
+        {((finalidade === 'Residencial' && !['Terreno', 'Terreno de Condomínio', 'Área', 'Loteamento', 'Garagem'].includes(tipoImovel)) ||
+          (finalidade === 'Rural' && ['Chácara', 'Chácara em Condomínio', 'Fazenda', 'Haras', 'Rancho', 'Sítio'].includes(tipoImovel)) ||
+          (finalidade === 'Comercial' && ['Casa', 'Sobrado', 'Conjunto Comercial', 'Prédio'].includes(tipoImovel))) && (
+          <AccordionSection title="Composição (Cômodos)" icon={<LayoutGrid className="size-4" strokeWidth={2.5} />} isOpen={openSection === 3} onToggle={() => setOpenSection(openSection === 3 ? 0 : 3)}>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Dormitórios</label>
+                <input type="number" value={quartos} onChange={(e) => setQuartos(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Suítes</label>
+                <input type="number" value={suites} onChange={(e) => setSuites(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Banheiros</label>
+                <input type="number" value={banheiros} onChange={(e) => setBanheiros(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Salas</label>
+                <input type="number" value={salas} onChange={(e) => setSalas(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vagas</label>
+                <input type="number" value={vagas} onChange={(e) => setVagas(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+          </AccordionSection>
+        )}
+
+        {/* BLOCO 4: MEDIDAS E VALORES */}
+        <AccordionSection title="Medidas e Valores" icon={<Ruler className="size-4" strokeWidth={2.5} />} isOpen={openSection === 4} onToggle={() => setOpenSection(openSection === 4 ? 0 : 4)}>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Valor (R$)</label>
+              <input type="text" value={valor} onChange={(e) => setValor(e.target.value)} placeholder="R$ 890.000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Útil/Const.</label>
+                <input type="number" value={area} onChange={(e) => setArea(e.target.value)} placeholder="m²" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Total</label>
+                <input type="number" value={areaTotal} onChange={(e) => setAreaTotal(e.target.value)} placeholder="m²" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+        </AccordionSection>
+
+        {/* BLOCO 5: CARACTERÍSTICAS */}
+        <AccordionSection title="Características" icon={<Tag className="size-4" strokeWidth={2.5} />} isOpen={openSection === 5} onToggle={() => setOpenSection(openSection === 5 ? 0 : 5)}>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Descrição / Observações</label>
+              <textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={4} placeholder="Notas sobre o imóvel, infraestrutura, proximidades..." className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              {observacoes && titulo && (
+                <p className="mt-1.5 flex items-center gap-1 text-[10px] text-teal-mid font-medium">
+                  <Sparkles className="size-2.5" strokeWidth={2} />
+                  Preenchido pela IA
+                </p>
+              )}
+            </div>
+        </AccordionSection>
+
+        {/* BLOCO 6: PROPRIETÁRIO */}
+        <AccordionSection title="Proprietário" icon={<UserCircle className="size-4" strokeWidth={2.5} />} isOpen={openSection === 6} onToggle={() => setOpenSection(openSection === 6 ? 0 : 6)}>
+          <div className="flex flex-col gap-3">
+            <input type="text" value={proprietario} onChange={(e) => setProprietario(e.target.value)} placeholder="Nome completo" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            <input type="tel" value={telefoneProprietario} onChange={(e) => setTelefoneProprietario(e.target.value)} placeholder="Telefone / WhatsApp" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            <input type="email" value={emailProprietario} onChange={(e) => setEmailProprietario(e.target.value)} placeholder="E-mail" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+          </div>
+        </AccordionSection>
+
+        {/* BLOCO 7: MÍDIA */}
+        <AccordionSection title="Mídia" icon={<ImageIcon className="size-4" strokeWidth={2.5} />} isOpen={openSection === 7} onToggle={() => setOpenSection(openSection === 7 ? 0 : 7)}>
+          <div className="flex flex-col gap-4">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">URL do Vídeo</label>
+              <input type="url" value={urlVideo} onChange={(e) => setUrlVideo(e.target.value)} placeholder="https://youtube.com/..." className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">URL do Tour 360</label>
+              <input type="url" value={urlTour360} onChange={(e) => setUrlTour360(e.target.value)} placeholder="https://..." className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+        </AccordionSection>
+
+        {/* BLOCO 8: INFORMAÇÕES INTERNAS */}
+        <AccordionSection title="Informações Internas" icon={<Lock className="size-4" strokeWidth={2.5} />} isOpen={openSection === 8} onToggle={() => setOpenSection(openSection === 8 ? 0 : 8)}>
+          <div className="flex flex-col gap-4">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Observações Internas</label>
+              <textarea value={observacoesInternas} onChange={(e) => setObservacoesInternas(e.target.value)} rows={3} placeholder="Anotações sigilosas (visíveis apenas para corretores da imobiliária)..." className="w-full resize-none rounded-2xl border border-border bg-muted/40 p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Chave disponível?</label>
+                <select value={chaveDisponivel} onChange={(e) => setChaveDisponivel(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
+                  <option value="Sim">Sim</option>
+                  <option value="Não">Não</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Local das chaves</label>
+                <input type="text" value={localChaves} onChange={(e) => setLocalChaves(e.target.value)} placeholder="Ex: Portaria" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Matrícula Nº</label>
+                <input type="text" value={matricula} onChange={(e) => setMatricula(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">IPTU Nº</label>
+                <input type="text" value={iptu} onChange={(e) => setIptu(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">INCRA Nº</label>
+                <input type="text" value={incra} onChange={(e) => setIncra(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cartório</label>
+                <input type="text" value={cartorio} onChange={(e) => setCartorio(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Energia Nº</label>
+                <input type="text" value={energia} onChange={(e) => setEnergia(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Água Nº</label>
+                <input type="text" value={agua} onChange={(e) => setAgua(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Captador 1</label>
+                <input type="text" value={captador1} onChange={(e) => setCaptador1(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Captador 2</label>
+                <input type="text" value={captador2} onChange={(e) => setCaptador2(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+            </div>
+          </div>
+        </AccordionSection>
+
+        {/* BLOCO 9: DIVULGAÇÃO */}
+        <AccordionSection title="Divulgação no Website" icon={<Megaphone className="size-4" strokeWidth={2.5} />} isOpen={openSection === 9} onToggle={() => setOpenSection(openSection === 9 ? 0 : 9)}>
+          <div className="flex flex-col gap-3">
+            <label className="flex items-center gap-3 text-sm font-medium text-foreground cursor-pointer">
+              <input type="checkbox" checked={destaqueHome} onChange={(e) => setDestaqueHome(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+              Destaque na Página Inicial
+            </label>
+            <label className="flex items-center gap-3 text-sm font-medium text-foreground cursor-pointer">
+              <input type="checkbox" checked={destaqueBanner} onChange={(e) => setDestaqueBanner(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+              Destaque no Banner
+            </label>
+            <label className="flex items-center gap-3 text-sm font-medium text-foreground cursor-pointer">
+              <input type="checkbox" checked={oportunidade} onChange={(e) => setOportunidade(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+              Oportunidade (Selo)
+            </label>
+          </div>
+        </AccordionSection>
+
+        {/* BLOCO 10: SEO E OTIMIZAÇÃO */}
+        <AccordionSection title="SEO e Otimização" icon={<Search className="size-4" strokeWidth={2.5} />} isOpen={openSection === 10} onToggle={() => setOpenSection(openSection === 10 ? 0 : 10)}>
+          <div className="flex flex-col gap-4">
+            <button 
+              type="button" 
+              onClick={() => {
+                setSeoTitulo(`${tipoImovel}, ${bairro || 'Centro'}, ${cidade || 'SP'}`)
+                setSeoPalavras(`${tipoImovel} em ${bairro || 'Centro'}, ${tipoImovel} em ${cidade || 'SP'}, ${quartos ? quartos + ' dorms' : ''}`)
+                setSeoDescricao(`${tipoImovel} à venda em ${bairro || 'Centro'}, ${cidade || 'SP'} com ${area ? area + 'm²' : ''}. Código: ${codigo || '1000'}`)
+              }} 
+              className="flex items-center justify-center gap-2 rounded-xl bg-teal-mid/10 py-3 text-sm font-semibold text-teal-deep transition-colors hover:bg-teal-mid/20"
+            >
+              <Sparkles className="size-4" strokeWidth={2} />
+              Preencher com IA
+            </button>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título</label>
+              <input type="text" value={seoTitulo} onChange={(e) => setSeoTitulo(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Palavras-Chave</label>
+              <input type="text" value={seoPalavras} onChange={(e) => setSeoPalavras(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Descrição</label>
+              <textarea value={seoDescricao} onChange={(e) => setSeoDescricao(e.target.value)} rows={3} className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+        </AccordionSection>
+        <button type="button" onClick={onClose} className="h-14 w-full mt-2 rounded-2xl bg-primary text-base font-semibold text-primary-foreground shadow-xl shadow-primary/20 transition-transform active:scale-[0.98]">
+          Salvar Imóvel
+        </button>
+      </div>
+    </div>
+  )
+}
