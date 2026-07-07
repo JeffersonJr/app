@@ -821,6 +821,14 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
   // ── Fase 6: Formulário Completo (manual ou pré-preenchido pela IA) ────────
   return (
     <div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={handleFotos}
+      />
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <h2 className="font-serif text-xl font-semibold text-foreground">Cadastrar imóvel</h2>
@@ -1353,7 +1361,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
 
       {/* Modal Edição de Foto */}
       {fotoEditando && (
-        <div className="absolute inset-0 z-50 flex flex-col justify-end">
+        <div className="fixed inset-0 z-[100] flex flex-col justify-end">
           <button type="button" onClick={() => setFotoEditando(null)} className="absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]" />
           <div className="relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200">
             <div className="flex justify-center pt-3 pb-1">
