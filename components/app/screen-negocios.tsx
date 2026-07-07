@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Bot, ChevronDown, MessageCircle, Phone, Plus, SlidersHorizontal, X, CheckCircle2 } from 'lucide-react'
+import { Bot, ChevronDown, MessageCircle, Phone, Plus, ListFilter, Settings2, X, CheckCircle2 } from 'lucide-react'
 import {
   atendimentos as dadosAtendimentos,
   etapaConfig,
@@ -127,7 +127,7 @@ export function ScreenNegocios({
                 : 'text-foreground'
             }`}
           >
-            <SlidersHorizontal className="size-5" strokeWidth={1.5} />
+            <ListFilter className="size-5" strokeWidth={1.5} />
             {(filtroTemp !== 'todas' || filtroOrigem !== 'todas') && (
               <span className="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-primary border-2 border-card" />
             )}
@@ -158,7 +158,7 @@ export function ScreenNegocios({
             onClick={() => setMostrarGerenciarFunil(true)}
             className="flex size-[3.25rem] items-center justify-center rounded-2xl bg-card border border-border shadow-soft transition-brand active:scale-95 text-muted-foreground hover:text-foreground"
           >
-            <SlidersHorizontal className="size-5" strokeWidth={1.5} />
+            <Settings2 className="size-5" strokeWidth={1.5} />
           </button>
 
           {/* Dropdown de funis */}

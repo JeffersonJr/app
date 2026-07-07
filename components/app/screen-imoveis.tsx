@@ -19,7 +19,7 @@ import {
   Bot,
   Map,
   CheckCircle2,
-  SlidersHorizontal,
+  ListFilter,
   Plus,
   ArrowUpDown,
   PenLine,
@@ -147,15 +147,15 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
           <button
             type="button"
             onClick={() => setMostrarFiltrosAvancados(true)}
-            className={`flex size-12 items-center justify-center rounded-2xl border transition-brand active:scale-95 shadow-sm ${
-              filtroFinalidade !== 'Todas' || filtroStatus !== 'Todos'
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'border-border bg-card text-muted-foreground hover:text-foreground'
+            className={`flex size-10 relative items-center justify-center rounded-full border border-border bg-card shadow-sm transition-brand active:scale-95 ${
+              Object.keys(filtrosAplicados).length > 0
+                ? 'text-primary bg-primary/5 border-primary/30'
+                : 'text-foreground'
             }`}
           >
-            <SlidersHorizontal className="size-5" strokeWidth={1.5} />
-            {(filtroFinalidade !== 'Todas' || filtroStatus !== 'Todos') && (
-              <span className="absolute -right-1 -top-1 flex size-3 items-center justify-center rounded-full bg-red-500 text-[8px] text-white ring-2 ring-background" />
+            <ListFilter className="size-5" strokeWidth={1.5} />
+            {Object.keys(filtrosAplicados).length > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-primary border-2 border-card" />
             )}
           </button>
           <button
@@ -559,7 +559,7 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
         )}
       </div>
 
-      <div className="px-5 pb-5">
+      <div className="px-5 pb-[calc(80px+env(safe-area-inset-bottom))]">
         <button type="button" onClick={() => setShowShareMenu(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/30 transition-transform active:scale-[0.98]">
           <Share2 className="size-5" strokeWidth={2.5} /> 
           Compartilhar com Lead

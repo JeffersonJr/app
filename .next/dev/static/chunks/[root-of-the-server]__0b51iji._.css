@@ -2661,6 +2661,10 @@
     padding-bottom: calc(1rem + env(safe-area-inset-bottom));
   }
 
+  .pb-\[calc\(80px\+env\(safe-area-inset-bottom\)\)\] {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+
   .pb-\[env\(safe-area-inset-bottom\)\] {
     padding-bottom: env(safe-area-inset-bottom);
   }
