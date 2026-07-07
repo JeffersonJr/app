@@ -24,6 +24,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$megaphone$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Megaphone$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/megaphone.mjs [app-ssr] (ecmascript) <export default as Megaphone>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/search.mjs [app-ssr] (ecmascript) <export default as Search>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$monitor$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Monitor$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/monitor.mjs [app-ssr] (ecmascript) <export default as Monitor>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.mjs [app-ssr] (ecmascript) <export default as Trash2>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$cw$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCw$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/rotate-cw.mjs [app-ssr] (ecmascript) <export default as RotateCw>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-left.mjs [app-ssr] (ecmascript) <export default as ChevronLeft>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-right.mjs [app-ssr] (ecmascript) <export default as ChevronRight>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$feature$2d$flags$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/feature-flags.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$ia$2d$upsell$2d$page$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/app/ia-upsell-page.tsx [app-ssr] (ecmascript)");
 'use client';
@@ -227,7 +231,7 @@ function AccordionSection({ title, icon, isOpen, onToggle, children }) {
 }
 function FormCaptarImovel({ onClose }) {
     const [fase, setFase] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('upload');
-    const [fotosPreview, setFotosPreview] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [fotos, setFotos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [progresso, setProgresso] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(0);
     const [progressoTexto, setProgressoTexto] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
     const [resultado, setResultado] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(AI_RESULTADOS[0]);
@@ -236,6 +240,7 @@ function FormCaptarImovel({ onClose }) {
     const fileInputRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const [openSection, setOpenSection] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(1);
     const [showFastLink, setShowFastLink] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [fotoEditando, setFotoEditando] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     // Campos do formulário
     // 1. Negociações e Tipos
     const [titulo, setTitulo] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
@@ -318,8 +323,55 @@ function FormCaptarImovel({ onClose }) {
     function handleFotos(e) {
         const files = Array.from(e.target.files ?? []);
         if (files.length === 0) return;
-        const previews = files.slice(0, 5).map((f)=>URL.createObjectURL(f));
-        setFotosPreview(previews);
+        const novasFotos = files.map((f)=>({
+                id: Math.random().toString(36).substr(2, 9),
+                url: URL.createObjectURL(f),
+                titulo: '',
+                descricao: '',
+                rotacao: 0
+            }));
+        setFotos((prev)=>[
+                ...prev,
+                ...novasFotos
+            ]);
+    }
+    function moverFoto(index, direcao) {
+        if (direcao === 'esq' && index > 0) {
+            const nova = [
+                ...fotos
+            ];
+            [nova[index - 1], nova[index]] = [
+                nova[index],
+                nova[index - 1]
+            ];
+            setFotos(nova);
+        } else if (direcao === 'dir' && index < fotos.length - 1) {
+            const nova = [
+                ...fotos
+            ];
+            [nova[index], nova[index + 1]] = [
+                nova[index + 1],
+                nova[index]
+            ];
+            setFotos(nova);
+        }
+    }
+    function rotacionarFoto(index) {
+        const nova = [
+            ...fotos
+        ];
+        nova[index].rotacao = (nova[index].rotacao + 90) % 360;
+        setFotos(nova);
+    }
+    function removerFoto(index) {
+        setFotos(fotos.filter((_, i)=>i !== index));
+    }
+    function atualizarFoto(index, campo, valor) {
+        const nova = [
+            ...fotos
+        ];
+        nova[index][campo] = valor;
+        setFotos(nova);
     }
     async function iniciarAnaliseIA() {
         setFase('analisando');
@@ -382,7 +434,7 @@ function FormCaptarImovel({ onClose }) {
             origem: "imovel"
         }, void 0, false, {
             fileName: "[project]/components/app/form-captar-imovel.tsx",
-            lineNumber: 232,
+            lineNumber: 275,
             columnNumber: 12
         }, this);
     }
@@ -398,7 +450,7 @@ function FormCaptarImovel({ onClose }) {
                             children: "Captar imóvel"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 248,
+                            lineNumber: 291,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -411,18 +463,18 @@ function FormCaptarImovel({ onClose }) {
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 250,
+                                lineNumber: 293,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 249,
+                            lineNumber: 292,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 247,
+                    lineNumber: 290,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -435,12 +487,12 @@ function FormCaptarImovel({ onClose }) {
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 257,
+                                lineNumber: 300,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 256,
+                            lineNumber: 299,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -450,7 +502,7 @@ function FormCaptarImovel({ onClose }) {
                                     children: "Cadastro inteligente com IA"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 260,
+                                    lineNumber: 303,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -458,19 +510,19 @@ function FormCaptarImovel({ onClose }) {
                                     children: "Tire fotos do imóvel e a IA preenche automaticamente: tipo, área, valor estimado, descrição e localização."
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 261,
+                                    lineNumber: 304,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 259,
+                            lineNumber: 302,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 255,
+                    lineNumber: 298,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -482,109 +534,95 @@ function FormCaptarImovel({ onClose }) {
                     onChange: handleFotos
                 }, void 0, false, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 268,
+                    lineNumber: 311,
                     columnNumber: 9
                 }, this),
                 fotosPreview.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                     type: "button",
                     onClick: ()=>fileInputRef.current?.click(),
                     className: "flex w-full flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-primary/30 bg-primary/5 py-10 transition-brand active:scale-[0.98]",
+                    className: "flex h-[320px] w-full flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border bg-card/50 transition-colors",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex size-14 items-center justify-center rounded-2xl bg-primary/10",
+                            className: "flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__["Camera"], {
-                                className: "size-7 text-primary",
+                                className: "size-8",
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 284,
+                                lineNumber: 328,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 283,
+                            lineNumber: 327,
                             columnNumber: 13
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "text-center",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "mt-4 font-serif text-lg font-semibold text-foreground",
+                            children: "Adicionar fotos"
+                        }, void 0, false, {
+                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                            lineNumber: 330,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "mt-1 text-center text-sm text-muted-foreground",
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-sm font-semibold text-foreground",
-                                    children: "Selecionar fotos do imóvel"
-                                }, void 0, false, {
+                                "Tire fotos agora ou",
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 287,
-                                    columnNumber: 15
+                                    lineNumber: 334,
+                                    columnNumber: 34
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-xs text-muted-foreground",
-                                    children: "Fachada, sala, cozinha, quartos... (até 5 fotos)"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 288,
-                                    columnNumber: 15
-                                }, this)
+                                "escolha da galeria"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 286,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            className: "rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground",
-                            children: "Abrir câmera / galeria"
-                        }, void 0, false, {
-                            fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 290,
+                            lineNumber: 333,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 278,
+                    lineNumber: 321,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex h-[320px] w-full flex-col rounded-3xl border border-border bg-card shadow-soft overflow-hidden",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "grid grid-cols-3 gap-2 mb-4",
+                            className: "grid grid-cols-2 gap-2 p-2 h-full",
                             children: [
-                                fotosPreview.map((src, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "relative aspect-square rounded-xl overflow-hidden bg-muted",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                                src: src,
-                                                alt: `Foto ${i + 1}`,
-                                                className: "h-full w-full object-cover"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 301,
-                                                columnNumber: 19
-                                            }, this),
-                                            i === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "absolute left-1 top-1 rounded-md bg-black/60 px-1.5 py-0.5 text-[9px] font-semibold text-white",
-                                                children: "Principal"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 303,
-                                                columnNumber: 21
-                                            }, this)
-                                        ]
-                                    }, i, true, {
+                                fotos.map((foto, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "relative h-full w-full overflow-hidden rounded-2xl bg-muted",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                            src: foto.url,
+                                            alt: `Foto ${i + 1}`,
+                                            className: "h-full w-full object-cover",
+                                            style: {
+                                                transform: `rotate(${foto.rotacao}deg)`
+                                            }
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                            lineNumber: 343,
+                                            columnNumber: 19
+                                        }, this)
+                                    }, foto.id, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 299,
+                                        lineNumber: 341,
                                         columnNumber: 17
                                     }, this)),
-                                fotosPreview.length < 5 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                fotos.length < 5 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
                                     onClick: ()=>fileInputRef.current?.click(),
-                                    className: "flex aspect-square flex-col items-center justify-center rounded-xl border-2 border-dashed border-border text-muted-foreground",
+                                    className: "flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-muted-foreground",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__["Camera"], {
                                             className: "size-5",
                                             strokeWidth: 1.5
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 315,
+                                            lineNumber: 352,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -592,45 +630,62 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Mais"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 316,
+                                            lineNumber: 353,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 310,
+                                    lineNumber: 347,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 297,
+                            lineNumber: 339,
                             columnNumber: 13
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-xs text-muted-foreground mb-4",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "p-4 bg-muted/30",
                             children: [
-                                fotosPreview.length,
-                                " foto",
-                                fotosPreview.length > 1 ? 's' : '',
-                                " selecionada",
-                                fotosPreview.length > 1 ? 's' : ''
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "font-serif text-lg font-semibold text-foreground",
+                                    children: [
+                                        fotos.length,
+                                        " foto",
+                                        fotos.length > 1 ? 's' : '',
+                                        " selecionada",
+                                        fotos.length > 1 ? 's' : ''
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                    lineNumber: 358,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-xs text-muted-foreground",
+                                    children: "A IA vai extrair as informações"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                    lineNumber: 361,
+                                    columnNumber: 15
+                                }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 320,
+                            lineNumber: 357,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 295,
+                    lineNumber: 338,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "mt-4 flex flex-col gap-3",
                     children: [
-                        fotosPreview.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        fotos.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "button",
                             onClick: ()=>{
                                 if (!__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$feature$2d$flags$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["featureFlags"].temIA) {
@@ -646,14 +701,14 @@ function FormCaptarImovel({ onClose }) {
                                     strokeWidth: 1.5
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 339,
+                                    lineNumber: 379,
                                     columnNumber: 15
                                 }, this),
                                 "Analisar com IA"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 328,
+                            lineNumber: 368,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -663,19 +718,19 @@ function FormCaptarImovel({ onClose }) {
                             children: "Preencher manualmente"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 343,
+                            lineNumber: 383,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 326,
+                    lineNumber: 366,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/app/form-captar-imovel.tsx",
-            lineNumber: 246,
+            lineNumber: 289,
             columnNumber: 7
         }, this);
     }
@@ -696,12 +751,12 @@ function FormCaptarImovel({ onClose }) {
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 361,
+                                lineNumber: 401,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 360,
+                            lineNumber: 400,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -709,20 +764,20 @@ function FormCaptarImovel({ onClose }) {
                             children: "Modo de Cadastro"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 363,
+                            lineNumber: 403,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "w-8"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 364,
+                            lineNumber: 404,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 359,
+                    lineNumber: 399,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -730,7 +785,7 @@ function FormCaptarImovel({ onClose }) {
                     children: "Como você deseja cadastrar este imóvel?"
                 }, void 0, false, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 367,
+                    lineNumber: 407,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -748,12 +803,12 @@ function FormCaptarImovel({ onClose }) {
                                         strokeWidth: 1.5
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 378,
+                                        lineNumber: 418,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 377,
+                                    lineNumber: 417,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -763,7 +818,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Cadastro Rápido (Fast)"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 381,
+                                            lineNumber: 421,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -771,19 +826,19 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Preencha apenas o básico para salvar e continuar depois no celular ou computador."
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 382,
+                                            lineNumber: 422,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 380,
+                                    lineNumber: 420,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 372,
+                            lineNumber: 412,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -798,12 +853,12 @@ function FormCaptarImovel({ onClose }) {
                                         strokeWidth: 1.5
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 392,
+                                        lineNumber: 432,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 391,
+                                    lineNumber: 431,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -813,7 +868,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Cadastro Completo"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 395,
+                                            lineNumber: 435,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -821,31 +876,31 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Preencha todos os dados, características e informações para já publicar."
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 396,
+                                            lineNumber: 436,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 394,
+                                    lineNumber: 434,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 386,
+                            lineNumber: 426,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 371,
+                    lineNumber: 411,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/app/form-captar-imovel.tsx",
-            lineNumber: 358,
+            lineNumber: 398,
             columnNumber: 7
         }, this);
     }
@@ -870,7 +925,7 @@ function FormCaptarImovel({ onClose }) {
                                     strokeWidth: "4"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 411,
+                                    lineNumber: 451,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
@@ -886,13 +941,13 @@ function FormCaptarImovel({ onClose }) {
                                     className: "transition-all duration-500"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 412,
+                                    lineNumber: 452,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 410,
+                            lineNumber: 450,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
@@ -900,13 +955,13 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 1.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 423,
+                            lineNumber: 463,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 408,
+                    lineNumber: 448,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -914,7 +969,7 @@ function FormCaptarImovel({ onClose }) {
                     children: "IA analisando imóvel"
                 }, void 0, false, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 426,
+                    lineNumber: 466,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -922,7 +977,7 @@ function FormCaptarImovel({ onClose }) {
                     children: progressoTexto || 'Iniciando análise...'
                 }, void 0, false, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 427,
+                    lineNumber: 467,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -937,12 +992,12 @@ function FormCaptarImovel({ onClose }) {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 432,
+                                lineNumber: 472,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 431,
+                            lineNumber: 471,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -953,27 +1008,30 @@ function FormCaptarImovel({ onClose }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 437,
+                            lineNumber: 477,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 430,
+                    lineNumber: 470,
                     columnNumber: 9
                 }, this),
-                fotosPreview.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                fotos.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "mt-6 flex gap-2",
-                    children: fotosPreview.slice(0, 3).map((src, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    children: fotos.slice(0, 3).map((foto, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: `relative size-16 overflow-hidden rounded-xl transition-all duration-700 ${progresso > i * 30 ? 'opacity-100 ring-2 ring-primary' : 'opacity-40'}`,
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                    src: src,
+                                    src: foto.url,
                                     alt: "",
-                                    className: "h-full w-full object-cover"
+                                    className: "h-full w-full object-cover",
+                                    style: {
+                                        transform: `rotate(${foto.rotacao}deg)`
+                                    }
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 446,
+                                    lineNumber: 486,
                                     columnNumber: 17
                                 }, this),
                                 progresso > (i + 1) * 30 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -983,23 +1041,23 @@ function FormCaptarImovel({ onClose }) {
                                         strokeWidth: 2
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 449,
+                                        lineNumber: 489,
                                         columnNumber: 21
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 448,
+                                    lineNumber: 488,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, i, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 444,
+                            lineNumber: 484,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 442,
+                    lineNumber: 482,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1014,18 +1072,18 @@ function FormCaptarImovel({ onClose }) {
                             children: tag
                         }, tag, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 459,
+                            lineNumber: 499,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 457,
+                    lineNumber: 497,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/app/form-captar-imovel.tsx",
-            lineNumber: 407,
+            lineNumber: 447,
             columnNumber: 7
         }, this);
     }
@@ -1041,7 +1099,7 @@ function FormCaptarImovel({ onClose }) {
                             children: "Resultado da IA"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 473,
+                            lineNumber: 513,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1054,18 +1112,18 @@ function FormCaptarImovel({ onClose }) {
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 475,
+                                lineNumber: 515,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 474,
+                            lineNumber: 514,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 472,
+                    lineNumber: 512,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1076,7 +1134,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 1.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 481,
+                            lineNumber: 521,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1086,26 +1144,26 @@ function FormCaptarImovel({ onClose }) {
                                     children: "IA concluiu a análise"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 483,
+                                    lineNumber: 523,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-xs text-muted-foreground",
                                     children: [
                                         "Confiança: 94% · Baseado em ",
-                                        fotosPreview.length > 0 ? fotosPreview.length : 3,
+                                        fotos.length > 0 ? fotos.length : 3,
                                         " foto",
-                                        fotosPreview.length !== 1 ? 's' : ''
+                                        fotos.length !== 1 ? 's' : ''
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 484,
+                                    lineNumber: 524,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 482,
+                            lineNumber: 522,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1115,18 +1173,18 @@ function FormCaptarImovel({ onClose }) {
                                 children: "94%"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 487,
+                                lineNumber: 527,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 486,
+                            lineNumber: 526,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 480,
+                    lineNumber: 520,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1180,7 +1238,7 @@ function FormCaptarImovel({ onClose }) {
                                     children: item.emoji
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 504,
+                                    lineNumber: 544,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1191,7 +1249,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: item.label
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 506,
+                                            lineNumber: 546,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1199,13 +1257,13 @@ function FormCaptarImovel({ onClose }) {
                                             children: item.value
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 507,
+                                            lineNumber: 547,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 505,
+                                    lineNumber: 545,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
@@ -1213,18 +1271,18 @@ function FormCaptarImovel({ onClose }) {
                                     strokeWidth: 1.5
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 509,
+                                    lineNumber: 549,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, item.label, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 503,
+                            lineNumber: 543,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 492,
+                    lineNumber: 532,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1238,14 +1296,14 @@ function FormCaptarImovel({ onClose }) {
                                     strokeWidth: 1.5
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 517,
+                                    lineNumber: 557,
                                     columnNumber: 13
                                 }, this),
                                 "Descrição gerada pela IA"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 516,
+                            lineNumber: 556,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1253,13 +1311,13 @@ function FormCaptarImovel({ onClose }) {
                             children: resultado.observacoes
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 520,
+                            lineNumber: 560,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 515,
+                    lineNumber: 555,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1275,14 +1333,14 @@ function FormCaptarImovel({ onClose }) {
                                     strokeWidth: 2
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 529,
+                                    lineNumber: 569,
                                     columnNumber: 13
                                 }, this),
                                 "Usar estes dados e revisar"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 524,
+                            lineNumber: 564,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1292,19 +1350,19 @@ function FormCaptarImovel({ onClose }) {
                             children: "Pular, preencher manualmente"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 532,
+                            lineNumber: 572,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 523,
+                    lineNumber: 563,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/app/form-captar-imovel.tsx",
-            lineNumber: 471,
+            lineNumber: 511,
             columnNumber: 7
         }, this);
     }
@@ -1321,7 +1379,7 @@ function FormCaptarImovel({ onClose }) {
                             children: "Como deseja cadastrar?"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 549,
+                            lineNumber: 589,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1334,18 +1392,18 @@ function FormCaptarImovel({ onClose }) {
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 551,
+                                lineNumber: 591,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 550,
+                            lineNumber: 590,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 548,
+                    lineNumber: 588,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1364,12 +1422,12 @@ function FormCaptarImovel({ onClose }) {
                                             className: "size-5"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 563,
+                                            lineNumber: 603,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 562,
+                                        lineNumber: 602,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1379,7 +1437,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Cadastro Fast (No App)"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 566,
+                                                lineNumber: 606,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1387,24 +1445,24 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Campos essenciais para colocar o imóvel no ar agora."
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 567,
+                                                lineNumber: 607,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 565,
+                                        lineNumber: 605,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 561,
+                                lineNumber: 601,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 556,
+                            lineNumber: 596,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1424,12 +1482,12 @@ function FormCaptarImovel({ onClose }) {
                                             strokeWidth: 1.5
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 582,
+                                            lineNumber: 622,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 581,
+                                        lineNumber: 621,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1439,7 +1497,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Finalizar no Computador"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 585,
+                                                lineNumber: 625,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1447,24 +1505,24 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Copie o link seguro e preencha todos os detalhes na tela grande."
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 586,
+                                                lineNumber: 626,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 584,
+                                        lineNumber: 624,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 580,
+                                lineNumber: 620,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 572,
+                            lineNumber: 612,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1474,19 +1532,19 @@ function FormCaptarImovel({ onClose }) {
                             children: "Prefiro fazer o completo aqui pelo celular"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 591,
+                            lineNumber: 631,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 555,
+                    lineNumber: 595,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/app/form-captar-imovel.tsx",
-            lineNumber: 547,
+            lineNumber: 587,
             columnNumber: 7
         }, this);
     }
@@ -1503,7 +1561,7 @@ function FormCaptarImovel({ onClose }) {
                             children: "Cadastro Fast"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 608,
+                            lineNumber: 648,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1516,18 +1574,18 @@ function FormCaptarImovel({ onClose }) {
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 610,
+                                lineNumber: 650,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 609,
+                            lineNumber: 649,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 607,
+                    lineNumber: 647,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1543,7 +1601,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Finalidade"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 617,
+                                            lineNumber: 657,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1555,18 +1613,18 @@ function FormCaptarImovel({ onClose }) {
                                                     children: fin
                                                 }, fin, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 619,
+                                                    lineNumber: 659,
                                                     columnNumber: 43
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 618,
+                                            lineNumber: 658,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 616,
+                                    lineNumber: 656,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1576,7 +1634,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Tipo"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 623,
+                                            lineNumber: 663,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1588,24 +1646,24 @@ function FormCaptarImovel({ onClose }) {
                                                     children: tipo
                                                 }, tipo, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 625,
+                                                    lineNumber: 665,
                                                     columnNumber: 65
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 624,
+                                            lineNumber: 664,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 622,
+                                    lineNumber: 662,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 615,
+                            lineNumber: 655,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1615,7 +1673,7 @@ function FormCaptarImovel({ onClose }) {
                                     children: "Endereço Básico / Título *"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 631,
+                                    lineNumber: 671,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1626,13 +1684,13 @@ function FormCaptarImovel({ onClose }) {
                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 632,
+                                    lineNumber: 672,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 630,
+                            lineNumber: 670,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1645,7 +1703,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Valor (R$)"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 637,
+                                            lineNumber: 677,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1656,13 +1714,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 638,
+                                            lineNumber: 678,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 636,
+                                    lineNumber: 676,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1672,7 +1730,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Área Útil (m²)"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 641,
+                                            lineNumber: 681,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1683,19 +1741,19 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 642,
+                                            lineNumber: 682,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 640,
+                                    lineNumber: 680,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 635,
+                            lineNumber: 675,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1708,7 +1766,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Dorms"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 648,
+                                            lineNumber: 688,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1718,13 +1776,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 649,
+                                            lineNumber: 689,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 647,
+                                    lineNumber: 687,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1734,7 +1792,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Suítes"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 652,
+                                            lineNumber: 692,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1744,13 +1802,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 653,
+                                            lineNumber: 693,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 651,
+                                    lineNumber: 691,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1760,7 +1818,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Vagas"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 656,
+                                            lineNumber: 696,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1770,19 +1828,19 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 657,
+                                            lineNumber: 697,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 655,
+                                    lineNumber: 695,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 646,
+                            lineNumber: 686,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1795,7 +1853,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Proprietário"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 663,
+                                            lineNumber: 703,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1806,13 +1864,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 664,
+                                            lineNumber: 704,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 662,
+                                    lineNumber: 702,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1822,7 +1880,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Telefone"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 667,
+                                            lineNumber: 707,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1833,19 +1891,19 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 668,
+                                            lineNumber: 708,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 666,
+                                    lineNumber: 706,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 661,
+                            lineNumber: 701,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1857,14 +1915,14 @@ function FormCaptarImovel({ onClose }) {
                                     className: "size-5"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 677,
+                                    lineNumber: 717,
                                     columnNumber: 13
                                 }, this),
                                 "Salvar Rascunho / Fast"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 672,
+                            lineNumber: 712,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1872,19 +1930,19 @@ function FormCaptarImovel({ onClose }) {
                             children: "Você poderá finalizar as fotos e dados completos depois pelo computador."
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 681,
+                            lineNumber: 721,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                    lineNumber: 614,
+                    lineNumber: 654,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/app/form-captar-imovel.tsx",
-            lineNumber: 606,
+            lineNumber: 646,
             columnNumber: 7
         }, this);
     }
@@ -1902,7 +1960,7 @@ function FormCaptarImovel({ onClose }) {
                                 children: "Cadastrar imóvel"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 692,
+                                lineNumber: 732,
                                 columnNumber: 11
                             }, this),
                             titulo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1913,20 +1971,20 @@ function FormCaptarImovel({ onClose }) {
                                         strokeWidth: 2
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 695,
+                                        lineNumber: 735,
                                         columnNumber: 15
                                     }, this),
                                     "IA"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 694,
+                                lineNumber: 734,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 691,
+                        lineNumber: 731,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1939,18 +1997,18 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 1.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 701,
+                            lineNumber: 741,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 700,
+                        lineNumber: 740,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                lineNumber: 690,
+                lineNumber: 730,
                 columnNumber: 7
             }, this),
             fotosPreview.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1963,17 +2021,17 @@ function FormCaptarImovel({ onClose }) {
                             className: "h-full w-full object-cover"
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 711,
+                            lineNumber: 751,
                             columnNumber: 15
                         }, this)
                     }, i, false, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 709,
+                        lineNumber: 749,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                lineNumber: 707,
+                lineNumber: 747,
                 columnNumber: 9
             }, this),
             isIaGerado && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1987,7 +2045,7 @@ function FormCaptarImovel({ onClose }) {
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 720,
+                                lineNumber: 760,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1997,7 +2055,7 @@ function FormCaptarImovel({ onClose }) {
                                         children: "IA concluiu a análise"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 722,
+                                        lineNumber: 762,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2005,19 +2063,19 @@ function FormCaptarImovel({ onClose }) {
                                         children: "Confiança: 94% · Baseado nas fotos"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 723,
+                                        lineNumber: 763,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 721,
+                                lineNumber: 761,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 719,
+                        lineNumber: 759,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2030,7 +2088,7 @@ function FormCaptarImovel({ onClose }) {
                                 children: "Analisar Novamente"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 727,
+                                lineNumber: 767,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2049,19 +2107,19 @@ function FormCaptarImovel({ onClose }) {
                                 children: "Descartar"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 730,
+                                lineNumber: 770,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 726,
+                        lineNumber: 766,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                lineNumber: 718,
+                lineNumber: 758,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2074,7 +2132,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 743,
+                            lineNumber: 783,
                             columnNumber: 61
                         }, this),
                         isOpen: openSection === 1,
@@ -2087,7 +2145,7 @@ function FormCaptarImovel({ onClose }) {
                                         children: "Título do imóvel *"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 745,
+                                        lineNumber: 785,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2098,13 +2156,13 @@ function FormCaptarImovel({ onClose }) {
                                         className: `h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring ${titulo ? 'border-teal-mid/40' : 'border-border'}`
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 746,
+                                        lineNumber: 786,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 744,
+                                lineNumber: 784,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2117,7 +2175,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Código"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 757,
+                                                lineNumber: 797,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2128,13 +2186,13 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 758,
+                                                lineNumber: 798,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 756,
+                                        lineNumber: 796,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2144,7 +2202,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "CIB"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 761,
+                                                lineNumber: 801,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2155,19 +2213,19 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 762,
+                                                lineNumber: 802,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 760,
+                                        lineNumber: 800,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 755,
+                                lineNumber: 795,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2180,7 +2238,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Finalidade"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 768,
+                                                lineNumber: 808,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -2196,18 +2254,18 @@ function FormCaptarImovel({ onClose }) {
                                                         children: f
                                                     }, f, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 774,
+                                                        lineNumber: 814,
                                                         columnNumber: 43
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 769,
+                                                lineNumber: 809,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 767,
+                                        lineNumber: 807,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2217,7 +2275,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Tipo"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 778,
+                                                lineNumber: 818,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -2229,24 +2287,24 @@ function FormCaptarImovel({ onClose }) {
                                                         children: t
                                                     }, t, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 780,
+                                                        lineNumber: 820,
                                                         columnNumber: 64
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 779,
+                                                lineNumber: 819,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 777,
+                                        lineNumber: 817,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 766,
+                                lineNumber: 806,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2256,7 +2314,7 @@ function FormCaptarImovel({ onClose }) {
                                         children: "Operação"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 786,
+                                        lineNumber: 826,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2274,18 +2332,18 @@ function FormCaptarImovel({ onClose }) {
                                                 children: o
                                             }, o, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 789,
+                                                lineNumber: 829,
                                                 columnNumber: 19
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 787,
+                                        lineNumber: 827,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 785,
+                                lineNumber: 825,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2298,7 +2356,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Situação"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 798,
+                                                lineNumber: 838,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -2311,7 +2369,7 @@ function FormCaptarImovel({ onClose }) {
                                                         children: "Pronto"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 800,
+                                                        lineNumber: 840,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -2319,7 +2377,7 @@ function FormCaptarImovel({ onClose }) {
                                                         children: "Na Planta"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 801,
+                                                        lineNumber: 841,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -2327,19 +2385,19 @@ function FormCaptarImovel({ onClose }) {
                                                         children: "Em Obras"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 802,
+                                                        lineNumber: 842,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 799,
+                                                lineNumber: 839,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 797,
+                                        lineNumber: 837,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2349,7 +2407,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Status"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 806,
+                                                lineNumber: 846,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -2361,24 +2419,24 @@ function FormCaptarImovel({ onClose }) {
                                                         children: s
                                                     }, s, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 808,
+                                                        lineNumber: 848,
                                                         columnNumber: 46
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 807,
+                                                lineNumber: 847,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 805,
+                                        lineNumber: 845,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 796,
+                                lineNumber: 836,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2389,7 +2447,7 @@ function FormCaptarImovel({ onClose }) {
                                         children: "Contrato de Exclusividade"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 814,
+                                        lineNumber: 854,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2409,12 +2467,12 @@ function FormCaptarImovel({ onClose }) {
                                                         children: tipo
                                                     }, tipo, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 820,
+                                                        lineNumber: 860,
                                                         columnNumber: 21
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 818,
+                                                lineNumber: 858,
                                                 columnNumber: 17
                                             }, this),
                                             tipoExclusividade !== 'Nenhuma' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2425,7 +2483,7 @@ function FormCaptarImovel({ onClose }) {
                                                         children: "Validade (Dias)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 837,
+                                                        lineNumber: 877,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2436,31 +2494,31 @@ function FormCaptarImovel({ onClose }) {
                                                         className: "h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 838,
+                                                        lineNumber: 878,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 836,
+                                                lineNumber: 876,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 817,
+                                        lineNumber: 857,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 813,
+                                lineNumber: 853,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 743,
+                        lineNumber: 783,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AccordionSection, {
@@ -2470,7 +2528,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 846,
+                            lineNumber: 886,
                             columnNumber: 62
                         }, this),
                         isOpen: openSection === 2,
@@ -2487,7 +2545,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "CEP"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 849,
+                                                lineNumber: 889,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2498,13 +2556,13 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 850,
+                                                lineNumber: 890,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 848,
+                                        lineNumber: 888,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2515,7 +2573,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Endereço"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 853,
+                                                lineNumber: 893,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2526,19 +2584,19 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 854,
+                                                lineNumber: 894,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 852,
+                                        lineNumber: 892,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 847,
+                                lineNumber: 887,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2551,7 +2609,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Bairro"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 860,
+                                                lineNumber: 900,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2562,13 +2620,13 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 861,
+                                                lineNumber: 901,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 859,
+                                        lineNumber: 899,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2578,7 +2636,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Cidade"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 864,
+                                                lineNumber: 904,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2589,19 +2647,19 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 865,
+                                                lineNumber: 905,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 863,
+                                        lineNumber: 903,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 858,
+                                lineNumber: 898,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2611,7 +2669,7 @@ function FormCaptarImovel({ onClose }) {
                                         children: "Condomínio/Empreendimento"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 870,
+                                        lineNumber: 910,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2622,13 +2680,13 @@ function FormCaptarImovel({ onClose }) {
                                         className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 871,
+                                        lineNumber: 911,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 869,
+                                lineNumber: 909,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2641,7 +2699,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Andar"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 876,
+                                                lineNumber: 916,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2652,13 +2710,13 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 877,
+                                                lineNumber: 917,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 875,
+                                        lineNumber: 915,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2668,7 +2726,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Ano de Construção"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 880,
+                                                lineNumber: 920,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2679,25 +2737,25 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 881,
+                                                lineNumber: 921,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 879,
+                                        lineNumber: 919,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 874,
+                                lineNumber: 914,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 846,
+                        lineNumber: 886,
                         columnNumber: 9
                     }, this),
                     (finalidade === 'Residencial' && ![
@@ -2725,7 +2783,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 890,
+                            lineNumber: 930,
                             columnNumber: 64
                         }, this),
                         isOpen: openSection === 3,
@@ -2740,7 +2798,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Dormitórios"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 893,
+                                            lineNumber: 933,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2751,13 +2809,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 894,
+                                            lineNumber: 934,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 892,
+                                    lineNumber: 932,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2767,7 +2825,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Suítes"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 897,
+                                            lineNumber: 937,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2778,13 +2836,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 898,
+                                            lineNumber: 938,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 896,
+                                    lineNumber: 936,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2794,7 +2852,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Banheiros"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 901,
+                                            lineNumber: 941,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2805,13 +2863,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 902,
+                                            lineNumber: 942,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 900,
+                                    lineNumber: 940,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2821,7 +2879,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Salas"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 905,
+                                            lineNumber: 945,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2832,13 +2890,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 906,
+                                            lineNumber: 946,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 904,
+                                    lineNumber: 944,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2848,7 +2906,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Vagas"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 909,
+                                            lineNumber: 949,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2859,24 +2917,24 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 910,
+                                            lineNumber: 950,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 908,
+                                    lineNumber: 948,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 891,
+                            lineNumber: 931,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 890,
+                        lineNumber: 930,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AccordionSection, {
@@ -2886,7 +2944,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 917,
+                            lineNumber: 957,
                             columnNumber: 59
                         }, this),
                         isOpen: openSection === 4,
@@ -2899,7 +2957,7 @@ function FormCaptarImovel({ onClose }) {
                                         children: "Valor (R$)"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 919,
+                                        lineNumber: 959,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2910,13 +2968,13 @@ function FormCaptarImovel({ onClose }) {
                                         className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 920,
+                                        lineNumber: 960,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 918,
+                                lineNumber: 958,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2929,7 +2987,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Área Útil/Const."
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 924,
+                                                lineNumber: 964,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2940,13 +2998,13 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 925,
+                                                lineNumber: 965,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 923,
+                                        lineNumber: 963,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2956,7 +3014,7 @@ function FormCaptarImovel({ onClose }) {
                                                 children: "Área Total"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 928,
+                                                lineNumber: 968,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2967,25 +3025,25 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 929,
+                                                lineNumber: 969,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 927,
+                                        lineNumber: 967,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 922,
+                                lineNumber: 962,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 917,
+                        lineNumber: 957,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AccordionSection, {
@@ -2995,7 +3053,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 935,
+                            lineNumber: 975,
                             columnNumber: 57
                         }, this),
                         isOpen: openSection === 5,
@@ -3009,7 +3067,7 @@ function FormCaptarImovel({ onClose }) {
                                         children: "Selecionar Características"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 937,
+                                        lineNumber: 977,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3019,7 +3077,7 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 939,
+                                                lineNumber: 979,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3030,19 +3088,19 @@ function FormCaptarImovel({ onClose }) {
                                                 className: "h-10 w-full rounded-xl border border-border bg-background pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 940,
+                                                lineNumber: 980,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 938,
+                                        lineNumber: 978,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 936,
+                                lineNumber: 976,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3066,7 +3124,7 @@ function FormCaptarImovel({ onClose }) {
                                                         className: "size-4 shrink-0 rounded border-border text-primary focus:ring-primary"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 956,
+                                                        lineNumber: 996,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3075,13 +3133,13 @@ function FormCaptarImovel({ onClose }) {
                                                         children: carac
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                        lineNumber: 965,
+                                                        lineNumber: 1005,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, carac, true, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 955,
+                                                lineNumber: 995,
                                                 columnNumber: 19
                                             }, this)),
                                         CARACTERISTICAS_OPCOES.filter((c)=>c.toLowerCase().includes(buscaCaracteristica.toLowerCase())).length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3089,18 +3147,18 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Nenhuma característica encontrada."
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 969,
+                                            lineNumber: 1009,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 951,
+                                    lineNumber: 991,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 950,
+                                lineNumber: 990,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3110,7 +3168,7 @@ function FormCaptarImovel({ onClose }) {
                                         children: "Descrição do imóvel"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 977,
+                                        lineNumber: 1017,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -3121,7 +3179,7 @@ function FormCaptarImovel({ onClose }) {
                                         className: "w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 978,
+                                        lineNumber: 1018,
                                         columnNumber: 15
                                     }, this),
                                     observacoes && titulo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3132,26 +3190,26 @@ function FormCaptarImovel({ onClose }) {
                                                 strokeWidth: 2
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                lineNumber: 981,
+                                                lineNumber: 1021,
                                                 columnNumber: 19
                                             }, this),
                                             "Preenchido pela IA"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                        lineNumber: 980,
+                                        lineNumber: 1020,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                lineNumber: 976,
+                                lineNumber: 1016,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 935,
+                        lineNumber: 975,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AccordionSection, {
@@ -3161,7 +3219,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 989,
+                            lineNumber: 1029,
                             columnNumber: 54
                         }, this),
                         isOpen: openSection === 6,
@@ -3177,7 +3235,7 @@ function FormCaptarImovel({ onClose }) {
                                     className: "h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 991,
+                                    lineNumber: 1031,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3188,7 +3246,7 @@ function FormCaptarImovel({ onClose }) {
                                     className: "h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 992,
+                                    lineNumber: 1032,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3199,18 +3257,18 @@ function FormCaptarImovel({ onClose }) {
                                     className: "h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 993,
+                                    lineNumber: 1033,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 990,
+                            lineNumber: 1030,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 989,
+                        lineNumber: 1029,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AccordionSection, {
@@ -3220,7 +3278,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 998,
+                            lineNumber: 1038,
                             columnNumber: 47
                         }, this),
                         isOpen: openSection === 7,
@@ -3230,12 +3288,239 @@ function FormCaptarImovel({ onClose }) {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "mb-2 flex items-center justify-between",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: "text-xs font-semibold uppercase tracking-wide text-muted-foreground",
+                                                    children: [
+                                                        "Fotos (",
+                                                        fotos.length,
+                                                        ")"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                    lineNumber: 1044,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "button",
+                                                    onClick: ()=>fileInputRef.current?.click(),
+                                                    className: "text-xs font-semibold text-primary",
+                                                    children: "Adicionar +"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                    lineNumber: 1045,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                            lineNumber: 1043,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex flex-col gap-3",
+                                            children: fotos.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex h-32 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/30 text-muted-foreground",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$camera$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Camera$3e$__["Camera"], {
+                                                        className: "size-6 mb-2 opacity-50",
+                                                        strokeWidth: 1.5
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                        lineNumber: 1051,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-xs font-medium",
+                                                        children: "Nenhuma foto adicionada"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                        lineNumber: 1052,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                lineNumber: 1050,
+                                                columnNumber: 19
+                                            }, this) : fotos.map((foto, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex gap-3 rounded-2xl border border-border bg-background p-2 pr-4 shadow-sm",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "relative size-20 shrink-0 overflow-hidden rounded-xl bg-muted",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                                                    src: foto.url,
+                                                                    alt: "Foto",
+                                                                    className: "h-full w-full object-cover",
+                                                                    style: {
+                                                                        transform: `rotate(${foto.rotacao}deg)`
+                                                                    }
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                    lineNumber: 1059,
+                                                                    columnNumber: 25
+                                                                }, this),
+                                                                i === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "absolute left-1 top-1 rounded bg-black/70 px-1.5 py-0.5 text-[8px] font-bold uppercase text-white",
+                                                                    children: "Capa"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                    lineNumber: 1061,
+                                                                    columnNumber: 27
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                            lineNumber: 1057,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex flex-1 flex-col justify-center",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    type: "button",
+                                                                    onClick: ()=>setFotoEditando(foto),
+                                                                    className: "text-left",
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                            className: `text-sm font-semibold ${foto.titulo ? 'text-foreground' : 'text-muted-foreground italic'}`,
+                                                                            children: foto.titulo || 'Adicionar título...'
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                            lineNumber: 1066,
+                                                                            columnNumber: 27
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                            className: "mt-0.5 text-xs text-muted-foreground line-clamp-1",
+                                                                            children: foto.descricao || 'Adicionar descrição...'
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                            lineNumber: 1067,
+                                                                            columnNumber: 27
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                    lineNumber: 1065,
+                                                                    columnNumber: 25
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "mt-2 flex items-center gap-1.5",
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            type: "button",
+                                                                            onClick: ()=>rotacionarFoto(i),
+                                                                            className: "flex size-7 items-center justify-center rounded-full bg-muted text-foreground transition-brand active:scale-95",
+                                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$cw$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCw$3e$__["RotateCw"], {
+                                                                                className: "size-3.5"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                                lineNumber: 1070,
+                                                                                columnNumber: 206
+                                                                            }, this)
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                            lineNumber: 1070,
+                                                                            columnNumber: 27
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            type: "button",
+                                                                            disabled: i === 0,
+                                                                            onClick: ()=>moverFoto(i, 'esq'),
+                                                                            className: "flex size-7 items-center justify-center rounded-full bg-muted text-foreground disabled:opacity-30 transition-brand active:scale-95",
+                                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__["ChevronLeft"], {
+                                                                                className: "size-3.5"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                                lineNumber: 1071,
+                                                                                columnNumber: 247
+                                                                            }, this)
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                            lineNumber: 1071,
+                                                                            columnNumber: 27
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            type: "button",
+                                                                            disabled: i === fotos.length - 1,
+                                                                            onClick: ()=>moverFoto(i, 'dir'),
+                                                                            className: "flex size-7 items-center justify-center rounded-full bg-muted text-foreground disabled:opacity-30 transition-brand active:scale-95",
+                                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
+                                                                                className: "size-3.5"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                                lineNumber: 1072,
+                                                                                columnNumber: 262
+                                                                            }, this)
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                            lineNumber: 1072,
+                                                                            columnNumber: 27
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                            className: "flex-1"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                            lineNumber: 1073,
+                                                                            columnNumber: 27
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            type: "button",
+                                                                            onClick: ()=>removerFoto(i),
+                                                                            className: "flex size-7 items-center justify-center rounded-full bg-red-500/10 text-red-600 transition-brand active:scale-95",
+                                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
+                                                                                className: "size-3.5"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                                lineNumber: 1074,
+                                                                                columnNumber: 205
+                                                                            }, this)
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                            lineNumber: 1074,
+                                                                            columnNumber: 27
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                                    lineNumber: 1069,
+                                                                    columnNumber: 25
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                            lineNumber: 1064,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    ]
+                                                }, foto.id, true, {
+                                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                    lineNumber: 1056,
+                                                    columnNumber: 21
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                            lineNumber: 1048,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                    lineNumber: 1042,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "border-t border-border/50 pt-4 mt-2",
+                                    children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                             className: "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground",
                                             children: "URL do Vídeo"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1001,
+                                            lineNumber: 1084,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3246,13 +3531,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1002,
+                                            lineNumber: 1085,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1000,
+                                    lineNumber: 1083,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3262,7 +3547,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "URL do Tour 360"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1005,
+                                            lineNumber: 1088,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3273,24 +3558,24 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1006,
+                                            lineNumber: 1089,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1004,
+                                    lineNumber: 1087,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 999,
+                            lineNumber: 1039,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 998,
+                        lineNumber: 1038,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AccordionSection, {
@@ -3300,7 +3585,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 1012,
+                            lineNumber: 1095,
                             columnNumber: 62
                         }, this),
                         isOpen: openSection === 8,
@@ -3315,7 +3600,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Observações Internas"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1015,
+                                            lineNumber: 1098,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -3326,13 +3611,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "w-full resize-none rounded-2xl border border-border bg-muted/40 p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1016,
+                                            lineNumber: 1099,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1014,
+                                    lineNumber: 1097,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3345,7 +3630,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "Chave disponível?"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1021,
+                                                    lineNumber: 1104,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -3358,7 +3643,7 @@ function FormCaptarImovel({ onClose }) {
                                                             children: "Sim"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                            lineNumber: 1023,
+                                                            lineNumber: 1106,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -3366,19 +3651,19 @@ function FormCaptarImovel({ onClose }) {
                                                             children: "Não"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                            lineNumber: 1024,
+                                                            lineNumber: 1107,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1022,
+                                                    lineNumber: 1105,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1020,
+                                            lineNumber: 1103,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3388,7 +3673,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "Local das chaves"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1028,
+                                                    lineNumber: 1111,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3399,19 +3684,19 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1029,
+                                                    lineNumber: 1112,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1027,
+                                            lineNumber: 1110,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1019,
+                                    lineNumber: 1102,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3424,7 +3709,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "Matrícula Nº"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1035,
+                                                    lineNumber: 1118,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3434,13 +3719,13 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1036,
+                                                    lineNumber: 1119,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1034,
+                                            lineNumber: 1117,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3450,7 +3735,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "IPTU Nº"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1039,
+                                                    lineNumber: 1122,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3460,19 +3745,19 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1040,
+                                                    lineNumber: 1123,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1038,
+                                            lineNumber: 1121,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1033,
+                                    lineNumber: 1116,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3485,7 +3770,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "INCRA Nº"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1046,
+                                                    lineNumber: 1129,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3495,13 +3780,13 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1047,
+                                                    lineNumber: 1130,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1045,
+                                            lineNumber: 1128,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3511,7 +3796,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "Cartório"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1050,
+                                                    lineNumber: 1133,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3521,19 +3806,19 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1051,
+                                                    lineNumber: 1134,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1049,
+                                            lineNumber: 1132,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1044,
+                                    lineNumber: 1127,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3546,7 +3831,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "Energia Nº"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1057,
+                                                    lineNumber: 1140,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3556,13 +3841,13 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1058,
+                                                    lineNumber: 1141,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1056,
+                                            lineNumber: 1139,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3572,7 +3857,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "Água Nº"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1061,
+                                                    lineNumber: 1144,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3582,19 +3867,19 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1062,
+                                                    lineNumber: 1145,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1060,
+                                            lineNumber: 1143,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1055,
+                                    lineNumber: 1138,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3607,7 +3892,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "Captador 1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1068,
+                                                    lineNumber: 1151,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3617,13 +3902,13 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1069,
+                                                    lineNumber: 1152,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1067,
+                                            lineNumber: 1150,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3633,7 +3918,7 @@ function FormCaptarImovel({ onClose }) {
                                                     children: "Captador 2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1072,
+                                                    lineNumber: 1155,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3643,30 +3928,30 @@ function FormCaptarImovel({ onClose }) {
                                                     className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                                    lineNumber: 1073,
+                                                    lineNumber: 1156,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1071,
+                                            lineNumber: 1154,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1066,
+                                    lineNumber: 1149,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 1013,
+                            lineNumber: 1096,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 1012,
+                        lineNumber: 1095,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AccordionSection, {
@@ -3676,7 +3961,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 1080,
+                            lineNumber: 1163,
                             columnNumber: 63
                         }, this),
                         isOpen: openSection === 9,
@@ -3694,14 +3979,14 @@ function FormCaptarImovel({ onClose }) {
                                             className: "size-5 rounded border-border text-primary focus:ring-primary"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1083,
+                                            lineNumber: 1166,
                                             columnNumber: 15
                                         }, this),
                                         "Destaque na Página Inicial"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1082,
+                                    lineNumber: 1165,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -3714,14 +3999,14 @@ function FormCaptarImovel({ onClose }) {
                                             className: "size-5 rounded border-border text-primary focus:ring-primary"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1087,
+                                            lineNumber: 1170,
                                             columnNumber: 15
                                         }, this),
                                         "Destaque no Banner"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1086,
+                                    lineNumber: 1169,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -3734,25 +4019,25 @@ function FormCaptarImovel({ onClose }) {
                                             className: "size-5 rounded border-border text-primary focus:ring-primary"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1091,
+                                            lineNumber: 1174,
                                             columnNumber: 15
                                         }, this),
                                         "Oportunidade (Selo)"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1090,
+                                    lineNumber: 1173,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 1081,
+                            lineNumber: 1164,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 1080,
+                        lineNumber: 1163,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AccordionSection, {
@@ -3762,7 +4047,7 @@ function FormCaptarImovel({ onClose }) {
                             strokeWidth: 2.5
                         }, void 0, false, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 1098,
+                            lineNumber: 1181,
                             columnNumber: 58
                         }, this),
                         isOpen: openSection === 10,
@@ -3784,14 +4069,14 @@ function FormCaptarImovel({ onClose }) {
                                             strokeWidth: 2
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1109,
+                                            lineNumber: 1192,
                                             columnNumber: 15
                                         }, this),
                                         "Preencher com IA"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1100,
+                                    lineNumber: 1183,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3801,7 +4086,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Título"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1113,
+                                            lineNumber: 1196,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3811,13 +4096,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1114,
+                                            lineNumber: 1197,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1112,
+                                    lineNumber: 1195,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3827,7 +4112,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Palavras-Chave"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1117,
+                                            lineNumber: 1200,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3837,13 +4122,13 @@ function FormCaptarImovel({ onClose }) {
                                             className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1118,
+                                            lineNumber: 1201,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1116,
+                                    lineNumber: 1199,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3853,7 +4138,7 @@ function FormCaptarImovel({ onClose }) {
                                             children: "Descrição"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1121,
+                                            lineNumber: 1204,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -3863,46 +4148,248 @@ function FormCaptarImovel({ onClose }) {
                                             className: "w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                            lineNumber: 1122,
+                                            lineNumber: 1205,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/form-captar-imovel.tsx",
-                                    lineNumber: 1120,
+                                    lineNumber: 1203,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/app/form-captar-imovel.tsx",
-                            lineNumber: 1099,
+                            lineNumber: 1182,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 1098,
+                        lineNumber: 1181,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        type: "button",
-                        onClick: onClose,
-                        className: "h-14 w-full mt-2 rounded-2xl bg-primary text-base font-semibold text-primary-foreground shadow-xl shadow-primary/20 transition-transform active:scale-[0.98]",
-                        children: "Salvar Imóvel"
-                    }, void 0, false, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mt-4 flex gap-2",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "button",
+                                onClick: ()=>setFase('upload'),
+                                className: "h-12 rounded-2xl border border-border px-5 text-sm font-semibold text-foreground transition-brand active:bg-muted",
+                                children: "Voltar"
+                            }, void 0, false, {
+                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                lineNumber: 1211,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "button",
+                                onClick: onClose,
+                                className: "flex-1 h-12 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]",
+                                children: "Salvar Captação"
+                            }, void 0, false, {
+                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                lineNumber: 1212,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/components/app/form-captar-imovel.tsx",
-                        lineNumber: 1126,
+                        lineNumber: 1210,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/form-captar-imovel.tsx",
-                lineNumber: 740,
+                lineNumber: 780,
                 columnNumber: 7
+            }, this),
+            fotoEditando && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute inset-0 z-50 flex flex-col justify-end",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        type: "button",
+                        onClick: ()=>setFotoEditando(null),
+                        className: "absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]"
+                    }, void 0, false, {
+                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                        lineNumber: 1219,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex justify-center pt-3 pb-1",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "h-1 w-10 rounded-full bg-border"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                    lineNumber: 1222,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                lineNumber: 1221,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center justify-between px-6 py-4 border-b border-border",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                        className: "font-serif text-xl font-semibold text-foreground",
+                                        children: "Detalhes da foto"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                        lineNumber: 1225,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        onClick: ()=>setFotoEditando(null),
+                                        className: "flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                            className: "size-4",
+                                            strokeWidth: 1.5
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                            lineNumber: 1227,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                        lineNumber: 1226,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                lineNumber: 1224,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex flex-col gap-4 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "relative h-40 w-full overflow-hidden rounded-2xl bg-muted border border-border",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                            src: fotoEditando.url,
+                                            alt: "",
+                                            className: "h-full w-full object-cover",
+                                            style: {
+                                                transform: `rotate(${fotoEditando.rotacao}deg)`
+                                            }
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                            lineNumber: 1233,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                        lineNumber: 1231,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground",
+                                                children: "Título"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                lineNumber: 1236,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "text",
+                                                value: fotoEditando.titulo,
+                                                onChange: (e)=>setFotoEditando({
+                                                        ...fotoEditando,
+                                                        titulo: e.target.value
+                                                    }),
+                                                placeholder: "Ex: Fachada, Sala de Estar...",
+                                                className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                lineNumber: 1237,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                        lineNumber: 1235,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground",
+                                                children: "Descrição (Opcional)"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                lineNumber: 1246,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                                value: fotoEditando.descricao,
+                                                onChange: (e)=>setFotoEditando({
+                                                        ...fotoEditando,
+                                                        descricao: e.target.value
+                                                    }),
+                                                rows: 2,
+                                                placeholder: "Detalhes para os portais...",
+                                                className: "w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                                lineNumber: 1247,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                        lineNumber: 1245,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        onClick: ()=>{
+                                            const idx = fotos.findIndex((f)=>f.id === fotoEditando.id);
+                                            if (idx !== -1) {
+                                                const nova = [
+                                                    ...fotos
+                                                ];
+                                                nova[idx] = fotoEditando;
+                                                setFotos(nova);
+                                            }
+                                            setFotoEditando(null);
+                                        },
+                                        className: "mt-2 h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground active:scale-[0.98]",
+                                        children: "Salvar detalhes"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                        lineNumber: 1255,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                                lineNumber: 1230,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/app/form-captar-imovel.tsx",
+                        lineNumber: 1220,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/app/form-captar-imovel.tsx",
+                lineNumber: 1218,
+                columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/app/form-captar-imovel.tsx",
-        lineNumber: 689,
+        lineNumber: 729,
         columnNumber: 5
     }, this);
 }

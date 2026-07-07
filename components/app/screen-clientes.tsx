@@ -118,8 +118,12 @@ export function ScreenClientes({
                 <span className="block truncate text-sm font-semibold text-foreground">
                   {c.nome}
                 </span>
-                <span className="block text-xs text-muted-foreground">
-                  {c.tipo} · último contato {c.ultimoContato}
+                <span className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span className="inline-flex rounded-md border border-border bg-muted/50 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-foreground">
+                    {c.tipo}
+                  </span>
+                  <span>·</span>
+                  <span>contato {c.ultimoContato}</span>
                 </span>
               </span>
               <span className="flex gap-2">

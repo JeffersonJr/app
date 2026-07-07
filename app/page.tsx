@@ -62,17 +62,29 @@ export default function Page() {
             <span className="font-serif text-base font-semibold text-foreground">Microsistec</span>
           </div>
 
-          {/* Botão de notificações */}
-          <button
-            type="button"
-            aria-label="Notificações"
-            onClick={() => setNotificacoesAbertas(true)}
-            className="relative flex size-10 items-center justify-center rounded-full bg-card border border-border text-foreground shadow-sm transition-brand active:scale-95"
-          >
-            <Bell className="size-5" strokeWidth={1.5} />
-            {/* Badge de não lidas */}
-            <span className="absolute right-2 top-2 size-2 rounded-full bg-amber" aria-hidden="true" />
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Botão de notificações */}
+            <button
+              type="button"
+              aria-label="Notificações"
+              onClick={() => setNotificacoesAbertas(true)}
+              className="relative flex size-10 items-center justify-center rounded-full bg-card border border-border text-foreground shadow-sm transition-brand active:scale-95"
+            >
+              <Bell className="size-5" strokeWidth={1.5} />
+              {/* Badge de não lidas */}
+              <span className="absolute right-2 top-2 size-2 rounded-full bg-amber" aria-hidden="true" />
+            </button>
+            
+            {/* Botão de Perfil */}
+            <button
+              onClick={() => setTab('perfil')}
+              type="button"
+              aria-label="Meu Perfil"
+              className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#2B5250] text-sm font-semibold text-white shadow-sm border border-[#2B5250] transition-transform active:scale-95"
+            >
+              JC
+            </button>
+          </div>
         </div>
 
         {/* Conteúdo principal */}

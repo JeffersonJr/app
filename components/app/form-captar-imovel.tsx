@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info, Monitor } from 'lucide-react'
+import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info, Monitor, Trash2, RotateCw, ChevronLeft, ChevronRight } from 'lucide-react'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 
@@ -87,9 +87,17 @@ function AccordionSection({ title, icon, isOpen, onToggle, children }: { title: 
   )
 }
 
+type Foto = {
+  id: string
+  url: string
+  titulo: string
+  descricao: string
+  rotacao: number
+}
+
 export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
   const [fase, setFase] = useState<Fase>('upload')
-  const [fotosPreview, setFotosPreview] = useState<string[]>([])
+  const [fotos, setFotos] = useState<Foto[]>([])
   const [progresso, setProgresso] = useState(0)
   const [progressoTexto, setProgressoTexto] = useState('')
   const [resultado, setResultado] = useState(AI_RESULTADOS[0])
@@ -98,6 +106,7 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [openSection, setOpenSection] = useState<number>(1)
   const [showFastLink, setShowFastLink] = useState(false)
+  const [fotoEditando, setFotoEditando] = useState<Foto | null>(null)
 
   // Campos do formulário
   // 1. Negociações e Tipos
@@ -191,8 +200,42 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
   function handleFotos(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? [])
     if (files.length === 0) return
-    const previews = files.slice(0, 5).map((f) => URL.createObjectURL(f))
-    setFotosPreview(previews)
+    const novasFotos = files.map((f) => ({
+      id: Math.random().toString(36).substr(2, 9),
+      url: URL.createObjectURL(f),
+      titulo: '',
+      descricao: '',
+      rotacao: 0
+    }))
+    setFotos(prev => [...prev, ...novasFotos])
+  }
+
+  function moverFoto(index: number, direcao: 'esq' | 'dir') {
+    if (direcao === 'esq' && index > 0) {
+      const nova = [...fotos]
+      ;[nova[index - 1], nova[index]] = [nova[index], nova[index - 1]]
+      setFotos(nova)
+    } else if (direcao === 'dir' && index < fotos.length - 1) {
+      const nova = [...fotos]
+      ;[nova[index], nova[index + 1]] = [nova[index + 1], nova[index]]
+      setFotos(nova)
+    }
+  }
+
+  function rotacionarFoto(index: number) {
+    const nova = [...fotos]
+    nova[index].rotacao = (nova[index].rotacao + 90) % 360
+    setFotos(nova)
+  }
+
+  function removerFoto(index: number) {
+    setFotos(fotos.filter((_, i) => i !== index))
+  }
+
+  function atualizarFoto(index: number, campo: 'titulo' | 'descricao', valor: string) {
+    const nova = [...fotos]
+    nova[index][campo] = valor
+    setFotos(nova)
   }
 
   async function iniciarAnaliseIA() {
@@ -279,52 +322,49 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             className="flex w-full flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-primary/30 bg-primary/5 py-10 transition-brand active:scale-[0.98]"
+            className="flex h-[320px] w-full flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border bg-card/50 transition-colors"
           >
-            <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10">
-              <Camera className="size-7 text-primary" strokeWidth={1.5} />
+            <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Camera className="size-8" strokeWidth={1.5} />
             </div>
-            <div className="text-center">
-              <p className="text-sm font-semibold text-foreground">Selecionar fotos do imóvel</p>
-              <p className="text-xs text-muted-foreground">Fachada, sala, cozinha, quartos... (até 5 fotos)</p>
-            </div>
-            <span className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground">
-              Abrir câmera / galeria
-            </span>
+            <p className="mt-4 font-serif text-lg font-semibold text-foreground">
+              Adicionar fotos
+            </p>
+            <p className="mt-1 text-center text-sm text-muted-foreground">
+              Tire fotos agora ou<br />escolha da galeria
+            </p>
           </button>
         ) : (
-          <div>
-            {/* Grid de preview */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              {fotosPreview.map((src, i) => (
-                <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+          <div className="flex h-[320px] w-full flex-col rounded-3xl border border-border bg-card shadow-soft overflow-hidden">
+            <div className="grid grid-cols-2 gap-2 p-2 h-full">
+              {fotos.map((foto, i) => (
+                <div key={foto.id} className="relative h-full w-full overflow-hidden rounded-2xl bg-muted">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={src} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
-                  {i === 0 && (
-                    <span className="absolute left-1 top-1 rounded-md bg-black/60 px-1.5 py-0.5 text-[9px] font-semibold text-white">
-                      Principal
-                    </span>
-                  )}
+                  <img src={foto.url} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" style={{ transform: `rotate(${foto.rotacao}deg)` }} />
                 </div>
               ))}
-              {fotosPreview.length < 5 && (
+              {fotos.length < 5 && (
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex aspect-square flex-col items-center justify-center rounded-xl border-2 border-dashed border-border text-muted-foreground"
+                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-muted-foreground"
                 >
                   <Camera className="size-5" strokeWidth={1.5} />
                   <span className="text-[10px] mt-1">Mais</span>
                 </button>
               )}
             </div>
-            <p className="text-xs text-muted-foreground mb-4">
-              {fotosPreview.length} foto{fotosPreview.length > 1 ? 's' : ''} selecionada{fotosPreview.length > 1 ? 's' : ''}
-            </p>
+            <div className="p-4 bg-muted/30">
+              <p className="font-serif text-lg font-semibold text-foreground">
+                {fotos.length} foto{fotos.length > 1 ? 's' : ''} selecionada{fotos.length > 1 ? 's' : ''}
+              </p>
+              <p className="text-xs text-muted-foreground">A IA vai extrair as informações</p>
+            </div>
           </div>
         )}
 
         <div className="mt-4 flex flex-col gap-3">
-          {fotosPreview.length > 0 && (
+          {fotos.length > 0 && (
             <button
               type="button"
               onClick={() => {
@@ -438,12 +478,12 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Fotos sendo "processadas" */}
-        {fotosPreview.length > 0 && (
+        {fotos.length > 0 && (
           <div className="mt-6 flex gap-2">
-            {fotosPreview.slice(0, 3).map((src, i) => (
+            {fotos.slice(0, 3).map((foto, i) => (
               <div key={i} className={`relative size-16 overflow-hidden rounded-xl transition-all duration-700 ${progresso > i * 30 ? 'opacity-100 ring-2 ring-primary' : 'opacity-40'}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt="" className="h-full w-full object-cover" />
+                <img src={foto.url} alt="" className="h-full w-full object-cover" style={{ transform: `rotate(${foto.rotacao}deg)` }} />
                 {progresso > (i + 1) * 30 && (
                   <div className="absolute inset-0 flex items-center justify-center bg-primary/40">
                     <CheckCircle2 className="size-5 text-white" strokeWidth={2} />
@@ -481,7 +521,7 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
           <Sparkles className="size-5 text-teal-mid shrink-0" strokeWidth={1.5} />
           <div>
             <p className="text-sm font-semibold text-teal-deep">IA concluiu a análise</p>
-            <p className="text-xs text-muted-foreground">Confiança: 94% · Baseado em {fotosPreview.length > 0 ? fotosPreview.length : 3} foto{fotosPreview.length !== 1 ? 's' : ''}</p>
+            <p className="text-xs text-muted-foreground">Confiança: 94% · Baseado em {fotos.length > 0 ? fotos.length : 3} foto{fotos.length !== 1 ? 's' : ''}</p>
           </div>
           <div className="ml-auto flex items-center gap-1">
             <span className="font-mono text-lg font-bold text-teal-mid">94%</span>
@@ -997,7 +1037,50 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
         {/* BLOCO 7: MÍDIA */}
         <AccordionSection title="Mídia" icon={<ImageIcon className="size-4" strokeWidth={2.5} />} isOpen={openSection === 7} onToggle={() => setOpenSection(openSection === 7 ? 0 : 7)}>
           <div className="flex flex-col gap-4">
+            
+            {/* Gerenciamento de Fotos */}
             <div>
+              <div className="mb-2 flex items-center justify-between">
+                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Fotos ({fotos.length})</label>
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="text-xs font-semibold text-primary">Adicionar +</button>
+              </div>
+              
+              <div className="flex flex-col gap-3">
+                {fotos.length === 0 ? (
+                  <div className="flex h-32 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/30 text-muted-foreground">
+                    <Camera className="size-6 mb-2 opacity-50" strokeWidth={1.5} />
+                    <span className="text-xs font-medium">Nenhuma foto adicionada</span>
+                  </div>
+                ) : (
+                  fotos.map((foto, i) => (
+                    <div key={foto.id} className="flex gap-3 rounded-2xl border border-border bg-background p-2 pr-4 shadow-sm">
+                      <div className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-muted">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={foto.url} alt="Foto" className="h-full w-full object-cover" style={{ transform: `rotate(${foto.rotacao}deg)` }} />
+                        {i === 0 && (
+                          <span className="absolute left-1 top-1 rounded bg-black/70 px-1.5 py-0.5 text-[8px] font-bold uppercase text-white">Capa</span>
+                        )}
+                      </div>
+                      <div className="flex flex-1 flex-col justify-center">
+                        <button type="button" onClick={() => setFotoEditando(foto)} className="text-left">
+                          <p className={`text-sm font-semibold ${foto.titulo ? 'text-foreground' : 'text-muted-foreground italic'}`}>{foto.titulo || 'Adicionar título...'}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{foto.descricao || 'Adicionar descrição...'}</p>
+                        </button>
+                        <div className="mt-2 flex items-center gap-1.5">
+                          <button type="button" onClick={() => rotacionarFoto(i)} className="flex size-7 items-center justify-center rounded-full bg-muted text-foreground transition-brand active:scale-95"><RotateCw className="size-3.5" /></button>
+                          <button type="button" disabled={i === 0} onClick={() => moverFoto(i, 'esq')} className="flex size-7 items-center justify-center rounded-full bg-muted text-foreground disabled:opacity-30 transition-brand active:scale-95"><ChevronLeft className="size-3.5" /></button>
+                          <button type="button" disabled={i === fotos.length - 1} onClick={() => moverFoto(i, 'dir')} className="flex size-7 items-center justify-center rounded-full bg-muted text-foreground disabled:opacity-30 transition-brand active:scale-95"><ChevronRight className="size-3.5" /></button>
+                          <div className="flex-1" />
+                          <button type="button" onClick={() => removerFoto(i)} className="flex size-7 items-center justify-center rounded-full bg-red-500/10 text-red-600 transition-brand active:scale-95"><Trash2 className="size-3.5" /></button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="border-t border-border/50 pt-4 mt-2">
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">URL do Vídeo</label>
               <input type="url" value={urlVideo} onChange={(e) => setUrlVideo(e.target.value)} placeholder="https://youtube.com/..." className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
@@ -1123,10 +1206,71 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
             </div>
           </div>
         </AccordionSection>
-        <button type="button" onClick={onClose} className="h-14 w-full mt-2 rounded-2xl bg-primary text-base font-semibold text-primary-foreground shadow-xl shadow-primary/20 transition-transform active:scale-[0.98]">
-          Salvar Imóvel
-        </button>
+
+        <div className="mt-4 flex gap-2">
+          <button type="button" onClick={() => setFase('upload')} className="h-12 rounded-2xl border border-border px-5 text-sm font-semibold text-foreground transition-brand active:bg-muted">Voltar</button>
+          <button type="button" onClick={onClose} className="flex-1 h-12 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]">Salvar Captação</button>
+        </div>
       </div>
+
+      {/* Modal Edição de Foto */}
+      {fotoEditando && (
+        <div className="absolute inset-0 z-50 flex flex-col justify-end">
+          <button type="button" onClick={() => setFotoEditando(null)} className="absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]" />
+          <div className="relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200">
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="h-1 w-10 rounded-full bg-border" />
+            </div>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+              <h2 className="font-serif text-xl font-semibold text-foreground">Detalhes da foto</h2>
+              <button type="button" onClick={() => setFotoEditando(null)} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <X className="size-4" strokeWidth={1.5} />
+              </button>
+            </div>
+            <div className="flex flex-col gap-4 p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+              <div className="relative h-40 w-full overflow-hidden rounded-2xl bg-muted border border-border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={fotoEditando.url} alt="" className="h-full w-full object-cover" style={{ transform: `rotate(${fotoEditando.rotacao}deg)` }} />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título</label>
+                <input
+                  type="text"
+                  value={fotoEditando.titulo}
+                  onChange={(e) => setFotoEditando({ ...fotoEditando, titulo: e.target.value })}
+                  placeholder="Ex: Fachada, Sala de Estar..."
+                  className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Descrição (Opcional)</label>
+                <textarea
+                  value={fotoEditando.descricao}
+                  onChange={(e) => setFotoEditando({ ...fotoEditando, descricao: e.target.value })}
+                  rows={2}
+                  placeholder="Detalhes para os portais..."
+                  className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const idx = fotos.findIndex(f => f.id === fotoEditando.id)
+                  if (idx !== -1) {
+                    const nova = [...fotos]
+                    nova[idx] = fotoEditando
+                    setFotos(nova)
+                  }
+                  setFotoEditando(null)
+                }}
+                className="mt-2 h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground active:scale-[0.98]"
+              >
+                Salvar detalhes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

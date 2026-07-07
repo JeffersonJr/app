@@ -1436,32 +1436,52 @@ function Page() {
                             lineNumber: 56,
                             columnNumber: 11
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            "aria-label": "Notificações",
-                            onClick: ()=>setNotificacoesAbertas(true),
-                            className: "relative flex size-10 items-center justify-center rounded-full bg-card border border-border text-foreground shadow-sm transition-brand active:scale-95",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center gap-2",
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bell$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bell$3e$__["Bell"], {
-                                    className: "size-5",
-                                    strokeWidth: 1.5
-                                }, void 0, false, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
+                                    "aria-label": "Notificações",
+                                    onClick: ()=>setNotificacoesAbertas(true),
+                                    className: "relative flex size-10 items-center justify-center rounded-full bg-card border border-border text-foreground shadow-sm transition-brand active:scale-95",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bell$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bell$3e$__["Bell"], {
+                                            className: "size-5",
+                                            strokeWidth: 1.5
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/page.tsx",
+                                            lineNumber: 73,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "absolute right-2 top-2 size-2 rounded-full bg-amber",
+                                            "aria-hidden": "true"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/page.tsx",
+                                            lineNumber: 75,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 72,
+                                    lineNumber: 67,
                                     columnNumber: 13
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    className: "absolute right-2 top-2 size-2 rounded-full bg-amber",
-                                    "aria-hidden": "true"
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: ()=>setTab('perfil'),
+                                    type: "button",
+                                    "aria-label": "Meu Perfil",
+                                    className: "flex size-10 shrink-0 items-center justify-center rounded-full bg-[#2B5250] text-sm font-semibold text-white shadow-sm border border-[#2B5250] transition-transform active:scale-95",
+                                    children: "JC"
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 74,
+                                    lineNumber: 79,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 66,
+                            lineNumber: 65,
                             columnNumber: 11
                         }, this)
                     ]
@@ -1480,7 +1500,7 @@ function Page() {
                             onVerAtendimento: abrirAtendimentoPorId
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 81,
+                            lineNumber: 93,
                             columnNumber: 13
                         }, this),
                         tab === 'negocios' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$screen$2d$negocios$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ScreenNegocios"], {
@@ -1489,17 +1509,17 @@ function Page() {
                             onAtendimentoAberto: ()=>setAtendimentoAbertoId(null)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 89,
+                            lineNumber: 101,
                             columnNumber: 13
                         }, this),
                         tab === 'atividades' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$screen$2d$atividades$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ScreenAtividades"], {}, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 95,
+                            lineNumber: 107,
                             columnNumber: 36
                         }, this),
                         tab === 'imoveis' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$screen$2d$imoveis$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ScreenImoveis"], {}, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 96,
+                            lineNumber: 108,
                             columnNumber: 33
                         }, this),
                         tab === 'clientes' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$screen$2d$clientes$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ScreenClientes"], {
@@ -1508,7 +1528,7 @@ function Page() {
                             onAbrirCliente: setClienteAbertoId
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 98,
+                            lineNumber: 110,
                             columnNumber: 13
                         }, this),
                         tab === 'perfil' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$screen$2d$perfil$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ScreenPerfil"], {
@@ -1516,13 +1536,13 @@ function Page() {
                             onLogout: handleLogout
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 105,
+                            lineNumber: 117,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 79,
+                    lineNumber: 91,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$tab$2d$bar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabBar"], {
@@ -1531,7 +1551,7 @@ function Page() {
                     onQuickAdd: ()=>setQuickAddAberto(true)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 112,
+                    lineNumber: 124,
                     columnNumber: 9
                 }, this),
                 quickAddAberto && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$quick$2d$add$2d$sheet$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["QuickAddSheet"], {
@@ -1539,7 +1559,7 @@ function Page() {
                     onAtividadeCriada: abrirAtendimentoPorId
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 118,
+                    lineNumber: 130,
                     columnNumber: 28
                 }, this),
                 notificacoesAbertas && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$notificacoes$2d$panel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["NotificacoesPanel"], {
@@ -1547,7 +1567,7 @@ function Page() {
                     onVerAtendimento: abrirAtendimentoPorId
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 120,
+                    lineNumber: 132,
                     columnNumber: 11
                 }, this)
             ]

@@ -37,28 +37,18 @@ export function ScreenHoje({
 
   const pendentes = localAtividades.filter((a) => !a.concluida)
 
+  const horaAtual = new Date().getHours()
+  const saudacao = horaAtual < 12 ? 'Bom dia' : horaAtual < 18 ? 'Boa tarde' : 'Boa noite'
+
   return (
     <div className="flex flex-col gap-6 px-5 pt-4 pb-28">
-      <header className="flex items-center justify-between">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            Terça · 07 Jul
-          </p>
-          <h1 className="mt-1 font-serif text-3xl font-semibold text-foreground tracking-tight">
-            Bom dia, Jefferson.
-          </h1>
-        </div>
-        <button
-          onClick={onVerPerfil}
-          type="button"
-          aria-label="Meu Perfil"
-          className="flex items-center gap-3 rounded-[20px] bg-card p-1.5 pr-4 shadow-sm border border-border transition-transform active:scale-95 hover:border-primary/20 hover:shadow-md"
-        >
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-[#2B5250] text-sm font-semibold text-white shadow-inner">
-            JC
-          </div>
-          <span className="text-sm font-medium text-foreground whitespace-nowrap">Meu Perfil</span>
-        </button>
+      <header className="flex flex-col gap-1">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          Terça · 07 Jul
+        </p>
+        <h1 className="font-serif text-3xl font-semibold text-foreground tracking-tight truncate">
+          {saudacao}, Jefferson.
+        </h1>
       </header>
 
       {/* Indicadores do dia */}
