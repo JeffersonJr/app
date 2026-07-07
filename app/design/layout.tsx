@@ -51,6 +51,19 @@ export default function DesignSystemLayout({ children }: { children: React.React
                 <NavItem href="#padroes" icon={<Code2 className="w-4 h-4" />}>Padrões de Código</NavItem>
               </ul>
             </div>
+
+            <div className="pt-4 border-t border-border">
+              <h2 className="text-xs font-bold text-teal-deep uppercase tracking-wider mb-3 flex items-center gap-2">
+                <LayoutTemplate className="w-4 h-4" /> Wiki do App
+              </h2>
+              <ul className="space-y-1">
+                <NavItem href="#wiki-visao-geral" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Visão Geral (Hoje)</div>
+                <NavItem href="#wiki-negocios" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Módulo de Negócios</div>
+                <NavItem href="#wiki-relacionamento" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Relacionamento (FORD)</div>
+                <NavItem href="#wiki-captacao" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Captação (Imóveis)</div>
+                <NavItem href="#wiki-inteligencia" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Inteligência Artificial</div>
+              </ul>
+            </div>
           </nav>
         </div>
       </aside>

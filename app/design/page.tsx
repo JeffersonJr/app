@@ -368,6 +368,126 @@ export default function DesignSystemPage() {
         </div>
       </section>
 
+      {/* ---------------------------------------------------- */}
+      {/* WIKI DO APP */}
+      {/* ---------------------------------------------------- */}
+
+      <div className="pt-24 border-t-4 border-fog">
+        <h1 className="text-4xl font-extrabold text-teal-deep mb-4">Wiki do Aplicativo</h1>
+        <p className="text-lg text-slate leading-relaxed mb-12">
+          Esta seção é a documentação viva (Wiki) de todo o funcionamento da aplicação. Aqui você encontra as regras de negócio, o fluxo de cada tela, e explicações detalhadas sobre como o CRM Microsistec opera nos bastidores.
+        </p>
+
+        {/* Visão Geral */}
+        <section id="wiki-visao-geral" className="scroll-mt-8 mb-20">
+          <SectionHeader title="Visão Geral (Painel Hoje)" description="A central de comando do corretor de imóveis." />
+          <div className="space-y-6 text-slate leading-relaxed bg-white p-6 md:p-8 rounded-2xl border border-border shadow-sm min-w-0">
+            <h3 className="text-lg font-bold text-ink">O que é?</h3>
+            <p>O painel "Hoje" é a tela inicial do aplicativo, acessada logo após o login. Funciona como um cockpit diário que resume os compromissos, finanças, metas e imóveis recomendados.</p>
+            
+            <h3 className="text-lg font-bold text-ink mt-8">O que faz?</h3>
+            <ul className="list-disc list-inside space-y-2">
+              <li><strong>Resumo Financeiro:</strong> Exibe comissões recebidas, a receber e estimativa futura baseada em propostas em andamento.</li>
+              <li><strong>Metas Mensais:</strong> Um gráfico de progresso (ex: "Faltam R$ 32.500 para atingir a meta").</li>
+              <li><strong>Atividades Diárias:</strong> Timeline rolável de tarefas, visitas e ligações agendadas para o dia.</li>
+              <li><strong>Match de Imóveis:</strong> Carrossel de imóveis recomendados baseados no perfil dos clientes mais quentes do funil.</li>
+            </ul>
+
+            <h3 className="text-lg font-bold text-ink mt-8">Como faz? (Regras de Negócio)</h3>
+            <p>Os dados na tela principal são agregados das atividades cadastradas no módulo de <em>Clientes</em>. A barra de rolagem horizontal permite visualizar dias futuros na agenda. Quando uma atividade é tocada, o sistema abre o Sheet de edição de atividade.</p>
+          </div>
+        </section>
+
+        {/* Módulo de Negócios */}
+        <section id="wiki-negocios" className="scroll-mt-8 mb-20">
+          <SectionHeader title="Módulo de Negócios (Kanban)" description="Gestão de pipeline de vendas e locações." />
+          <div className="space-y-6 text-slate leading-relaxed bg-white p-6 md:p-8 rounded-2xl border border-border shadow-sm min-w-0">
+            <h3 className="text-lg font-bold text-ink">O que é?</h3>
+            <p>A aba central do app (ícone de cifrão). É onde o ciclo de vida da venda/locação acontece, através de um quadro Kanban.</p>
+
+            <h3 className="text-lg font-bold text-ink mt-8">O que faz?</h3>
+            <ul className="list-disc list-inside space-y-2">
+              <li>Visualiza negócios em etapas: <em>Prospecção</em>, <em>Qualificação</em>, <em>Proposta</em> e <em>Fechamento</em>.</li>
+              <li>Permite mover cards entre colunas deslizando a tela horizontalmente (Swipe).</li>
+              <li>Criação "Fast" de novos negócios apertando o botão <strong>+</strong> no topo.</li>
+            </ul>
+
+            <h3 className="text-lg font-bold text-ink mt-8">Como faz? (Regras de Negócio)</h3>
+            <p>
+              O sistema foi construído pensando "Mobile First". No celular, o corretor vê uma coluna por vez, e desliza <em>(Swipe)</em> para a lateral para ver as próximas etapas do funil. O sistema detecta o arraste do dedo via eventos <code>onTouchStart</code>, <code>onTouchMove</code> e <code>onTouchEnd</code>. 
+            </p>
+            <p>Cada card exibe uma <strong>Badge de Temperatura</strong>. A temperatura (Quente/Morno/Frio) determina a urgência do negócio. Os cards possuem também identificação visual rápida de quando a última interação ocorreu, mudando de cor para alertar se um negócio estiver abandonado.</p>
+          </div>
+        </section>
+
+        {/* Relacionamento (FORD) */}
+        <section id="wiki-relacionamento" className="scroll-mt-8 mb-20">
+          <SectionHeader title="Relacionamento (Clientes & FORD 4Q)" description="Cadastro, histórico e perfis psicológicos de leads." />
+          <div className="space-y-6 text-slate leading-relaxed bg-white p-6 md:p-8 rounded-2xl border border-border shadow-sm min-w-0">
+            <h3 className="text-lg font-bold text-ink">O que é?</h3>
+            <p>A tela de Clientes (acessada pelo ícone de usuários). É a central do CRM (Customer Relationship Management) da Microsistec, onde reside o histórico completo de interação.</p>
+
+            <h3 className="text-lg font-bold text-ink mt-8">O que faz?</h3>
+            <ul className="list-disc list-inside space-y-2">
+              <li>Listagem de contatos com filtros rápidos (Favoritos, Ativos, etc).</li>
+              <li><strong>Método F.O.R.D:</strong> Coleta de dados avançados sobre a <em>Família</em>, <em>Ocupação</em>, <em>Recreação</em> e <em>Desejos (Sonhos)</em> do cliente.</li>
+              <li><strong>Matriz 4Q:</strong> Classificação das intenções de compra.</li>
+              <li><strong>Timeline Interativa:</strong> Registro cronológico de visitas, ligações, e mensagens trocadas.</li>
+            </ul>
+
+            <h3 className="text-lg font-bold text-ink mt-8">Como faz? (Regras de Negócio)</h3>
+            <p>
+              Ao abrir o perfil de um cliente, o usuário visualiza uma ficha completa. O grande diferencial é a seção FORD 4Q, que utiliza acordiões expansíveis. Ao preencher os sonhos e ocupações de um lead, o algoritmo do app pode, futuramente, gerar um "match" perfeito com imóveis novos no mercado (ex: cliente gosta de Tênis, o app recomenda condomínios com quadra de Tênis).
+            </p>
+            <p>A aba de <strong>Atividades</strong> permite registrar novos contatos no sistema via um menu fixo <code>Sheet</code> animado na parte inferior da tela, que possui integração com calendário e envio de notificações.</p>
+          </div>
+        </section>
+
+        {/* Captação */}
+        <section id="wiki-captacao" className="scroll-mt-8 mb-20">
+          <SectionHeader title="Captação (Imóveis)" description="Adição de portfólio, unidades e preenchimento IA." />
+          <div className="space-y-6 text-slate leading-relaxed bg-white p-6 md:p-8 rounded-2xl border border-border shadow-sm min-w-0">
+            <h3 className="text-lg font-bold text-ink">O que é?</h3>
+            <p>Onde o corretor insere novos produtos para venda ou locação, incluindo imóveis avulsos e grandes empreendimentos.</p>
+
+            <h3 className="text-lg font-bold text-ink mt-8">O que faz?</h3>
+            <ul className="list-disc list-inside space-y-2">
+              <li><strong>Captação Fast:</strong> Permite salvar um rascunho apenas com fotos e endereço no momento da visita, para concluir os detalhes no computador depois.</li>
+              <li><strong>Captação de Empreendimentos:</strong> Gestão de prédios/loteamentos e suas respectivas unidades (lotes, apartamentos) individualizadas.</li>
+              <li><strong>Envio de Mídia:</strong> Possibilidade de tirar fotos na hora, carregar da galeria e anexar ao formulário dinâmico.</li>
+            </ul>
+
+            <h3 className="text-lg font-bold text-ink mt-8">Como faz? (Regras de Negócio)</h3>
+            <p>
+              Os formulários de captação utilizam um sistema multi-passos controlados por variáveis de estado (<code>fase === 'formulario' | 'upload' | 'analisando'</code>). 
+              A submissão de fotos interage nativamente com a câmera do celular através de inputs HTML do tipo <code>file accept="image/*"</code> que permanecem ocultos e são acionados via botões visuais da interface (<code>fileInputRef.current.click()</code>).
+            </p>
+          </div>
+        </section>
+
+        {/* Inteligência Artificial */}
+        <section id="wiki-inteligencia" className="scroll-mt-8 mb-20">
+          <SectionHeader title="Inteligência Artificial (Albert)" description="Automação, Upsell e IA Generativa na rotina." />
+          <div className="space-y-6 text-slate leading-relaxed bg-white p-6 md:p-8 rounded-2xl border border-border shadow-sm min-w-0">
+            <h3 className="text-lg font-bold text-ink">O que é?</h3>
+            <p>O "Albert" é a IA embarcada dentro do sistema Microsistec. Ele ajuda a automatizar o trabalho braçal e trazer insights dos dados do CRM.</p>
+
+            <h3 className="text-lg font-bold text-ink mt-8">O que faz?</h3>
+            <ul className="list-disc list-inside space-y-2">
+              <li><strong>Chatbot Especialista:</strong> Pode ser acionado no Painel Hoje para sugerir abordagens a clientes que esfriaram no funil ou buscar pendências diárias.</li>
+              <li><strong>Visão Computacional na Captação:</strong> Ao subir as fotos de um imóvel novo, a IA varre as imagens para preencher os campos do formulário sozinha (detecta banheiros, suites, área externa, se é apartamento ou casa).</li>
+              <li><strong>Geração de Descrições:</strong> Transforma atributos do imóvel (3 dorms, 2 vagas) em descrições românticas e atrativas para portais de anúncio.</li>
+            </ul>
+
+            <h3 className="text-lg font-bold text-ink mt-8">Como faz? (Regras de Negócio)</h3>
+            <p>
+              Na tela de Captação, se o corretor tenta usar a IA e não possui o plano ativado, um <strong>Upsell Modal</strong> bloqueia a ação, utilizando gatilhos de ancoragem cognitiva (Plano A vs B) e um selo animado de "Mais Popular" na versão com IA. Se a IA estiver ativada, uma animação com barras de progresso circulares (SVG Stroke) simula a análise neural, passando por estágios (OCR, Visão Computacional, Estimativa de Mercado). O formulário é então pré-preenchido utilizando mutação de estados nos componentes do React.
+            </p>
+          </div>
+        </section>
+
+      </div>
+
     </div>
   )
 }
