@@ -41,7 +41,7 @@ export function ScreenHoje({
   const saudacao = horaAtual < 12 ? 'Bom dia' : horaAtual < 18 ? 'Boa tarde' : 'Boa noite'
 
   return (
-    <div className="flex flex-col gap-6 px-5 pt-4 pb-28">
+    <div className="flex flex-col gap-6 px-5 md:px-12 pt-4 md:pt-10 pb-28 md:pb-12 max-w-7xl mx-auto w-full">
       <header className="flex flex-col gap-1">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           Terça · 07 Jul

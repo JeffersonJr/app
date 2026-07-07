@@ -3,5 +3,6 @@
   "/crm/page": "app/crm/page.js",
   "/design/page": "app/design/page.js",
   "/page": "app/page.js",
-  "/site/page": "app/site/page.js"
+  "/site/page": "app/site/page.js",
+  "/web/page": "app/web/page.js"
 }

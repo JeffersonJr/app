@@ -140,8 +140,8 @@ export function ScreenNegocios({
   }
 
   return (
-    <div className="flex h-full flex-col pb-24">
-      <header className="px-5 pt-4">
+    <div className="flex h-full flex-col pb-24 max-w-7xl mx-auto w-full">
+      <header className="px-5 pt-4 md:px-12 md:pt-10">
         {/* Linha 1 — Título + filtros */}
         <div className="flex items-center justify-between">
           <h1 className="font-serif text-2xl font-semibold text-foreground">Atendimentos</h1>

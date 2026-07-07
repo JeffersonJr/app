@@ -132,7 +132,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   }
 
   return (
-    <div className="flex flex-col gap-4 px-5 pt-4 pb-28">
+    <div className="flex h-full flex-col pb-24 md:px-12 md:pt-10 max-w-7xl mx-auto w-full">
       <header className="glass-header -mx-5 px-5 pb-4 pt-4">
         <div className="flex items-center justify-between">
           <div className="flex rounded-full bg-muted/50 p-1">
