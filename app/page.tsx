@@ -54,14 +54,14 @@ export default function Page() {
         {/* Header global com logo Microsistec e notificações */}
         <div className="glass-header flex items-center justify-between px-5 py-3">
         {/* Logo Microsistec */}
-          <div className="flex items-center gap-2">
+          <button type="button" onClick={() => setTab('hoje')} className="flex items-center gap-2 transition-brand active:opacity-70 text-left">
               <img
                 src="/logo.svg"
                 alt="Microsistec"
                 className="size-8 object-contain"
               />
             <span className="font-serif text-base font-semibold text-foreground">Microsistec</span>
-          </div>
+          </button>
 
           <div className="flex items-center gap-2">
             {/* Botão de notificações */}

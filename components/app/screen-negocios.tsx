@@ -265,7 +265,7 @@ export function ScreenNegocios({
                     : 'border border-border bg-card text-muted-foreground'
                 }`}
               >
-                {etapaConfig[etapa].label}
+                {etapa.label}
                 <span
                   className={`flex size-5 items-center justify-center rounded-full font-mono text-[11px] ${
                     estagioAtivo === i ? 'bg-teal-shadow/40 text-primary-foreground' : 'bg-muted text-muted-foreground'
@@ -291,7 +291,7 @@ export function ScreenNegocios({
                 <div className="mt-10 flex flex-col items-center gap-2 text-center">
                   <span className="text-4xl">🎯</span>
                   <p className="text-sm text-muted-foreground">
-                    Nenhum atendimento em {etapaConfig[estagio.id].label}
+                    Nenhum atendimento em {funilAtivo.etapas?.find(e => e.id === estagio.id)?.label || estagio.id}
                   </p>
                   <p className="text-xs text-muted-foreground/60">
                     {filtroModo !== 'todos' && `Filtro: ${filtroModo === 'venda' ? 'Venda' : 'Locação'} · `}
