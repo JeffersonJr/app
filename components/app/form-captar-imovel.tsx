@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info, Monitor, Trash2, RotateCw, ChevronLeft, ChevronRight } from 'lucide-react'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'

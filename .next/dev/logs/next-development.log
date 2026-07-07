@@ -38,3 +38,9 @@
 {"timestamp":"00:10:19.715","source":"Browser","level":"ERROR","message":"./components/app/screen-imoveis.tsx:24:3\nthe name `Plus` is defined multiple times\n  22 |   SlidersHorizontal,\n  23 |   Plus,\n> 24 |   Plus,\n     |   ^^^^\n  25 |   ArrowUpDown,\n  26 |   PenLine\n  27 | } from 'lucide-react'\n\nEcmascript file had an error\n\nImport traces:\n  Client Component Browser:\n    ./components/app/screen-imoveis.tsx [Client Component Browser]\n    ./app/page.tsx [Client Component Browser]\n    ./app/page.tsx [Server Component]\n\n  Client Component SSR:\n    ./components/app/screen-imoveis.tsx [Client Component SSR]\n    ./app/page.tsx [Client Component SSR]\n    ./app/page.tsx [Server Component] \"\""}
 {"timestamp":"00:10:35.003","source":"Server","level":"LOG","message":"✓ Compiled in 54ms"}
 {"timestamp":"00:10:35.966","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:12:22.783","source":"Server","level":"LOG","message":"✓ Compiled in 593ms"}
+{"timestamp":"00:12:58.922","source":"Server","level":"LOG","message":"✓ Compiled in 110ms"}
+{"timestamp":"00:13:40.597","source":"Server","level":"LOG","message":"✓ Compiled in 249ms"}
+{"timestamp":"00:14:40.067","source":"Server","level":"LOG","message":"✓ Compiled in 111ms"}
+{"timestamp":"00:15:10.300","source":"Server","level":"LOG","message":"✓ Compiled in 599ms"}
+{"timestamp":"00:15:41.168","source":"Server","level":"LOG","message":"✓ Compiled in 132ms"}

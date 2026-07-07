@@ -22,11 +22,15 @@ import {
   SlidersHorizontal,
   Plus,
   ArrowUpDown,
-  PenLine
+  PenLine,
+  X,
+  Mic,
+  PhoneOff
 } from 'lucide-react'
 import { imoveis, type Imovel } from '@/lib/app-data'
 import { FiltrosAvancadosImoveisSheet } from '@/components/app/filtros-avancados-imoveis-sheet'
 import { FormCaptarImovel } from '@/components/app/form-captar-imovel'
+import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 
 const filtros = ['Todos', 'Venda', 'Locação', 'Livre', 'Reservado'] as const
 
@@ -262,6 +266,12 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
   const [editMode, setEditMode] = useState(false)
+  const [mostrarUpsell, setMostrarUpsell] = useState(false)
+  const [upsellSucesso, setUpsellSucesso] = useState(false)
+  const [mostrarMapa, setMostrarMapa] = useState(false)
+  const [mostrarWhatsappModal, setMostrarWhatsappModal] = useState(false)
+  const [msgWhatsapp, setMsgWhatsapp] = useState(`Olá ${imovel.proprietario?.nome}, tudo bem?\nSou da imobiliária e gostaria de falar sobre o seu imóvel (${imovel.codigo}).`)
+  const [mostrarLigacao, setMostrarLigacao] = useState(false)
 
   function handleShare(leadName: string) {
     setShowShareMenu(false)
@@ -292,7 +302,7 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
           {toastMessage}
         </div>
       )}
-      <div className="flex flex-col pb-32">
+      <div className="flex flex-col pb-8">
       <div className="relative aspect-[4/3]">
         <Image
           src={imovel.foto || '/placeholder.svg'}
@@ -385,6 +395,32 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
           </div>
         )}
 
+        <div className="mt-6 border-t border-border/50 pt-6">
+          <h3 className="text-sm font-semibold text-foreground mb-4">Detalhes Técnicos</h3>
+          <div className="grid grid-cols-2 gap-y-4 gap-x-2">
+            {[
+              { label: 'Operação', value: imovel.operacoes?.join(', ') || imovel.operacao },
+              { label: 'Tipo', value: imovel.tipoImovel },
+              { label: 'Finalidade', value: imovel.finalidade },
+              { label: 'Situação', value: imovel.situacaoImovel },
+              { label: 'Status', value: imovel.status },
+              { label: 'CIB', value: imovel.cib },
+              { label: 'CEP', value: imovel.cep },
+              { label: 'Ano Construção', value: imovel.anoConstrucao },
+              { label: 'Andar', value: imovel.andar },
+              { label: 'Salas', value: imovel.salas },
+              { label: 'Banheiros', value: imovel.banheiros },
+              { label: 'Área Total', value: imovel.areaTotal ? `${imovel.areaTotal}m²` : null },
+              { label: 'Exclusividade', value: imovel.tipoExclusividade && imovel.tipoExclusividade !== 'Nenhuma' ? `${imovel.tipoExclusividade} (Até ${imovel.validadeExclusividade})` : 'Nenhuma' },
+            ].filter(i => i.value).map((item) => (
+              <div key={item.label}>
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{item.label}</p>
+                <p className="text-sm font-medium text-foreground">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {(imovel.condominio || imovel.iptu) && (
           <div className="mt-6 flex gap-4">
             {imovel.condominio && (
@@ -450,10 +486,21 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
               </button>
             </div>
             <p className="text-sm text-muted-foreground mb-3">{imovel.enderecoCompleto}</p>
-            <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-muted/30 border border-border flex flex-col items-center justify-center text-muted-foreground shadow-soft">
-              <Map className="size-8 opacity-20 mb-2" strokeWidth={1.5} />
-              <span className="text-xs font-medium opacity-50">Mapa não carregado</span>
-            </div>
+            {!mostrarMapa ? (
+              <button 
+                type="button" 
+                onClick={() => setMostrarMapa(true)}
+                className="relative aspect-video w-full overflow-hidden rounded-2xl bg-muted border border-border flex flex-col items-center justify-center text-muted-foreground shadow-soft transition-brand hover:opacity-90"
+              >
+                <Map className="size-8 opacity-40 mb-2 text-primary" strokeWidth={1.5} />
+                <span className="text-xs font-semibold text-primary">Tocar para ver o mapa</span>
+              </button>
+            ) : (
+              <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border shadow-soft">
+                {/* Imagem estática simulando um mapa do google maps */}
+                <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(imovel.enderecoCompleto)}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${encodeURIComponent(imovel.enderecoCompleto)}&key=YOUR_API_KEY`} alt="Mapa" className="w-full h-full object-cover bg-muted" onError={(e) => { e.currentTarget.src = 'https://developers.google.com/static/maps/images/landing/hero_geocoding_api.png' }} />
+              </div>
+            )}
           </div>
         )}
 
@@ -473,24 +520,47 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
             </div>
             
             <div className="flex gap-2 mb-3">
-              <button className="flex-1 flex items-center justify-center gap-2 h-11 rounded-2xl bg-primary text-primary-foreground text-xs font-semibold shadow-sm transition-brand active:scale-[0.98]">
+              <button 
+                type="button"
+                onClick={() => setMostrarWhatsappModal(true)}
+                className="flex-1 flex items-center justify-center gap-2 h-11 rounded-2xl bg-[#25D366] text-white text-xs font-semibold shadow-sm transition-brand active:scale-[0.98]"
+              >
                 <MessageCircle className="size-4" strokeWidth={2} /> WhatsApp
               </button>
-              <button className="flex-1 flex items-center justify-center gap-2 h-11 rounded-2xl border border-border bg-card text-foreground text-xs font-semibold shadow-sm transition-brand active:bg-muted">
+              <button 
+                type="button"
+                onClick={() => setMostrarLigacao(true)}
+                className="flex-1 flex items-center justify-center gap-2 h-11 rounded-2xl border border-border bg-card text-foreground text-xs font-semibold shadow-sm transition-brand active:bg-muted"
+              >
                 <Phone className="size-4" strokeWidth={2} /> Ligar
               </button>
             </div>
 
-            <button className="w-full flex items-center justify-center gap-2 h-11 rounded-2xl bg-amber/15 text-amber-900 border border-amber/30 text-xs font-semibold shadow-sm transition-brand active:scale-[0.98]">
-              <Bot className="size-4" strokeWidth={2} /> Atualizar com Albert (IA)
-            </button>
+            {upsellSucesso ? (
+              <div className="w-full flex items-center gap-3 rounded-2xl bg-green-50 p-3 border border-green-200">
+                <div className="flex size-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+                  <CheckCircle2 className="size-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-green-800">Proprietário acionado</p>
+                  <p className="text-[10px] text-green-700 truncate">O Albert já iniciou contato via WhatsApp.</p>
+                </div>
+              </div>
+            ) : (
+              <button 
+                type="button"
+                onClick={() => setMostrarUpsell(true)}
+                className="w-full flex items-center justify-center gap-2 h-11 rounded-2xl bg-amber/15 text-amber-900 border border-amber/30 text-xs font-semibold shadow-sm transition-brand active:scale-[0.98]"
+              >
+                <Bot className="size-4" strokeWidth={2} /> Atualizar com Albert (IA)
+              </button>
+            )}
           </div>
         )}
       </div>
 
-      {/* Sticky Action Bar */}
-      <div className="absolute bottom-0 left-0 right-0 p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] bg-background/90 backdrop-blur-md border-t border-border/50 z-20 flex gap-3 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.05)]">
-        <button type="button" onClick={() => setShowShareMenu(true)} className="flex-1 flex items-center justify-center gap-2.5 h-14 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/30 transition-transform active:scale-[0.98]">
+      <div className="px-5 pb-5">
+        <button type="button" onClick={() => setShowShareMenu(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/30 transition-transform active:scale-[0.98]">
           <Share2 className="size-5" strokeWidth={2.5} /> 
           Compartilhar com Lead
         </button>
@@ -531,6 +601,83 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
             </div>
           </div>
         </>
+      )}
+
+      {/* IA Upsell */}
+      {mostrarUpsell && (
+        <div className="absolute inset-0 z-50 overflow-y-auto bg-background">
+          <IAUpsellPage 
+            onClose={() => setMostrarUpsell(false)}
+            onContract={() => {
+              setMostrarUpsell(false)
+              setUpsellSucesso(true)
+            }}
+          />
+        </div>
+      )}
+
+      {/* WhatsApp Editor Modal */}
+      {mostrarWhatsappModal && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setMostrarWhatsappModal(false)} />
+          <div className="relative w-full max-w-sm rounded-3xl bg-card p-5 shadow-2xl border border-border animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="flex size-8 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366]">
+                  <MessageCircle className="size-4" />
+                </div>
+                <h3 className="font-semibold text-foreground">Mensagem WhatsApp</h3>
+              </div>
+              <button type="button" onClick={() => setMostrarWhatsappModal(false)} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground">
+                <X className="size-4" />
+              </button>
+            </div>
+            
+            <textarea
+              value={msgWhatsapp}
+              onChange={(e) => setMsgWhatsapp(e.target.value)}
+              className="w-full h-32 resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[#25D366]/50 mb-4"
+              placeholder="Digite sua mensagem..."
+            />
+            
+            <button 
+              type="button" 
+              onClick={() => {
+                setMostrarWhatsappModal(false)
+                setToastMessage('Redirecionando para o WhatsApp...')
+                setTimeout(() => setToastMessage(''), 3000)
+              }}
+              className="w-full flex items-center justify-center gap-2 h-12 rounded-2xl bg-[#25D366] text-white font-semibold text-sm transition-transform active:scale-[0.98]"
+            >
+              Abrir WhatsApp
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Calling Screen */}
+      {mostrarLigacao && (
+        <div className="absolute inset-0 z-[100] bg-zinc-900 flex flex-col justify-between animate-in fade-in slide-in-from-bottom">
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="mb-8 flex size-24 items-center justify-center rounded-full bg-zinc-800 text-4xl text-zinc-300">
+              {imovel.proprietario?.nome.substring(0, 2).toUpperCase()}
+            </div>
+            <h2 className="text-2xl font-medium text-white mb-2">{imovel.proprietario?.nome}</h2>
+            <p className="text-zinc-400">Chamando...</p>
+          </div>
+          <div className="p-10 flex items-center justify-center gap-8 pb-16">
+            <button type="button" className="flex size-14 items-center justify-center rounded-full bg-zinc-800 text-white transition-transform active:scale-90">
+              <Mic className="size-6" />
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setMostrarLigacao(false)}
+              className="flex size-16 items-center justify-center rounded-full bg-red-500 text-white transition-transform active:scale-90 shadow-lg shadow-red-500/20"
+            >
+              <PhoneOff className="size-7" />
+            </button>
+          </div>
+        </div>
       )}
     </div>
     </>

@@ -106,6 +106,7 @@ export function AtendimentoDetail({
   const [localAtividades, setLocalAtividades] = useState(atendimento.atividades)
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
   const [sheetGanhoPerdido, setSheetGanhoPerdido] = useState<'ganho' | 'perdido' | null>(null)
+  const [expandedTimelineItemId, setExpandedTimelineItemId] = useState<string | null>(null)
   
   // 4Q e FORD Edit states
   const [editing4Q, setEditing4Q] = useState(false)
@@ -520,20 +521,47 @@ export function AtendimentoDetail({
             </div>
 
             <ol className="relative flex flex-col gap-4 border-l-2 border-border pl-5">
-              {timelineFiltrada.map((item) => (
-                <li key={item.id} className="relative">
-                  <span className="absolute -left-[22px] top-1 flex size-5 items-center justify-center rounded-full bg-card border border-border text-[10px]">
-                    {iconeTimeline(item.tipo)}
-                  </span>
-                  {item.importante && (
-                    <span className="absolute -left-[30px] -top-1 text-[8px]">⭐</span>
-                  )}
-                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                    {item.data} · {item.hora}
-                  </p>
-                  <p className="mt-0.5 text-sm font-medium text-foreground">{item.descricao}</p>
-                </li>
-              ))}
+              {timelineFiltrada.map((item) => {
+                const isExpanded = expandedTimelineItemId === item.id
+                return (
+                  <li key={item.id} className="relative">
+                    <span className={`absolute -left-[22px] top-1 flex size-5 items-center justify-center rounded-full border border-border text-[10px] transition-colors ${isExpanded ? 'bg-primary text-primary-foreground border-primary' : 'bg-card text-foreground'}`}>
+                      {iconeTimeline(item.tipo)}
+                    </span>
+                    {item.importante && (
+                      <span className="absolute -left-[30px] -top-1 text-[8px]">⭐</span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setExpandedTimelineItemId(isExpanded ? null : item.id)}
+                      className="w-full text-left rounded-xl p-3 -ml-3 transition-colors hover:bg-muted/50 focus:outline-none"
+                    >
+                      <div className="flex items-center justify-between">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                          {item.data} · {item.hora}
+                        </p>
+                        <ChevronRight className={`size-4 text-muted-foreground transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                      </div>
+                      <p className="mt-0.5 text-sm font-medium text-foreground pr-4 leading-tight">{item.descricao}</p>
+                      
+                      {/* Expanded Content */}
+                      {isExpanded && (
+                        <div className="mt-3 pt-3 border-t border-border/50 text-xs text-muted-foreground animate-in slide-in-from-top-1 fade-in duration-200">
+                          <p className="font-semibold text-foreground mb-1">Detalhes Adicionais:</p>
+                          <p>Origem do registro: {item.tipo === 'whatsapp' ? 'Integração Oficial (API)' : 'Sistema interno'}</p>
+                          <p className="mt-1">Registrado por: Atendente Digital (Albert)</p>
+                          
+                          {item.tipo === 'imovel_enviado' && (
+                            <button className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-primary/10 py-2 font-semibold text-primary">
+                              <MapPin className="size-4" /> Ver Imóvel Enviado
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </button>
+                  </li>
+                )
+              })}
               {timelineFiltrada.length === 0 && (
                 <p className="text-sm text-muted-foreground">Nenhum registro para este filtro.</p>
               )}
