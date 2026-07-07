@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Bell, ChevronRight, HelpCircle, LogOut, ShieldCheck, Target, X, Lock, KeyRound } from 'lucide-react'
+import { Bell, ChevronRight, HelpCircle, LogOut, ShieldCheck, Target, X, Lock, KeyRound, Smartphone, RefreshCcw } from 'lucide-react'
 
 export function ScreenPerfil({
   onNotificacoes,
@@ -13,6 +13,14 @@ export function ScreenPerfil({
   const [showSecurity, setShowSecurity] = useState(false)
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
   const [newPassword, setNewPassword] = useState('')
+  const [temAtualizacao, setTemAtualizacao] = useState(true)
+  const [mensagemAtualizacao, setMensagemAtualizacao] = useState('')
+
+  const handleAtualizar = () => {
+    setTemAtualizacao(false)
+    setMensagemAtualizacao('App atualizado com a última versão')
+    setTimeout(() => setMensagemAtualizacao(''), 3000)
+  }
   return (
     <div className="flex h-full flex-col bg-fog pb-28">
       {/* Header Profile */}
@@ -95,6 +103,53 @@ export function ScreenPerfil({
               </div>
               <ChevronRight className="size-5 text-muted-foreground" strokeWidth={1.5} />
             </a>
+          </div>
+        </div>
+
+        {/* Versão do App */}
+        <div className="flex flex-col gap-2">
+          <span className="ml-2 font-mono text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            Sobre o App
+          </span>
+          <div className="flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-soft p-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-3">
+                <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Smartphone className="size-5" strokeWidth={1.5} />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-[15px] text-foreground">Microsistec CRM</span>
+                  <span className="text-xs text-muted-foreground">Versão 1.0.4 (Build 402)</span>
+                </div>
+              </div>
+              {temAtualizacao ? (
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-amber"></span>
+                </span>
+              ) : (
+                <span className="text-[10px] font-bold text-teal-mid bg-teal-mid/10 px-2 py-1 rounded-full uppercase tracking-wider">
+                  Atualizado
+                </span>
+              )}
+            </div>
+            
+            {mensagemAtualizacao && (
+              <div className="mt-2 text-xs font-semibold text-[#25D366] bg-[#25D366]/10 px-3 py-2 rounded-xl text-center animate-in fade-in slide-in-from-top-2">
+                {mensagemAtualizacao}
+              </div>
+            )}
+
+            {temAtualizacao && !mensagemAtualizacao && (
+              <button
+                type="button"
+                onClick={handleAtualizar}
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-amber/20 px-4 py-2.5 text-sm font-bold text-amber-700 transition-colors hover:bg-amber/30 active:scale-95"
+              >
+                <RefreshCcw className="size-4" />
+                Atualização disponível! Toque para atualizar
+              </button>
+            )}
           </div>
         </div>
 
