@@ -15,11 +15,12 @@ import {
 } from '@/lib/app-data'
 import { AtendimentoDetail } from '@/components/app/atendimento-detail'
 import { FiltrosAvancadosSheet } from '@/components/app/filtros-avancados-sheet'
+import { GerenciarFunilSheet } from '@/components/app/gerenciar-funil-sheet'
 import { type Temperatura, type OrigemLead } from '@/lib/app-data'
 
 type FiltroModo = 'todos' | 'venda' | 'locacao'
 
-const ETAPAS: EtapaFunil[] = ['qualificando', 'conhecendo', 'agendado', 'negociando']
+
 
 export function ScreenNegocios({
   onVerCliente,
@@ -39,6 +40,7 @@ export function ScreenNegocios({
   const [mostrarNovoFunil, setMostrarNovoFunil] = useState(false)
   const [novoFunilNome, setNovoFunilNome] = useState('')
   const [funisList, setFunisList] = useState(funis)
+  const [mostrarGerenciarFunil, setMostrarGerenciarFunil] = useState(false)
   
   const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false)
   const [filtroTemp, setFiltroTemp] = useState<Temperatura | 'todas'>('todas')
@@ -136,20 +138,28 @@ export function ScreenNegocios({
         </p>
 
         {/* ── Seletor de Funil ── */}
-        <div className="mt-4 relative">
+        <div className="mt-4 relative flex items-center gap-2">
           <button
-          type="button"
-          onClick={() => setMostrarSeletorFunil(!mostrarSeletorFunil)}
-          className="flex items-center gap-2 rounded-2xl bg-card px-4 py-2.5 shadow-soft transition-brand active:scale-95 border border-border w-full"
-        >
-          <div className="flex flex-col text-left flex-1">
-            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Funil Ativo</span>
-            <span className="font-serif text-base font-semibold text-foreground flex items-center justify-between gap-1.5">
-              {funilAtivo.nome}
-              <ChevronDown className={`size-4 text-muted-foreground transition-transform ${mostrarSeletorFunil ? 'rotate-180' : ''}`} strokeWidth={2} />
-            </span>
-          </div>
-        </button>
+            type="button"
+            onClick={() => setMostrarSeletorFunil(!mostrarSeletorFunil)}
+            className="flex flex-1 items-center gap-2 rounded-2xl bg-card px-4 py-2.5 shadow-soft transition-brand active:scale-95 border border-border"
+          >
+            <div className="flex flex-col text-left flex-1">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Funil Ativo</span>
+              <span className="font-serif text-base font-semibold text-foreground flex items-center justify-between gap-1.5">
+                {funilAtivo.nome}
+                <ChevronDown className={`size-4 text-muted-foreground transition-transform ${mostrarSeletorFunil ? 'rotate-180' : ''}`} strokeWidth={2} />
+              </span>
+            </div>
+          </button>
+          
+          <button
+            type="button"
+            onClick={() => setMostrarGerenciarFunil(true)}
+            className="flex size-[3.25rem] items-center justify-center rounded-2xl bg-card border border-border shadow-soft transition-brand active:scale-95 text-muted-foreground hover:text-foreground"
+          >
+            <SlidersHorizontal className="size-5" strokeWidth={1.5} />
+          </button>
 
           {/* Dropdown de funis */}
           {mostrarSeletorFunil && (
@@ -242,11 +252,11 @@ export function ScreenNegocios({
 
         {/* ── Chips de etapa ── */}
         <div className="mt-4 flex gap-2 overflow-x-auto scrollbar-none -mx-5 px-5">
-          {ETAPAS.map((etapa, i) => {
-            const estagio = pipeline.find((f) => f.id === etapa)
+          {(funilAtivo.etapas || []).map((etapa, i) => {
+            const estagio = pipeline.find((f) => f.id === etapa.id)
             return (
               <button
-                key={etapa}
+                key={etapa.id}
                 type="button"
                 onClick={() => setEstagioAtivo(i)}
                 className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-brand ${
@@ -313,6 +323,30 @@ export function ScreenNegocios({
           setFiltroTemp={setFiltroTemp}
           filtroOrigem={filtroOrigem}
           setFiltroOrigem={setFiltroOrigem}
+        />
+      )}
+      {mostrarGerenciarFunil && (
+        <GerenciarFunilSheet
+          funil={funilAtivo}
+          atendimentos={dados.filter(a => a.funilId === funilAtivo.id)}
+          onClose={() => setMostrarGerenciarFunil(false)}
+          onSave={(funilAtualizado, transferencias) => {
+            // Update funnel
+            setFunisList(prev => prev.map(f => f.id === funilAtualizado.id ? funilAtualizado : f))
+            setFunilAtivo(funilAtualizado)
+            
+            // Apply transfers
+            if (Object.keys(transferencias).length > 0) {
+              setDados(prev => prev.map(a => {
+                if (a.funilId === funilAtualizado.id && transferencias[a.etapa]) {
+                  return { ...a, etapa: transferencias[a.etapa] }
+                }
+                return a
+              }))
+            }
+            
+            setMostrarGerenciarFunil(false)
+          }}
         />
       )}
     </div>

@@ -17,6 +17,13 @@ const TIPOS_POR_FINALIDADE: Record<FinalidadeCategoria, string[]> = {
 
 const STATUS_OPTIONS = ['Livre', 'Ocupado', 'Em reforma'] as const
 
+const CARACTERISTICAS_OPCOES = [
+  'Piscina', 'Churrasqueira', 'Academia', 'Salão de Festas', 'Playground',
+  'Quadra Poliesportiva', 'Varanda Gourmet', 'Ar Condicionado', 'Móveis Planejados',
+  'Elevador', 'Portaria 24h', 'Aceita Pet', 'Jardim', 'Lareira', 'Sauna',
+  'Lavabo', 'Closet', 'Cozinha Americana', 'Quintal', 'Escritório'
+].sort()
+
 // Resultados simulados que a IA "detectaria" das fotos
 const AI_RESULTADOS = [
   {
@@ -57,7 +64,7 @@ const AI_RESULTADOS = [
   },
 ]
 
-type Fase = 'upload' | 'analisando' | 'resultado' | 'modo' | 'formulario_fast' | 'formulario'
+type Fase = 'upload' | 'analisando' | 'resultado' | 'modo' | 'escolha_modo_manual' | 'formulario_fast' | 'formulario'
 
 function AccordionSection({ title, icon, isOpen, onToggle, children }: { title: string, icon: React.ReactNode, isOpen: boolean, onToggle: () => void, children: React.ReactNode }) {
   return (
@@ -94,14 +101,14 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
   // Campos do formulário
   // 1. Negociações e Tipos
   const [titulo, setTitulo] = useState('')
-  const [operacao, setOperacao] = useState<'Venda' | 'Locação' | 'Temporada' | 'Arrendamento'>('Venda')
+  const [operacao, setOperacao] = useState<'Venda' | 'Locação' | 'Venda e Locação' | 'Temporada' | 'Arrendamento'>('Venda')
   const [finalidade, setFinalidade] = useState<FinalidadeCategoria>('Residencial')
   const [tipoImovel, setTipoImovel] = useState('Apartamento')
   const [codigo, setCodigo] = useState('')
   const [cib, setCib] = useState('')
   const [situacaoImovel, setSituacaoImovel] = useState('Pronto')
   const [statusImovel, setStatusImovel] = useState<(typeof STATUS_OPTIONS)[number]>('Livre')
-  const [exclusividade, setExclusividade] = useState(false)
+  const [tipoExclusividade, setTipoExclusividade] = useState<'Nenhuma' | 'Venda' | 'Locação' | 'Ambas'>('Nenhuma')
   const [validadeExclusividade, setValidadeExclusividade] = useState('')
 
   // 2. Localização
@@ -127,6 +134,8 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
 
   // 5. Características
   const [observacoes, setObservacoes] = useState('')
+  const [caracteristicasSelecionadas, setCaracteristicasSelecionadas] = useState<string[]>([])
+  const [buscaCaracteristica, setBuscaCaracteristica] = useState('')
 
   // 6. Proprietário
   const [proprietario, setProprietario] = useState('')
@@ -323,10 +332,59 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
           )}
           <button
             type="button"
-            onClick={() => setFase('formulario')}
+            onClick={() => setFase('escolha_modo_manual')}
             className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold text-muted-foreground transition-brand active:scale-[0.98]"
           >
             Preencher manualmente
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Fase: Escolha Modo Manual ─────────────────────────────────────────────
+  if (fase === 'escolha_modo_manual') {
+    return (
+      <div className="flex flex-col h-full">
+        <div className="flex items-center justify-between mb-6">
+          <button type="button" onClick={() => setFase('upload')} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
+            <X className="size-4" strokeWidth={1.5} />
+          </button>
+          <h2 className="font-serif text-xl font-semibold text-foreground">Modo de Cadastro</h2>
+          <div className="w-8" />
+        </div>
+
+        <p className="text-sm text-muted-foreground mb-6 text-center">
+          Como você deseja cadastrar este imóvel?
+        </p>
+
+        <div className="flex flex-col gap-4">
+          <button
+            type="button"
+            onClick={() => setFase('formulario_fast')}
+            className="flex flex-col items-center gap-3 rounded-3xl border-2 border-primary/20 bg-primary/5 p-6 text-center transition-brand active:scale-[0.98] hover:border-primary/40 hover:bg-primary/10"
+          >
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10">
+              <Zap className="size-7 text-primary" strokeWidth={1.5} />
+            </div>
+            <div>
+              <p className="text-base font-semibold text-foreground mb-1">Cadastro Rápido (Fast)</p>
+              <p className="text-xs text-muted-foreground">Preencha apenas o básico para salvar e continuar depois no celular ou computador.</p>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setFase('formulario')}
+            className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-6 text-center shadow-soft transition-brand active:scale-[0.98] hover:border-border/80"
+          >
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-muted">
+              <LayoutGrid className="size-7 text-muted-foreground" strokeWidth={1.5} />
+            </div>
+            <div>
+              <p className="text-base font-semibold text-foreground mb-1">Cadastro Completo</p>
+              <p className="text-xs text-muted-foreground">Preencha todos os dados, características e informações para já publicar.</p>
+            </div>
           </button>
         </div>
       </div>
@@ -544,9 +602,24 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Finalidade</label>
+              <select value={finalidade} onChange={(e) => setFinalidade(e.target.value as FinalidadeCategoria)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+                {FINALIDADES.map((fin) => <option key={fin} value={fin}>{fin}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipo</label>
+              <select value={tipoImovel} onChange={(e) => setTipoImovel(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+                {TIPOS_POR_FINALIDADE[finalidade].map((tipo) => <option key={tipo} value={tipo}>{tipo}</option>)}
+              </select>
+            </div>
+          </div>
+
           <div>
-            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título do imóvel *</label>
-            <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} placeholder="Ex: Apartamento Jardins 3 quartos" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Endereço Básico / Título *</label>
+            <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} placeholder="Ex: Apartamento Jardins" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -575,14 +648,27 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-3 mt-2 border-t border-border/50 pt-4">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Proprietário</label>
+              <input type="text" value={proprietario} onChange={(e) => setProprietario(e.target.value)} placeholder="Nome" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Telefone</label>
+              <input type="text" value={telefoneProprietario} onChange={(e) => setTelefoneProprietario(e.target.value)} placeholder="(00) 00000-0000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+
           <button
             type="button"
             onClick={onClose}
-            className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
+            className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-amber text-sm font-semibold text-ink shadow-lg shadow-amber/20 transition-brand active:scale-[0.98]"
           >
             <CheckCircle2 className="size-5" />
-            Salvar e Publicar
+            Salvar Rascunho / Fast
           </button>
+          
+          <p className="text-center text-xs text-muted-foreground">Você poderá finalizar as fotos e dados completos depois pelo computador.</p>
         </div>
       </div>
     )
@@ -666,7 +752,7 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Operação</label>
               <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1 py-1">
-                {(['Venda', 'Locação', 'Temporada', 'Arrendamento'] as const).map((o) => (
+                {(['Venda', 'Locação', 'Venda e Locação', 'Temporada', 'Arrendamento'] as const).map((o) => (
                   <button key={o} type="button" onClick={() => setOperacao(o)} className={`shrink-0 rounded-2xl px-4 py-3 text-sm font-semibold transition-brand ${operacao === o ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'}`}>
                     {o}
                   </button>
@@ -692,16 +778,34 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
             </div>
             
             <div className="mt-2 rounded-2xl bg-muted/40 p-4 border border-border/50">
-              <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3 cursor-pointer">
-                <input type="checkbox" checked={exclusividade} onChange={(e) => setExclusividade(e.target.checked)} className="size-4 rounded border-border text-primary focus:ring-primary" />
+              <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
                 Contrato de Exclusividade
               </label>
-              {exclusividade && (
-                <div>
-                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Validade (Dias)</label>
-                  <input type="number" value={validadeExclusividade} onChange={(e) => setValidadeExclusividade(e.target.value)} placeholder="Ex: 90" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <div className="flex flex-col gap-3">
+                <div className="flex gap-2 bg-background p-1.5 rounded-xl border border-border/50">
+                  {(['Nenhuma', 'Venda', 'Locação', 'Ambas'] as const).map(tipo => (
+                    <button
+                      key={tipo}
+                      type="button"
+                      onClick={() => setTipoExclusividade(tipo)}
+                      className={`flex-1 rounded-lg py-2 text-xs font-semibold transition-all ${
+                        tipoExclusividade === tipo 
+                          ? 'bg-primary/10 text-primary' 
+                          : 'text-muted-foreground hover:bg-muted/50'
+                      }`}
+                    >
+                      {tipo}
+                    </button>
+                  ))}
                 </div>
-              )}
+
+                {tipoExclusividade !== 'Nenhuma' && (
+                  <div className="mt-2">
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Validade (Dias)</label>
+                    <input type="number" value={validadeExclusividade} onChange={(e) => setValidadeExclusividade(e.target.value)} placeholder="Ex: 90" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                  </div>
+                )}
+              </div>
             </div>
         </AccordionSection>
 
@@ -796,9 +900,49 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
 
         {/* BLOCO 5: CARACTERÍSTICAS */}
         <AccordionSection title="Características" icon={<Tag className="size-4" strokeWidth={2.5} />} isOpen={openSection === 5} onToggle={() => setOpenSection(openSection === 5 ? 0 : 5)}>
+            <div className="mb-4">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Selecionar Características</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={buscaCaracteristica}
+                  onChange={(e) => setBuscaCaracteristica(e.target.value)}
+                  placeholder="Buscar amenidades, ex: Piscina..."
+                  className="h-10 w-full rounded-xl border border-border bg-background pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            </div>
+            
+            <div className="max-h-56 overflow-y-auto rounded-xl border border-border bg-background p-2 mb-4 scrollbar-hide">
+              <div className="grid grid-cols-2 gap-1">
+                {CARACTERISTICAS_OPCOES
+                  .filter(c => c.toLowerCase().includes(buscaCaracteristica.toLowerCase()))
+                  .map(carac => (
+                  <label key={carac} className="flex items-center gap-2.5 rounded-lg p-2 hover:bg-muted/50 cursor-pointer transition-colors border border-transparent">
+                    <input
+                      type="checkbox"
+                      checked={caracteristicasSelecionadas.includes(carac)}
+                      onChange={(e) => {
+                        if (e.target.checked) setCaracteristicasSelecionadas([...caracteristicasSelecionadas, carac])
+                        else setCaracteristicasSelecionadas(caracteristicasSelecionadas.filter(c => c !== carac))
+                      }}
+                      className="size-4 shrink-0 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm font-medium text-foreground select-none truncate" title={carac}>{carac}</span>
+                  </label>
+                ))}
+                {CARACTERISTICAS_OPCOES.filter(c => c.toLowerCase().includes(buscaCaracteristica.toLowerCase())).length === 0 && (
+                  <div className="col-span-2 text-center p-4 text-sm text-muted-foreground">
+                    Nenhuma característica encontrada.
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Descrição / Observações</label>
-              <textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={4} placeholder="Notas sobre o imóvel, infraestrutura, proximidades..." className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Descrição do imóvel</label>
+              <textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={4} placeholder="Conte a história do imóvel, detalhes e proximidades..." className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
               {observacoes && titulo && (
                 <p className="mt-1.5 flex items-center gap-1 text-[10px] text-teal-mid font-medium">
                   <Sparkles className="size-2.5" strokeWidth={2} />

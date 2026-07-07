@@ -15,7 +15,7 @@ export type OrigemLead =
   | 'Novo'
   | 'Outro'
 
-export type EtapaFunil = 'qualificando' | 'conhecendo' | 'agendado' | 'negociando'
+export type EtapaFunil = string
 
 export type TipoAtividade = 'visita' | 'reuniao' | 'ligacao' | 'prazo' | 'pos-venda'
 
@@ -145,12 +145,20 @@ export type Funil = {
   nome: string
   descricao: string
   cor: string // classe tailwind para a cor do badge
+  etapas?: Array<{ id: string; label: string; cor: string }>
 }
 
+const DEFAULT_ETAPAS = [
+  { id: 'qualificando', label: 'Qualificando', cor: 'bg-indigo-100 text-indigo-800 border border-indigo-200 font-medium dark:bg-indigo-900/40 dark:text-indigo-300 dark:border-indigo-800' },
+  { id: 'conhecendo', label: 'Conhecendo', cor: 'bg-blue-100 text-blue-800 border border-blue-200 font-medium dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800' },
+  { id: 'agendado', label: 'Agendado', cor: 'bg-amber-100 text-amber-800 border border-amber-200 font-medium dark:bg-amber-900/40 dark:text-amber-300 dark:border-amber-800' },
+  { id: 'negociando', label: 'Negociando', cor: 'bg-emerald-100 text-emerald-800 border border-emerald-200 font-medium dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800' },
+]
+
 export const funis: Funil[] = [
-  { id: 'principal', nome: 'Principal', descricao: 'Funil padrão de vendas', cor: 'bg-primary text-primary-foreground' },
-  { id: 'alto-padrao', nome: 'Alto Padrão', descricao: 'Imóveis acima de R$ 1,5M', cor: 'bg-amber text-ink' },
-  { id: 'locacoes', nome: 'Locações', descricao: 'Contratos de locação', cor: 'bg-teal-mid text-white' },
+  { id: 'principal', nome: 'Principal', descricao: 'Funil padrão de vendas', cor: 'bg-primary text-primary-foreground', etapas: DEFAULT_ETAPAS },
+  { id: 'alto-padrao', nome: 'Alto Padrão', descricao: 'Imóveis acima de R$ 1,5M', cor: 'bg-amber text-ink', etapas: DEFAULT_ETAPAS },
+  { id: 'locacoes', nome: 'Locações', descricao: 'Contratos de locação', cor: 'bg-teal-mid text-white', etapas: DEFAULT_ETAPAS },
 ]
 
 export const perfilVazio: PerfilBusca = {
@@ -497,14 +505,12 @@ export function getFunil(funilId: string, filtroModo?: 'venda' | 'locacao' | 'to
     const matchModo = !filtroModo || filtroModo === 'todos' || a.modo === filtroModo
     return matchFunil && matchStatus && matchModo
   })
-  const etapas: { id: EtapaFunil; nome: string }[] = [
-    { id: 'qualificando', nome: 'Qualificando' },
-    { id: 'conhecendo', nome: 'Conhecendo' },
-    { id: 'agendado', nome: 'Agendado' },
-    { id: 'negociando', nome: 'Negociando' },
-  ]
+  const funil = funis.find(f => f.id === funilId)
+  const etapas = funil?.etapas || []
+  
   return etapas.map((e) => ({
-    ...e,
+    id: e.id,
+    nome: e.label,
     atendimentos: lista.filter((a) => a.etapa === e.id),
   }))
 }
