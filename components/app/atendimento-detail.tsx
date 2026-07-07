@@ -215,18 +215,20 @@ export function AtendimentoDetail({
     setImoveisSelecionados([])
   }
 
-  function handleConcluirAtividade(id: string, feedback: string, agendarProxima: boolean) {
-    setLocalAtividades((prev) => prev.map((a) => (a.id === id ? { ...a, concluida: true } : a)))
+  function handleConcluirAtividade(id: string, statusConcluida: boolean, feedback?: string, agendarProxima?: boolean) {
+    setLocalAtividades((prev) => prev.map((a) => (a.id === id ? { ...a, concluida: statusConcluida } : a)))
     
-    // Add feedback as a note/timeline event
-    const evento: EventoTimeline = {
-      id: `evt-${Date.now()}`,
-      tipo: 'atividade',
-      descricao: `Atividade concluída com feedback: "${feedback}"`,
-      data: 'Hoje',
-      hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+    if (statusConcluida && feedback) {
+      // Add feedback as a note/timeline event
+      const evento: EventoTimeline = {
+        id: `evt-${Date.now()}`,
+        tipo: 'atividade',
+        descricao: `Atividade concluída com feedback: "${feedback}"`,
+        data: 'Hoje',
+        hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      }
+      setLocalTimeline((prev) => [evento, ...prev])
     }
-    setLocalTimeline((prev) => [evento, ...prev])
 
     if (agendarProxima) {
       setMostrarNovaAtividade(true)
@@ -450,6 +452,42 @@ export function AtendimentoDetail({
                 <Plus className="size-3.5" strokeWidth={2} /> Registro
               </button>
             </div>
+
+            {/* Atividades Pendentes */}
+            {localAtividades.some(a => !a.concluida) && (
+              <div className="mb-6">
+                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                  <Calendar className="size-3.5" />
+                  Atividades Pendentes
+                </h3>
+                <ul className="flex flex-col gap-2">
+                  {localAtividades
+                    .filter((a) => !a.concluida)
+                    .map((atv) => (
+                      <li key={atv.id}>
+                        <button
+                          type="button"
+                          onClick={() => setAtividadeSelecionada(atv)}
+                          className="w-full text-left flex items-center gap-3 rounded-[1.25rem] p-3.5 transition-brand relative overflow-hidden border-transparent bg-card shadow-soft hover:bg-muted/50 border border-border/50"
+                        >
+                          <div className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${(tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.cor || 'bg-muted text-muted-foreground'}`}>
+                            <span className="text-lg">{(tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.emoji || '📋'}</span>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-semibold text-foreground">
+                              {atv.titulo}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              {atv.hora}
+                            </p>
+                          </div>
+                          <ChevronRight className="size-4 text-muted-foreground opacity-50" />
+                        </button>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            )}
 
             {/* Filtros timeline */}
             <div className="mb-4 flex gap-2 overflow-x-auto scrollbar-none -mx-5 px-5">
