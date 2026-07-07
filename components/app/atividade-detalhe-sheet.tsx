@@ -15,7 +15,7 @@ export function AtividadeDetalheSheet({
   atividade: Atividade | null
   onClose: () => void
   onVerNegocio: (clienteNome: string) => void
-  onConcluir: (id: string, feedback: string, agendarProxima: boolean) => void
+  onConcluir: (id: string, statusConcluida: boolean, feedback?: string, agendarProxima?: boolean) => void
 }) {
   const [feedback, setFeedback] = useState('')
   const [agendarProxima, setAgendarProxima] = useState(false)
@@ -64,8 +64,12 @@ export function AtividadeDetalheSheet({
       colors: ['#0d9488', '#14b8a6', '#5eead4']
     })
     setTimeout(() => {
-      onConcluir(atividade!.id, feedback, agendarProxima)
+      onConcluir(atividade!.id, true, feedback, agendarProxima)
     }, 1500)
+  }
+
+  function handleDesfazerConclusao() {
+    onConcluir(atividade!.id, false)
   }
 
   function handleRemarcar() {
@@ -112,6 +116,25 @@ export function AtividadeDetalheSheet({
             <p className="mt-2 text-sm text-muted-foreground text-center max-w-xs">
               A agenda foi atualizada.
             </p>
+          </div>
+        ) : atividade.concluida ? (
+          <div className="flex flex-col items-center justify-center py-6 animate-in zoom-in duration-300">
+            <div className="flex size-20 items-center justify-center rounded-full bg-teal-mid/10 text-teal-deep mb-4">
+              <CheckCircle2 className="size-10" />
+            </div>
+            <h2 className="font-serif text-2xl font-bold text-foreground text-center">
+              Atividade Concluída
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground text-center max-w-xs mb-8">
+              Esta atividade já foi finalizada.
+            </p>
+            <button
+              type="button"
+              onClick={handleDesfazerConclusao}
+              className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Desfazer conclusão
+            </button>
           </div>
         ) : (
           <>

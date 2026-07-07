@@ -259,14 +259,14 @@ export function ScreenHoje({
       <AtividadeDetalheSheet
         atividade={atividadeSelecionada}
         onClose={() => setAtividadeSelecionada(null)}
-        onConcluir={(id, feedback, agendar) => {
-          // Update local state to trigger re-render with strikethrough
+        onConcluir={(id, statusConcluida, feedback, agendar) => {
+          // Update local state to trigger re-render with strikethrough or remove strikethrough
           setLocalAtividades((prev) =>
-            prev.map((a) => (a.id === id ? { ...a, concluida: true } : a))
+            prev.map((a) => (a.id === id ? { ...a, concluida: statusConcluida } : a))
           )
           // Also update the global mock so other screens see it
           const atvGlob = atividadesHoje.find((a) => a.id === id)
-          if (atvGlob) atvGlob.concluida = true
+          if (atvGlob) atvGlob.concluida = statusConcluida
           setAtividadeSelecionada(null)
         }}
         onVerNegocio={(cliente) => {
