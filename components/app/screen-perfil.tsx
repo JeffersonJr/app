@@ -30,7 +30,7 @@ export function ScreenPerfil({
         </div>
         <div className="flex flex-col">
           <h1 className="font-serif text-[22px] leading-tight font-bold text-foreground">Jefferson</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Corretora sênior · CRECI 187433</p>
+          <p className="text-sm text-muted-foreground mt-0.5">Corretor sênior · CRECI 187433</p>
         </div>
       </div>
 
@@ -153,15 +153,27 @@ export function ScreenPerfil({
           </div>
         </div>
 
+        {/* Desenvolvido Por */}
+        <div className="flex flex-col items-center justify-center mt-2 mb-4 gap-1 text-xs text-muted-foreground">
+          <p>Desenvolvido por</p>
+          <div className="flex items-center gap-1 font-medium">
+            <a href="https://microsistec.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Microsistec</a>
+            <span>&</span>
+            <a href="https://evolves.site" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Evolves</a>
+          </div>
+        </div>
+
         {/* Logout */}
-        <button
-          type="button"
-          onClick={onLogout}
-          className="flex items-center justify-center gap-2 rounded-3xl border border-border/60 bg-card p-[18px] font-semibold text-destructive shadow-soft transition-brand active:bg-destructive/5"
-        >
-          <LogOut className="size-[22px]" strokeWidth={1.5} />
-          Sair da conta
-        </button>
+        <div className="pb-12">
+          <button
+            type="button"
+            onClick={onLogout}
+            className="flex w-full items-center justify-center gap-2 rounded-3xl border border-border/60 bg-card p-[18px] font-semibold text-destructive shadow-soft transition-brand active:bg-destructive/5"
+          >
+            <LogOut className="size-[22px]" strokeWidth={1.5} />
+            Sair da conta
+          </button>
+        </div>
       </div>
       {/* Security Sheet */}
       {showSecurity && (
