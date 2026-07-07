@@ -1,11 +1,5 @@
 {
-  "/(auth)/cadastro/page": "app/(auth)/cadastro/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
   "/crm/page": "app/crm/page.js",
   "/design/page": "app/design/page.js",
-  "/page": "app/page.js",
-  "/site/funcionalidades/page": "app/site/funcionalidades/page.js",
-  "/site/page": "app/site/page.js",
-  "/site/precos/page": "app/site/precos/page.js"
+  "/page": "app/page.js"
 }

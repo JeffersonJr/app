@@ -411,7 +411,7 @@ function ComponentShowcase({ title, code, children }: { title: string, code: str
       <div className="p-4 border-b border-border bg-fog/50 flex justify-between items-center">
         <h3 className="font-bold text-ink text-sm">{title}</h3>
       </div>
-      <div className="p-8 bg-snow flex items-center justify-center min-h-[160px]">
+      <div className="p-4 sm:p-8 bg-snow flex items-center justify-center min-h-[160px]">
         {children}
       </div>
       <div className="relative group border-t border-border bg-ink">
@@ -424,7 +424,7 @@ function ComponentShowcase({ title, code, children }: { title: string, code: str
             {copied ? <Check className="w-4 h-4 text-teal-light" /> : <Copy className="w-4 h-4" />}
           </button>
         </div>
-        <pre className="p-6 overflow-x-auto text-sm text-fog font-mono leading-relaxed">
+        <pre className="p-4 sm:p-6 overflow-x-auto text-xs sm:text-sm text-fog font-mono leading-relaxed">
           <code>{code}</code>
         </pre>
       </div>
