@@ -63,7 +63,7 @@ export default function DesignSystemLayout({ children }: { children: React.React
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-64 bg-snow min-h-screen pt-16 md:pt-0">
+      <main className="flex-1 min-w-0 md:ml-64 bg-snow min-h-screen pt-16 md:pt-0">
         <div className="max-w-4xl mx-auto p-4 sm:p-8 md:p-12 lg:p-16">
           {children}
         </div>

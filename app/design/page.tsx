@@ -407,7 +407,7 @@ function ComponentShowcase({ title, code, children }: { title: string, code: str
   }
 
   return (
-    <div className="mb-12 border border-border rounded-2xl overflow-hidden bg-white shadow-sm">
+    <div className="mb-12 border border-border rounded-2xl overflow-hidden bg-white shadow-sm min-w-0">
       <div className="p-4 border-b border-border bg-fog/50 flex justify-between items-center">
         <h3 className="font-bold text-ink text-sm">{title}</h3>
       </div>
