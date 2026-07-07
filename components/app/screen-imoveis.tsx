@@ -21,10 +21,12 @@ import {
   CheckCircle2,
   SlidersHorizontal,
   Plus,
-  ArrowUpDown
+  ArrowUpDown,
+  PenLine
 } from 'lucide-react'
 import { imoveis, type Imovel } from '@/lib/app-data'
 import { FiltrosAvancadosImoveisSheet } from '@/components/app/filtros-avancados-imoveis-sheet'
+import { FormCaptarImovel } from '@/components/app/form-captar-imovel'
 
 const filtros = ['Todos', 'Venda', 'Locação', 'Livre', 'Reservado'] as const
 
@@ -65,23 +67,43 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   }, [filtro, busca, filtroFinalidade, filtroStatus])
 
   if (selecionado) {
-    return <ImovelDetail imovel={selecionado} onBack={() => setSelecionado(null)} />
+    return (
+      <ImovelDetail 
+        imovel={selecionado} 
+        onBack={() => setSelecionado(null)} 
+        onUpdate={(novo) => {
+          setSelecionado(novo)
+          const idx = imoveis.findIndex(i => i.id === novo.id)
+          if (idx !== -1) {
+            imoveis[idx] = novo
+          }
+        }}
+      />
+    )
   }
 
   return (
     <div className="flex flex-col gap-4 px-5 pt-4 pb-28">
       <header className="glass-header -mx-5 px-5 pb-4 pt-4">
         <div className="flex items-center justify-between">
-          <div className="flex gap-4">
+          <div className="flex rounded-full bg-muted/50 p-1">
             <button
               onClick={() => setAbaAtiva('imoveis')}
-              className={`font-serif text-2xl font-semibold transition-colors ${abaAtiva === 'imoveis' ? 'text-foreground' : 'text-muted-foreground'}`}
+              className={`relative flex-1 rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${
+                abaAtiva === 'imoveis'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               Imóveis
             </button>
             <button
               onClick={() => setAbaAtiva('empreendimentos')}
-              className={`font-serif text-2xl font-semibold transition-colors ${abaAtiva === 'empreendimentos' ? 'text-foreground' : 'text-muted-foreground'}`}
+              className={`relative flex-1 rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${
+                abaAtiva === 'empreendimentos'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               Empreendimentos
             </button>
@@ -236,14 +258,30 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   )
 }
 
-function ImovelDetail({ imovel, onBack }: { imovel: Imovel; onBack: () => void }) {
+function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: () => void; onUpdate: (novo: Imovel) => void }) {
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
+  const [editMode, setEditMode] = useState(false)
 
   function handleShare(leadName: string) {
     setShowShareMenu(false)
     setToastMessage(`Imóvel enviado para ${leadName}!`)
     setTimeout(() => setToastMessage(''), 3000)
+  }
+
+  if (editMode) {
+    return (
+      <div className="absolute inset-0 z-50 bg-background overflow-y-auto">
+        <FormCaptarImovel 
+          onClose={() => setEditMode(false)}
+          imovelParaEditar={imovel}
+          onSaveEdit={(novo) => {
+            onUpdate(novo)
+            setEditMode(false)
+          }}
+        />
+      </div>
+    )
   }
 
   return (
@@ -274,6 +312,14 @@ function ImovelDetail({ imovel, onBack }: { imovel: Imovel; onBack: () => void }
             <ArrowLeft className="size-5" strokeWidth={1.5} />
           </button>
           <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setEditMode(true)}
+              aria-label="Editar"
+              className="flex size-10 items-center justify-center rounded-full bg-teal-shadow/60 text-white backdrop-blur-sm transition-brand active:scale-95"
+            >
+              <PenLine className="size-5" strokeWidth={1.5} />
+            </button>
             <button
               type="button"
               aria-label="Favoritar"

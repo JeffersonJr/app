@@ -95,7 +95,7 @@ type Foto = {
   rotacao: number
 }
 
-export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
+export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { onClose: () => void, imovelParaEditar?: any, onSaveEdit?: (imovel: any) => void }) {
   const [fase, setFase] = useState<Fase>('upload')
   const [fotos, setFotos] = useState<Foto[]>([])
   const [progresso, setProgresso] = useState(0)
@@ -158,6 +158,50 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
 
   // 8. Informações Internas e Documentação
   const [observacoesInternas, setObservacoesInternas] = useState('')
+
+  useEffect(() => {
+    if (imovelParaEditar) {
+      setTitulo(imovelParaEditar.titulo || '')
+      setOperacoes(imovelParaEditar.operacoes || ['Venda'])
+      setFinalidade(imovelParaEditar.finalidade || 'Residencial')
+      setTipoImovel(imovelParaEditar.tipoImovel || 'Apartamento')
+      setCodigo(imovelParaEditar.codigo || '')
+      setCib(imovelParaEditar.cib || '')
+      setSituacaoImovel(imovelParaEditar.situacaoImovel || 'Pronto')
+      setStatusImovel(imovelParaEditar.status || 'Livre')
+      setTipoExclusividade(imovelParaEditar.tipoExclusividade || 'Nenhuma')
+      setValidadeExclusividade(imovelParaEditar.validadeExclusividade || '')
+      setEndereco(imovelParaEditar.enderecoCompleto || '')
+      setCep(imovelParaEditar.cep || '')
+      setBairro(imovelParaEditar.bairro || '')
+      setCidade(imovelParaEditar.cidade || '')
+      setCondominio(imovelParaEditar.condominio?.replace(/\D/g, '') || '')
+      setAnoConstrucao(imovelParaEditar.anoConstrucao || '')
+      setAndar(imovelParaEditar.andar || '')
+      setQuartos(String(imovelParaEditar.dorms || ''))
+      setSuites(String(imovelParaEditar.suites || ''))
+      setBanheiros(String(imovelParaEditar.banheiros || ''))
+      setSalas(String(imovelParaEditar.salas || ''))
+      setVagas(String(imovelParaEditar.vagas || ''))
+      setValor(imovelParaEditar.preco?.replace(/\D/g, '') || '')
+      setArea(String(imovelParaEditar.area || ''))
+      setAreaTotal(String(imovelParaEditar.areaTotal || ''))
+      setObservacoes(imovelParaEditar.descricao || '')
+      setCaracteristicasSelecionadas(imovelParaEditar.caracteristicas || [])
+      setProprietario(imovelParaEditar.proprietario?.nome || '')
+      setEmailProprietario(imovelParaEditar.proprietario?.email || '')
+      setTelefoneProprietario(imovelParaEditar.proprietario?.telefone || '')
+      setUrlVideo(imovelParaEditar.urlVideo || '')
+      setUrlTour360(imovelParaEditar.urlTour360 || '')
+      setObservacoesInternas(imovelParaEditar.observacoesInternas || '')
+      if (imovelParaEditar.fotos) {
+        setFotos(imovelParaEditar.fotos)
+      } else if (imovelParaEditar.foto) {
+        setFotos([{ id: 'f1', url: imovelParaEditar.foto, titulo: '', descricao: '', rotacao: 0 }])
+      }
+      setFase('formulario')
+    }
+  }, [imovelParaEditar])
   const [chaveDisponivel, setChaveDisponivel] = useState('Não')
   const [localChaves, setLocalChaves] = useState('')
   const [matricula, setMatricula] = useState('')
@@ -207,7 +251,48 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
       descricao: '',
       rotacao: 0
     }))
-    setFotos(prev => [...prev, ...novasFotos])
+    setFotos((prev) => [...prev, ...novasFotos])
+  }
+
+  function handleSave() {
+    if (imovelParaEditar && onSaveEdit) {
+      onSaveEdit({
+        ...imovelParaEditar,
+        titulo,
+        operacoes,
+        finalidade,
+        tipoImovel,
+        codigo,
+        cib,
+        situacaoImovel,
+        status: statusImovel,
+        tipoExclusividade,
+        validadeExclusividade,
+        enderecoCompleto: endereco,
+        cep,
+        bairro,
+        cidade,
+        condominio,
+        anoConstrucao,
+        andar,
+        dorms: Number(quartos),
+        suites: Number(suites),
+        banheiros: Number(banheiros),
+        salas: Number(salas),
+        vagas: Number(vagas),
+        preco: valor,
+        area: Number(area),
+        areaTotal: Number(areaTotal),
+        descricao: observacoes,
+        caracteristicas: caracteristicasSelecionadas,
+        proprietario: { nome: proprietario, email: emailProprietario, telefone: telefoneProprietario },
+        urlVideo,
+        urlTour360,
+        observacoesInternas,
+        fotos
+      })
+    }
+    onClose()
   }
 
   function moverFoto(index: number, direcao: 'esq' | 'dir') {
@@ -1207,7 +1292,7 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
 
         <div className="mt-4 flex gap-2">
           <button type="button" onClick={() => setFase('upload')} className="h-12 rounded-2xl border border-border px-5 text-sm font-semibold text-foreground transition-brand active:bg-muted">Voltar</button>
-          <button type="button" onClick={onClose} className="flex-1 h-12 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]">Salvar Captação</button>
+          <button type="button" onClick={handleSave} className="flex-1 h-12 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-transform active:scale-[0.98]">{imovelParaEditar ? 'Salvar Alterações' : 'Salvar Captação'}</button>
         </div>
       </div>
 

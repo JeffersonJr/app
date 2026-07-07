@@ -847,12 +847,23 @@ const imoveis = [
         bairro: 'Jardins',
         cidade: 'São Paulo',
         preco: 'R$ 890.000',
-        finalidade: 'Venda',
+        operacoes: [
+            'Venda'
+        ],
+        finalidade: 'Residencial',
+        tipoImovel: 'Apartamento',
+        situacaoImovel: 'Pronto',
         dorms: 2,
         suites: 1,
         vagas: 2,
         area: 94,
         foto: '/images/imovel-apto-jardins.png',
+        fotos: [
+            {
+                id: 'f1',
+                url: '/images/imovel-apto-jardins.png'
+            }
+        ],
         status: 'Livre',
         descricao: 'Lindo apartamento nos Jardins com acabamento de alto padrão, varanda gourmet envidraçada e piso em madeira de lei. Excelente iluminação natural.',
         tags: [
@@ -878,7 +889,10 @@ const imoveis = [
             nome: 'Carlos Nogueira',
             telefone: '(11) 98765-4321',
             validade: 'Autorização válida por mais 62 dias'
-        }
+        },
+        banheiros: 2,
+        salas: 2,
+        andar: '5º'
     },
     {
         id: 'i2',
@@ -887,12 +901,23 @@ const imoveis = [
         bairro: 'Alphaville',
         cidade: 'Barueri',
         preco: 'R$ 1.680.000',
-        finalidade: 'Venda',
+        operacoes: [
+            'Venda'
+        ],
+        finalidade: 'Residencial',
+        tipoImovel: 'Casa de Condomínio',
+        situacaoImovel: 'Pronto',
         dorms: 4,
         suites: 3,
         vagas: 4,
         area: 320,
         foto: '/images/imovel-casa-condominio.png',
+        fotos: [
+            {
+                id: 'f2',
+                url: '/images/imovel-casa-condominio.png'
+            }
+        ],
         status: 'Proposta',
         descricao: 'Ampla casa em Alphaville com piscina privativa, área gourmet integrada e pé direito duplo na sala de estar. O condomínio oferece segurança 24h e clube completo.',
         tags: [
@@ -918,7 +943,9 @@ const imoveis = [
             nome: 'Mariana Silva',
             telefone: '(11) 97654-3210',
             validade: 'Autorização válida por mais 15 dias'
-        }
+        },
+        banheiros: 5,
+        salas: 3
     },
     {
         id: 'i3',
@@ -927,12 +954,23 @@ const imoveis = [
         bairro: 'Centro',
         cidade: 'São Paulo',
         preco: 'R$ 2.800/mês',
-        finalidade: 'Locação',
+        operacoes: [
+            'Locação'
+        ],
+        finalidade: 'Residencial',
+        tipoImovel: 'Studio',
+        situacaoImovel: 'Pronto',
         dorms: 1,
         suites: 0,
         vagas: 1,
         area: 38,
         foto: '/images/imovel-studio-centro.png',
+        fotos: [
+            {
+                id: 'f3',
+                url: '/images/imovel-studio-centro.png'
+            }
+        ],
         status: 'Livre',
         descricao: 'Studio moderno e 100% mobiliado (porteira fechada), a apenas 3 minutos da estação República. Ideal para jovens profissionais ou estudantes.',
         tags: [
@@ -958,7 +996,10 @@ const imoveis = [
             nome: 'João Pedro',
             telefone: '(11) 91234-5678',
             validade: 'Locação exclusiva'
-        }
+        },
+        banheiros: 1,
+        salas: 1,
+        andar: '12º'
     },
     {
         id: 'i4',
@@ -967,12 +1008,23 @@ const imoveis = [
         bairro: 'Vila Nova Conceição',
         cidade: 'São Paulo',
         preco: 'R$ 2.300.000',
-        finalidade: 'Venda',
+        operacoes: [
+            'Venda'
+        ],
+        finalidade: 'Residencial',
+        tipoImovel: 'Cobertura',
+        situacaoImovel: 'Pronto',
         dorms: 3,
         suites: 3,
         vagas: 3,
         area: 210,
         foto: '/images/imovel-cobertura.png',
+        fotos: [
+            {
+                id: 'f4',
+                url: '/images/imovel-cobertura.png'
+            }
+        ],
         status: 'Reservado',
         descricao: 'Cobertura espetacular com vista 360º para o parque Ibirapuera. Possui deck de madeira, piscina aquecida e espaço para adega.',
         tags: [
@@ -998,7 +1050,10 @@ const imoveis = [
             nome: 'Fernanda Costa',
             telefone: '(11) 95555-4444',
             validade: 'Autorização válida por mais 120 dias'
-        }
+        },
+        banheiros: 4,
+        salas: 3,
+        andar: '20º'
     }
 ];
 const clientes = [
