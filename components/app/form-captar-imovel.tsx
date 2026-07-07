@@ -93,6 +93,7 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
   const [progresso, setProgresso] = useState(0)
   const [progressoTexto, setProgressoTexto] = useState('')
   const [resultado, setResultado] = useState(AI_RESULTADOS[0])
+  const [isIaGerado, setIsIaGerado] = useState(false)
   const [mostrarUpsell, setMostrarUpsell] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [openSection, setOpenSection] = useState<number>(1)
@@ -173,18 +174,18 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
   const [seoPalavras, setSeoPalavras] = useState('')
   const [seoDescricao, setSeoDescricao] = useState('')
 
-  function aplicarResultadoIA() {
-    setTitulo(resultado.titulo)
-    setBairro(resultado.bairro)
-    setCidade(resultado.cidade)
-    setFinalidade(resultado.finalidade)
-    setTipoImovel(resultado.tipo)
-    setOperacao(resultado.operacao)
-    setValor(resultado.valor)
-    setArea(resultado.area)
-    setQuartos(resultado.quartos)
-    setObservacoes(resultado.observacoes)
-    setFase('modo')
+  function aplicarResultadoIA(res: typeof AI_RESULTADOS[0]) {
+    setTitulo(res.titulo)
+    setBairro(res.bairro)
+    setCidade(res.cidade)
+    setFinalidade(res.finalidade)
+    setTipoImovel(res.tipo)
+    setOperacao(res.operacao)
+    setValor(res.valor)
+    setArea(res.area)
+    setQuartos(res.quartos)
+    setObservacoes(res.observacoes)
+    setIsIaGerado(true)
   }
 
   function handleFotos(e: React.ChangeEvent<HTMLInputElement>) {
@@ -221,13 +222,22 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
     const escolhido = AI_RESULTADOS[Math.floor(Math.random() * AI_RESULTADOS.length)]
     setTimeout(() => {
       setResultado(escolhido)
-      setFase('resultado')
+      aplicarResultadoIA(escolhido)
+      setFase('formulario')
     }, totalDelay + 400)
   }
 
   // ── Upsell IA ─────────────────────────────────────────────────────────────
   if (mostrarUpsell) {
-    return <IAUpsellPage onClose={() => setMostrarUpsell(false)} origem="imovel" />
+    return <IAUpsellPage 
+      onClose={() => setMostrarUpsell(false)} 
+      onSuccess={() => {
+        setMostrarUpsell(false)
+        featureFlags.temIA = true
+        iniciarAnaliseIA()
+      }}
+      origem="imovel" 
+    />
   }
 
   // ── Fase 1: Upload de fotos ───────────────────────────────────────────────
@@ -701,6 +711,29 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
               <img src={src} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
             </div>
           ))}
+        </div>
+      )}
+
+      {isIaGerado && (
+        <div className="mb-6 flex flex-col gap-3 rounded-2xl bg-teal-mid/10 p-4 border border-teal-mid/20">
+          <div className="flex items-center gap-3">
+            <Sparkles className="size-5 text-teal-mid shrink-0" strokeWidth={1.5} />
+            <div>
+              <p className="text-sm font-semibold text-teal-deep">IA concluiu a análise</p>
+              <p className="text-xs text-teal-deep/80">Confiança: 94% · Baseado nas fotos</p>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-1">
+            <button type="button" onClick={() => iniciarAnaliseIA()} className="flex-1 rounded-xl bg-background/50 border border-teal-mid/20 py-2 text-xs font-semibold text-teal-deep hover:bg-teal-mid/20 transition-colors">
+              Analisar Novamente
+            </button>
+            <button type="button" onClick={() => {
+              setTitulo(''); setBairro(''); setCidade(''); setValor(''); setArea(''); setQuartos(''); setObservacoes('');
+              setIsIaGerado(false);
+            }} className="flex-1 rounded-xl border border-border bg-background py-2 text-xs font-semibold text-muted-foreground hover:bg-muted transition-colors">
+              Descartar
+            </button>
+          </div>
         </div>
       )}
 

@@ -18,9 +18,11 @@ import {
   MessageCircle,
   Bot,
   Map,
-  CheckCircle2
+  CheckCircle2,
+  SlidersHorizontal
 } from 'lucide-react'
 import { imoveis, type Imovel } from '@/lib/app-data'
+import { FiltrosAvancadosImoveisSheet } from '@/components/app/filtros-avancados-imoveis-sheet'
 
 const filtros = ['Todos', 'Venda', 'Locação', 'Livre', 'Reservado'] as const
 
@@ -34,6 +36,10 @@ export function ScreenImoveis() {
   const [filtro, setFiltro] = useState<(typeof filtros)[number]>('Todos')
   const [busca, setBusca] = useState('')
   const [selecionado, setSelecionado] = useState<Imovel | null>(null)
+  
+  const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false)
+  const [filtroFinalidade, setFiltroFinalidade] = useState('Todas')
+  const [filtroStatus, setFiltroStatus] = useState('Todos')
 
   const lista = useMemo(() => {
     return imoveis.filter((im) => {
@@ -47,9 +53,13 @@ export function ScreenImoveis() {
         im.titulo.toLowerCase().includes(q) ||
         im.bairro.toLowerCase().includes(q) ||
         im.codigo.toLowerCase().includes(q)
-      return matchFiltro && matchBusca
+      
+      const matchAdvFinalidade = filtroFinalidade === 'Todas' || im.finalidade === filtroFinalidade
+      const matchAdvStatus = filtroStatus === 'Todos' || im.status === filtroStatus
+
+      return matchFiltro && matchBusca && matchAdvFinalidade && matchAdvStatus
     })
-  }, [filtro, busca])
+  }, [filtro, busca, filtroFinalidade, filtroStatus])
 
   if (selecionado) {
     return <ImovelDetail imovel={selecionado} onBack={() => setSelecionado(null)} />
@@ -83,6 +93,20 @@ export function ScreenImoveis() {
               className="h-12 w-full rounded-2xl border border-border bg-card pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring shadow-sm"
             />
           </div>
+          <button
+            type="button"
+            onClick={() => setMostrarFiltrosAvancados(true)}
+            className={`flex size-12 items-center justify-center rounded-2xl border transition-brand active:scale-95 shadow-sm ${
+              filtroFinalidade !== 'Todas' || filtroStatus !== 'Todos'
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-border bg-card text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <SlidersHorizontal className="size-5" strokeWidth={1.5} />
+            {(filtroFinalidade !== 'Todas' || filtroStatus !== 'Todos') && (
+              <span className="absolute -right-1 -top-1 flex size-3 items-center justify-center rounded-full bg-red-500 text-[8px] text-white ring-2 ring-background" />
+            )}
+          </button>
         </div>
       </header>
 
@@ -166,6 +190,16 @@ export function ScreenImoveis() {
           </li>
         ))}
       </ul>
+      
+      {mostrarFiltrosAvancados && (
+        <FiltrosAvancadosImoveisSheet
+          onClose={() => setMostrarFiltrosAvancados(false)}
+          filtroFinalidade={filtroFinalidade}
+          setFiltroFinalidade={setFiltroFinalidade}
+          filtroStatus={filtroStatus}
+          setFiltroStatus={setFiltroStatus}
+        />
+      )}
     </div>
   )
 }

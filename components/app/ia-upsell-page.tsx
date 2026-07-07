@@ -58,7 +58,7 @@ const ESTATISTICAS = [
   { valor: '94%', label: 'de precisão na análise' },
 ]
 
-export function IAUpsellPage({ onClose, origem }: { onClose: () => void; origem: 'albert' | 'imovel' }) {
+export function IAUpsellPage({ onClose, onSuccess, origem }: { onClose: () => void; onSuccess?: () => void; origem: 'albert' | 'imovel' }) {
   const [contratando, setContratando] = useState(false)
   const [habilitado, setHabilitado] = useState(false)
   const beneficioDestaque = origem === 'albert' ? 1 : 0 // qual card mostrar primeiro
@@ -72,7 +72,7 @@ export function IAUpsellPage({ onClose, origem }: { onClose: () => void; origem:
   }
 
   return (
-    <div className="absolute inset-0 z-50 flex flex-col bg-background">
+    <div className="fixed inset-0 z-[100] flex flex-col bg-background">
       <div className="flex-1 overflow-y-auto pb-6">
       {/* Hero */}
       <div className="relative flex flex-col items-center justify-center overflow-hidden bg-primary px-6 pb-10 pt-[calc(3rem+env(safe-area-inset-top))] text-center">
@@ -229,7 +229,7 @@ export function IAUpsellPage({ onClose, origem }: { onClose: () => void; origem:
           {habilitado ? (
             <button
               type="button"
-              onClick={onClose}
+              onClick={onSuccess || onClose}
               className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-teal-mid text-sm font-semibold text-white shadow-xl shadow-teal-mid/25 transition-brand active:scale-[0.98]"
             >
               <CheckCircle2 className="size-4" />

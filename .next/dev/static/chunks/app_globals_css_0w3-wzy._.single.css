@@ -591,6 +591,10 @@
     right: calc(var(--spacing) * -.5);
   }
 
+  .-right-1 {
+    right: calc(var(--spacing) * -1);
+  }
+
   .-right-4 {
     right: calc(var(--spacing) * -4);
   }
@@ -1722,6 +1726,16 @@
     background-color: var(--background);
   }
 
+  .bg-background\/50 {
+    background-color: var(--background);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-background\/50 {
+      background-color: color-mix(in oklab, var(--background) 50%, transparent);
+    }
+  }
+
   .bg-background\/80 {
     background-color: var(--background);
   }
@@ -1992,6 +2006,10 @@
 
   .bg-red-100 {
     background-color: var(--color-red-100);
+  }
+
+  .bg-red-500 {
+    background-color: var(--color-red-500);
   }
 
   .bg-red-500\/30 {
@@ -2908,6 +2926,16 @@
     }
   }
 
+  .text-teal-deep\/80 {
+    color: var(--teal-deep);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .text-teal-deep\/80 {
+      color: color-mix(in oklab, var(--teal-deep) 80%, transparent);
+    }
+  }
+
   .text-teal-light {
     color: var(--teal-light);
   }
@@ -3143,6 +3171,10 @@
     .shadow-teal-mid\/25 {
       --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--teal-mid) 25%, transparent) var(--tw-shadow-alpha), transparent);
     }
+  }
+
+  .ring-background {
+    --tw-ring-color: var(--background);
   }
 
   .ring-primary {
