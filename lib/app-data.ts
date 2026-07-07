@@ -603,10 +603,10 @@ export const tempConfig: Record<Temperatura, { label: string; dot: string; chip:
 }
 
 export const etapaConfig: Record<EtapaFunil, { label: string; cor: string }> = {
-  qualificando: { label: 'Qualificando', cor: 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-400' },
-  conhecendo: { label: 'Conhecendo', cor: 'bg-indigo/15 text-indigo' },
-  agendado: { label: 'Agendado', cor: 'bg-amber/15 text-amber' },
-  negociando: { label: 'Negociando', cor: 'bg-primary/20 text-primary' },
+  qualificando: { label: 'Qualificando', cor: 'bg-indigo-100 text-indigo-800 border border-indigo-200 font-medium dark:bg-indigo-900/40 dark:text-indigo-300 dark:border-indigo-800' },
+  conhecendo: { label: 'Conhecendo', cor: 'bg-blue-100 text-blue-800 border border-blue-200 font-medium dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800' },
+  agendado: { label: 'Agendado', cor: 'bg-amber-100 text-amber-800 border border-amber-200 font-medium dark:bg-amber-900/40 dark:text-amber-300 dark:border-amber-800' },
+  negociando: { label: 'Negociando', cor: 'bg-emerald-100 text-emerald-800 border border-emerald-200 font-medium dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800' },
 }
 
 export const origemConfig: Record<OrigemLead, { cor: string }> = {
