@@ -613,7 +613,7 @@ export function AtendimentoDetail({
                 <li key={atv.id}>
                   <button
                     type="button"
-                    onClick={() => setAtividadeSelecionada({ ...atv, cliente: atendimento.nome })}
+                    onClick={() => setAtividadeSelecionada({ ...atv, cliente: atendimento.nome, telefone: atendimento.telefone, whatsapp: atendimento.telefone })}
                     className={`w-full text-left rounded-[1.25rem] bg-card shadow-soft p-4 transition-brand hover:bg-muted/50 ${atv.concluida ? 'opacity-70 grayscale' : ''}`}
                   >
                     <div className="flex items-start gap-3">

@@ -197,7 +197,21 @@ const atendimentos = [
                 hora: '15:00',
                 importante: true,
                 concluida: false,
-                criadoEm: 'Hoje, 09:32'
+                criadoEm: 'Hoje, 09:32',
+                imoveisVisitados: [
+                    {
+                        id: 'v1',
+                        nome: 'Casa em condomínio',
+                        visitado: false,
+                        endereco: 'Alameda Rio Negro, Barueri'
+                    },
+                    {
+                        id: 'v2',
+                        nome: 'Cobertura duplex',
+                        visitado: false,
+                        endereco: 'Rua Jacques Félix, São Paulo'
+                    }
+                ]
             }
         ],
         emails: [

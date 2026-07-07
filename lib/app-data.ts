@@ -64,6 +64,10 @@ export type AtividadeAtendimento = {
   importante: boolean
   concluida: boolean
   criadoEm: string
+  telefone?: string
+  whatsapp?: string
+  cliente?: string
+  imoveisVisitados?: { id: string; nome: string; visitado: boolean; endereco: string }[]
 }
 
 export type NotaAtendimento = {
@@ -255,6 +259,10 @@ export const atendimentos: Atendimento[] = [
         importante: true,
         concluida: false,
         criadoEm: 'Hoje, 09:32',
+        imoveisVisitados: [
+          { id: 'v1', nome: 'Casa em condomínio', visitado: false, endereco: 'Alameda Rio Negro, Barueri' },
+          { id: 'v2', nome: 'Cobertura duplex', visitado: false, endereco: 'Rua Jacques Félix, São Paulo' },
+        ]
       },
     ],
     emails: [

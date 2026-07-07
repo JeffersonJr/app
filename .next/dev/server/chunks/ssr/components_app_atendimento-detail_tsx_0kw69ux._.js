@@ -1168,7 +1168,9 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 type: "button",
                                                 onClick: ()=>setAtividadeSelecionada({
                                                         ...atv,
-                                                        cliente: atendimento.nome
+                                                        cliente: atendimento.nome,
+                                                        telefone: atendimento.telefone,
+                                                        whatsapp: atendimento.telefone
                                                     }),
                                                 className: `w-full text-left rounded-[1.25rem] bg-card shadow-soft p-4 transition-brand hover:bg-muted/50 ${atv.concluida ? 'opacity-70 grayscale' : ''}`,
                                                 children: [
