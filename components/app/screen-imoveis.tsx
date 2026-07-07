@@ -98,11 +98,9 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
           )}
         </div>
         
-        {abaAtiva === 'imoveis' && (
-          <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            {lista.length} na carteira
-          </p>
-        )}
+        <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          {abaAtiva === 'imoveis' ? lista.length : 0} na carteira
+        </p>
 
         {/* Busca e Filtros */}
         <div className="mt-4 flex gap-3">

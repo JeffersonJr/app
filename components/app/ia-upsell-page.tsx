@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Bot, Brain, Camera, CheckCircle2, MessageCircle, Sparkles, Trophy, X, Zap, Loader2, Check, ArrowRight } from 'lucide-react'
 import { createPortal } from 'react-dom'
 
@@ -62,6 +62,12 @@ const ESTATISTICAS = [
 export function IAUpsellPage({ onClose, onSuccess, origem }: { onClose: () => void; onSuccess?: () => void; origem: 'albert' | 'imovel' }) {
   const [contratando, setContratando] = useState(false)
   const [habilitado, setHabilitado] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const beneficioDestaque = origem === 'albert' ? 1 : 0 // qual card mostrar primeiro
 
   function handleContratar() {
@@ -279,8 +285,6 @@ export function IAUpsellPage({ onClose, onSuccess, origem }: { onClose: () => vo
     </div>
   )
 
-  if (typeof document !== 'undefined') {
-    return createPortal(content, document.body)
-  }
-  return content
+  if (!mounted) return null
+  return createPortal(content, document.body)
 }

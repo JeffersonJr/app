@@ -111,7 +111,7 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
   // Campos do formulário
   // 1. Negociações e Tipos
   const [titulo, setTitulo] = useState('')
-  const [operacao, setOperacao] = useState<'Venda' | 'Locação' | 'Venda e Locação' | 'Temporada' | 'Arrendamento'>('Venda')
+  const [operacoes, setOperacoes] = useState<string[]>(['Venda'])
   const [finalidade, setFinalidade] = useState<FinalidadeCategoria>('Residencial')
   const [tipoImovel, setTipoImovel] = useState('Apartamento')
   const [codigo, setCodigo] = useState('')
@@ -189,7 +189,7 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
     setCidade(res.cidade)
     setFinalidade(res.finalidade)
     setTipoImovel(res.tipo)
-    setOperacao(res.operacao)
+    setOperacoes([res.operacao])
     setValor(res.valor)
     setArea(res.area)
     setQuartos(res.quartos)
@@ -812,8 +812,19 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Operação</label>
               <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1 py-1">
-                {(['Venda', 'Locação', 'Venda e Locação', 'Temporada', 'Arrendamento'] as const).map((o) => (
-                  <button key={o} type="button" onClick={() => setOperacao(o)} className={`shrink-0 rounded-2xl px-4 py-3 text-sm font-semibold transition-brand ${operacao === o ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'}`}>
+                {(['Venda', 'Locação', 'Temporada', 'Arrendamento'] as const).map((o) => (
+                  <button
+                    key={o}
+                    type="button"
+                    onClick={() => {
+                      if (operacoes.includes(o)) {
+                        setOperacoes(operacoes.filter((op) => op !== o))
+                      } else {
+                        setOperacoes([...operacoes, o])
+                      }
+                    }}
+                    className={`shrink-0 rounded-2xl px-4 py-3 text-sm font-semibold transition-brand ${operacoes.includes(o) ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'}`}
+                  >
                     {o}
                   </button>
                 ))}
