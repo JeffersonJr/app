@@ -12,16 +12,14 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <header className="glass-header">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/site" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-teal-deep rounded-xl flex items-center justify-center shadow-soft">
-              <Home className="w-5 h-5 text-cream" />
-            </div>
+            <img src="/logo.svg" alt="Microsistec Logo" className="w-8 h-8" />
             <span className="text-xl font-bold text-ink">Microsistec<span className="text-teal-mid">.</span></span>
           </Link>
           
           <nav className="hidden md:flex items-center gap-8">
             <Link href="/site" className="text-sm font-medium text-slate hover:text-teal-deep transition-colors">Início</Link>
             <Link href="/site/funcionalidades" className="text-sm font-medium text-slate hover:text-teal-deep transition-colors">Funcionalidades</Link>
-            <Link href="#precos" className="text-sm font-medium text-slate hover:text-teal-deep transition-colors">Preços</Link>
+            <Link href="/site/precos" className="text-sm font-medium text-slate hover:text-teal-deep transition-colors">Preços</Link>
           </nav>
 
           <div className="flex items-center gap-4">
@@ -46,9 +44,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-teal-mid/20 rounded-lg flex items-center justify-center">
-                <Home className="w-4 h-4 text-teal-light" />
-              </div>
+              <img src="/logo.svg" alt="Microsistec Logo" className="w-6 h-6 brightness-0 invert opacity-80" />
               <span className="text-lg font-bold text-white">Microsistec<span className="text-teal-mid">.</span></span>
             </div>
             <p className="text-sm text-slate max-w-xs mb-6">
@@ -60,7 +56,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
             <h4 className="text-white font-medium mb-4">Produto</h4>
             <ul className="space-y-3 text-sm text-slate">
               <li><Link href="/site/funcionalidades" className="hover:text-amber transition-colors">Funcionalidades</Link></li>
-              <li><Link href="#" className="hover:text-amber transition-colors">Preços</Link></li>
+              <li><Link href="/site/precos" className="hover:text-amber transition-colors">Preços</Link></li>
               <li><Link href="#" className="hover:text-amber transition-colors">Changelog</Link></li>
             </ul>
           </div>

@@ -56,8 +56,129 @@ export default function SiteHomePage() {
             {/* Background glowing blob */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber/20 blur-3xl rounded-full -z-10" />
             
-            {/* CSS App Mockup */}
+            {/* CSS App Mockup - Home (Hoje) */}
             <div className="relative w-full max-w-[320px] h-[600px] bg-fog rounded-[3rem] border-[8px] border-ink shadow-2xl overflow-hidden flex flex-col transform lg:rotate-[-5deg] lg:translate-x-12 hover:rotate-0 hover:translate-x-0 transition-transform duration-700 ease-out">
+              {/* Fake iPhone Notch */}
+              <div className="absolute top-0 inset-x-0 h-6 bg-ink rounded-b-xl w-32 mx-auto z-50"></div>
+              
+              {/* App Header */}
+              <div className="bg-teal-deep pt-8 pb-6 px-5 flex flex-col gap-4 text-white shadow-sm z-10">
+                <div className="flex items-center justify-between">
+                  <div className="size-10 rounded-full bg-white/10 flex items-center justify-center font-bold text-sm">JC</div>
+                  <div className="size-10 rounded-full bg-white/10 flex items-center justify-center relative">
+                    <span className="absolute top-2 right-2 size-2 bg-amber rounded-full border border-teal-deep"></span>
+                    <Bot className="size-5" />
+                  </div>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-serif font-bold">Bom dia, Jefferson</h2>
+                  <p className="text-teal-light text-xs mt-1">Você tem 3 tarefas atrasadas hoje.</p>
+                </div>
+              </div>
+
+              {/* App Body - Dashboard */}
+              <div className="flex-1 bg-snow p-4 overflow-hidden flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white rounded-2xl p-4 border border-border shadow-soft">
+                    <span className="text-xs text-slate font-semibold uppercase">Negócios</span>
+                    <div className="text-2xl font-bold text-teal-deep mt-1">12</div>
+                  </div>
+                  <div className="bg-white rounded-2xl p-4 border border-border shadow-soft">
+                    <span className="text-xs text-slate font-semibold uppercase">Visitas</span>
+                    <div className="text-2xl font-bold text-amber mt-1">4</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-2">
+                  <h3 className="font-bold text-sm text-ink">Próximas Atividades</h3>
+                </div>
+
+                {/* Activity 1 */}
+                <div className="bg-white rounded-2xl p-3 border border-border flex items-start gap-3 shadow-sm">
+                  <div className="size-8 rounded-full bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
+                    <Calendar className="size-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-ink">Ligar para Mariana</p>
+                    <p className="text-[10px] text-destructive font-medium mt-0.5">Atrasado (Ontem, 14:00)</p>
+                  </div>
+                </div>
+
+                {/* Activity 2 */}
+                <div className="bg-white rounded-2xl p-3 border border-border flex items-start gap-3 shadow-sm">
+                  <div className="size-8 rounded-full bg-amber/10 text-amber-600 flex items-center justify-center shrink-0">
+                    <MapPin className="size-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-ink">Visita - Apto Jardins</p>
+                    <p className="text-[10px] text-slate mt-0.5">Hoje, 15:30 • João Silva</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* App Bottom Bar */}
+              <div className="h-16 bg-white border-t border-border flex items-center justify-around px-4 pb-2 shrink-0">
+                <div className="flex flex-col items-center text-teal-deep"><Home className="size-5 mb-1" /><span className="text-[9px] font-bold">Hoje</span></div>
+                <div className="flex flex-col items-center text-slate"><Target className="size-5 mb-1" /><span className="text-[9px] font-medium">Negócios</span></div>
+                <div className="flex flex-col items-center text-slate"><Calendar className="size-5 mb-1" /><span className="text-[9px] font-medium">Agenda</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="py-24 bg-white border-y border-border/50">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4">Tudo que você precisa em um só lugar</h2>
+          <p className="text-slate max-w-2xl mx-auto mb-16 text-lg">
+            Um ecossistema completo focado em relacionamento real e fechamento de alto padrão.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <FeatureCard 
+              icon={<Filter />}
+              title="Funis de Vendas Dinâmicos"
+              description="Visualize seus negócios como nunca antes. Arraste (swipe) e movimente clientes entre as etapas do funil com máxima fluidez."
+            />
+            <FeatureCard 
+              icon={<Brain />}
+              title="Inteligência Artificial"
+              description="Escreva descrições matadoras para seus imóveis e resuma o histórico do cliente em um toque com o Albert (nossa I.A. nativa)."
+            />
+            <FeatureCard 
+              icon={<Target />}
+              title="Método FORD & 4Q Integrados"
+              description="Conheça seu cliente a fundo. Mapeie Família, Ocupação, Recreação e Sonhos diretamente no card de relacionamento."
+            />
+            <FeatureCard 
+              icon={<LineChart />}
+              title="Timeline de Interações"
+              description="Cada WhatsApp, e-mail, reunião ou visita fica perfeitamente documentado numa linha do tempo automática."
+            />
+            <FeatureCard 
+              icon={<Zap />}
+              title="Recomendação de Imóveis"
+              description="Busque imóveis compatíveis instantaneamente no perfil do lead e envie as fichas em PDF num clique."
+            />
+            <FeatureCard 
+              icon={<CheckCircle2 />}
+              title="Gestão de Atividades"
+              description="Não perca follow-ups. Um calendário inteligente que avisa o que está em dia, o que é pra amanhã e o que atrasou."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Deep Dive Section */}
+      <section className="py-24 bg-snow overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="order-2 lg:order-1 relative">
+            {/* Background glowing blob */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-teal-mid/10 blur-3xl rounded-full -z-10" />
+            
+            {/* CSS App Mockup - Kanban (Negócios) */}
+            <div className="relative w-full max-w-[320px] h-[600px] bg-fog rounded-[3rem] border-[8px] border-ink shadow-2xl overflow-hidden flex flex-col mx-auto transform lg:rotate-[5deg] hover:rotate-0 transition-transform duration-700 ease-out">
               {/* Fake iPhone Notch */}
               <div className="absolute top-0 inset-x-0 h-6 bg-ink rounded-b-xl w-32 mx-auto z-50"></div>
               
@@ -122,110 +243,10 @@ export default function SiteHomePage() {
               </div>
 
               {/* App Bottom Bar */}
-              <div className="h-16 bg-white border-t border-border flex items-center justify-around px-4 pb-2">
+              <div className="h-16 bg-white border-t border-border flex items-center justify-around px-4 pb-2 shrink-0">
+                <div className="flex flex-col items-center text-slate"><Home className="size-5 mb-1" /><span className="text-[9px] font-medium">Hoje</span></div>
                 <div className="flex flex-col items-center text-teal-deep"><Target className="size-5 mb-1" /><span className="text-[9px] font-bold">Negócios</span></div>
-                <div className="flex flex-col items-center text-slate"><Home className="size-5 mb-1" /><span className="text-[9px] font-medium">Imóveis</span></div>
                 <div className="flex flex-col items-center text-slate"><Calendar className="size-5 mb-1" /><span className="text-[9px] font-medium">Agenda</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-24 bg-white border-y border-border/50">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink mb-4">Tudo que você precisa em um só lugar</h2>
-          <p className="text-slate max-w-2xl mx-auto mb-16 text-lg">
-            Um ecossistema completo focado em relacionamento real e fechamento de alto padrão.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon={<Filter />}
-              title="Funis de Vendas Dinâmicos"
-              description="Visualize seus negócios como nunca antes. Arraste (swipe) e movimente clientes entre as etapas do funil com máxima fluidez."
-            />
-            <FeatureCard 
-              icon={<Brain />}
-              title="Inteligência Artificial"
-              description="Escreva descrições matadoras para seus imóveis e resuma o histórico do cliente em um toque com o Albert (nossa I.A. nativa)."
-            />
-            <FeatureCard 
-              icon={<Target />}
-              title="Método FORD & 4Q Integrados"
-              description="Conheça seu cliente a fundo. Mapeie Família, Ocupação, Recreação e Sonhos diretamente no card de relacionamento."
-            />
-            <FeatureCard 
-              icon={<LineChart />}
-              title="Timeline de Interações"
-              description="Cada WhatsApp, e-mail, reunião ou visita fica perfeitamente documentado numa linha do tempo automática."
-            />
-            <FeatureCard 
-              icon={<Zap />}
-              title="Recomendação de Imóveis"
-              description="Busque imóveis compatíveis instantaneamente no perfil do lead e envie as fichas em PDF num clique."
-            />
-            <FeatureCard 
-              icon={<CheckCircle2 />}
-              title="Gestão de Atividades"
-              description="Não perca follow-ups. Um calendário inteligente que avisa o que está em dia, o que é pra amanhã e o que atrasou."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Deep Dive Section */}
-      <section className="py-24 bg-snow overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="order-2 lg:order-1 relative">
-            {/* Background glowing blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-teal-mid/10 blur-3xl rounded-full -z-10" />
-            
-            {/* Property Detail App Mockup */}
-            <div className="relative w-full max-w-[300px] h-[550px] bg-fog rounded-[3rem] border-[8px] border-ink shadow-2xl overflow-hidden flex flex-col mx-auto transform lg:rotate-[5deg] hover:rotate-0 transition-transform duration-700 ease-out">
-              <div className="absolute top-0 inset-x-0 h-6 bg-ink rounded-b-xl w-32 mx-auto z-50"></div>
-              
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-fog">
-                <div className="absolute inset-0 bg-gradient-to-br from-teal-mid to-teal-deep opacity-10" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Home className="w-12 h-12 text-teal-deep/20" />
-                </div>
-                <div className="absolute left-3 top-10 flex flex-col gap-2 z-10">
-                  <span className="rounded-full bg-teal-deep/90 backdrop-blur px-2.5 py-1 text-[10px] font-bold text-white shadow-sm">
-                    Venda
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex-1 bg-snow p-5 -mt-4 rounded-t-[1.5rem] relative z-20 flex flex-col">
-                <h3 className="text-lg font-bold text-ink leading-snug">
-                  Apartamento Exemplo com 3 suítes e varanda
-                </h3>
-                <p className="mt-1 text-xs text-slate flex items-center gap-1">
-                  <MapPin className="size-3" /> Jardins, São Paulo
-                </p>
-                <div className="mt-4 flex gap-2 p-1 bg-fog/50 rounded-xl border border-border">
-                  <button className="flex-1 rounded-lg py-1.5 text-xs font-semibold bg-white text-ink shadow-soft">
-                    Detalhes
-                  </button>
-                  <button className="flex-1 rounded-lg py-1.5 text-xs font-medium text-slate">
-                    Histórico
-                  </button>
-                </div>
-                <div className="mt-4 space-y-3">
-                  <div className="flex justify-between items-center text-sm border-b border-border pb-2">
-                    <span className="text-slate">Área Útil</span>
-                    <span className="font-bold text-ink">145m²</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm border-b border-border pb-2">
-                    <span className="text-slate">Dormitórios</span>
-                    <span className="font-bold text-ink">3 (3 suítes)</span>
-                  </div>
-                </div>
-                <div className="mt-auto pt-4 flex items-end justify-between">
-                  <p className="font-serif text-xl font-bold text-teal-deep">R$ 1.200.000</p>
-                </div>
               </div>
             </div>
           </div>
