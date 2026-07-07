@@ -57,11 +57,11 @@ export default function DesignSystemLayout({ children }: { children: React.React
                 <LayoutTemplate className="w-4 h-4" /> Wiki do App
               </h2>
               <ul className="space-y-1">
-                <NavItem href="#wiki-visao-geral" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Visão Geral (Hoje)</div>
-                <NavItem href="#wiki-negocios" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Módulo de Negócios</div>
-                <NavItem href="#wiki-relacionamento" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Relacionamento (FORD)</div>
-                <NavItem href="#wiki-captacao" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Captação (Imóveis)</div>
-                <NavItem href="#wiki-inteligencia" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Inteligência Artificial</div>
+                <NavItem href="#wiki-visao-geral" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Visão Geral (Hoje)</NavItem>
+                <NavItem href="#wiki-negocios" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Módulo de Negócios</NavItem>
+                <NavItem href="#wiki-relacionamento" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Relacionamento (FORD)</NavItem>
+                <NavItem href="#wiki-captacao" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Captação (Imóveis)</NavItem>
+                <NavItem href="#wiki-inteligencia" icon={<div className="w-2 h-2 rounded-full bg-slate" />}>Inteligência Artificial</NavItem>
               </ul>
             </div>
           </nav>
