@@ -1,15 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Calendar, MessageCircle, FileText, CalendarDays } from 'lucide-react'
-import { tipoAtividadeConfig, type EventoTimeline, type TipoAtividade } from '@/lib/app-data'
+import { tipoAtividadeConfig, type EventoTimeline, type TipoAtividade, imoveis } from '@/lib/app-data'
+import { Search, ArrowUp, ArrowDown, Trash2, Phone as PhoneIcon, MessageCircle as WpIcon, X, CalendarDays, Calendar, MessageCircle } from 'lucide-react'
 
 export function RegistrarAtividadeSheet({
   onClose,
   onSave,
+  clienteDados,
 }: {
   onClose: () => void
   onSave: (evento: EventoTimeline) => void
+  clienteDados?: { nome: string; telefone: string; email?: string }
 }) {
   const [tipo, setTipo] = useState<'nota' | 'atividade' | 'email'>('nota')
   
@@ -21,6 +23,10 @@ export function RegistrarAtividadeSheet({
   const [horaStr, setHoraStr] = useState('')
   const [importante, setImportante] = useState(false)
   const [assuntoEmail, setAssuntoEmail] = useState('')
+
+  // Visita states
+  const [buscaImovel, setBuscaImovel] = useState('')
+  const [imoveisSelecionados, setImoveisSelecionados] = useState<typeof imoveis>([])
 
   function handleSalvar() {
     if (!descricao.trim()) return
@@ -162,6 +168,115 @@ export function RegistrarAtividadeSheet({
                     />
                   </div>
                 </div>
+
+                {tipoAtividade === 'reuniao' && clienteDados && (
+                  <div className="mt-2 rounded-2xl bg-muted/40 p-4 border border-border">
+                    <p className="mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Ações Rápidas com Cliente</p>
+                    <div className="flex gap-2">
+                      <a href={`tel:${clienteDados.telefone.replace(/\D/g, '')}`} className="flex flex-1 items-center justify-center gap-2 h-10 rounded-xl bg-card border border-border text-xs font-semibold text-foreground shadow-sm transition-brand hover:bg-muted active:scale-95">
+                        <PhoneIcon className="size-4 text-primary" /> Ligar
+                      </a>
+                      <a href={`https://wa.me/55${clienteDados.telefone.replace(/\D/g, '')}`} target="_blank" rel="noreferrer" className="flex flex-1 items-center justify-center gap-2 h-10 rounded-xl bg-[#25D366] border border-[#25D366] text-xs font-semibold text-white shadow-sm transition-brand active:scale-95">
+                        <WpIcon className="size-4 text-white" /> WhatsApp
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {tipoAtividade === 'visita' && (
+                  <div className="mt-2">
+                    <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Imóveis para Visitar
+                    </label>
+                    <div className="relative mb-3">
+                      <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                      <input
+                        type="text"
+                        value={buscaImovel}
+                        onChange={(e) => setBuscaImovel(e.target.value)}
+                        placeholder="Buscar por código ou título..."
+                        className="w-full rounded-2xl border border-border bg-card pl-10 pr-4 py-3 text-sm text-foreground outline-none focus:border-primary"
+                      />
+                    </div>
+                    {buscaImovel.trim() && (
+                      <div className="max-h-48 overflow-y-auto rounded-2xl border border-border bg-card p-2 shadow-sm mb-4">
+                        {imoveis
+                          .filter(im => 
+                            !imoveisSelecionados.find(s => s.id === im.id) &&
+                            (im.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) || im.codigo.toLowerCase().includes(buscaImovel.toLowerCase()))
+                          )
+                          .map(im => (
+                            <button
+                              key={im.id}
+                              type="button"
+                              onClick={() => {
+                                setImoveisSelecionados([...imoveisSelecionados, im])
+                                setBuscaImovel('')
+                              }}
+                              className="w-full flex items-center justify-between rounded-xl p-2 text-left hover:bg-muted/50 transition-colors"
+                            >
+                              <div className="flex-1 min-w-0 pr-3">
+                                <p className="text-sm font-semibold text-foreground truncate">{im.titulo}</p>
+                                <p className="text-xs text-muted-foreground">{im.codigo} • {im.bairro}</p>
+                              </div>
+                              <div className="shrink-0 flex items-center justify-center rounded bg-primary/10 px-2 py-1 text-xs font-bold text-primary">
+                                + Adicionar
+                              </div>
+                            </button>
+                          ))}
+                      </div>
+                    )}
+                    {imoveisSelecionados.length > 0 && (
+                      <ul className="flex flex-col gap-2">
+                        {imoveisSelecionados.map((im, idx) => (
+                          <li key={im.id} className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-sm">
+                            <div className="flex flex-col gap-1">
+                              <button 
+                                type="button" 
+                                disabled={idx === 0}
+                                onClick={() => {
+                                  const arr = [...imoveisSelecionados]
+                                  const temp = arr[idx-1]
+                                  arr[idx-1] = arr[idx]
+                                  arr[idx] = temp
+                                  setImoveisSelecionados(arr)
+                                }}
+                                className="flex size-6 items-center justify-center rounded bg-muted text-muted-foreground disabled:opacity-30 transition-transform active:scale-95"
+                              >
+                                <ArrowUp className="size-3" strokeWidth={3} />
+                              </button>
+                              <button 
+                                type="button"
+                                disabled={idx === imoveisSelecionados.length - 1}
+                                onClick={() => {
+                                  const arr = [...imoveisSelecionados]
+                                  const temp = arr[idx+1]
+                                  arr[idx+1] = arr[idx]
+                                  arr[idx] = temp
+                                  setImoveisSelecionados(arr)
+                                }}
+                                className="flex size-6 items-center justify-center rounded bg-muted text-muted-foreground disabled:opacity-30 transition-transform active:scale-95"
+                              >
+                                <ArrowDown className="size-3" strokeWidth={3} />
+                              </button>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-semibold text-foreground truncate">{im.titulo}</p>
+                              <p className="text-xs text-muted-foreground font-mono">{im.codigo}</p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => setImoveisSelecionados(imoveisSelecionados.filter(s => s.id !== im.id))}
+                              className="flex size-8 items-center justify-center rounded-full text-red-500 hover:bg-red-500/10 transition-colors"
+                            >
+                              <Trash2 className="size-4" strokeWidth={2} />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
               </>
             )}
 

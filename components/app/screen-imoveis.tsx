@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   Bath,
   BedDouble,
+  Building2,
   Car,
   Heart,
   MapPin,
@@ -28,9 +29,12 @@ import {
   PhoneOff
 } from 'lucide-react'
 import { imoveis, type Imovel } from '@/lib/app-data'
+import { empreendimentosMock, type Empreendimento } from '@/lib/empreendimentos-data'
 import { FiltrosAvancadosImoveisSheet } from '@/components/app/filtros-avancados-imoveis-sheet'
 import { FormCaptarImovel } from '@/components/app/form-captar-imovel'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
+import { FormCaptarEmpreendimento } from '@/components/app/form-captar-empreendimento'
+import { EmpreendimentoDetail } from '@/components/app/empreendimento-detail'
 
 const filtros = ['Todos', 'Venda', 'Locação', 'Livre', 'Reservado'] as const
 
@@ -40,18 +44,31 @@ const statusStyle: Record<Imovel['status'], string> = {
   Proposta: 'bg-teal-shadow/90 text-white',
 }
 
+
 export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   const [abaAtiva, setAbaAtiva] = useState<'imoveis' | 'empreendimentos'>('imoveis')
   const [filtro, setFiltro] = useState<(typeof filtros)[number]>('Todos')
   const [busca, setBusca] = useState('')
   const [selecionado, setSelecionado] = useState<Imovel | null>(null)
+  const [empreendimentoSelecionado, setEmpreendimentoSelecionado] = useState<Empreendimento | null>(null)
   
   const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false)
   const [filtroFinalidade, setFiltroFinalidade] = useState('Todas')
   const [filtroStatus, setFiltroStatus] = useState('Todos')
+  
+  const [ordenacao, setOrdenacao] = useState<'padrao' | 'menor-preco' | 'maior-preco' | 'maior-area'>('padrao')
+  const [mostrarMenuOrdenacao, setMostrarMenuOrdenacao] = useState(false)
+  const [mostrarCadastroEmpreendimento, setMostrarCadastroEmpreendimento] = useState(false)
+
+  const filtrosAplicados = useMemo(() => {
+    const res: Record<string, string> = {}
+    if (filtroFinalidade !== 'Todas') res.finalidade = filtroFinalidade
+    if (filtroStatus !== 'Todos') res.status = filtroStatus
+    return res
+  }, [filtroFinalidade, filtroStatus])
 
   const lista = useMemo(() => {
-    return imoveis.filter((im) => {
+    const filtrados = imoveis.filter((im) => {
       const matchFiltro =
         filtro === 'Todos' ||
         im.finalidade === filtro ||
@@ -68,7 +85,26 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
 
       return matchFiltro && matchBusca && matchAdvFinalidade && matchAdvStatus
     })
-  }, [filtro, busca, filtroFinalidade, filtroStatus])
+
+    if (ordenacao === 'menor-preco') {
+      return [...filtrados].sort((a, b) => {
+        const pA = parseInt(a.preco.replace(/\D/g, ''), 10) || 0
+        const pB = parseInt(b.preco.replace(/\D/g, ''), 10) || 0
+        return pA - pB
+      })
+    }
+    if (ordenacao === 'maior-preco') {
+      return [...filtrados].sort((a, b) => {
+        const pA = parseInt(a.preco.replace(/\D/g, ''), 10) || 0
+        const pB = parseInt(b.preco.replace(/\D/g, ''), 10) || 0
+        return pB - pA
+      })
+    }
+    if (ordenacao === 'maior-area') {
+      return [...filtrados].sort((a, b) => (b.area || 0) - (a.area || 0))
+    }
+    return filtrados
+  }, [filtro, busca, filtroFinalidade, filtroStatus, ordenacao])
 
   if (selecionado) {
     return (
@@ -82,6 +118,15 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
             imoveis[idx] = novo
           }
         }}
+      />
+    )
+  }
+
+  if (empreendimentoSelecionado) {
+    return (
+      <EmpreendimentoDetail 
+        emp={empreendimentoSelecionado}
+        onBack={() => setEmpreendimentoSelecionado(null)}
       />
     )
   }
@@ -115,8 +160,8 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
           {onCaptar && (
             <button
               type="button"
-              onClick={onCaptar}
-              aria-label="Captar novo imóvel"
+              onClick={abaAtiva === 'empreendimentos' ? () => setMostrarCadastroEmpreendimento(true) : onCaptar}
+              aria-label={abaAtiva === 'empreendimentos' ? 'Cadastrar empreendimento' : 'Captar novo imóvel'}
               className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary transition-brand active:scale-95"
             >
               <Plus className="size-5" />
@@ -158,13 +203,48 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
               <span className="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-primary border-2 border-card" />
             )}
           </button>
-          <button
-            type="button"
-            className="flex size-12 items-center justify-center rounded-2xl border border-border bg-card shadow-sm text-foreground transition-brand active:scale-95"
-            aria-label="Mudar ordenação"
-          >
-            <ArrowUpDown className="size-5" strokeWidth={1.5} />
-          </button>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setMostrarMenuOrdenacao(!mostrarMenuOrdenacao)}
+              className={`flex size-12 items-center justify-center rounded-2xl border border-border bg-card shadow-sm transition-brand active:scale-95 ${
+                ordenacao !== 'padrao' ? 'text-primary border-primary/30 bg-primary/5' : 'text-foreground'
+              }`}
+              aria-label="Mudar ordenação"
+            >
+              <ArrowUpDown className="size-5" strokeWidth={1.5} />
+            </button>
+            
+            {mostrarMenuOrdenacao && (
+              <>
+                <div className="fixed inset-0 z-30" onClick={() => setMostrarMenuOrdenacao(false)} />
+                <div className="absolute right-0 mt-2 w-48 rounded-2xl border border-border bg-card p-2 shadow-xl z-40 animate-in fade-in slide-in-from-top-2 duration-150">
+                  {[
+                    { id: 'padrao', label: 'Padrão (Relevância)' },
+                    { id: 'menor-preco', label: 'Menor Preço' },
+                    { id: 'maior-preco', label: 'Maior Preço' },
+                    { id: 'maior-area', label: 'Maior Área' },
+                  ].map((op) => (
+                    <button
+                      key={op.id}
+                      type="button"
+                      onClick={() => {
+                        setOrdenacao(op.id as any)
+                        setMostrarMenuOrdenacao(false)
+                      }}
+                      className={`w-full text-left rounded-xl px-3 py-2 text-xs font-medium transition-colors ${
+                        ordenacao === op.id
+                          ? 'bg-primary text-primary-foreground'
+                          : 'hover:bg-muted text-foreground'
+                      }`}
+                    >
+                      {op.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -186,68 +266,178 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
         ))}
       </div>
 
-      {/* Cards fotográficos */}
-      <ul className="flex flex-col gap-4">
-        {lista.map((im) => (
-          <li key={im.id}>
-            <button
-              type="button"
-              onClick={() => setSelecionado(im)}
-              className="w-full overflow-hidden rounded-[1.25rem] border-transparent bg-card shadow-soft text-left transition-brand active:scale-[0.98]"
-            >
-              <div className="relative aspect-[4/3]">
-                <Image
-                  src={im.foto || '/placeholder.svg'}
-                  alt={`Foto do imóvel: ${im.titulo}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 480px) 100vw, 420px"
-                />
-                <span
-                  className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm ${statusStyle[im.status]}`}
-                >
-                  {im.status}
-                </span>
-                <span className="absolute right-3 top-3 rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
-                  {im.codigo}
-                </span>
-              </div>
-              <div className="p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-foreground">{im.titulo}</p>
-                    <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
-                      <MapPin className="size-3.5" strokeWidth={1.5} />
-                      {im.bairro} · {im.cidade}
+      {/* Cards fotográficos — apenas na aba Imóveis */}
+      {abaAtiva === 'imoveis' && (
+        <ul className="flex flex-col gap-4">
+          {lista.map((im) => (
+            <li key={im.id}>
+              <button
+                type="button"
+                onClick={() => setSelecionado(im)}
+                className="w-full overflow-hidden rounded-[1.25rem] border-transparent bg-card shadow-soft text-left transition-brand active:scale-[0.98]"
+              >
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src={im.foto || '/placeholder.svg'}
+                    alt={`Foto do imóvel: ${im.titulo}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 480px) 100vw, 420px"
+                  />
+                  <span
+                    className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm ${statusStyle[im.status]}`}
+                  >
+                    {im.status}
+                  </span>
+                  <span className="absolute right-3 top-3 rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+                    {im.codigo}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-foreground">{im.titulo}</p>
+                      <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+                        <MapPin className="size-3.5" strokeWidth={1.5} />
+                        {im.bairro} · {im.cidade}
+                      </p>
+                    </div>
+                    <p className="shrink-0 font-mono text-base font-semibold text-primary">
+                      {im.preco}
                     </p>
                   </div>
-                  <p className="shrink-0 font-mono text-base font-semibold text-primary">
-                    {im.preco}
-                  </p>
+                  <div className="mt-3 flex items-center gap-4 border-t border-border pt-3 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <BedDouble className="size-4" strokeWidth={1.5} />
+                      {im.dorms}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Bath className="size-4" strokeWidth={1.5} />
+                      {im.suites}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Car className="size-4" strokeWidth={1.5} />
+                      {im.vagas}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Ruler className="size-4" strokeWidth={1.5} />
+                      {im.area} m²
+                    </span>
+                  </div>
                 </div>
-                <div className="mt-3 flex items-center gap-4 border-t border-border pt-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <BedDouble className="size-4" strokeWidth={1.5} />
-                    {im.dorms}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Bath className="size-4" strokeWidth={1.5} />
-                    {im.suites}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Car className="size-4" strokeWidth={1.5} />
-                    {im.vagas}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Ruler className="size-4" strokeWidth={1.5} />
-                    {im.area} m²
-                  </span>
-                </div>
-              </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* Aba Empreendimentos */}
+      {abaAtiva === 'empreendimentos' && (
+        empreendimentosMock.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-5 py-12 text-center">
+            <div className="flex size-20 items-center justify-center rounded-3xl bg-primary/10">
+              <Building2 className="size-10 text-primary" strokeWidth={1.5} />
+            </div>
+            <div>
+              <p className="font-serif text-lg font-semibold text-foreground">Nenhum empreendimento</p>
+              <p className="mt-1 text-sm text-muted-foreground">Cadastre seu primeiro empreendimento para gerenciar torres, plantas e cronogramas.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setMostrarCadastroEmpreendimento(true)}
+              className="flex h-12 items-center gap-2 rounded-2xl bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
+            >
+              <Plus className="size-4" strokeWidth={2} />
+              Cadastrar Empreendimento
             </button>
-          </li>
-        ))}
-      </ul>
+          </div>
+        ) : (
+          <ul className="flex flex-col gap-4">
+            {empreendimentosMock.map(emp => {
+              const statusColor =
+                emp.status === 'Lançamento' ? 'bg-primary/90 text-white' :
+                emp.status === 'Em Obras' ? 'bg-amber/90 text-ink' :
+                'bg-teal-mid/90 text-white'
+              const composicaoDorms = emp.minDorms === emp.maxDorms
+                ? `${emp.minDorms} dorm${emp.minDorms > 1 ? 's' : ''}`
+                : `${emp.minDorms}–${emp.maxDorms} dorms`
+              const composicaoSuites = emp.minSuites === emp.maxSuites
+                ? `${emp.minSuites} suíte${emp.minSuites !== 1 ? 's' : ''}`
+                : `${emp.minSuites}–${emp.maxSuites} suítes`
+              const composicaoVagas = emp.minVagas === emp.maxVagas
+                ? `${emp.minVagas} vaga${emp.minVagas > 1 ? 's' : ''}`
+                : `${emp.minVagas}–${emp.maxVagas} vagas`
+
+              return (
+                <li key={emp.id}>
+                  <button
+                    type="button"
+                    onClick={() => setEmpreendimentoSelecionado(emp)}
+                    className="w-full overflow-hidden rounded-[1.25rem] border-transparent bg-card shadow-soft text-left transition-brand active:scale-[0.98]"
+                  >
+                    <div className="relative aspect-[16/9]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={emp.foto} alt={emp.nome} className="h-full w-full object-cover" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      {/* Status badge */}
+                      <span className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm ${statusColor}`}>
+                        {emp.status}
+                      </span>
+                      {/* Finalidade badge */}
+                      <span className="absolute right-3 top-3 rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+                        {emp.finalidade}
+                      </span>
+                      {/* Nome + local over image */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <p className="font-serif text-base font-bold text-white leading-tight">{emp.nome}</p>
+                        <p className="mt-0.5 flex items-center gap-1 text-xs text-white/80">
+                          <Building2 className="size-3.5" strokeWidth={1.5} />
+                          {emp.construtora}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-4">
+                      {/* Location */}
+                      <p className="flex items-center gap-1 text-xs text-muted-foreground mb-3">
+                        <MapPin className="size-3.5" strokeWidth={1.5} />
+                        {emp.bairro} · {emp.cidade}
+                      </p>
+
+                      {/* Composição min-max */}
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
+                        <span className="flex items-center gap-1.5">
+                          <BedDouble className="size-4" strokeWidth={1.5} />
+                          {composicaoDorms}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <Bath className="size-4" strokeWidth={1.5} />
+                          {composicaoSuites}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <Car className="size-4" strokeWidth={1.5} />
+                          {composicaoVagas}
+                        </span>
+                      </div>
+
+                      {/* Preço + unidades */}
+                      <div className="flex items-end justify-between border-t border-border pt-3">
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">A partir de</p>
+                          <p className="font-mono text-base font-bold text-primary">{emp.precoMin}</p>
+                        </div>
+                        <span className="rounded-full bg-muted px-3 py-1 text-[11px] font-semibold text-muted-foreground">
+                          {emp.unidades} unidades
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        )
+      )}
       
       {mostrarFiltrosAvancados && (
         <FiltrosAvancadosImoveisSheet
@@ -257,6 +447,15 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
           filtroStatus={filtroStatus}
           setFiltroStatus={setFiltroStatus}
         />
+      )}
+
+      {/* Overlay: Cadastro de Empreendimento */}
+      {mostrarCadastroEmpreendimento && (
+        <div className="absolute inset-0 z-50 bg-background overflow-y-auto">
+          <div className="px-5 pt-6 pb-10">
+            <FormCaptarEmpreendimento onClose={() => setMostrarCadastroEmpreendimento(false)} />
+          </div>
+        </div>
       )}
     </div>
   )
@@ -399,7 +598,7 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
           <h3 className="text-sm font-semibold text-foreground mb-4">Detalhes Técnicos</h3>
           <div className="grid grid-cols-2 gap-y-4 gap-x-2">
             {[
-              { label: 'Operação', value: imovel.operacoes?.join(', ') || imovel.operacao },
+              { label: 'Operação', value: imovel.operacoes?.join(', ') },
               { label: 'Tipo', value: imovel.tipoImovel },
               { label: 'Finalidade', value: imovel.finalidade },
               { label: 'Situação', value: imovel.situacaoImovel },
@@ -607,8 +806,9 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
       {mostrarUpsell && (
         <div className="absolute inset-0 z-50 overflow-y-auto bg-background">
           <IAUpsellPage 
+            origem="imovel"
             onClose={() => setMostrarUpsell(false)}
-            onContract={() => {
+            onSuccess={() => {
               setMostrarUpsell(false)
               setUpsellSucesso(true)
             }}

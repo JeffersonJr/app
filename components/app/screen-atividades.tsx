@@ -6,7 +6,18 @@ import { atividadesHoje, tipoAtividadeConfig } from '@/lib/app-data'
 import type { Atividade } from '@/lib/app-data'
 
 export function ScreenAtividades() {
-  const [atividades, setAtividades] = useState<Atividade[]>(atividadesHoje)
+  const [atividades, setAtividades] = useState<Atividade[]>(() => {
+    return [...atividadesHoje].sort((a, b) => {
+      const getT = (atv: Atividade) => {
+        let d = '1970-01-01'
+        if (atv.hora) { // some activities might lack 'data' prop here but we treat them as 'Hoje' if missing
+          d = new Date().toISOString().split('T')[0] // default Hoje
+        }
+        return new Date(`${d}T${atv.hora.replace('h', '')}:00`).getTime()
+      }
+      return getT(a) - getT(b)
+    })
+  })
 
   const toggleAtividade = (id: string) => {
     setAtividades(prev =>
@@ -59,6 +70,9 @@ export function ScreenAtividades() {
                         <span className="flex items-center gap-1 font-medium text-muted-foreground">
                           <Clock className="size-3" />
                           {atv.hora}
+                          {!atv.concluida && new Date(`${new Date().toISOString().split('T')[0]}T${atv.hora.replace('h', '')}:00`).getTime() < Date.now() && (
+                            <span className="ml-1 rounded text-[10px] font-bold text-red-500 bg-red-500/10 px-1.5 py-0.5">Atrasada</span>
+                          )}
                         </span>
                         <span>•</span>
                         <span className="truncate">{atv.cliente}</span>

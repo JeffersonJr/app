@@ -3,17 +3,19 @@
 import { useState } from 'react'
 import { Building2, CalendarPlus, Camera, UserPlus, X } from 'lucide-react'
 import { FormCaptarImovel } from '@/components/app/form-captar-imovel'
+import { FormCaptarEmpreendimento } from '@/components/app/form-captar-empreendimento'
 import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
 import { FormNovoLead } from '@/components/app/form-novo-lead'
 import { FormNovoNegocio } from '@/components/app/form-novo-negocio'
 
-type Acao = 'novo-lead' | 'nova-atividade' | 'novo-negocio' | 'captar-imovel' | null
+type Acao = 'novo-lead' | 'nova-atividade' | 'novo-negocio' | 'captar-imovel' | 'captar-empreendimento' | null
 
 const acoes = [
   { id: 'novo-lead' as const, icon: UserPlus, titulo: 'Novo lead', desc: 'Capture um contato em segundos' },
   { id: 'nova-atividade' as const, icon: CalendarPlus, titulo: 'Nova atividade', desc: 'Visita, ligação, reunião ou prazo' },
   { id: 'novo-negocio' as const, icon: Building2, titulo: 'Novo negócio', desc: 'Inicie uma negociação no funil' },
   { id: 'captar-imovel' as const, icon: Camera, titulo: 'Captar imóvel', desc: 'Fotografe e cadastre na rua' },
+  { id: 'captar-empreendimento' as const, icon: Building2, titulo: 'Cadastrar empreendimento', desc: 'Novo lançamento ou projeto' },
 ]
 
 export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }: { onClose: () => void, onAtividadeCriada?: (atendimentoId: string) => void, defaultAcao?: Acao }) {
@@ -82,6 +84,9 @@ export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }
         )}
         {acaoAtiva === 'captar-imovel' && (
           <FormCaptarImovel onClose={() => { setAcaoAtiva(null); onClose() }} />
+        )}
+        {acaoAtiva === 'captar-empreendimento' && (
+          <FormCaptarEmpreendimento onClose={() => { setAcaoAtiva(null); onClose() }} />
         )}
       </div>
     </div>

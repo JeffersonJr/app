@@ -29,7 +29,9 @@ import {
   Send,
   FileText as DocumentIcon,
   Trash2,
-  Edit3
+  Edit3,
+  MapPin,
+  Search
 } from 'lucide-react'
 import {
   type Atendimento,
@@ -40,16 +42,15 @@ import {
   origemConfig,
   tempConfig,
   tipoAtividadeConfig,
+  funis,
 } from '@/lib/app-data'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { AtividadeDetalheSheet } from '@/components/app/atividade-detalhe-sheet'
 import { GanhoPerdidoSheet } from '@/components/app/ganho-perdido-sheet'
 import { RegistrarAtividadeSheet } from '@/components/app/registrar-atividade-sheet'
-import { atividadesHoje } from '@/lib/app-data'
 
-const ETAPAS = ['qualificando', 'conhecendo', 'agendado', 'negociando'] as const
-type Etapa = (typeof ETAPAS)[number]
+type Etapa = string
 
 const FILTROS_TIMELINE = ['Todos', 'Atividades', 'E-mails', 'Imóveis', 'Notas', 'Outros'] as const
 
@@ -64,6 +65,7 @@ function iconeTimeline(tipo: EventoTimeline['tipo']) {
     origem: '🎯',
     etapa: '➡️',
     status: '⭐',
+    whatsapp: '💬',
   }
   return map[tipo] ?? '•'
 }
@@ -102,8 +104,23 @@ export function AtendimentoDetail({
   const [mostrarUpsell, setMostrarUpsell] = useState(false)
   const [nota, setNota] = useState('')
   const [mostrarNovaInteracao, setMostrarNovaInteracao] = useState(false)
-  const [localTimeline, setLocalTimeline] = useState<EventoTimeline[]>(atendimento.timeline)
-  const [localAtividades, setLocalAtividades] = useState(atendimento.atividades)
+  const [localTimeline, setLocalTimeline] = useState(() => {
+    return [...(atendimento.timeline || [])].sort((a, b) => {
+      if (a.id > b.id) return -1;
+      if (a.id < b.id) return 1;
+      return 0;
+    })
+  })
+  const [localAtividades, setLocalAtividades] = useState(() => {
+    return [...(atendimento.atividades || [])].sort((a, b) => {
+      const parseDate = (d: string, h: string) => {
+        if (d === 'Hoje') return new Date(`1970-01-01T${h}:00`)
+        if (d === 'Amanhã') return new Date(`1970-01-02T${h}:00`)
+        return new Date(`${d}T${h}:00`)
+      }
+      return parseDate(a.data, a.hora).getTime() - parseDate(b.data, b.hora).getTime()
+    })
+  })
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
   const [sheetGanhoPerdido, setSheetGanhoPerdido] = useState<'ganho' | 'perdido' | null>(null)
   const [expandedTimelineItemId, setExpandedTimelineItemId] = useState<string | null>(null)
@@ -121,6 +138,9 @@ export function AtendimentoDetail({
   const [assuntoEnvio, setAssuntoEnvio] = useState('')
   const [termoAberto, setTermoAberto] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // Busca manual de imóveis
+  const [buscaManualImoveis, setBuscaManualImoveis] = useState('')
 
   useEffect(() => { setIsClient(true) }, [])
 
@@ -142,7 +162,9 @@ export function AtendimentoDetail({
     }
   }, [atendimento?.id])
 
-  const etapaIdx = ETAPAS.indexOf(atendimento.etapa as Etapa)
+  const funilDoLead = funis.find((f) => f.id === atendimento.funilId)
+  const etapasFunil = funilDoLead?.etapas || []
+  const etapaIdx = etapasFunil.findIndex((e) => e.id === atendimento.etapa)
   const imoveisCompativeis = imoveis.filter((im) => {
     const p = atendimento.perfil
     if (p.finalidade === 'Venda' && im.finalidade !== 'Venda') return false
@@ -150,6 +172,13 @@ export function AtendimentoDetail({
     if (p.quartos && im.dorms < p.quartos) return false
     return true
   })
+
+  // Se a busca manual estiver preenchida, filtramos sobre todos imóveis
+  const imoveisExibidos = buscaManualImoveis 
+    ? imoveis.filter(im => im.titulo.toLowerCase().includes(buscaManualImoveis.toLowerCase()) || im.codigo.toLowerCase().includes(buscaManualImoveis.toLowerCase()))
+    : imoveisCompativeis.length > 0 
+      ? imoveisCompativeis 
+      : imoveis.filter(im => im.finalidade === atendimento.perfil.finalidade || true).slice(0, 2) // recomendacao fallback
 
   function handleSave4Q() {
     if (atendimento) {
@@ -334,8 +363,8 @@ export function AtendimentoDetail({
           <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${origemConfig[atendimento.origem].cor}`}>
             {atendimento.origem}
           </span>
-          <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${etapaConfig[atendimento.etapa as Etapa].cor}`}>
-            {etapaConfig[atendimento.etapa as Etapa].label}
+          <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${etapasFunil.find(e => e.id === atendimento.etapa)?.cor || 'bg-muted'}`}>
+            {etapasFunil.find(e => e.id === atendimento.etapa)?.label || atendimento.etapa}
           </span>
           <span className="rounded-full bg-teal-shadow/30 px-2.5 py-1 text-[10px] font-semibold text-teal-light">
             Entrada: {atendimento.dataEntrada}
@@ -378,8 +407,8 @@ export function AtendimentoDetail({
         <div className="mt-4 flex items-center justify-between rounded-2xl bg-teal-shadow/40 px-4 py-3">
           <button
             type="button"
-            disabled={etapaIdx === 0}
-            onClick={() => etapaIdx > 0 && onEtapaChange?.(atendimento.id, ETAPAS[etapaIdx - 1])}
+            disabled={etapaIdx <= 0}
+            onClick={() => etapaIdx > 0 && onEtapaChange?.(atendimento.id, etapasFunil[etapaIdx - 1].id)}
             className="flex size-8 items-center justify-center rounded-full bg-teal-shadow/40 text-teal-light disabled:opacity-30"
           >
             <ChevronLeft className="size-4" strokeWidth={2} />
@@ -387,18 +416,18 @@ export function AtendimentoDetail({
           <div className="flex flex-col items-center gap-1">
             <span className="text-[10px] uppercase tracking-widest text-teal-light/70">Etapa no funil</span>
             <span className="font-serif text-sm font-semibold text-white">
-              {etapaConfig[atendimento.etapa as Etapa].label}
+              {etapasFunil.find(e => e.id === atendimento.etapa)?.label || atendimento.etapa}
             </span>
             <div className="flex gap-1">
-              {ETAPAS.map((e, i) => (
-                <span key={e} className={`h-1 w-6 rounded-full ${i <= etapaIdx ? 'bg-teal-light' : 'bg-teal-shadow/60'}`} />
+              {etapasFunil.map((e, i) => (
+                <span key={e.id} className={`h-1 w-6 rounded-full ${i <= etapaIdx ? 'bg-teal-light' : 'bg-teal-shadow/60'}`} />
               ))}
             </div>
           </div>
           <button
             type="button"
-            disabled={etapaIdx === ETAPAS.length - 1}
-            onClick={() => etapaIdx < ETAPAS.length - 1 && onEtapaChange?.(atendimento.id, ETAPAS[etapaIdx + 1])}
+            disabled={etapaIdx >= etapasFunil.length - 1}
+            onClick={() => etapaIdx < etapasFunil.length - 1 && onEtapaChange?.(atendimento.id, etapasFunil[etapaIdx + 1].id)}
             className="flex size-8 items-center justify-center rounded-full bg-teal-shadow/40 text-teal-light disabled:opacity-30"
           >
             <ChevronRight className="size-4" strokeWidth={2} />
@@ -617,8 +646,8 @@ export function AtendimentoDetail({
                     className={`w-full text-left rounded-[1.25rem] bg-card shadow-soft p-4 transition-brand hover:bg-muted/50 ${atv.concluida ? 'opacity-70 grayscale' : ''}`}
                   >
                     <div className="flex items-start gap-3">
-                      <span className={`rounded-xl px-2.5 py-1 text-xs font-semibold ${tipoAtividadeConfig[atv.tipo].cor}`}>
-                        {tipoAtividadeConfig[atv.tipo].emoji} {tipoAtividadeConfig[atv.tipo].label}
+                      <span className={`rounded-xl px-2.5 py-1 text-xs font-semibold ${tipoAtividadeConfig[atv.tipo]?.cor || 'bg-muted'}`}>
+                        {tipoAtividadeConfig[atv.tipo]?.emoji || '📅'} {tipoAtividadeConfig[atv.tipo]?.label || atv.tipo}
                       </span>
                       {atv.importante && <Star className="size-4 text-amber fill-amber" strokeWidth={0} />}
                     </div>
@@ -626,8 +655,11 @@ export function AtendimentoDetail({
                       {atv.titulo}
                     </p>
                     {atv.descricao && <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{atv.descricao}</p>}
-                    <p className={`mt-2 font-mono text-[11px] ${atv.concluida ? 'text-muted-foreground' : 'text-primary'}`}>
-                      {atv.data === 'Hoje' ? 'Hoje' : new Date(atv.data).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })} · {atv.hora}
+                    <p className={`mt-2 flex items-center gap-1 font-mono text-[11px] ${atv.concluida ? 'text-muted-foreground' : 'text-primary'}`}>
+                      {atv.data === 'Hoje' ? 'Hoje' : atv.data} · {atv.hora}
+                      {!atv.concluida && atv.data !== 'Hoje' && atv.data !== 'Amanhã' && new Date(`${atv.data}T${atv.hora}:00`).getTime() < Date.now() && (
+                        <span className="ml-2 rounded text-[10px] font-bold text-red-500 bg-red-500/10 px-1.5 py-0.5">Atrasada</span>
+                      )}
                     </p>
                   </button>
                 </li>
@@ -638,7 +670,29 @@ export function AtendimentoDetail({
             </ul>
 
             {mostrarNovaAtividade && (
-              <FormNovaAtividade onClose={() => setMostrarNovaAtividade(false)} />
+              <RegistrarAtividadeSheet
+                onClose={() => setMostrarNovaAtividade(false)}
+                onSave={(evento) => {
+                  setMostrarNovaAtividade(false)
+                  // Handle saving to localAtividades...
+                  const atv = {
+                    id: evento.id,
+                    hora: evento.hora,
+                    data: evento.data,
+                    titulo: evento.descricao.split('] ')[1]?.split(' -')[0] || evento.descricao,
+                    descricao: evento.descricao,
+                    cliente: atendimento.nome,
+                    telefone: atendimento.telefone,
+                    whatsapp: atendimento.telefone,
+                    tipo: 'visita' as const, // Na verdade precisamos do tipo exato que está no título [Tipo]...
+                    concluida: false,
+                    importante: evento.importante || false,
+                    criadoEm: 'Agora'
+                  }
+                  setLocalAtividades((prev) => [atv, ...prev])
+                }}
+                clienteDados={{ nome: atendimento.nome, telefone: atendimento.telefone, email: atendimento.email }}
+              />
             )}
           </div>
         )}
@@ -648,11 +702,32 @@ export function AtendimentoDetail({
           <div>
             <div className="mb-4">
               <h2 className="font-serif text-lg font-semibold">Imóveis compatíveis</h2>
-              <p className="mt-0.5 text-xs text-muted-foreground">Baseado no perfil de busca do cliente</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                {imoveisCompativeis.length > 0 ? 'Baseado no perfil de busca do cliente' : 'Nenhum imóvel exato. Veja estas recomendações ou busque.'}
+              </p>
             </div>
+            
+            {imoveisCompativeis.length === 0 && (
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={buscaManualImoveis}
+                  onChange={(e) => setBuscaManualImoveis(e.target.value)}
+                  placeholder="Pesquisar por código ou título..."
+                  className="w-full rounded-2xl border border-border bg-card pl-10 pr-4 py-3 text-sm text-foreground outline-none focus:border-primary"
+                />
+              </div>
+            )}
+
             <ul className={`flex flex-col gap-3 ${imoveisSelecionados.length > 0 ? 'pb-40' : ''}`}>
-              {imoveisCompativeis.map((im) => (
-                <li key={im.id} className={`rounded-[1.25rem] bg-card shadow-soft p-4 border transition-colors ${imoveisSelecionados.includes(im.id) ? 'border-primary bg-primary/5' : 'border-transparent'}`}>
+              {imoveisExibidos.map((im) => (
+                <li key={im.id} className={`relative rounded-[1.25rem] bg-card shadow-soft p-4 border transition-colors ${imoveisSelecionados.includes(im.id) ? 'border-primary bg-primary/5' : 'border-transparent'}`}>
+                  {imoveisCompativeis.length === 0 && !buscaManualImoveis && (
+                    <span className="absolute -top-2.5 right-4 rounded-full bg-amber text-[#8a5a1e] px-2 py-0.5 text-[10px] font-bold shadow-sm">
+                      Fora do perfil
+                    </span>
+                  )}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-start gap-3">
                       <input 
@@ -684,8 +759,8 @@ export function AtendimentoDetail({
                   </div>
                 </li>
               ))}
-              {localAtividades.length === 0 && imoveisCompativeis.length === 0 && (
-                <p className="text-sm text-muted-foreground">Nenhum imóvel compatível encontrado.</p>
+              {imoveisExibidos.length === 0 && (
+                <p className="text-sm text-muted-foreground">Nenhum imóvel encontrado.</p>
               )}
             </ul>
 
@@ -700,11 +775,11 @@ export function AtendimentoDetail({
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2">
-                    <button type="button" onClick={() => abrirPreviewEnvio('whatsapp', imoveisCompativeis.filter(i => imoveisSelecionados.includes(i.id)))} className="flex-1 rounded-xl bg-green-100 py-2.5 text-xs font-semibold text-green-700 active:scale-95 transition-brand">
+                    <button type="button" onClick={() => abrirPreviewEnvio('whatsapp', imoveisExibidos.filter(i => imoveisSelecionados.includes(i.id)))} className="flex-1 rounded-xl bg-green-100 py-2.5 text-xs font-semibold text-green-700 active:scale-95 transition-brand">
                       <MessageCircle className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
                       WhatsApp
                     </button>
-                    <button type="button" onClick={() => abrirPreviewEnvio('email', imoveisCompativeis.filter(i => imoveisSelecionados.includes(i.id)))} className="flex-1 rounded-xl bg-primary/10 py-2.5 text-xs font-semibold text-primary active:scale-95 transition-brand">
+                    <button type="button" onClick={() => abrirPreviewEnvio('email', imoveisExibidos.filter(i => imoveisSelecionados.includes(i.id)))} className="flex-1 rounded-xl bg-primary/10 py-2.5 text-xs font-semibold text-primary active:scale-95 transition-brand">
                       <Mail className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
                       E-mail
                     </button>
@@ -1037,6 +1112,7 @@ export function AtendimentoDetail({
         <RegistrarAtividadeSheet
           onClose={() => setMostrarNovaInteracao(false)}
           onSave={handleSalvarInteracao}
+          clienteDados={{ nome: atendimento.nome, telefone: atendimento.telefone, email: atendimento.email }}
         />
       )}
 

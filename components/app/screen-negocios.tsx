@@ -46,6 +46,34 @@ export function ScreenNegocios({
   const [filtroTemp, setFiltroTemp] = useState<Temperatura | 'todas'>('todas')
   const [filtroOrigem, setFiltroOrigem] = useState<OrigemLead | 'todas'>('todas')
 
+  // Swipe state
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const minSwipeDistance = 50
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      setEstagioAtivo(prev => Math.min(prev + 1, pipeline.length - 1))
+    }
+    if (isRightSwipe) {
+      setEstagioAtivo(prev => Math.max(prev - 1, 0))
+    }
+  }
+
   useEffect(() => {
     if (abrirAtendimentoId) {
       const atd = dados.find((a) => a.id === abrirAtendimentoId)
@@ -261,14 +289,14 @@ export function ScreenNegocios({
                 onClick={() => setEstagioAtivo(i)}
                 className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-brand ${
                   estagioAtivo === i
-                    ? 'bg-primary text-primary-foreground'
+                    ? 'bg-teal-deep text-white border border-teal-deep'
                     : 'border border-border bg-card text-muted-foreground'
                 }`}
               >
                 {etapa.label}
                 <span
                   className={`flex size-5 items-center justify-center rounded-full font-mono text-[11px] ${
-                    estagioAtivo === i ? 'bg-teal-shadow/40 text-primary-foreground' : 'bg-muted text-muted-foreground'
+                    estagioAtivo === i ? 'bg-white/20 text-white' : 'bg-muted text-muted-foreground'
                   }`}
                 >
                   {estagio?.atendimentos.length ?? 0}
@@ -280,9 +308,9 @@ export function ScreenNegocios({
       </header>
 
       {/* ── Colunas do funil com swipe horizontal ── */}
-      <div className="mt-4 flex-1 overflow-hidden">
+      <div className="mt-4 flex-1 overflow-hidden" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
         <div
-          className="flex h-full transition-transform duration-200 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+          className="flex h-full transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
           style={{ transform: `translateX(-${estagioAtivo * 100}%)` }}
         >
           {pipeline.map((estagio) => (

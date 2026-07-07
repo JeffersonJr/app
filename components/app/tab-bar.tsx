@@ -26,7 +26,7 @@ export function TabBar({
   return (
     <nav
       aria-label="Navegação principal"
-      className="absolute inset-x-0 bottom-0 z-40 border-t border-border/50 bg-background/80 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]"
+      className="absolute inset-x-0 bottom-0 z-40 border-t border-border bg-background pb-[env(safe-area-inset-bottom)]"
     >
       <div className="flex items-center justify-between px-2">
         {left.map((tab) => (

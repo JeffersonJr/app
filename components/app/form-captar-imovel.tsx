@@ -1,28 +1,31 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info, Monitor, Trash2, RotateCw, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info, Monitor, Trash2, RotateCw, ChevronLeft, ChevronRight, Bot } from 'lucide-react'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
+import { SearchableTagSelect } from '@/components/app/searchable-tag-select'
+import {
+  STATUS_CONSTRUCAO,
+  PROXIMIDADES_POPULAR,
+  PROXIMIDADES_GRUPOS,
+  CARACTERISTICAS_POPULAR,
+  CARACTERISTICAS_GRUPOS,
+  CARACTERISTICAS_COMODOS_POPULAR,
+  CARACTERISTICAS_COMODOS_GRUPOS
+} from '@/lib/opcoes-imovel'
 
 const FINALIDADES = ['Residencial', 'Comercial', 'Industrial', 'Rural'] as const
 type FinalidadeCategoria = typeof FINALIDADES[number]
 
 const TIPOS_POR_FINALIDADE: Record<FinalidadeCategoria, string[]> = {
-  Comercial: ['Armazém/Barracão', 'Casa', 'Conjunto Comercial', 'Fundo de comércio', 'Galeria', 'Galpão', 'Garagem', 'Laje Corporativa', 'Loja', 'Loteamento', 'Prédio', 'Sala', 'Salão', 'Sobrado', 'Sobreloja', 'Terreno', 'Área'],
-  Industrial: ['Armazém/Barracão', 'Conjunto Industrial', 'Galpão', 'Galpão em Condomínio', 'Indústria', 'Jazidas', 'Loteamento', 'Mineradora', 'PCH (Pequena Central Hidrelétrica)', 'Pedreira', 'Prédio', 'Terreno', 'UHE (Usina Hidrelétrica)', 'Usina', 'Área'],
-  Rural: ['Chácara', 'Chácara em Condomínio', 'Fazenda', 'Haras', 'Loteamento', 'Rancho', 'Sítio', 'Terreno'],
+  Comercial: ['Andar Comercial', 'Armazém', 'Barracão', 'Casa', 'Casa Comercial', 'Conjunto Comercial', 'Consultório', 'Depósito', 'Edifício Comercial', 'Fazenda', 'Galpão', 'Garagem', 'Haras', 'Hotel', 'Indústria', 'Loja', 'Loja em Shopping', 'Loteamento', 'Motel', 'Padaria', 'Ponto Comercial', 'Pousada', 'Prédio', 'Sala Comercial', 'Salão', 'Sobrado', 'Studio', 'Terreno', 'Terreno de Condomínio', 'Área'],
+  Industrial: ['Armazém', 'Barracão', 'Depósito', 'Galpão', 'Indústria', 'Loteamento', 'Terreno', 'Terreno de Condomínio', 'Área'],
+  Rural: ['Chácara', 'Chácara em Condomínio', 'Fazenda', 'Haras', 'Loteamento', 'Rancho', 'Sítio', 'Terreno', 'Terreno de Condomínio', 'Área'],
   Residencial: ['Apartamento', 'Casa', 'Casa de Condomínio', 'Casa de Vila', 'Chácara', 'Chácara em Condomínio', 'Cobertura', 'Flat', 'Garagem', 'Kitnet', 'Loft', 'Loteamento', 'Penthouse', 'Prédio', 'Sala Living', 'Sobrado', 'Sobrado de Condomínio', 'Sobrado de Vila', 'Studio', 'Terreno', 'Terreno de Condomínio', 'Área'],
 }
 
 const STATUS_OPTIONS = ['Livre', 'Ocupado', 'Em reforma'] as const
-
-const CARACTERISTICAS_OPCOES = [
-  'Piscina', 'Churrasqueira', 'Academia', 'Salão de Festas', 'Playground',
-  'Quadra Poliesportiva', 'Varanda Gourmet', 'Ar Condicionado', 'Móveis Planejados',
-  'Elevador', 'Portaria 24h', 'Aceita Pet', 'Jardim', 'Lareira', 'Sauna',
-  'Lavabo', 'Closet', 'Cozinha Americana', 'Quintal', 'Escritório'
-].sort()
 
 // Resultados simulados que a IA "detectaria" das fotos
 const AI_RESULTADOS = [
@@ -133,6 +136,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
   // 3. Composição
   const [quartos, setQuartos] = useState('')
   const [suites, setSuites] = useState('')
+  const [statusConstrucao, setStatusConstrucao] = useState('Pronto para morar')
   const [banheiros, setBanheiros] = useState('')
   const [salas, setSalas] = useState('')
   const [vagas, setVagas] = useState('')
@@ -142,9 +146,11 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
   const [area, setArea] = useState('') // Área Útil/Construída
   const [areaTotal, setAreaTotal] = useState('')
 
-  // 5. Características
+  // 5. Características e Proximidades
   const [observacoes, setObservacoes] = useState('')
   const [caracteristicasSelecionadas, setCaracteristicasSelecionadas] = useState<string[]>([])
+  const [proximidadesSelecionadas, setProximidadesSelecionadas] = useState<string[]>([])
+  const [caracteristicasComodos, setCaracteristicasComodos] = useState<string[]>([])
   const [buscaCaracteristica, setBuscaCaracteristica] = useState('')
 
   // 6. Proprietário
@@ -216,6 +222,10 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
   const [indicador1, setIndicador1] = useState('')
   const [indicador2, setIndicador2] = useState('')
   const [filialImovel, setFilialImovel] = useState('')
+
+  // Albert
+  const [descricaoIA, setDescricaoIA] = useState('')
+  const [iaAtivada, setIaAtivada] = useState<boolean>(featureFlags.temIA)
 
   // 9. Divulgação no Website
   const [destaqueHome, setDestaqueHome] = useState(false)
@@ -361,6 +371,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
       onClose={() => setMostrarUpsell(false)} 
       onSuccess={() => {
         setMostrarUpsell(false)
+        setIaAtivada(true)
         iniciarAnaliseIA()
       }}
       origem="imovel" 
@@ -1033,6 +1044,18 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
                 <input type="number" value={vagas} onChange={(e) => setVagas(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
               </div>
             </div>
+            
+            <div className="mt-6">
+              <SearchableTagSelect
+                label="Acabamento & Características dos Cômodos"
+                placeholder="Ex: Armários, Piso Porcelanato, Ar Condicionado..."
+                groups={CARACTERISTICAS_COMODOS_GRUPOS}
+                popular={CARACTERISTICAS_COMODOS_POPULAR}
+                selected={caracteristicasComodos}
+                onChange={setCaracteristicasComodos}
+                maxVisible={10}
+              />
+            </div>
           </AccordionSection>
         )}
 
@@ -1056,44 +1079,26 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
 
         {/* BLOCO 5: CARACTERÍSTICAS */}
         <AccordionSection title="Características" icon={<Tag className="size-4" strokeWidth={2.5} />} isOpen={openSection === 5} onToggle={() => setOpenSection(openSection === 5 ? 0 : 5)}>
-            <div className="mb-4">
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Selecionar Características</label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={buscaCaracteristica}
-                  onChange={(e) => setBuscaCaracteristica(e.target.value)}
-                  placeholder="Buscar amenidades, ex: Piscina..."
-                  className="h-10 w-full rounded-xl border border-border bg-background pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-            </div>
-            
-            <div className="max-h-56 overflow-y-auto rounded-xl border border-border bg-background p-2 mb-4 scrollbar-hide">
-              <div className="grid grid-cols-2 gap-1">
-                {CARACTERISTICAS_OPCOES
-                  .filter(c => c.toLowerCase().includes(buscaCaracteristica.toLowerCase()))
-                  .map(carac => (
-                  <label key={carac} className="flex items-center gap-2.5 rounded-lg p-2 hover:bg-muted/50 cursor-pointer transition-colors border border-transparent">
-                    <input
-                      type="checkbox"
-                      checked={caracteristicasSelecionadas.includes(carac)}
-                      onChange={(e) => {
-                        if (e.target.checked) setCaracteristicasSelecionadas([...caracteristicasSelecionadas, carac])
-                        else setCaracteristicasSelecionadas(caracteristicasSelecionadas.filter(c => c !== carac))
-                      }}
-                      className="size-4 shrink-0 rounded border-border text-primary focus:ring-primary"
-                    />
-                    <span className="text-sm font-medium text-foreground select-none truncate" title={carac}>{carac}</span>
-                  </label>
-                ))}
-                {CARACTERISTICAS_OPCOES.filter(c => c.toLowerCase().includes(buscaCaracteristica.toLowerCase())).length === 0 && (
-                  <div className="col-span-2 text-center p-4 text-sm text-muted-foreground">
-                    Nenhuma característica encontrada.
-                  </div>
-                )}
-              </div>
+            <div className="flex flex-col gap-6 mb-4">
+              <SearchableTagSelect
+                label="Características e Infraestrutura"
+                placeholder="Buscar características..."
+                groups={CARACTERISTICAS_GRUPOS}
+                popular={CARACTERISTICAS_POPULAR}
+                selected={caracteristicasSelecionadas}
+                onChange={setCaracteristicasSelecionadas}
+                maxVisible={10}
+              />
+
+              <SearchableTagSelect
+                label="Proximidades"
+                placeholder="Buscar proximidades..."
+                groups={PROXIMIDADES_GRUPOS}
+                popular={PROXIMIDADES_POPULAR}
+                selected={proximidadesSelecionadas}
+                onChange={setProximidadesSelecionadas}
+                maxVisible={10}
+              />
             </div>
 
             <div>
@@ -1287,6 +1292,56 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Descrição</label>
               <textarea value={seoDescricao} onChange={(e) => setSeoDescricao(e.target.value)} rows={3} className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
+          </div>
+        </AccordionSection>
+
+        {/* BLOCO 11: ALBERT — DESCRIÇÃO I.A */}
+        <AccordionSection title="Albert — IA" icon={<Bot className="size-4" strokeWidth={2.5} />} isOpen={openSection === 11} onToggle={() => setOpenSection(openSection === 11 ? 0 : 11)}>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start gap-3 rounded-2xl bg-gradient-to-br from-primary/10 to-teal-mid/5 border border-primary/15 p-4">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/15">
+                <Bot className="size-5 text-primary" strokeWidth={1.5} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">Descrição para o Albert</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">Neste campo você deve colocar a descrição do imóvel com a visão da venda, informações que o Albert deverá evidenciar e mostrar ao cliente durante a apresentação do imóvel.</p>
+              </div>
+            </div>
+
+            {iaAtivada ? (
+              <textarea
+                value={descricaoIA}
+                onChange={e => setDescricaoIA(e.target.value)}
+                rows={6}
+                placeholder="Descreva as informações que o Albert deve usar ao apresentar este imóvel ao cliente..."
+                className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            ) : (
+              <div className="relative">
+                <textarea
+                  readOnly
+                  rows={6}
+                  placeholder="Descreva as informações que o Albert deve usar ao apresentar este imóvel ao cliente..."
+                  className="w-full resize-none rounded-2xl border border-border bg-muted/30 p-4 text-sm text-foreground placeholder:text-muted-foreground cursor-not-allowed"
+                />
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl bg-background/70 backdrop-blur-sm">
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
+                    <Bot className="size-6 text-primary" strokeWidth={1.5} />
+                  </div>
+                  <div className="text-center px-4">
+                    <p className="text-sm font-semibold text-foreground">Recurso exclusivo com I.A</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">Ative o Albert para configurar como ele apresenta este imóvel.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setMostrarUpsell(true)}
+                    className="flex h-9 items-center gap-2 rounded-xl bg-primary px-4 text-xs font-semibold text-primary-foreground shadow-md shadow-primary/20 transition-brand active:scale-95"
+                  >
+                    <Sparkles className="size-3.5" strokeWidth={2} /> Contratar Albert
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </AccordionSection>
 
