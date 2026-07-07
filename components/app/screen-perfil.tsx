@@ -133,7 +133,7 @@ export function ScreenPerfil({
                 </span>
               )}
             </div>
-            
+
             {mensagemAtualizacao && (
               <div className="mt-2 text-xs font-semibold text-[#25D366] bg-[#25D366]/10 px-3 py-2 rounded-xl text-center animate-in fade-in slide-in-from-top-2">
                 {mensagemAtualizacao}
@@ -150,16 +150,6 @@ export function ScreenPerfil({
                 Atualização disponível! Toque para atualizar
               </button>
             )}
-          </div>
-        </div>
-
-        {/* Desenvolvido Por */}
-        <div className="flex flex-col items-center justify-center mt-2 mb-4 gap-1 text-xs text-muted-foreground">
-          <p>Desenvolvido por</p>
-          <div className="flex items-center gap-1 font-medium">
-            <a href="https://microsistec.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Microsistec</a>
-            <span>&</span>
-            <a href="https://evolves.site" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Evolves</a>
           </div>
         </div>
 
@@ -182,7 +172,7 @@ export function ScreenPerfil({
           />
           <div className="relative z-50 w-full rounded-t-[2.5rem] bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom-full duration-300">
             <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-border" />
-            
+
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-serif text-xl font-semibold text-foreground flex items-center gap-2">
                 <ShieldCheck className="size-5 text-primary" strokeWidth={2} />

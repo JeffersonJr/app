@@ -295,3 +295,6 @@
 {"timestamp":"02:10:12.554","source":"Browser","level":"ERROR","message":"uncaughtError: Error: Internal Next.js error: Router action dispatched before initialization."}
 {"timestamp":"02:10:12.554","source":"Browser","level":"ERROR","message":"uncaughtError: Error: Internal Next.js error: Router action dispatched before initialization."}
 {"timestamp":"02:10:22.085","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"02:11:04.840","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"02:11:10.336","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"02:12:22.277","source":"Server","level":"LOG","message":"✓ Compiled in 330ms"}
