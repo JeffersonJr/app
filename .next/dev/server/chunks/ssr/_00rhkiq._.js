@@ -42,6 +42,8 @@ __turbopack_context__.s([
     ()=>imoveis,
     "origemConfig",
     ()=>origemConfig,
+    "perfilVazio",
+    ()=>perfilVazio,
     "tempConfig",
     ()=>tempConfig,
     "tipoAtividadeConfig",
@@ -182,7 +184,22 @@ const atendimentos = [
                 enviadoEm: 'Ontem, 16:10'
             }
         ],
-        documentos: [],
+        documentos: [
+            {
+                id: 'd10',
+                nome: 'Proposta_Comercial_Mariana.pdf',
+                tipo: 'pdf',
+                url: '#',
+                anexadoEm: 'Ontem'
+            },
+            {
+                id: 'd11',
+                nome: 'Identidade_Mariana.jpg',
+                tipo: 'jpg',
+                url: '#',
+                anexadoEm: 'Hoje'
+            }
+        ],
         imoveisEnviados: [
             {
                 id: 'ie1',
@@ -272,10 +289,54 @@ const atendimentos = [
             prazoParaComprar: '3-6 meses',
             observacoes: 'Precisa de condomínio fechado com segurança 24h.'
         },
-        notas: [],
-        atividades: [],
+        notas: [
+            {
+                id: 'n1',
+                texto: 'Cliente prefere região de Alphaville. Enfatizou segurança como prioridade 1.',
+                criadoEm: '04/07'
+            }
+        ],
+        atividades: [
+            {
+                id: 'a2',
+                tipo: 'ligacao',
+                titulo: 'Alinhamento de perfil',
+                descricao: 'Ligar para detalhar o que a esposa achou dos imoveis.',
+                data: '2026-07-07',
+                hora: '10:00',
+                importante: false,
+                concluida: false,
+                criadoEm: 'Hoje'
+            },
+            {
+                id: 'a3',
+                tipo: 'reuniao',
+                titulo: 'Primeiro contato (Qualificação)',
+                descricao: 'Entender a real motivação de compra e confirmar budget.',
+                data: '2026-07-04',
+                hora: '14:45',
+                importante: true,
+                concluida: true,
+                criadoEm: '04/07'
+            }
+        ],
         emails: [],
-        documentos: [],
+        documentos: [
+            {
+                id: 'd1',
+                nome: 'Cópia CNH Ricardo.pdf',
+                tipo: 'pdf',
+                url: '#',
+                anexadoEm: 'Ontem'
+            },
+            {
+                id: 'd2',
+                nome: 'Comprovante_Residencia.png',
+                tipo: 'png',
+                url: '#',
+                anexadoEm: 'Hoje'
+            }
+        ],
         imoveisEnviados: [],
         timeline: [
             {
@@ -284,6 +345,28 @@ const atendimentos = [
                 descricao: 'Lead captado via Site Próprio',
                 data: '04/07',
                 hora: '14:30'
+            },
+            {
+                id: 't2',
+                tipo: 'atividade',
+                descricao: 'Primeiro contato (Qualificação) - Concluído',
+                data: '04/07',
+                hora: '15:10',
+                concluida: true
+            },
+            {
+                id: 't3',
+                tipo: 'nota',
+                descricao: 'Adicionada nota: Cliente prefere região de...',
+                data: '04/07',
+                hora: '15:15'
+            },
+            {
+                id: 't4',
+                tipo: 'documento',
+                descricao: 'Documento Cópia CNH Ricardo.pdf anexado',
+                data: 'Ontem',
+                hora: '10:00'
             }
         ],
         albert: {
@@ -330,7 +413,15 @@ const atendimentos = [
         notas: [],
         atividades: [],
         emails: [],
-        documentos: [],
+        documentos: [
+            {
+                id: 'd30',
+                nome: 'Ficha_Locacao_Assinada.pdf',
+                tipo: 'pdf',
+                url: '#',
+                anexadoEm: '02/07/2026'
+            }
+        ],
         imoveisEnviados: [],
         timeline: [
             {
@@ -400,7 +491,15 @@ const atendimentos = [
             }
         ],
         emails: [],
-        documentos: [],
+        documentos: [
+            {
+                id: 'd40',
+                nome: 'Termo_De_Visita.pdf',
+                tipo: 'pdf',
+                url: '#',
+                anexadoEm: 'Ontem'
+            }
+        ],
         imoveisEnviados: [],
         timeline: [
             {
@@ -463,7 +562,22 @@ const atendimentos = [
         notas: [],
         atividades: [],
         emails: [],
-        documentos: [],
+        documentos: [
+            {
+                id: 'd50',
+                nome: 'Matricula_Atualizada.pdf',
+                tipo: 'pdf',
+                url: '#',
+                anexadoEm: '03/07/2026'
+            },
+            {
+                id: 'd51',
+                nome: 'Planta_Baixa.pdf',
+                tipo: 'pdf',
+                url: '#',
+                anexadoEm: '04/07/2026'
+            }
+        ],
         imoveisEnviados: [],
         timeline: [
             {
@@ -519,7 +633,15 @@ const atendimentos = [
         notas: [],
         atividades: [],
         emails: [],
-        documentos: [],
+        documentos: [
+            {
+                id: 'd60',
+                nome: 'Folder_Empreendimento.pdf',
+                tipo: 'pdf',
+                url: '#',
+                anexadoEm: '05/07/2026'
+            }
+        ],
         imoveisEnviados: [],
         timeline: [
             {
@@ -579,7 +701,15 @@ const atendimentos = [
         notas: [],
         atividades: [],
         emails: [],
-        documentos: [],
+        documentos: [
+            {
+                id: 'd70',
+                nome: 'RG_Beatriz.jpg',
+                tipo: 'jpg',
+                url: '#',
+                anexadoEm: '20/06/2026'
+            }
+        ],
         imoveisEnviados: [],
         timeline: [
             {
@@ -642,7 +772,15 @@ const atendimentos = [
         notas: [],
         atividades: [],
         emails: [],
-        documentos: [],
+        documentos: [
+            {
+                id: 'd80',
+                nome: 'Comprovante_de_Renda.pdf',
+                tipo: 'pdf',
+                url: '#',
+                anexadoEm: '22/06/2026'
+            }
+        ],
         imoveisEnviados: [],
         timeline: [
             {
@@ -983,6 +1121,7 @@ const atividadesHoje = [
         hora: '11:00',
         titulo: 'Ligar para follow-up de proposta',
         cliente: 'André Souza',
+        telefone: '(11) 99999-1111',
         tipo: 'ligacao',
         concluida: false,
         descricao: 'Perguntar se ele já analisou a proposta que enviei ontem e verificar se a esposa também aprovou o layout do apartamento.'
@@ -990,18 +1129,34 @@ const atividadesHoje = [
     {
         id: 'a2',
         hora: '15:00',
-        titulo: 'Visita — Cobertura Vila Nova',
+        titulo: 'Visita — Cobertura e Imóveis',
         cliente: 'Mariana Costa',
+        whatsapp: '(11) 98765-4321',
         tipo: 'visita',
         concluida: false,
-        descricao: 'Chegar 15 minutos antes para abrir as janelas e verificar se o proprietário já deixou as chaves na portaria conforme combinado.'
+        descricao: 'Visita para conhecer opções em Alphaville.',
+        imoveisVisitados: [
+            {
+                id: 'v1',
+                nome: 'Casa em condomínio',
+                visitado: false,
+                endereco: 'Alameda Rio Negro, Barueri'
+            },
+            {
+                id: 'v2',
+                nome: 'Cobertura duplex',
+                visitado: false,
+                endereco: 'Rua Jacques Félix, São Paulo'
+            }
+        ]
     },
     {
         id: 'a3',
         hora: '17:30',
         titulo: 'Enviar documentação do MS-1108',
         cliente: 'Beatriz Rocha',
-        tipo: 'tarefa',
+        whatsapp: '(11) 96543-2109',
+        tipo: 'whatsapp',
         concluida: false
     },
     {
@@ -1036,15 +1191,15 @@ const tempConfig = {
 const etapaConfig = {
     qualificando: {
         label: 'Qualificando',
-        cor: 'bg-slate/20 text-slate'
+        cor: 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-400'
     },
     conhecendo: {
         label: 'Conhecendo',
-        cor: 'bg-teal-mid/20 text-teal-deep'
+        cor: 'bg-indigo/15 text-indigo'
     },
     agendado: {
         label: 'Agendado',
-        cor: 'bg-amber/20 text-[#8a5a1e]'
+        cor: 'bg-amber/15 text-amber'
     },
     negociando: {
         label: 'Negociando',
@@ -1062,16 +1217,19 @@ const origemConfig = {
         cor: 'bg-purple-100 text-purple-700'
     },
     'Site Próprio': {
-        cor: 'bg-teal-mid/15 text-teal-deep'
+        cor: 'bg-teal-deep text-white'
+    },
+    'Indicação': {
+        cor: 'bg-amber/15 text-amber'
+    },
+    'Ativo': {
+        cor: 'bg-purple-500/15 text-purple-600'
     },
     Facebook: {
         cor: 'bg-blue-100 text-blue-800'
     },
     Instagram: {
         cor: 'bg-pink-100 text-pink-700'
-    },
-    Indicação: {
-        cor: 'bg-green-100 text-green-700'
     },
     'Cliente de Porta': {
         cor: 'bg-yellow-100 text-yellow-700'
@@ -1081,6 +1239,9 @@ const origemConfig = {
     },
     Ligação: {
         cor: 'bg-gray-100 text-gray-700'
+    },
+    Novo: {
+        cor: 'bg-teal-mid/15 text-teal-deep'
     },
     Outro: {
         cor: 'bg-fog text-slate'
@@ -1232,9 +1393,9 @@ function Page() {
         window.location.href = '/login';
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
-        className: "flex min-h-dvh justify-center bg-fog sm:py-6",
+        className: "flex min-h-dvh justify-center bg-background",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "relative flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background sm:h-[min(56rem,calc(100dvh-3rem))] sm:rounded-[2.5rem] sm:border-8 sm:border-teal-shadow sm:shadow-2xl",
+            className: "relative flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background sm:border-x sm:border-border",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "glass-header flex items-center justify-between px-5 py-3",
@@ -1364,7 +1525,8 @@ function Page() {
                     columnNumber: 9
                 }, this),
                 quickAddAberto && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$quick$2d$add$2d$sheet$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["QuickAddSheet"], {
-                    onClose: ()=>setQuickAddAberto(false)
+                    onClose: ()=>setQuickAddAberto(false),
+                    onAtividadeCriada: abrirAtendimentoPorId
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
                     lineNumber: 118,

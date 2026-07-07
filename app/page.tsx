@@ -46,9 +46,9 @@ export default function Page() {
   }
 
   return (
-    <main className="flex min-h-dvh justify-center bg-fog sm:py-6">
-      {/* Moldura mobile */}
-      <div className="relative flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background sm:h-[min(56rem,calc(100dvh-3rem))] sm:rounded-[2.5rem] sm:border-8 sm:border-teal-shadow sm:shadow-2xl">
+    <main className="flex min-h-dvh justify-center bg-background">
+      {/* Container principal */}
+      <div className="relative flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background sm:border-x sm:border-border">
 
         {/* Header global com logo Microsistec e notificações */}
         <div className="glass-header flex items-center justify-between px-5 py-3">
@@ -115,7 +115,7 @@ export default function Page() {
           onQuickAdd={() => setQuickAddAberto(true)}
         />
 
-        {quickAddAberto && <QuickAddSheet onClose={() => setQuickAddAberto(false)} />}
+        {quickAddAberto && <QuickAddSheet onClose={() => setQuickAddAberto(false)} onAtividadeCriada={abrirAtendimentoPorId} />}
         {notificacoesAbertas && (
           <NotificacoesPanel 
             onClose={() => setNotificacoesAbertas(false)} 

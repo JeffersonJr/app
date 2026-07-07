@@ -258,7 +258,7 @@ export function ScreenNegocios({
                 {etapaConfig[etapa].label}
                 <span
                   className={`flex size-5 items-center justify-center rounded-full font-mono text-[11px] ${
-                    estagioAtivo === i ? 'bg-teal-shadow/40 text-primary-foreground' : 'bg-muted text-slate'
+                    estagioAtivo === i ? 'bg-teal-shadow/40 text-primary-foreground' : 'bg-muted text-muted-foreground'
                   }`}
                 >
                   {estagio?.atendimentos.length ?? 0}
@@ -367,10 +367,10 @@ function AtendimentoCard({
         <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${origemConfig[atd.origem].cor}`}>
           {atd.origem}
         </span>
-        <span className="rounded-full bg-fog px-2 py-0.5 text-[10px] text-slate">
+        <span className="rounded-full bg-fog px-2 py-0.5 text-[10px] text-muted-foreground">
           Entrada: {atd.dataEntrada}
         </span>
-        <span className="rounded-full bg-fog px-2 py-0.5 text-[10px] text-slate">
+        <span className="rounded-full bg-fog px-2 py-0.5 text-[10px] text-muted-foreground">
           Última: {atd.ultimaInteracao}
         </span>
       </div>

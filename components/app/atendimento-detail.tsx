@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   ArrowLeft,
   Bot,
@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
+  Edit2,
   FileText,
   Flame,
   Mail,
@@ -25,6 +26,10 @@ import {
   Star,
   Target,
   Heart,
+  Send,
+  FileText as DocumentIcon,
+  Trash2,
+  Edit3
 } from 'lucide-react'
 import {
   type Atendimento,
@@ -38,8 +43,9 @@ import {
 } from '@/lib/app-data'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
-import { RegistrarInteracaoSheet } from '@/components/app/registrar-interacao-sheet'
 import { AtividadeDetalheSheet } from '@/components/app/atividade-detalhe-sheet'
+import { GanhoPerdidoSheet } from '@/components/app/ganho-perdido-sheet'
+import { RegistrarAtividadeSheet } from '@/components/app/registrar-atividade-sheet'
 import { atividadesHoje } from '@/lib/app-data'
 
 const ETAPAS = ['qualificando', 'conhecendo', 'agendado', 'negociando'] as const
@@ -84,10 +90,14 @@ export function AtendimentoDetail({
   onEtapaChange?: (id: string, etapa: Etapa) => void
 }) {
   const [aba, setAba] = useState<'historico' | 'atividades' | 'imoveis' | 'documentos' | 'perfil' | 'albert'>('historico')
+  const [isClient, setIsClient] = useState(false)
   const [filtroTimeline, setFiltroTimeline] = useState('Todos')
   const [mostrarNovaNota, setMostrarNovaNota] = useState(false)
   const [mostrarNovaAtividade, setMostrarNovaAtividade] = useState(false)
   const [mostrarNovoEmail, setMostrarNovoEmail] = useState(false)
+  const [localDocumentos, setLocalDocumentos] = useState(atendimento.documentos)
+  const [editandoDocId, setEditandoDocId] = useState<string | null>(null)
+  const [novoNomeDoc, setNovoNomeDoc] = useState('')
   const [mostrarAlbert, setMostrarAlbert] = useState(false)
   const [mostrarUpsell, setMostrarUpsell] = useState(false)
   const [nota, setNota] = useState('')
@@ -95,6 +105,41 @@ export function AtendimentoDetail({
   const [localTimeline, setLocalTimeline] = useState<EventoTimeline[]>(atendimento.timeline)
   const [localAtividades, setLocalAtividades] = useState(atendimento.atividades)
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
+  const [sheetGanhoPerdido, setSheetGanhoPerdido] = useState<'ganho' | 'perdido' | null>(null)
+  
+  // 4Q e FORD Edit states
+  const [editing4Q, setEditing4Q] = useState(false)
+  const [form4Q, setForm4Q] = useState({ quem: '', oQue: '', quando: '', quanto: '' })
+  const [editingFORD, setEditingFORD] = useState(false)
+  const [formFORD, setFormFORD] = useState({ familia: '', ocupacao: '', recreacao: '', sonhos: '' })
+  
+  // Imóveis selection and sending
+  const [imoveisSelecionados, setImoveisSelecionados] = useState<string[]>([])
+  const [previewEnvio, setPreviewEnvio] = useState<{tipo: 'email'|'whatsapp', imoveis: any[]}|null>(null)
+  const [textoEnvio, setTextoEnvio] = useState('')
+  const [assuntoEnvio, setAssuntoEnvio] = useState('')
+  const [termoAberto, setTermoAberto] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => { setIsClient(true) }, [])
+
+  // Reset states when the atendimento changes
+  useEffect(() => {
+    if (atendimento?.perfil) {
+      setForm4Q({
+        quem: atendimento.perfil.metodo4Q?.quem || '',
+        oQue: atendimento.perfil.metodo4Q?.oQue || '',
+        quando: atendimento.perfil.metodo4Q?.quando || '',
+        quanto: atendimento.perfil.metodo4Q?.quanto || '',
+      })
+      setFormFORD({
+        familia: atendimento.perfil.metodoFORD?.familia || '',
+        ocupacao: atendimento.perfil.metodoFORD?.ocupacao || '',
+        recreacao: atendimento.perfil.metodoFORD?.recreacao || '',
+        sonhos: atendimento.perfil.metodoFORD?.sonhos || '',
+      })
+    }
+  }, [atendimento?.id])
 
   const etapaIdx = ETAPAS.indexOf(atendimento.etapa as Etapa)
   const imoveisCompativeis = imoveis.filter((im) => {
@@ -105,22 +150,124 @@ export function AtendimentoDetail({
     return true
   })
 
+  function handleSave4Q() {
+    if (atendimento) {
+      if (!atendimento.perfil.metodo4Q) atendimento.perfil.metodo4Q = { quem: '', oQue: '', quando: '', quanto: '' }
+      atendimento.perfil.metodo4Q = { ...form4Q }
+    }
+    setEditing4Q(false)
+  }
+
+  function handleSaveFORD() {
+    if (atendimento) {
+      if (!atendimento.perfil.metodoFORD) atendimento.perfil.metodoFORD = { familia: '', ocupacao: '', recreacao: '', sonhos: '' }
+      atendimento.perfil.metodoFORD = { ...formFORD }
+    }
+    setEditingFORD(false)
+  }
+
   const timelineFiltrada = localTimeline.filter((e) => filtroMatches(e.tipo, filtroTimeline))
 
   function handleSalvarInteracao(evento: EventoTimeline) {
-    setLocalTimeline((prev) => [evento, ...prev])
+    setLocalTimeline([evento, ...localTimeline])
     setMostrarNovaInteracao(false)
+  }
+
+  function handleMarcarVisitaMassa() {
+    setMostrarNovaAtividade(true)
+    setImoveisSelecionados([])
+  }
+
+  function handleGerarTermo() {
+    setTermoAberto(true)
+  }
+
+  function toggleSelecionarImovel(id: string) {
+    if (imoveisSelecionados.includes(id)) {
+      setImoveisSelecionados(imoveisSelecionados.filter(i => i !== id))
+    } else {
+      setImoveisSelecionados([...imoveisSelecionados, id])
+    }
+  }
+
+  function abrirPreviewEnvio(tipo: 'email'|'whatsapp', imoveisParaEnviar: any[]) {
+    let msg = `Olá ${atendimento?.nome}, separei as seguintes opções de imóveis para você:\n\n`
+    imoveisParaEnviar.forEach(im => {
+      msg += `- ${im.titulo} (${im.codigo})\n  Preço: ${im.preco}\n\n`
+    })
+    msg += `O que acha de agendarmos uma visita?`
+    setTextoEnvio(msg)
+    setAssuntoEnvio('Sugestão de imóveis incríveis para você')
+    setPreviewEnvio({ tipo, imoveis: imoveisParaEnviar })
+  }
+
+  function handleEnviar() {
+    if (!previewEnvio) return
+    const evento: EventoTimeline = {
+      id: `evt-${Date.now()}`,
+      tipo: previewEnvio.tipo === 'email' ? 'email' : 'atividade',
+      descricao: `Imóveis enviados por ${previewEnvio.tipo}:\n${textoEnvio}`,
+      data: 'Hoje',
+      hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+    }
+    setLocalTimeline([evento, ...localTimeline])
+    setPreviewEnvio(null)
+    setImoveisSelecionados([])
   }
 
   function handleConcluirAtividade(id: string, feedback: string, agendarProxima: boolean) {
     setLocalAtividades((prev) => prev.map((a) => (a.id === id ? { ...a, concluida: true } : a)))
     
-    // Atualiza o mock global para refletir na Home imediatamente
-    const globalAtv = atividadesHoje.find(a => a.id === id)
-    if (globalAtv) globalAtv.concluida = true
-    
+    // Add feedback as a note/timeline event
+    const evento: EventoTimeline = {
+      id: `evt-${Date.now()}`,
+      tipo: 'atividade',
+      descricao: `Atividade concluída com feedback: "${feedback}"`,
+      data: 'Hoje',
+      hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+    }
+    setLocalTimeline((prev) => [evento, ...prev])
+
+    if (agendarProxima) {
+      setMostrarNovaAtividade(true)
+    }
     setAtividadeSelecionada(null)
   }
+
+  function handleDeletarDoc(id: string) {
+    setLocalDocumentos(localDocumentos.filter(d => d.id !== id))
+  }
+
+  function handleSalvarNomeDoc(id: string) {
+    setLocalDocumentos(localDocumentos.map(d => d.id === id ? { ...d, nome: novoNomeDoc } : d))
+    setEditandoDocId(null)
+  }
+
+  function handleUploadDoc(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+      const ext = file.name.split('.').pop() || 'pdf'
+      const novoDoc = {
+        id: `d${Date.now()}`,
+        nome: file.name,
+        tipo: ext.toLowerCase(),
+        url: '#',
+        anexadoEm: 'Hoje'
+      }
+      setLocalDocumentos([...localDocumentos, novoDoc])
+      
+      const evento: EventoTimeline = {
+        id: `evt-${Date.now()}`,
+        tipo: 'documento',
+        descricao: `Documento ${file.name} anexado`,
+        data: 'Hoje',
+        hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      }
+      setLocalTimeline([evento, ...localTimeline])
+    }
+  }
+
+  if (!isClient || !atendimento) return null
 
   return (
     <div className="flex flex-col pb-28">
@@ -142,7 +289,7 @@ export function AtendimentoDetail({
               <>
                 <button
                   type="button"
-                  onClick={() => onStatusChange?.(atendimento.id, 'ganho')}
+                  onClick={() => setSheetGanhoPerdido('ganho')}
                   className="flex items-center gap-1.5 rounded-full bg-teal-shadow/40 px-3 py-1.5 text-xs font-semibold transition-brand active:scale-95"
                 >
                   <Trophy className="size-3.5" strokeWidth={2} />
@@ -150,7 +297,7 @@ export function AtendimentoDetail({
                 </button>
                 <button
                   type="button"
-                  onClick={() => onStatusChange?.(atendimento.id, 'perdido')}
+                  onClick={() => setSheetGanhoPerdido('perdido')}
                   className="flex items-center gap-1.5 rounded-full bg-teal-shadow/40 px-3 py-1.5 text-xs font-semibold transition-brand active:scale-95"
                 >
                   <XCircle className="size-3.5" strokeWidth={2} />
@@ -300,7 +447,7 @@ export function AtendimentoDetail({
                 onClick={() => setMostrarNovaInteracao(true)}
                 className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary transition-brand active:scale-95"
               >
-                <Plus className="size-3.5" strokeWidth={2} /> Interação
+                <Plus className="size-3.5" strokeWidth={2} /> Registro
               </button>
             </div>
 
@@ -425,37 +572,80 @@ export function AtendimentoDetail({
               <h2 className="font-serif text-lg font-semibold">Imóveis compatíveis</h2>
               <p className="mt-0.5 text-xs text-muted-foreground">Baseado no perfil de busca do cliente</p>
             </div>
-            <ul className="flex flex-col gap-3">
+            <ul className={`flex flex-col gap-3 ${imoveisSelecionados.length > 0 ? 'pb-40' : ''}`}>
               {imoveisCompativeis.map((im) => (
-                <li key={im.id} className="rounded-[1.25rem] bg-card shadow-soft p-4">
+                <li key={im.id} className={`rounded-[1.25rem] bg-card shadow-soft p-4 border transition-colors ${imoveisSelecionados.includes(im.id) ? 'border-primary bg-primary/5' : 'border-transparent'}`}>
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{im.codigo}</p>
-                      <p className="mt-1 text-sm font-semibold text-foreground">{im.titulo}</p>
-                      <p className="text-xs text-muted-foreground">{im.bairro}, {im.cidade}</p>
-                      <p className="mt-1 font-mono text-sm font-semibold text-primary">{im.preco}</p>
+                    <div className="flex items-start gap-3">
+                      <input 
+                        type="checkbox" 
+                        checked={imoveisSelecionados.includes(im.id)}
+                        onChange={() => toggleSelecionarImovel(im.id)}
+                        className="mt-1 size-5 rounded border-border text-primary focus:ring-primary"
+                      />
+                      <div>
+                        <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{im.codigo}</p>
+                        <p className="mt-1 text-sm font-semibold text-foreground">{im.titulo}</p>
+                        <p className="text-xs text-muted-foreground">{im.bairro}, {im.cidade}</p>
+                        <p className="mt-1 font-mono text-sm font-semibold text-primary">{im.preco}</p>
+                      </div>
                     </div>
                     <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${im.status === 'Livre' ? 'bg-teal-mid/20 text-teal-deep' : 'bg-amber/20 text-[#8a5a1e]'}`}>
                       {im.status}
                     </span>
                   </div>
                   <div className="mt-3 flex gap-2 border-t border-border pt-3">
-                    <button type="button" className="flex-1 rounded-xl bg-primary/10 py-2 text-xs font-semibold text-primary active:scale-95 transition-brand">
+                    <button type="button" onClick={() => abrirPreviewEnvio('email', [im])} className="flex-1 rounded-xl bg-primary/10 py-2 text-xs font-semibold text-primary active:scale-95 transition-brand">
                       <Mail className="mb-0.5 inline size-3.5 mr-1" strokeWidth={1.5} />
                       Enviar por e-mail
                     </button>
-                    <button type="button" className="flex-1 rounded-xl bg-green-100 py-2 text-xs font-semibold text-green-700 active:scale-95 transition-brand">
+                    <button type="button" onClick={() => abrirPreviewEnvio('whatsapp', [im])} className="flex-1 rounded-xl bg-green-100 py-2 text-xs font-semibold text-green-700 active:scale-95 transition-brand">
                       <MessageCircle className="mb-0.5 inline size-3.5 mr-1" strokeWidth={1.5} />
                       WhatsApp
                     </button>
                   </div>
                 </li>
               ))}
-              {imoveisCompativeis.length === 0 && (
-                <p className="text-sm text-muted-foreground">Nenhum imóvel compatível com o perfil atual.</p>
+              {localAtividades.length === 0 && imoveisCompativeis.length === 0 && (
+                <p className="text-sm text-muted-foreground">Nenhum imóvel compatível encontrado.</p>
               )}
             </ul>
+
+            {/* Ações em Massa — sticky abaixo da lista */}
+            {imoveisSelecionados.length > 0 && (
+              <div className="sticky bottom-20 mt-4 rounded-[1.5rem] bg-card p-4 shadow-2xl border border-primary/30 animate-in slide-in-from-bottom-5 z-10">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                    {imoveisSelecionados.length} imóvel(is) selecionado(s)
+                  </span>
+                  <button type="button" onClick={() => setImoveisSelecionados([])} className="text-xs font-medium text-primary">Limpar</button>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <button type="button" onClick={() => abrirPreviewEnvio('whatsapp', imoveisCompativeis.filter(i => imoveisSelecionados.includes(i.id)))} className="flex-1 rounded-xl bg-green-100 py-2.5 text-xs font-semibold text-green-700 active:scale-95 transition-brand">
+                      <MessageCircle className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
+                      WhatsApp
+                    </button>
+                    <button type="button" onClick={() => abrirPreviewEnvio('email', imoveisCompativeis.filter(i => imoveisSelecionados.includes(i.id)))} className="flex-1 rounded-xl bg-primary/10 py-2.5 text-xs font-semibold text-primary active:scale-95 transition-brand">
+                      <Mail className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
+                      E-mail
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <button type="button" onClick={handleMarcarVisitaMassa} className="flex-1 rounded-xl bg-background border border-border py-2.5 text-xs font-semibold text-foreground active:scale-95 transition-brand">
+                      <Calendar className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
+                      Agendar Visita
+                    </button>
+                    <button type="button" onClick={handleGerarTermo} className="flex-1 rounded-xl bg-amber/10 py-2.5 text-xs font-semibold text-[#8a5a1e] active:scale-95 transition-brand">
+                      <DocumentIcon className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
+                      Gerar Termo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+
         )}
 
         {/* ── Documentos ── */}
@@ -463,27 +653,55 @@ export function AtendimentoDetail({
           <div>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-serif text-lg font-semibold">Documentos</h2>
-              <button type="button" className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
+              <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
                 <Plus className="size-3.5" strokeWidth={2} /> Anexar
               </button>
             </div>
-            {atendimento.documentos.length === 0 ? (
+            <input type="file" ref={fileInputRef} onChange={handleUploadDoc} className="hidden" />
+            {localDocumentos.length === 0 ? (
               <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border py-10 text-center">
                 <FileText className="size-10 text-muted-foreground/40" strokeWidth={1} />
                 <p className="text-sm text-muted-foreground">Nenhum documento anexado</p>
-                <button type="button" className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-brand active:scale-95">
                   Anexar documento
                 </button>
               </div>
             ) : (
-              <ul className="flex flex-col gap-2">
-                {atendimento.documentos.map((doc) => (
+              <ul className="flex flex-col gap-3">
+                {localDocumentos.map((doc) => (
                   <li key={doc.id} className="flex items-center gap-3 rounded-2xl bg-card shadow-soft p-4">
-                    <FileText className="size-8 text-primary" strokeWidth={1.5} />
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{doc.nome}</p>
-                      <p className="text-xs text-muted-foreground">{doc.tipo} · {doc.anexadoEm}</p>
+                    <FileText className="size-8 text-primary shrink-0" strokeWidth={1.5} />
+                    <div className="flex-1 min-w-0">
+                      {editandoDocId === doc.id ? (
+                        <div className="flex items-center gap-2">
+                          <input 
+                            type="text" 
+                            value={novoNomeDoc} 
+                            onChange={(e) => setNovoNomeDoc(e.target.value)} 
+                            className="h-8 w-full rounded border border-border bg-background px-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                            autoFocus
+                          />
+                          <button type="button" onClick={() => handleSalvarNomeDoc(doc.id)} className="h-8 px-3 rounded bg-primary text-xs font-semibold text-white transition-brand active:scale-95">
+                            OK
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <p className="text-sm font-semibold text-foreground truncate">{doc.nome}</p>
+                          <p className="text-xs text-muted-foreground">{doc.tipo.toUpperCase()} · {doc.anexadoEm}</p>
+                        </>
+                      )}
                     </div>
+                    {editandoDocId !== doc.id && (
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button type="button" onClick={() => { setEditandoDocId(doc.id); setNovoNomeDoc(doc.nome); }} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-primary transition-brand active:scale-95">
+                          <Edit3 className="size-4" strokeWidth={1.5} />
+                        </button>
+                        <button type="button" onClick={() => handleDeletarDoc(doc.id)} className="flex size-8 items-center justify-center rounded-full bg-red-100 text-red-600 transition-brand active:scale-95">
+                          <Trash2 className="size-4" strokeWidth={1.5} />
+                        </button>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -525,54 +743,120 @@ export function AtendimentoDetail({
 
               {/* Método 4Q */}
               <div className="mt-4 rounded-3xl bg-teal-mid/5 shadow-soft p-5 border border-teal-mid/20">
-                <h3 className="mb-4 font-serif text-lg font-semibold text-teal-deep flex items-center gap-2">
-                  <Target className="size-5" />
-                  Qualificação 4Q
-                </h3>
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quem decide?</span>
-                    <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodo4Q?.quem || '—'}</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">O quê busca?</span>
-                    <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodo4Q?.oQue || '—'}</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quando precisa?</span>
-                    <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodo4Q?.quando || '—'}</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quanto (Orçamento)?</span>
-                    <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodo4Q?.quanto || '—'}</span>
-                  </div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-serif text-lg font-semibold text-teal-deep flex items-center gap-2">
+                    <Target className="size-5" />
+                    Qualificação 4Q
+                  </h3>
+                  {!editing4Q ? (
+                    <button type="button" onClick={() => setEditing4Q(true)} className="flex size-8 items-center justify-center rounded-full bg-teal-mid/10 text-teal-deep transition-brand active:scale-95 hover:bg-teal-mid/20">
+                      <Edit2 className="size-4" strokeWidth={1.5} />
+                    </button>
+                  ) : (
+                    <button type="button" onClick={handleSave4Q} className="flex h-8 items-center justify-center rounded-full bg-teal-mid px-3 text-xs font-semibold text-white transition-brand active:scale-95 shadow-sm">
+                      Salvar
+                    </button>
+                  )}
                 </div>
+                
+                {editing4Q ? (
+                  <div className="flex flex-col gap-3 animate-in fade-in">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quem decide?</span>
+                      <input type="text" value={form4Q.quem} onChange={e => setForm4Q(prev => ({...prev, quem: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">O quê busca?</span>
+                      <input type="text" value={form4Q.oQue} onChange={e => setForm4Q(prev => ({...prev, oQue: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quando precisa?</span>
+                      <input type="text" value={form4Q.quando} onChange={e => setForm4Q(prev => ({...prev, quando: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quanto (Orçamento)?</span>
+                      <input type="text" value={form4Q.quanto} onChange={e => setForm4Q(prev => ({...prev, quanto: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quem decide?</span>
+                      <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodo4Q?.quem || '—'}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">O quê busca?</span>
+                      <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodo4Q?.oQue || '—'}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quando precisa?</span>
+                      <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodo4Q?.quando || '—'}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quanto (Orçamento)?</span>
+                      <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodo4Q?.quanto || '—'}</span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Método FORD */}
               <div className="mt-3 rounded-3xl bg-amber/5 shadow-soft p-5 border border-amber/20">
-                <h3 className="mb-4 font-serif text-lg font-semibold text-[#8a5a1e] flex items-center gap-2">
-                  <Heart className="size-5" />
-                  Rapport FORD
-                </h3>
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">F (Família)</span>
-                    <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodoFORD?.familia || '—'}</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">O (Ocupação)</span>
-                    <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodoFORD?.ocupacao || '—'}</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">R (Recreação)</span>
-                    <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodoFORD?.recreacao || '—'}</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">D (Sonhos)</span>
-                    <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodoFORD?.sonhos || '—'}</span>
-                  </div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-serif text-lg font-semibold text-[#8a5a1e] flex items-center gap-2">
+                    <Heart className="size-5" />
+                    Rapport FORD
+                  </h3>
+                  {!editingFORD ? (
+                    <button type="button" onClick={() => setEditingFORD(true)} className="flex size-8 items-center justify-center rounded-full bg-amber/10 text-[#8a5a1e] transition-brand active:scale-95 hover:bg-amber/20">
+                      <Edit2 className="size-4" strokeWidth={1.5} />
+                    </button>
+                  ) : (
+                    <button type="button" onClick={handleSaveFORD} className="flex h-8 items-center justify-center rounded-full bg-[#8a5a1e] px-3 text-xs font-semibold text-white transition-brand active:scale-95 shadow-sm">
+                      Salvar
+                    </button>
+                  )}
                 </div>
+
+                {editingFORD ? (
+                  <div className="flex flex-col gap-3 animate-in fade-in">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">F (Família)</span>
+                      <input type="text" value={formFORD.familia} onChange={e => setFormFORD(prev => ({...prev, familia: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">O (Ocupação)</span>
+                      <input type="text" value={formFORD.ocupacao} onChange={e => setFormFORD(prev => ({...prev, ocupacao: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">R (Recreação)</span>
+                      <input type="text" value={formFORD.recreacao} onChange={e => setFormFORD(prev => ({...prev, recreacao: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">D (Sonhos)</span>
+                      <input type="text" value={formFORD.sonhos} onChange={e => setFormFORD(prev => ({...prev, sonhos: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">F (Família)</span>
+                      <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodoFORD?.familia || '—'}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">O (Ocupação)</span>
+                      <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodoFORD?.ocupacao || '—'}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">R (Recreação)</span>
+                      <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodoFORD?.recreacao || '—'}</span>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">D (Sonhos)</span>
+                      <span className="text-sm font-medium text-foreground">{atendimento.perfil.metodoFORD?.sonhos || '—'}</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -672,9 +956,9 @@ export function AtendimentoDetail({
       )}
       {/* Registrar Interação Sheet */}
       {mostrarNovaInteracao && (
-        <RegistrarInteracaoSheet
+        <RegistrarAtividadeSheet
           onClose={() => setMostrarNovaInteracao(false)}
-          onSalvar={handleSalvarInteracao}
+          onSave={handleSalvarInteracao}
         />
       )}
 
@@ -684,10 +968,104 @@ export function AtendimentoDetail({
         onClose={() => setAtividadeSelecionada(null)}
         onConcluir={handleConcluirAtividade}
         onVerNegocio={() => {
-          // Já estamos no negócio, então apenas fecha a sheet
           setAtividadeSelecionada(null)
         }}
       />
+
+      {/* Ganho ou Perdido Sheet */}
+      {sheetGanhoPerdido && (
+        <GanhoPerdidoSheet
+          tipo={sheetGanhoPerdido}
+          onClose={() => setSheetGanhoPerdido(null)}
+          onConfirm={(feedback) => {
+            onStatusChange?.(atendimento.id, sheetGanhoPerdido)
+          }}
+        />
+      )}
+      {/* Preview Envio Sheet */}
+      {previewEnvio && (
+        <div className="absolute inset-0 z-[60] flex flex-col justify-end">
+          <button type="button" onClick={() => setPreviewEnvio(null)} className="absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]" />
+          <div className="relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200">
+            <div className="flex justify-center pt-3 pb-1 shrink-0">
+              <div className="h-1 w-10 rounded-full bg-border" />
+            </div>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
+              <h2 className="font-serif text-xl font-semibold text-foreground">
+                Enviar por {previewEnvio.tipo === 'whatsapp' ? 'WhatsApp' : 'E-mail'}
+              </h2>
+              <button type="button" onClick={() => setPreviewEnvio(null)} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
+                <X className="size-4" strokeWidth={1.5} />
+              </button>
+            </div>
+            <div className="p-6">
+              {previewEnvio.tipo === 'email' && (
+                <div className="mb-4">
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Assunto do e-mail</label>
+                  <input
+                    type="text"
+                    value={assuntoEnvio}
+                    onChange={(e) => setAssuntoEnvio(e.target.value)}
+                    placeholder="Assunto"
+                    className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
+              )}
+              <div className="mb-4">
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mensagem</label>
+                <textarea
+                value={textoEnvio}
+                onChange={(e) => setTextoEnvio(e.target.value)}
+                className="w-full h-48 rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+              />
+              </div>
+              <button
+                type="button"
+                onClick={handleEnviar}
+                className={`flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-sm font-semibold text-white shadow-xl transition-brand active:scale-[0.98] ${
+                  previewEnvio.tipo === 'whatsapp' ? 'bg-green-600 shadow-green-600/20' : 'bg-primary shadow-primary/20'
+                }`}
+              >
+                <Send className="size-4" />
+                Confirmar e Enviar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Termo de Visita Sheet */}
+      {termoAberto && (
+        <div className="absolute inset-0 z-[60] flex flex-col justify-end">
+          <button type="button" onClick={() => setTermoAberto(false)} className="absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]" />
+          <div className="relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200">
+            <div className="flex justify-center pt-3 pb-1 shrink-0">
+              <div className="h-1 w-10 rounded-full bg-border" />
+            </div>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
+              <h2 className="font-serif text-xl font-semibold text-foreground">Termo de Visita</h2>
+              <button type="button" onClick={() => setTermoAberto(false)} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
+                <X className="size-4" strokeWidth={1.5} />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="rounded-2xl bg-muted p-5 mb-5 flex flex-col items-center justify-center text-center">
+                <DocumentIcon className="size-10 text-muted-foreground mb-3" />
+                <p className="text-sm font-semibold">Termo gerado com sucesso</p>
+                <p className="text-xs text-muted-foreground">O termo já inclui os dados do cliente {atendimento.nome} e de {imoveisSelecionados.length} imóvel(is).</p>
+              </div>
+              <div className="flex gap-3">
+                <button type="button" className="flex-1 h-12 rounded-2xl border border-border bg-background text-sm font-semibold text-foreground">
+                  Baixar PDF
+                </button>
+                <button type="button" onClick={() => setTermoAberto(false)} className="flex-1 h-12 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground">
+                  Assinatura Digital
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

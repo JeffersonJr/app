@@ -7,9 +7,10 @@ import {
   MessageCircle,
   Phone,
   Search,
+  PlusCircle
 } from 'lucide-react'
 import { clientes, tempConfig, type Cliente, type EventoTimeline } from '@/lib/app-data'
-import { RegistrarInteracaoSheet } from '@/components/app/registrar-interacao-sheet'
+import { RegistrarAtividadeSheet } from '@/components/app/registrar-atividade-sheet'
 
 const segmentos = ['Todos', 'Comprador', 'Locatário', 'Proprietário'] as const
 
@@ -33,7 +34,25 @@ export function ScreenClientes({
       const q = busca.trim().toLowerCase()
       return matchSeg && (!q || c.nome.toLowerCase().includes(q))
     })
-  }, [segmento, busca])
+  }, [segmento, busca, clientes.length]) // Add clientes.length to trigger re-render on mutation
+
+  function handleCriarCliente() {
+    const novoId = `c${Date.now()}`
+    const novoNome = busca
+    clientes.push({
+      id: novoId,
+      nome: novoNome,
+      iniciais: novoNome.substring(0, 2).toUpperCase(),
+      tipo: 'Comprador',
+      temperatura: 'frio',
+      telefone: '(11) 99999-9999',
+      email: `${novoNome.toLowerCase().replace(/\s/g, '')}@email.com`,
+      ultimoContato: 'Agora',
+      timeline: []
+    })
+    setBusca('')
+    onAbrirCliente(novoId)
+  }
 
   if (clienteAberto) {
     return <ClienteDetail cliente={clienteAberto} onBack={onFecharCliente} />
@@ -114,6 +133,27 @@ export function ScreenClientes({
             </button>
           </li>
         ))}
+        {lista.length === 0 && busca && (
+          <li>
+            <button
+              type="button"
+              onClick={handleCriarCliente}
+              className="flex w-full items-center gap-3 rounded-2xl border border-dashed border-primary/40 bg-primary/5 p-3.5 text-left transition-brand hover:bg-primary/10 active:scale-[0.98]"
+            >
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <PlusCircle className="size-5" strokeWidth={2} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-semibold text-primary">
+                  Criar novo cliente
+                </span>
+                <span className="block text-xs text-muted-foreground">
+                  Adicionar "{busca}"
+                </span>
+              </span>
+            </button>
+          </li>
+        )}
       </ul>
     </div>
   )
@@ -218,7 +258,7 @@ function ClienteDetail({ cliente, onBack }: { cliente: Cliente; onBack: () => vo
 
       {/* Sheet Registrar Interação */}
       {mostrarNovaInteracao && (
-        <RegistrarInteracaoSheet
+        <RegistrarAtividadeSheet
           onClose={() => setMostrarNovaInteracao(false)}
           onSave={handleSalvarInteracao}
         />

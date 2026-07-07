@@ -183,7 +183,7 @@ function ImovelDetail({ imovel, onBack }: { imovel: Imovel; onBack: () => void }
   return (
     <>
       {toastMessage && (
-        <div className="fixed top-[calc(1rem+env(safe-area-inset-top))] left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-top-5">
+        <div className="absolute top-[calc(1rem+env(safe-area-inset-top))] left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-top-5">
           <CheckCircle2 className="size-4 inline-block mr-1.5 align-text-bottom" />
           {toastMessage}
         </div>
@@ -377,7 +377,7 @@ function ImovelDetail({ imovel, onBack }: { imovel: Imovel; onBack: () => void }
       </div>
 
       {/* Sticky Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] bg-background/90 backdrop-blur-md border-t border-border/50 z-20 flex gap-3 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.05)]">
+      <div className="absolute bottom-0 left-0 right-0 p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] bg-background/90 backdrop-blur-md border-t border-border/50 z-20 flex gap-3 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.05)]">
         <button type="button" onClick={() => setShowShareMenu(true)} className="flex-1 flex items-center justify-center gap-2.5 h-14 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/30 transition-transform active:scale-[0.98]">
           <Share2 className="size-5" strokeWidth={2.5} /> 
           Compartilhar com Lead
@@ -387,8 +387,8 @@ function ImovelDetail({ imovel, onBack }: { imovel: Imovel; onBack: () => void }
       {/* Share Bottom Sheet */}
       {showShareMenu && (
         <>
-          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 animate-in fade-in duration-200" onClick={() => setShowShareMenu(false)} />
-          <div className="fixed bottom-0 left-0 right-0 bg-card rounded-t-3xl shadow-2xl z-50 animate-in slide-in-from-bottom-full duration-300 pb-[env(safe-area-inset-bottom)]">
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-40 animate-in fade-in duration-200" onClick={() => setShowShareMenu(false)} />
+          <div className="absolute bottom-0 left-0 right-0 bg-card rounded-t-3xl shadow-2xl z-50 animate-in slide-in-from-bottom-full duration-300 pb-[env(safe-area-inset-bottom)]">
             <div className="flex justify-center pt-3 pb-2">
               <div className="h-1.5 w-12 rounded-full bg-border" />
             </div>

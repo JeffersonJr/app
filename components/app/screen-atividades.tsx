@@ -44,7 +44,7 @@ export function ScreenAtividades() {
         ) : (
           <ul className="flex flex-col gap-3">
             {pendentes.map(atv => {
-              const tipoInfo = (tipoAtividadeConfig as Record<string, any>)[atv.tipo] || { cor: 'bg-slate/15 text-slate' }
+              const tipoInfo = (tipoAtividadeConfig as Record<string, any>)[atv.tipo] || { cor: 'bg-muted text-muted-foreground' }
               return (
                 <li key={atv.id} className="animate-in fade-in slide-in-from-bottom-2">
                   <div className="flex items-center gap-3 rounded-[1.25rem] border border-transparent bg-card p-4 shadow-soft transition-all">
@@ -56,7 +56,7 @@ export function ScreenAtividades() {
                         {atv.titulo}
                       </p>
                       <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1 font-medium text-amber-600">
+                        <span className="flex items-center gap-1 font-medium text-muted-foreground">
                           <Clock className="size-3" />
                           {atv.hora}
                         </span>

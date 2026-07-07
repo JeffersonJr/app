@@ -16,7 +16,7 @@ const acoes = [
   { id: 'captar-imovel' as const, icon: Camera, titulo: 'Captar imóvel', desc: 'Fotografe e cadastre na rua' },
 ]
 
-export function QuickAddSheet({ onClose }: { onClose: () => void }) {
+export function QuickAddSheet({ onClose, onAtividadeCriada }: { onClose: () => void, onAtividadeCriada?: (atendimentoId: string) => void }) {
   const [acaoAtiva, setAcaoAtiva] = useState<Acao>(null)
 
   function handleSelect(id: Acao) {
@@ -75,7 +75,7 @@ export function QuickAddSheet({ onClose }: { onClose: () => void }) {
           <FormNovoLead onClose={() => { setAcaoAtiva(null); onClose() }} />
         )}
         {acaoAtiva === 'nova-atividade' && (
-          <FormNovaAtividade onClose={() => { setAcaoAtiva(null); onClose() }} />
+          <FormNovaAtividade onClose={() => { setAcaoAtiva(null); onClose() }} onSalvar={onAtividadeCriada} />
         )}
         {acaoAtiva === 'novo-negocio' && (
           <FormNovoNegocio onClose={() => { setAcaoAtiva(null); onClose() }} />

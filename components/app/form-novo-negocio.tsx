@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, Search, Check, PlusCircle } from 'lucide-react'
+import { atendimentos, perfilVazio } from '@/lib/app-data'
 
 const TIPOS_IMOVEL = ['Apartamento', 'Casa', 'Studio', 'Cobertura', 'Terreno', 'Sala Comercial', 'Galpão', 'Outro'] as const
 const CIDADES = ['São Paulo', 'Barueri', 'Osasco', 'Guarulhos', 'Santo André', 'São Bernardo', 'Mogi das Cruzes', 'Outra'] as const
@@ -9,6 +10,12 @@ const PRAZOS = ['Imediato', '1-3 meses', '3-6 meses', 'Acima de 6 meses'] as con
 
 export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
   const [nomeCliente, setNomeCliente] = useState('')
+  const [clienteIdSelecionado, setClienteIdSelecionado] = useState('')
+  const [mostrarSugestoes, setMostrarSugestoes] = useState(false)
+  const [criarClienteAberto, setCriarClienteAberto] = useState(false)
+  const [novoTelefone, setNovoTelefone] = useState('')
+  const [novoWhatsapp, setNovoWhatsapp] = useState('')
+  const [novoEmail, setNovoEmail] = useState('')
   const [finalidade, setFinalidade] = useState<'Venda' | 'Locação'>('Venda')
   const [tipoImovel, setTipoImovel] = useState<(typeof TIPOS_IMOVEL)[number]>('Apartamento')
   const [cidade, setCidade] = useState<(typeof CIDADES)[number]>('São Paulo')
@@ -18,6 +25,51 @@ export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
   const [valorMax, setValorMax] = useState('')
   const [prazo, setPrazo] = useState<(typeof PRAZOS)[number]>('Imediato')
   const [observacoes, setObservacoes] = useState('')
+
+  const atendimentosFiltrados = nomeCliente
+    ? atendimentos.filter(a => a.nome.toLowerCase().includes(nomeCliente.toLowerCase()))
+    : atendimentos.slice(0, 5)
+
+  function abrirFormCriar() {
+    setCriarClienteAberto(true)
+    setMostrarSugestoes(false)
+  }
+
+  function handleCriarCliente() {
+    const novoId = `c${Date.now()}`
+    const novoNome = nomeCliente
+    atendimentos.push({
+      id: novoId,
+      nome: novoNome,
+      iniciais: novoNome.substring(0, 2).toUpperCase(),
+      email: novoEmail || `${novoNome.toLowerCase().replace(/\s/g, '')}@email.com`,
+      telefone: novoTelefone || novoWhatsapp || '(11) 99999-9999',
+      origem: 'Novo',
+      etapa: 'qualificando',
+      temperatura: 'frio',
+      status: 'aberto',
+      dataEntrada: new Date().toLocaleDateString('pt-BR'),
+      ultimaInteracao: 'Agora',
+      interesse: 'A definir',
+      valor: '-',
+      modo: 'venda',
+      funilId: 'principal',
+      atividades: [],
+      notas: [],
+      documentos: [],
+      emails: [],
+      timeline: [],
+      imoveisEnviados: [],
+      perfil: { ...perfilVazio },
+      albert: { ativo: false, dia: '', hora: '', instrucoes: '' },
+    })
+    setClienteIdSelecionado(novoId)
+    setNomeCliente(novoNome)
+    setCriarClienteAberto(false)
+    setNovoTelefone('')
+    setNovoWhatsapp('')
+    setNovoEmail('')
+  }
 
   return (
     <div>
@@ -34,16 +86,82 @@ export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
       </div>
 
       <div className="flex flex-col gap-4">
-        {/* Cliente */}
-        <div>
+        {/* Cliente — campo com busca */}
+        <div className="relative">
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Nome do cliente *</label>
-          <input
-            type="text"
-            value={nomeCliente}
-            onChange={(e) => setNomeCliente(e.target.value)}
-            placeholder="Ex: Mariana Costa"
-            className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <input
+              type="text"
+              value={nomeCliente}
+              onChange={(e) => { setNomeCliente(e.target.value); setMostrarSugestoes(true); setClienteIdSelecionado('') }}
+              onFocus={() => setMostrarSugestoes(true)}
+              placeholder="Buscar ou criar cliente..."
+              className="h-12 w-full rounded-2xl border border-border bg-background pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+          {mostrarSugestoes && (
+            <div className="absolute top-full mt-2 w-full max-h-48 overflow-y-auto rounded-2xl border border-border bg-card p-2 shadow-xl z-50">
+              {atendimentosFiltrados.map(a => (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => { setNomeCliente(a.nome); setClienteIdSelecionado(a.id); setMostrarSugestoes(false) }}
+                  className="flex w-full items-center gap-3 rounded-xl p-2 text-left hover:bg-muted"
+                >
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-teal-mid/10 text-xs font-bold text-teal-deep">{a.iniciais}</div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-foreground">{a.nome}</span>
+                    <span className="text-[10px] uppercase text-muted-foreground">{a.origem}</span>
+                  </div>
+                  {clienteIdSelecionado === a.id && <Check className="ml-auto size-4 text-primary" />}
+                </button>
+              ))}
+              {atendimentosFiltrados.length === 0 && nomeCliente && (
+                <button
+                  type="button"
+                  onClick={abrirFormCriar}
+                  className="flex w-full items-center gap-3 rounded-xl p-3 text-left hover:bg-muted"
+                >
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <PlusCircle className="size-4" strokeWidth={2} />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-primary">Criar novo cliente</span>
+                    <span className="text-xs text-muted-foreground">Adicionar "{nomeCliente}"</span>
+                  </div>
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Mini-formulário de contatos */}
+          {criarClienteAberto && (
+            <div className="mt-3 rounded-2xl border border-primary/30 bg-primary/5 p-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-sm font-semibold text-foreground">Contatos de <span className="text-primary">{nomeCliente}</span></p>
+                <button type="button" onClick={() => setCriarClienteAberto(false)} className="flex size-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                  <X className="size-3.5" strokeWidth={2} />
+                </button>
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Telefone</label>
+                <input type="tel" value={novoTelefone} onChange={(e) => setNovoTelefone(e.target.value)} placeholder="(11) 99999-9999" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">WhatsApp</label>
+                <input type="tel" value={novoWhatsapp} onChange={(e) => setNovoWhatsapp(e.target.value)} placeholder="(11) 99999-9999" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">E-mail</label>
+                <input type="email" value={novoEmail} onChange={(e) => setNovoEmail(e.target.value)} placeholder="nome@email.com" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <button type="button" onClick={handleCriarCliente} className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground transition-brand active:scale-[0.98]">
+                <PlusCircle className="size-4" strokeWidth={2} />
+                Criar cliente e selecionar
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Finalidade */}

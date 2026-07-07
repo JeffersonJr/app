@@ -29,12 +29,13 @@ export function ScreenHoje({
   onVerAtendimento?: (id: string) => void
 }) {
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
+  const [localAtividades, setLocalAtividades] = useState(() => [...atividadesHoje])
   const leadsQuentes = funil
     .flatMap((estagio) => estagio.leads.map((lead) => ({ ...lead, estagio: estagio.nome })))
     .filter((lead) => lead.temperatura === 'quente')
     .slice(0, 3)
 
-  const pendentes = atividadesHoje.filter((a) => !a.concluida)
+  const pendentes = localAtividades.filter((a) => !a.concluida)
 
   return (
     <div className="flex flex-col gap-6 px-5 pt-4 pb-28">
@@ -111,9 +112,13 @@ export function ScreenHoje({
           </span>
         </div>
         <ul className="flex flex-col gap-2">
-          {atividadesHoje
+          {localAtividades
             .slice()
-            .sort((a, b) => a.hora.localeCompare(b.hora))
+            .sort((a, b) => {
+              // Pending first, then by time
+              if (a.concluida !== b.concluida) return a.concluida ? 1 : -1
+              return a.hora.localeCompare(b.hora)
+            })
             .map((atv) => (
               <li key={atv.id}>
                 <button
@@ -124,7 +129,7 @@ export function ScreenHoje({
                     : 'border-transparent bg-card shadow-soft hover:bg-muted/50'
                     }`}
                 >
-                  <div className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${atv.concluida ? 'bg-muted text-muted-foreground' : ((tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.cor || 'bg-slate/15 text-slate')}`}>
+                  <div className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${atv.concluida ? 'bg-muted text-muted-foreground' : ((tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.cor || 'bg-muted text-muted-foreground')}`}>
                     {atv.concluida ? (
                       <CheckCircle2 className="size-5" strokeWidth={1.5} />
                     ) : (
@@ -255,13 +260,13 @@ export function ScreenHoje({
         atividade={atividadeSelecionada}
         onClose={() => setAtividadeSelecionada(null)}
         onConcluir={(id, feedback, agendar) => {
-          // Update the global mock array directly to affect other screens without redux
+          // Update local state to trigger re-render with strikethrough
+          setLocalAtividades((prev) =>
+            prev.map((a) => (a.id === id ? { ...a, concluida: true } : a))
+          )
+          // Also update the global mock so other screens see it
           const atvGlob = atividadesHoje.find((a) => a.id === id)
           if (atvGlob) atvGlob.concluida = true
-          
-          // Note: ScreenHoje reads atividadesHoje on mount/render. 
-          // By updating atvGlob and closing the sheet, it will trigger a re-render
-          // (if we had a local state we would update it, but here we can just close the modal)
           setAtividadeSelecionada(null)
         }}
         onVerNegocio={(cliente) => {

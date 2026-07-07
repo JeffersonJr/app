@@ -4449,15 +4449,15 @@ const tempConfig = {
 const etapaConfig = {
     qualificando: {
         label: 'Qualificando',
-        cor: 'bg-slate/20 text-slate'
+        cor: 'bg-slate/30 text-slate-700'
     },
     conhecendo: {
         label: 'Conhecendo',
-        cor: 'bg-teal-mid/20 text-teal-deep'
+        cor: 'bg-indigo/15 text-indigo'
     },
     agendado: {
         label: 'Agendado',
-        cor: 'bg-amber/20 text-[#8a5a1e]'
+        cor: 'bg-amber/15 text-amber'
     },
     negociando: {
         label: 'Negociando',
@@ -4475,16 +4475,19 @@ const origemConfig = {
         cor: 'bg-purple-100 text-purple-700'
     },
     'Site Próprio': {
-        cor: 'bg-teal-mid/15 text-teal-deep'
+        cor: 'bg-teal-deep text-white'
+    },
+    'Indicação': {
+        cor: 'bg-amber/15 text-amber'
+    },
+    'Ativo': {
+        cor: 'bg-purple-500/15 text-purple-600'
     },
     Facebook: {
         cor: 'bg-blue-100 text-blue-800'
     },
     Instagram: {
         cor: 'bg-pink-100 text-pink-700'
-    },
-    Indicação: {
-        cor: 'bg-green-100 text-green-700'
     },
     'Cliente de Porta': {
         cor: 'bg-yellow-100 text-yellow-700'
@@ -7156,6 +7159,9 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
     _s();
     const [feedback, setFeedback] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [agendarProxima, setAgendarProxima] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [remarcando, setRemarcando] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [novaData, setNovaData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [novaHora, setNovaHora] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     if (!atividade) return null;
     const tipoInfo = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$app$2d$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["tipoAtividadeConfig"][atividade.tipo] || {
         emoji: '📋',
@@ -7169,7 +7175,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                 onClick: onClose
             }, void 0, false, {
                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                lineNumber: 26,
+                lineNumber: 29,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7179,7 +7185,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                         className: "mx-auto mb-6 h-1.5 w-12 rounded-full bg-border"
                     }, void 0, false, {
                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                        lineNumber: 31,
+                        lineNumber: 34,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7193,7 +7199,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         children: tipoInfo.emoji
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 35,
+                                        lineNumber: 38,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7203,7 +7209,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                                 children: atividade.tipo
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                                lineNumber: 39,
+                                                lineNumber: 42,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -7211,19 +7217,19 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                                 children: atividade.titulo
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                                lineNumber: 42,
+                                                lineNumber: 45,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 38,
+                                        lineNumber: 41,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 34,
+                                lineNumber: 37,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7234,18 +7240,18 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                     className: "size-5"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                    lineNumber: 52,
+                                    lineNumber: 55,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 47,
+                                lineNumber: 50,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                        lineNumber: 33,
+                        lineNumber: 36,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7258,7 +7264,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         className: "size-3.5"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 58,
+                                        lineNumber: 61,
                                         columnNumber: 13
                                     }, this),
                                     "Hoje, ",
@@ -7266,7 +7272,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 57,
+                                lineNumber: 60,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7278,7 +7284,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         className: "size-3.5"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 66,
+                                        lineNumber: 69,
                                         columnNumber: 13
                                     }, this),
                                     atividade.cliente,
@@ -7286,19 +7292,19 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         className: "size-3.5 text-muted-foreground"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 68,
+                                        lineNumber: 71,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 61,
+                                lineNumber: 64,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                        lineNumber: 56,
+                        lineNumber: 59,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7311,14 +7317,14 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         className: "size-3.5"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 74,
+                                        lineNumber: 77,
                                         columnNumber: 13
                                     }, this),
                                     "O que deve ser feito"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 73,
+                                lineNumber: 76,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -7326,13 +7332,13 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                 children: atividade.descricao || 'Nenhuma instrução específica para esta atividade.'
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 77,
+                                lineNumber: 80,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                        lineNumber: 72,
+                        lineNumber: 75,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7345,14 +7351,14 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         className: "size-3.5"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 84,
+                                        lineNumber: 87,
                                         columnNumber: 13
                                     }, this),
                                     "Feedback da atividade"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 83,
+                                lineNumber: 86,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -7362,13 +7368,13 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                 className: "w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary h-24"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 87,
+                                lineNumber: 90,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                        lineNumber: 82,
+                        lineNumber: 85,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -7381,7 +7387,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                 className: "size-5 rounded border-border text-primary focus:ring-primary"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 96,
+                                lineNumber: 99,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7392,7 +7398,7 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         children: "Agendar próxima atividade"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 103,
+                                        lineNumber: 106,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7400,41 +7406,162 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         children: "Continuar o fluxo com este cliente"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 104,
+                                        lineNumber: 107,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 102,
+                                lineNumber: 105,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                        lineNumber: 95,
+                        lineNumber: 98,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    remarcando ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mt-6 flex flex-col gap-4 animate-in fade-in duration-200",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                className: "text-sm font-semibold text-foreground",
+                                children: "Remarcar atividade"
+                            }, void 0, false, {
+                                fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                lineNumber: 113,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "grid grid-cols-2 gap-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex flex-col gap-1.5",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "text-xs font-medium text-muted-foreground",
+                                                children: "Nova Data"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                                lineNumber: 116,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "date",
+                                                value: novaData,
+                                                onChange: (e)=>setNovaData(e.target.value),
+                                                className: "h-12 w-full rounded-xl border border-border bg-card px-3 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                                lineNumber: 117,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                        lineNumber: 115,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex flex-col gap-1.5",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "text-xs font-medium text-muted-foreground",
+                                                children: "Nova Hora"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                                lineNumber: 125,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "time",
+                                                value: novaHora,
+                                                onChange: (e)=>setNovaHora(e.target.value),
+                                                className: "h-12 w-full rounded-xl border border-border bg-card px-3 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                                lineNumber: 126,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                        lineNumber: 124,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                lineNumber: 114,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "grid grid-cols-2 gap-3 mt-2",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        onClick: ()=>setRemarcando(false),
+                                        className: "flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-background text-sm font-semibold text-foreground transition-colors hover:bg-muted active:scale-95",
+                                        children: "Cancelar"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                        lineNumber: 135,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        onClick: ()=>{
+                                            // Aqui salvaria a nova data no banco de dados e fecharia
+                                            onClose();
+                                        },
+                                        className: "flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:bg-primary/90 active:scale-95",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__["CheckCircle2"], {
+                                                className: "size-4.5"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                                lineNumber: 150,
+                                                columnNumber: 17
+                                            }, this),
+                                            "Salvar"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                        lineNumber: 142,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                                lineNumber: 134,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
+                        lineNumber: 112,
+                        columnNumber: 11
+                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "mt-6 grid grid-cols-2 gap-3",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
+                                onClick: ()=>setRemarcando(true),
                                 className: "flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-background text-sm font-semibold text-foreground transition-colors hover:bg-muted active:scale-95",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
                                         className: "size-4.5"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 113,
-                                        columnNumber: 13
+                                        lineNumber: 162,
+                                        columnNumber: 15
                                     }, this),
                                     "Remarcar"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 109,
-                                columnNumber: 11
+                                lineNumber: 157,
+                                columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
@@ -7445,36 +7572,36 @@ function AtividadeDetalheSheet({ atividade, onClose, onVerNegocio }) {
                                         className: "size-4.5"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                        lineNumber: 121,
-                                        columnNumber: 13
+                                        lineNumber: 170,
+                                        columnNumber: 15
                                     }, this),
                                     "Concluir"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                                lineNumber: 116,
-                                columnNumber: 11
+                                lineNumber: 165,
+                                columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                        lineNumber: 108,
-                        columnNumber: 9
+                        lineNumber: 156,
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-                lineNumber: 30,
+                lineNumber: 33,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/app/atividade-detalhe-sheet.tsx",
-        lineNumber: 25,
+        lineNumber: 28,
         columnNumber: 5
     }, this);
 }
-_s(AtividadeDetalheSheet, "0RP0fQ4S4iBHvamoMqm4e0GJuWU=");
+_s(AtividadeDetalheSheet, "CeB8IVjxnLhz6vGkCUn3aSO7/9Y=");
 _c = AtividadeDetalheSheet;
 var _c;
 __turbopack_context__.k.register(_c, "AtividadeDetalheSheet");
@@ -12811,8 +12938,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.mjs [app-client] (ecmascript) <export default as Plus>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trending-up.mjs [app-client] (ecmascript) <export default as TrendingUp>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/users.mjs [app-client] (ecmascript) <export default as Users>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2d$days$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CalendarDays$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/calendar-days.mjs [app-client] (ecmascript) <export default as CalendarDays>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.mjs [app-client] (ecmascript) <export default as User>");
 'use client';
 ;
 ;
@@ -12828,11 +12953,6 @@ const tabs = [
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__["TrendingUp"]
     },
     {
-        id: 'atividades',
-        label: 'Atividades',
-        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2d$days$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CalendarDays$3e$__["CalendarDays"]
-    },
-    {
         id: 'imoveis',
         label: 'Imóveis',
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$building$2d$2$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Building2$3e$__["Building2"]
@@ -12841,16 +12961,11 @@ const tabs = [
         id: 'clientes',
         label: 'Clientes',
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"]
-    },
-    {
-        id: 'perfil',
-        label: 'Perfil',
-        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"]
     }
 ];
 function TabBar({ active, onChange, onQuickAdd }) {
-    const left = tabs.slice(0, 3);
-    const right = tabs.slice(3);
+    const left = tabs.slice(0, 2);
+    const right = tabs.slice(2);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
         "aria-label": "Navegação principal",
         className: "absolute inset-x-0 bottom-0 z-40 border-t border-border/50 bg-background/80 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]",
@@ -12863,7 +12978,7 @@ function TabBar({ active, onChange, onQuickAdd }) {
                         onChange: onChange
                     }, tab.id, false, {
                         fileName: "[project]/components/app/tab-bar.tsx",
-                        lineNumber: 35,
+                        lineNumber: 33,
                         columnNumber: 11
                     }, this)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -12876,12 +12991,12 @@ function TabBar({ active, onChange, onQuickAdd }) {
                         strokeWidth: 1.5
                     }, void 0, false, {
                         fileName: "[project]/components/app/tab-bar.tsx",
-                        lineNumber: 44,
+                        lineNumber: 42,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/app/tab-bar.tsx",
-                    lineNumber: 38,
+                    lineNumber: 36,
                     columnNumber: 9
                 }, this),
                 right.map((tab)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(TabButton, {
@@ -12890,18 +13005,18 @@ function TabBar({ active, onChange, onQuickAdd }) {
                         onChange: onChange
                     }, tab.id, false, {
                         fileName: "[project]/components/app/tab-bar.tsx",
-                        lineNumber: 48,
+                        lineNumber: 46,
                         columnNumber: 11
                     }, this))
             ]
         }, void 0, true, {
             fileName: "[project]/components/app/tab-bar.tsx",
-            lineNumber: 33,
+            lineNumber: 31,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/app/tab-bar.tsx",
-        lineNumber: 29,
+        lineNumber: 27,
         columnNumber: 5
     }, this);
 }
@@ -12919,7 +13034,7 @@ function TabButton({ tab, active, onChange }) {
                 strokeWidth: active ? 2 : 1.5
             }, void 0, false, {
                 fileName: "[project]/components/app/tab-bar.tsx",
-                lineNumber: 74,
+                lineNumber: 72,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -12927,13 +13042,13 @@ function TabButton({ tab, active, onChange }) {
                 children: tab.label
             }, void 0, false, {
                 fileName: "[project]/components/app/tab-bar.tsx",
-                lineNumber: 75,
+                lineNumber: 73,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/app/tab-bar.tsx",
-        lineNumber: 66,
+        lineNumber: 64,
         columnNumber: 5
     }, this);
 }

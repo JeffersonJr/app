@@ -7,10 +7,8 @@ export type TabId = 'hoje' | 'negocios' | 'atividades' | 'imoveis' | 'clientes' 
 const tabs: { id: TabId; label: string; icon: any }[] = [
   { id: 'hoje', label: 'Home', icon: Home },
   { id: 'negocios', label: 'Negócios', icon: TrendingUp },
-  { id: 'atividades', label: 'Atividades', icon: CalendarDays },
   { id: 'imoveis', label: 'Imóveis', icon: Building2 },
   { id: 'clientes', label: 'Clientes', icon: Users },
-  { id: 'perfil', label: 'Perfil', icon: User },
 ]
 
 export function TabBar({
@@ -22,8 +20,8 @@ export function TabBar({
   onChange: (tab: TabId) => void
   onQuickAdd: () => void
 }) {
-  const left = tabs.slice(0, 3)
-  const right = tabs.slice(3)
+  const left = tabs.slice(0, 2)
+  const right = tabs.slice(2)
 
   return (
     <nav

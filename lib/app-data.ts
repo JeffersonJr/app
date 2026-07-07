@@ -11,6 +11,8 @@ export type OrigemLead =
   | 'Cliente de Porta'
   | 'WhatsApp'
   | 'Ligação'
+  | 'Ativo'
+  | 'Novo'
   | 'Outro'
 
 export type EtapaFunil = 'qualificando' | 'conhecendo' | 'agendado' | 'negociando'
@@ -151,7 +153,7 @@ export const funis: Funil[] = [
   { id: 'locacoes', nome: 'Locações', descricao: 'Contratos de locação', cor: 'bg-teal-mid text-white' },
 ]
 
-const perfilVazio: PerfilBusca = {
+export const perfilVazio: PerfilBusca = {
   finalidade: '',
   tipoImovel: 'Apartamento',
   cidades: ['São Paulo'],
@@ -256,7 +258,10 @@ export const atendimentos: Atendimento[] = [
         enviadoEm: 'Ontem, 16:10',
       },
     ],
-    documentos: [],
+    documentos: [
+      { id: 'd10', nome: 'Proposta_Comercial_Mariana.pdf', tipo: 'pdf', url: '#', anexadoEm: 'Ontem' },
+      { id: 'd11', nome: 'Identidade_Mariana.jpg', tipo: 'jpg', url: '#', anexadoEm: 'Hoje' }
+    ],
     imoveisEnviados: [
       { id: 'ie1', codigoImovel: 'MS-1042', tituloImovel: 'Apartamento com varanda gourmet', enviadoPor: 'email', enviadoEm: 'Ontem, 16:10' },
     ],
@@ -286,12 +291,23 @@ export const atendimentos: Atendimento[] = [
     modo: 'venda',
     funilId: 'principal',
     perfil: { ...perfilVazio, finalidade: 'Venda', tipoImovel: 'Casa', cidades: ['Barueri'], bairros: ['Alphaville'], quartos: 4, suites: 2, vagas: 3, valorMin: 'R$ 1.200.000', valorMax: 'R$ 1.600.000', lazer: true, prazoParaComprar: '3-6 meses', observacoes: 'Precisa de condomínio fechado com segurança 24h.' },
-    notas: [],
-    atividades: [],
+    notas: [{ id: 'n1', texto: 'Cliente prefere região de Alphaville. Enfatizou segurança como prioridade 1.', criadoEm: '04/07' }],
+    atividades: [
+      { id: 'a2', tipo: 'ligacao', titulo: 'Alinhamento de perfil', descricao: 'Ligar para detalhar o que a esposa achou dos imoveis.', data: '2026-07-07', hora: '10:00', importante: false, concluida: false, criadoEm: 'Hoje' },
+      { id: 'a3', tipo: 'reuniao', titulo: 'Primeiro contato (Qualificação)', descricao: 'Entender a real motivação de compra e confirmar budget.', data: '2026-07-04', hora: '14:45', importante: true, concluida: true, criadoEm: '04/07' }
+    ],
     emails: [],
-    documentos: [],
+    documentos: [
+      { id: 'd1', nome: 'Cópia CNH Ricardo.pdf', tipo: 'pdf', url: '#', anexadoEm: 'Ontem' },
+      { id: 'd2', nome: 'Comprovante_Residencia.png', tipo: 'png', url: '#', anexadoEm: 'Hoje' }
+    ],
     imoveisEnviados: [],
-    timeline: [{ id: 't1', tipo: 'origem', descricao: 'Lead captado via Site Próprio', data: '04/07', hora: '14:30' }],
+    timeline: [
+      { id: 't1', tipo: 'origem', descricao: 'Lead captado via Site Próprio', data: '04/07', hora: '14:30' },
+      { id: 't2', tipo: 'atividade', descricao: 'Primeiro contato (Qualificação) - Concluído', data: '04/07', hora: '15:10', concluida: true },
+      { id: 't3', tipo: 'nota', descricao: 'Adicionada nota: Cliente prefere região de...', data: '04/07', hora: '15:15' },
+      { id: 't4', tipo: 'documento', descricao: 'Documento Cópia CNH Ricardo.pdf anexado', data: 'Ontem', hora: '10:00' }
+    ],
     albert: { ativo: false, dia: '', hora: '', instrucoes: '' },
   },
   {
@@ -314,7 +330,9 @@ export const atendimentos: Atendimento[] = [
     notas: [],
     atividades: [],
     emails: [],
-    documentos: [],
+    documentos: [
+      { id: 'd30', nome: 'Ficha_Locacao_Assinada.pdf', tipo: 'pdf', url: '#', anexadoEm: '02/07/2026' }
+    ],
     imoveisEnviados: [],
     timeline: [{ id: 't1', tipo: 'origem', descricao: 'Lead captado por indicação', data: '01/07', hora: '17:40' }],
     albert: { ativo: true, dia: '08/07/2026', hora: '10:00', instrucoes: 'Ligar e perguntar se ainda tem interesse na locação.' },
@@ -339,7 +357,9 @@ export const atendimentos: Atendimento[] = [
     notas: [],
     atividades: [{ id: 'av1', tipo: 'visita', titulo: 'Visita — Cobertura Vila Nova', descricao: 'Confirmar com portaria 30min antes.', data: '2026-07-06', hora: '15:00', importante: true, concluida: false, criadoEm: 'Ontem, 14:20' }],
     emails: [],
-    documentos: [],
+    documentos: [
+      { id: 'd40', nome: 'Termo_De_Visita.pdf', tipo: 'pdf', url: '#', anexadoEm: 'Ontem' }
+    ],
     imoveisEnviados: [],
     timeline: [
       { id: 't1', tipo: 'atividade', descricao: 'Visita agendada — Cobertura Vila Nova', data: 'Hoje', hora: '08:50', importante: true },
@@ -367,7 +387,10 @@ export const atendimentos: Atendimento[] = [
     notas: [],
     atividades: [],
     emails: [],
-    documentos: [],
+    documentos: [
+      { id: 'd50', nome: 'Matricula_Atualizada.pdf', tipo: 'pdf', url: '#', anexadoEm: '03/07/2026' },
+      { id: 'd51', nome: 'Planta_Baixa.pdf', tipo: 'pdf', url: '#', anexadoEm: '04/07/2026' }
+    ],
     imoveisEnviados: [],
     timeline: [{ id: 't1', tipo: 'origem', descricao: 'Lead captado via Portal VivaReal', data: '02/07', hora: '09:15' }],
     albert: { ativo: false, dia: '', hora: '', instrucoes: '' },
@@ -392,7 +415,9 @@ export const atendimentos: Atendimento[] = [
     notas: [],
     atividades: [],
     emails: [],
-    documentos: [],
+    documentos: [
+      { id: 'd60', nome: 'Folder_Empreendimento.pdf', tipo: 'pdf', url: '#', anexadoEm: '05/07/2026' }
+    ],
     imoveisEnviados: [],
     timeline: [
       { id: 't1', tipo: 'etapa', descricao: 'Avançou para Negociando', data: 'Hoje', hora: '09:00' },
@@ -420,7 +445,9 @@ export const atendimentos: Atendimento[] = [
     notas: [],
     atividades: [],
     emails: [],
-    documentos: [],
+    documentos: [
+      { id: 'd70', nome: 'RG_Beatriz.jpg', tipo: 'jpg', url: '#', anexadoEm: '20/06/2026' }
+    ],
     imoveisEnviados: [],
     timeline: [
       { id: 't1', tipo: 'status', descricao: 'Proposta aceita — aguardando documentação', data: 'Hoje', hora: '10:05', importante: true },
@@ -448,7 +475,9 @@ export const atendimentos: Atendimento[] = [
     notas: [],
     atividades: [],
     emails: [],
-    documentos: [],
+    documentos: [
+      { id: 'd80', nome: 'Comprovante_de_Renda.pdf', tipo: 'pdf', url: '#', anexadoEm: '22/06/2026' }
+    ],
     imoveisEnviados: [],
     timeline: [{ id: 't1', tipo: 'origem', descricao: 'Lead captado via Facebook', data: '05/07', hora: '10:00' }],
     albert: { ativo: false, dia: '', hora: '', instrucoes: '' },
@@ -549,15 +578,21 @@ export type Atividade = {
   hora: string
   titulo: string
   cliente: string
-  tipo: 'visita' | 'ligacao' | 'reuniao' | 'tarefa'
+  telefone?: string
+  whatsapp?: string
+  tipo: 'visita' | 'ligacao' | 'reuniao' | 'tarefa' | 'whatsapp'
   concluida: boolean
   descricao?: string
+  imoveisVisitados?: { id: string; nome: string; visitado: boolean; endereco: string }[]
 }
 
 export const atividadesHoje: Atividade[] = [
-  { id: 'a1', hora: '11:00', titulo: 'Ligar para follow-up de proposta', cliente: 'André Souza', tipo: 'ligacao', concluida: false, descricao: 'Perguntar se ele já analisou a proposta que enviei ontem e verificar se a esposa também aprovou o layout do apartamento.' },
-  { id: 'a2', hora: '15:00', titulo: 'Visita — Cobertura Vila Nova', cliente: 'Mariana Costa', tipo: 'visita', concluida: false, descricao: 'Chegar 15 minutos antes para abrir as janelas e verificar se o proprietário já deixou as chaves na portaria conforme combinado.' },
-  { id: 'a3', hora: '17:30', titulo: 'Enviar documentação do MS-1108', cliente: 'Beatriz Rocha', tipo: 'tarefa', concluida: false },
+  { id: 'a1', hora: '11:00', titulo: 'Ligar para follow-up de proposta', cliente: 'André Souza', telefone: '(11) 99999-1111', tipo: 'ligacao', concluida: false, descricao: 'Perguntar se ele já analisou a proposta que enviei ontem e verificar se a esposa também aprovou o layout do apartamento.' },
+  { id: 'a2', hora: '15:00', titulo: 'Visita — Cobertura e Imóveis', cliente: 'Mariana Costa', whatsapp: '(11) 98765-4321', tipo: 'visita', concluida: false, descricao: 'Visita para conhecer opções em Alphaville.', imoveisVisitados: [
+    { id: 'v1', nome: 'Casa em condomínio', visitado: false, endereco: 'Alameda Rio Negro, Barueri' },
+    { id: 'v2', nome: 'Cobertura duplex', visitado: false, endereco: 'Rua Jacques Félix, São Paulo' },
+  ] },
+  { id: 'a3', hora: '17:30', titulo: 'Enviar documentação do MS-1108', cliente: 'Beatriz Rocha', whatsapp: '(11) 96543-2109', tipo: 'whatsapp', concluida: false },
   { id: 'a4', hora: '09:00', titulo: 'Reunião de equipe — metas da semana', cliente: 'Equipe Central', tipo: 'reuniao', concluida: true },
 ]
 
@@ -568,9 +603,9 @@ export const tempConfig: Record<Temperatura, { label: string; dot: string; chip:
 }
 
 export const etapaConfig: Record<EtapaFunil, { label: string; cor: string }> = {
-  qualificando: { label: 'Qualificando', cor: 'bg-slate/20 text-slate' },
-  conhecendo: { label: 'Conhecendo', cor: 'bg-teal-mid/20 text-teal-deep' },
-  agendado: { label: 'Agendado', cor: 'bg-amber/20 text-[#8a5a1e]' },
+  qualificando: { label: 'Qualificando', cor: 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-400' },
+  conhecendo: { label: 'Conhecendo', cor: 'bg-indigo/15 text-indigo' },
+  agendado: { label: 'Agendado', cor: 'bg-amber/15 text-amber' },
   negociando: { label: 'Negociando', cor: 'bg-primary/20 text-primary' },
 }
 
@@ -578,13 +613,15 @@ export const origemConfig: Record<OrigemLead, { cor: string }> = {
   'Portal ZAP': { cor: 'bg-orange-100 text-orange-700' },
   'Portal VivaReal': { cor: 'bg-blue-100 text-blue-700' },
   'Portal OLX': { cor: 'bg-purple-100 text-purple-700' },
-  'Site Próprio': { cor: 'bg-teal-mid/15 text-teal-deep' },
+  'Site Próprio': { cor: 'bg-teal-deep text-white' },
+  'Indicação': { cor: 'bg-amber/15 text-amber' },
+  'Ativo': { cor: 'bg-purple-500/15 text-purple-600' },
   Facebook: { cor: 'bg-blue-100 text-blue-800' },
   Instagram: { cor: 'bg-pink-100 text-pink-700' },
-  Indicação: { cor: 'bg-green-100 text-green-700' },
   'Cliente de Porta': { cor: 'bg-yellow-100 text-yellow-700' },
   WhatsApp: { cor: 'bg-green-100 text-green-800' },
   Ligação: { cor: 'bg-gray-100 text-gray-700' },
+  Novo: { cor: 'bg-teal-mid/15 text-teal-deep' },
   Outro: { cor: 'bg-fog text-slate' },
 }
 

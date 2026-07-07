@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info } from 'lucide-react'
+import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info, Monitor } from 'lucide-react'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 
@@ -473,7 +473,122 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
     )
   }
 
-  // ── Fase 4: Formulário (manual ou pré-preenchido pela IA) ─────────────────
+  // ── Fase 4: Escolha do Modo de Cadastro ───────────────────────────────────────────────
+  if (fase === 'modo') {
+    return (
+      <div className="animate-in fade-in slide-in-from-bottom-2">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-serif text-xl font-semibold text-foreground">Como deseja cadastrar?</h2>
+          <button type="button" onClick={onClose} aria-label="Fechar" className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <X className="size-4" strokeWidth={1.5} />
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <button
+            type="button"
+            onClick={() => setFase('formulario_fast')}
+            className="flex flex-col items-start gap-2 rounded-2xl border border-border bg-card p-5 text-left transition-brand active:scale-[0.98] active:bg-muted"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-teal-mid/10 text-teal-deep">
+                <Zap className="size-5" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground">Cadastro Fast (No App)</h3>
+                <p className="text-xs text-muted-foreground">Campos essenciais para colocar o imóvel no ar agora.</p>
+              </div>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              alert('Link seguro copiado! Abra no seu PC para finalizar o cadastro completo com mais conforto.')
+              onClose()
+            }}
+            className="flex flex-col items-start gap-2 rounded-2xl border border-border bg-card p-5 text-left transition-brand active:scale-[0.98] active:bg-muted"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Monitor className="size-5" strokeWidth={1.5} />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground">Finalizar no Computador</h3>
+                <p className="text-xs text-muted-foreground">Copie o link seguro e preencha todos os detalhes na tela grande.</p>
+              </div>
+            </div>
+          </button>
+          
+          <button
+            type="button"
+            onClick={() => setFase('formulario')}
+            className="mt-2 text-center text-sm font-semibold text-muted-foreground underline"
+          >
+            Prefiro fazer o completo aqui pelo celular
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Fase 5: Formulário Fast ───────────────────────────────────────────────
+  if (fase === 'formulario_fast') {
+    return (
+      <div className="animate-in fade-in slide-in-from-bottom-2 pb-6">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-serif text-xl font-semibold text-foreground">Cadastro Fast</h2>
+          <button type="button" onClick={onClose} aria-label="Fechar" className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <X className="size-4" strokeWidth={1.5} />
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título do imóvel *</label>
+            <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} placeholder="Ex: Apartamento Jardins 3 quartos" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Valor (R$)</label>
+              <input type="text" value={valor} onChange={(e) => setValor(e.target.value)} placeholder="0,00" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Útil (m²)</label>
+              <input type="number" value={area} onChange={(e) => setArea(e.target.value)} placeholder="Ex: 85" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            <div>
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Dorms</label>
+              <input type="number" value={quartos} onChange={(e) => setQuartos(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Suítes</label>
+              <input type="number" value={suites} onChange={(e) => setSuites(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Vagas</label>
+              <input type="number" value={vagas} onChange={(e) => setVagas(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
+          >
+            <CheckCircle2 className="size-5" />
+            Salvar e Publicar
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Fase 6: Formulário Completo (manual ou pré-preenchido pela IA) ────────
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
