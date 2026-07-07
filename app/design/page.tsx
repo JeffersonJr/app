@@ -10,9 +10,9 @@ export default function DesignSystemPage() {
       
       {/* Intro */}
       <section>
-        <h1 className="text-4xl font-extrabold text-ink mb-4">Evolves UI</h1>
+        <h1 className="text-4xl font-extrabold text-ink mb-4">evolves UI</h1>
         <p className="text-lg text-slate leading-relaxed">
-          Bem-vindo ao sistema de design da Evolves. Este documento serve como fonte da verdade para cores, 
+          Bem-vindo ao sistema de design da evolves. Este documento serve como fonte da verdade para cores, 
           tipografia, componentes e padrões de código utilizados no CRM Imobiliário. Use os componentes e classes 
           abaixo para manter a consistência visual em toda a aplicação.
         </p>
@@ -20,15 +20,15 @@ export default function DesignSystemPage() {
 
       {/* Logo e Ícones */}
       <section id="logo-icones" className="scroll-mt-8">
-        <SectionHeader title="Logo & Ícones" description="Logomarca da Evolves e a biblioteca padrão de ícones." />
+        <SectionHeader title="Logo & Ícones" description="Logomarca da evolves e a biblioteca padrão de ícones." />
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <ComponentShowcase 
-            title="Logotipo Evolves" 
-            code={`<span className="text-xl font-bold text-ink">\\n  Evolves<span className="text-teal-mid">.</span>\\n</span>`}
+            title="Logotipo evolves" 
+            code={`<span className="text-xl font-bold text-ink">\\n  evolves<span className="text-teal-mid">.</span>\\n</span>`}
           >
             <span className="text-4xl font-bold text-ink">
-              Evolves<span className="text-teal-mid">.</span>
+              evolves<span className="text-teal-mid">.</span>
             </span>
           </ComponentShowcase>
           
@@ -50,7 +50,7 @@ export default function DesignSystemPage() {
 
       {/* Cores */}
       <section id="cores" className="scroll-mt-8">
-        <SectionHeader title="Cores" description="Nossa paleta baseada no manual de marca (Manual Evolves 03)." />
+        <SectionHeader title="Cores" description="Nossa paleta baseada no manual de marca (Manual evolves 03)." />
         
         <div className="space-y-8">
           <div>
@@ -93,7 +93,7 @@ export default function DesignSystemPage() {
                </div>
                <div>
                  <p className="text-xs text-slate mb-1">Body - text-base text-slate</p>
-                 <p className="text-base text-slate">O CRM imobiliário da Evolves no seu bolso. Aumente suas conversões com funis inteligentes e método FORD.</p>
+                 <p className="text-base text-slate">O CRM imobiliário da evolves no seu bolso. Aumente suas conversões com funis inteligentes e método FORD.</p>
                </div>
                <div>
                  <p className="text-xs text-slate mb-1">Small - text-sm font-medium</p>
@@ -375,7 +375,7 @@ export default function DesignSystemPage() {
       <div className="pt-24 border-t-4 border-fog">
         <h1 className="text-4xl font-extrabold text-teal-deep mb-4">Wiki do Aplicativo</h1>
         <p className="text-lg text-slate leading-relaxed mb-12">
-          Esta seção é a documentação viva (Wiki) de todo o funcionamento da aplicação. Aqui você encontra as regras de negócio, o fluxo de cada tela, e explicações detalhadas sobre como o CRM Evolves opera nos bastidores.
+          Esta seção é a documentação viva (Wiki) de todo o funcionamento da aplicação. Aqui você encontra as regras de negócio, o fluxo de cada tela, e explicações detalhadas sobre como o CRM evolves opera nos bastidores.
         </p>
 
         {/* Visão Geral */}
@@ -425,7 +425,7 @@ export default function DesignSystemPage() {
           <SectionHeader title="Relacionamento (Clientes & FORD 4Q)" description="Cadastro, histórico e perfis psicológicos de leads." />
           <div className="space-y-6 text-slate leading-relaxed bg-white p-6 md:p-8 rounded-2xl border border-border shadow-sm min-w-0">
             <h3 className="text-lg font-bold text-ink">O que é?</h3>
-            <p>A tela de Clientes (acessada pelo ícone de usuários). É a central do CRM (Customer Relationship Management) da Evolves, onde reside o histórico completo de interação.</p>
+            <p>A tela de Clientes (acessada pelo ícone de usuários). É a central do CRM (Customer Relationship Management) da evolves, onde reside o histórico completo de interação.</p>
 
             <h3 className="text-lg font-bold text-ink mt-8">O que faz?</h3>
             <ul className="list-disc list-inside space-y-2">
@@ -470,7 +470,7 @@ export default function DesignSystemPage() {
           <SectionHeader title="Inteligência Artificial (Albert)" description="Automação, Upsell e IA Generativa na rotina." />
           <div className="space-y-6 text-slate leading-relaxed bg-white p-6 md:p-8 rounded-2xl border border-border shadow-sm min-w-0">
             <h3 className="text-lg font-bold text-ink">O que é?</h3>
-            <p>O "Albert" é a IA embarcada dentro do sistema Evolves. Ele ajuda a automatizar o trabalho braçal e trazer insights dos dados do CRM.</p>
+            <p>O "Albert" é a IA embarcada dentro do sistema evolves. Ele ajuda a automatizar o trabalho braçal e trazer insights dos dados do CRM.</p>
 
             <h3 className="text-lg font-bold text-ink mt-8">O que faz?</h3>
             <ul className="list-disc list-inside space-y-2">

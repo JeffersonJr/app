@@ -29,7 +29,7 @@ export default function RecuperarSenhaPage() {
         </Link>
         <div>
           <h1 className="font-serif text-xl font-semibold text-primary-foreground">Recuperar senha</h1>
-          <p className="text-sm text-teal-light">Evolves CRM</p>
+          <p className="text-sm text-teal-light">evolves CRM</p>
         </div>
       </div>
 

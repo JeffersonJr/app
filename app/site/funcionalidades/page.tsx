@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Sparkles, Calendar, HeartHandshake, Database, ArrowRight, Bot, MessageCircle, Home, Target, MapPin, Users, Briefcase, Plane, Star } from 'lucide-react'
 
 export const metadata = {
-  title: 'Funcionalidades | Evolves CRM',
+  title: 'Funcionalidades | evolves CRM',
 }
 
 export default function FeaturesPage() {
@@ -11,7 +11,7 @@ export default function FeaturesPage() {
       {/* Header */}
       <section className="pt-24 pb-12 bg-white border-b border-border/50 text-center px-6">
         <h1 className="text-4xl md:text-5xl font-extrabold text-ink mb-6">
-          O poder do <span className="text-teal-deep">Evolves.</span>
+          O poder do <span className="text-teal-deep">evolves.</span>
         </h1>
         <p className="text-slate max-w-2xl mx-auto text-lg">
           Conheça cada detalhe dos módulos desenhados para otimizar sua rotina e aproximar você dos seus clientes.
@@ -27,7 +27,7 @@ export default function FeaturesPage() {
             </div>
             <h2 className="text-3xl font-bold text-ink mb-4">Pipeline Fluido e Dinâmico</h2>
             <p className="text-slate text-lg mb-6">
-              O núcleo do Evolves. Crie colunas personalizadas e mova seus leads entre elas com um simples arrastar de dedos (swipe). O visual em cards apresenta as informações de contato rápido, a etapa atual e se há alguma atividade pendente, tudo sem precisar abrir o cliente.
+              O núcleo do evolves. Crie colunas personalizadas e mova seus leads entre elas com um simples arrastar de dedos (swipe). O visual em cards apresenta as informações de contato rápido, a etapa atual e se há alguma atividade pendente, tudo sem precisar abrir o cliente.
             </p>
             <ul className="space-y-3 text-slate">
               <li className="flex gap-2"><Database className="w-5 h-5 text-teal-mid shrink-0" /> Gestão de Funil por tipo de imóvel (Locação vs Venda).</li>

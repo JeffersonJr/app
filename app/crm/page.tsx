@@ -51,16 +51,16 @@ export default function Page() {
       {/* Container principal */}
       <div className="relative flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background sm:border-x sm:border-border">
 
-        {/* Header global com logo Evolves e notificações */}
+        {/* Header global com logo evolves e notificações */}
         <div className="glass-header flex items-center justify-between px-5 py-3">
-        {/* Logo Evolves */}
+          {/* Logo evolves */}
           <button type="button" onClick={() => setTab('hoje')} className="flex items-center gap-2 transition-brand active:opacity-70 text-left">
-              <img
-                src="/logo-evolves.svg"
-                alt="Evolves"
-                className="size-8 object-contain"
-              />
-            <span className="font-serif text-base font-semibold text-foreground">Evolves</span>
+            <img
+              src="/logo-evolves.svg"
+              alt="evolves"
+              className="size-8 object-contain"
+            />
+            <span className="font-serif text-base font-semibold text-foreground">evolves</span>
           </button>
 
           <div className="flex items-center gap-2">
@@ -75,7 +75,7 @@ export default function Page() {
               {/* Badge de não lidas */}
               <span className="absolute right-2 top-2 size-2 rounded-full bg-amber" aria-hidden="true" />
             </button>
-            
+
             {/* Botão de Perfil */}
             <button
               onClick={() => setTab('perfil')}
@@ -99,8 +99,8 @@ export default function Page() {
             />
           )}
           {tab === 'negocios' && (
-            <ScreenNegocios 
-              onVerCliente={abrirClientePorLead} 
+            <ScreenNegocios
+              onVerCliente={abrirClientePorLead}
               abrirAtendimentoId={atendimentoAbertoId}
               onAtendimentoAberto={() => setAtendimentoAbertoId(null)}
             />
@@ -130,9 +130,9 @@ export default function Page() {
 
         {quickAddAberto && <QuickAddSheet onClose={() => setQuickAddAberto(false)} onAtividadeCriada={abrirAtendimentoPorId} defaultAcao={quickAddAcao} />}
         {notificacoesAbertas && (
-          <NotificacoesPanel 
-            onClose={() => setNotificacoesAbertas(false)} 
-            onVerAtendimento={abrirAtendimentoPorId} 
+          <NotificacoesPanel
+            onClose={() => setNotificacoesAbertas(false)}
+            onVerAtendimento={abrirAtendimentoPorId}
           />
         )}
       </div>

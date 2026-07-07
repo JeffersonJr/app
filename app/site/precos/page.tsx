@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Check, X, Sparkles } from 'lucide-react'
 
 export const metadata = {
-  title: 'Planos e Preços | Evolves CRM',
+  title: 'Planos e Preços | evolves CRM',
 }
 
 export default function PricingPage() {

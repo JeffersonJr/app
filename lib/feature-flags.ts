@@ -1,5 +1,5 @@
 /**
- * Feature flags do sistema Evolves
+ * Feature flags do sistema evolves
  * 
  * temIA: controla acesso às funcionalidades de Inteligência Artificial:
  *   - Cadastro de imóveis via análise de fotos (IA)

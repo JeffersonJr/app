@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import '../globals.css'
 
 export const metadata: Metadata = {
-  title: 'Evolves — Acesso',
-  description: 'Faça login ou crie sua conta no CRM Imobiliário Evolves.',
+  title: 'evolves — Acesso',
+  description: 'Faça login ou crie sua conta no CRM Imobiliário evolves.',
 }
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

@@ -118,7 +118,7 @@ export function ScreenPerfil({
                   <Smartphone className="size-5" strokeWidth={1.5} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-semibold text-[15px] text-foreground">Evolves CRM</span>
+                  <span className="font-semibold text-[15px] text-foreground">evolves CRM</span>
                   <span className="text-xs text-muted-foreground">Versão 1.0.4 (Build 402)</span>
                 </div>
               </div>
@@ -166,12 +166,7 @@ export function ScreenPerfil({
 
       {/* Desenvolvido Por */}
       <div className="flex flex-col items-center justify-center mt-2 mb-4 gap-1 text-xs text-muted-foreground">
-        <p>Desenvolvido por</p>
-        <div className="flex items-center gap-1 font-medium">
-          <a href="https://evolves.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Evolves</a>
-          <span>&</span>
-          <a href="https://evolves.site" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Evolves</a>
-        </div>
+        <p>Desenvolvido por <a href="https://evolves.site" target="_blank" rel="noopener noreferrer" className="font-medium hover:text-primary transition-colors">evolves tecnologia</a></p>
       </div>
 
       {/* Security Sheet */}
