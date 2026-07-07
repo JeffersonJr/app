@@ -53,17 +53,17 @@
 :root {
   color-scheme: light;
 
-  /* Paleta Microsistec */
-  --teal-deep: #2b5250;
-  --teal-mid: #5aa6a6;
-  --teal-light: #7cc1c1;
-  --teal-shadow: #1b2a2a;
-  --amber: #e8a14b;
-  --cream: #f7f3ea;
-  --snow: #fafbfb;
-  --fog: #e8eded;
-  --slate: #6b7878;
-  --ink: #1a1a1a;
+  /* Paleta Evolves */
+  --teal-deep: #3c91bb;
+  --teal-mid: #17cba2;
+  --teal-light: #8dcce8;
+  --teal-shadow: #215c7a;
+  --amber: #f59e0b;
+  --cream: #FDFBF7;
+  --snow: #FAFAFA;
+  --fog: #E5E5E5;
+  --slate: #737373;
+  --ink: #171717;
 
   /* Mapeamento semântico */
   --background: var(--snow);

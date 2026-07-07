@@ -56,21 +56,21 @@ export default function DesignSystemPage() {
           <div>
             <h3 className="text-sm font-bold text-slate uppercase tracking-wider mb-4">Cores Primárias da Marca</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <ColorCard bgClass="bg-teal-deep" textClass="text-white" name="Teal Deep" hex="#2b5250" twClass="bg-teal-deep" />
-              <ColorCard bgClass="bg-teal-mid" textClass="text-white" name="Teal Mid" hex="#5aa6a6" twClass="bg-teal-mid" />
-              <ColorCard bgClass="bg-teal-light" textClass="text-ink" name="Teal Light" hex="#7cc1c1" twClass="bg-teal-light" />
-              <ColorCard bgClass="bg-amber" textClass="text-ink" name="Amber" hex="#e8a14b" twClass="bg-amber" />
+              <ColorCard bgClass="bg-teal-deep" textClass="text-white" name="Primary" hex="#3c91bb" twClass="bg-teal-deep" />
+              <ColorCard bgClass="bg-teal-mid" textClass="text-white" name="Secondary" hex="#17cba2" twClass="bg-teal-mid" />
+              <ColorCard bgClass="bg-teal-light" textClass="text-ink" name="Primary Light" hex="#8dcce8" twClass="bg-teal-light" />
+              <ColorCard bgClass="bg-amber" textClass="text-ink" name="Accent" hex="#f59e0b" twClass="bg-amber" />
             </div>
           </div>
           
           <div>
             <h3 className="text-sm font-bold text-slate uppercase tracking-wider mb-4">Cores Neutras e Backgrounds</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <ColorCard bgClass="bg-ink" textClass="text-white" name="Ink (Texto Principal)" hex="#1a1a1a" twClass="bg-ink" />
-              <ColorCard bgClass="bg-slate" textClass="text-white" name="Slate (Texto Sec.)" hex="#6b7878" twClass="bg-slate" />
-              <ColorCard bgClass="bg-fog" textClass="text-ink" name="Fog (Bordas/Inputs)" hex="#e8eded" twClass="bg-fog border border-border" />
-              <ColorCard bgClass="bg-snow" textClass="text-ink" name="Snow (Fundo App)" hex="#fafbfb" twClass="bg-snow border border-border" />
-              <ColorCard bgClass="bg-cream" textClass="text-ink" name="Cream (Fundo Sec.)" hex="#f7f3ea" twClass="bg-cream border border-border" />
+              <ColorCard bgClass="bg-ink" textClass="text-white" name="Ink (Texto Principal)" hex="#171717" twClass="bg-ink" />
+              <ColorCard bgClass="bg-slate" textClass="text-white" name="Slate (Texto Sec.)" hex="#737373" twClass="bg-slate" />
+              <ColorCard bgClass="bg-fog" textClass="text-ink" name="Fog (Bordas/Inputs)" hex="#E5E5E5" twClass="bg-fog border border-border" />
+              <ColorCard bgClass="bg-snow" textClass="text-ink" name="Snow (Fundo App)" hex="#FAFAFA" twClass="bg-snow border border-border" />
+              <ColorCard bgClass="bg-cream" textClass="text-ink" name="Cream (Fundo Sec.)" hex="#FDFBF7" twClass="bg-cream border border-border" />
             </div>
           </div>
         </div>
