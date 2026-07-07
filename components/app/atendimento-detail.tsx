@@ -453,35 +453,47 @@ export function AtendimentoDetail({
               </button>
             </div>
 
-            {/* Atividades Pendentes */}
-            {localAtividades.some(a => !a.concluida) && (
+            {/* Atividades */}
+            {localAtividades.length > 0 && (
               <div className="mb-6">
                 <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                   <Calendar className="size-3.5" />
-                  Atividades Pendentes
+                  Atividades
                 </h3>
                 <ul className="flex flex-col gap-2">
                   {localAtividades
-                    .filter((a) => !a.concluida)
+                    .slice()
+                    .sort((a, b) => {
+                      if (a.concluida !== b.concluida) return a.concluida ? 1 : -1
+                      return a.hora.localeCompare(b.hora)
+                    })
                     .map((atv) => (
                       <li key={atv.id}>
                         <button
                           type="button"
                           onClick={() => setAtividadeSelecionada(atv)}
-                          className="w-full text-left flex items-center gap-3 rounded-[1.25rem] p-3.5 transition-brand relative overflow-hidden border-transparent bg-card shadow-soft hover:bg-muted/50 border border-border/50"
+                          className={`w-full text-left flex items-center gap-3 rounded-[1.25rem] p-3.5 transition-brand relative overflow-hidden ${
+                            atv.concluida
+                              ? 'border border-border bg-card/40 opacity-70'
+                              : 'border-transparent bg-card shadow-soft hover:bg-muted/50 border border-border/50'
+                          }`}
                         >
-                          <div className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${(tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.cor || 'bg-muted text-muted-foreground'}`}>
-                            <span className="text-lg">{(tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.emoji || '📋'}</span>
+                          <div className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${atv.concluida ? 'bg-muted text-muted-foreground' : ((tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.cor || 'bg-muted text-muted-foreground')}`}>
+                            {atv.concluida ? (
+                              <CheckCircle2 className="size-5" strokeWidth={1.5} />
+                            ) : (
+                              <span className="text-lg">{(tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.emoji || '📋'}</span>
+                            )}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-foreground">
+                            <p className={`truncate text-sm font-semibold ${atv.concluida ? 'text-muted-foreground line-through' : 'text-foreground'}`}>
                               {atv.titulo}
                             </p>
                             <p className="text-xs text-muted-foreground mt-0.5">
                               {atv.hora}
                             </p>
                           </div>
-                          <ChevronRight className="size-4 text-muted-foreground opacity-50" />
+                          <ChevronRight className={`size-4 ${atv.concluida ? 'text-muted-foreground/30' : 'text-muted-foreground opacity-50'}`} />
                         </button>
                       </li>
                     ))}

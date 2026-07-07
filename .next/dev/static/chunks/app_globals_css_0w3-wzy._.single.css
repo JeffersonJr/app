@@ -2686,6 +2686,16 @@
     color: var(--muted-foreground);
   }
 
+  .text-muted-foreground\/30 {
+    color: var(--muted-foreground);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .text-muted-foreground\/30 {
+      color: color-mix(in oklab, var(--muted-foreground) 30%, transparent);
+    }
+  }
+
   .text-muted-foreground\/40 {
     color: var(--muted-foreground);
   }
