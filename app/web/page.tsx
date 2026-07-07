@@ -6,6 +6,7 @@ import { ScreenImoveis } from '@/components/app/screen-imoveis'
 import { ScreenNegocios } from '@/components/app/screen-negocios'
 import { ScreenClientes } from '@/components/app/screen-clientes'
 import { ScreenPerfil } from '@/components/app/screen-perfil'
+import { NotificacoesPanel } from '@/components/app/notificacoes-panel'
 import { LayoutDashboard, Users, Home, Settings, PieChart, DollarSign } from 'lucide-react'
 import { BRAND } from '@/lib/branding'
 import Link from 'next/link'
@@ -103,13 +104,13 @@ export default function WebSystemPage() {
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <button className="relative p-2 rounded-full border border-border text-foreground hover:bg-muted transition-colors">
+                <button onClick={() => setNotificacoesAbertas(true)} className="relative p-2 rounded-full border border-border text-foreground hover:bg-muted transition-colors">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                   </svg>
                   <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-amber" />
                 </button>
-                <div className="flex items-center gap-2">
+                <button onClick={() => setActiveTab('perfil')} className="flex items-center gap-2 text-left hover:opacity-80 transition-opacity">
                   <div className="text-right hidden lg:block">
                     <p className="text-sm font-semibold text-foreground leading-tight">Jefferson Costa</p>
                     <p className="text-[10px] text-muted-foreground">Corretor · SP</p>
@@ -117,7 +118,7 @@ export default function WebSystemPage() {
                   <div className="size-10 rounded-full bg-primary flex items-center justify-center text-white font-semibold">
                     JC
                   </div>
-                </div>
+                </button>
               </div>
             </header>
 
@@ -127,9 +128,13 @@ export default function WebSystemPage() {
               {activeTab === 'kanban' && <ScreenNegocios />}
               {activeTab === 'clientes' && <ScreenClientes onNotificacoes={() => setNotificacoesAbertas(true)} />}
               {activeTab === 'imoveis' && <ScreenImoveis />}
-              {activeTab === 'perfil' && <ScreenPerfil />}
+              {activeTab === 'perfil' && <ScreenPerfil onNotificacoes={() => setNotificacoesAbertas(true)} />}
             </div>
             
+            <NotificacoesPanel 
+              aberta={notificacoesAbertas} 
+              onClose={() => setNotificacoesAbertas(false)} 
+            />
           </div>
         </div>
       </main>
