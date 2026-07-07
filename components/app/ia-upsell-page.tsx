@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Bot, Brain, Camera, CheckCircle2, MessageCircle, Sparkles, Trophy, X, Zap, Loader2 } from 'lucide-react'
+import { Bot, Brain, Camera, CheckCircle2, MessageCircle, Sparkles, Trophy, X, Zap, Loader2, Check, ArrowRight } from 'lucide-react'
+import { createPortal } from 'react-dom'
 
 const BENEFICIOS = [
   {
@@ -71,7 +72,7 @@ export function IAUpsellPage({ onClose, onSuccess, origem }: { onClose: () => vo
     }, 1500)
   }
 
-  return (
+  const content = (
     <div className="fixed inset-0 z-[100] flex flex-col bg-background">
       <div className="flex-1 overflow-y-auto pb-6">
       {/* Hero */}
@@ -277,4 +278,9 @@ export function IAUpsellPage({ onClose, onSuccess, origem }: { onClose: () => vo
       </div>
     </div>
   )
+
+  if (typeof document !== 'undefined') {
+    return createPortal(content, document.body)
+  }
+  return content
 }

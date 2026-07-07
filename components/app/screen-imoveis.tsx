@@ -19,7 +19,9 @@ import {
   Bot,
   Map,
   CheckCircle2,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Plus,
+  ArrowUpDown
 } from 'lucide-react'
 import { imoveis, type Imovel } from '@/lib/app-data'
 import { FiltrosAvancadosImoveisSheet } from '@/components/app/filtros-avancados-imoveis-sheet'
@@ -32,7 +34,8 @@ const statusStyle: Record<Imovel['status'], string> = {
   Proposta: 'bg-teal-shadow/90 text-white',
 }
 
-export function ScreenImoveis() {
+export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
+  const [abaAtiva, setAbaAtiva] = useState<'imoveis' | 'empreendimentos'>('imoveis')
   const [filtro, setFiltro] = useState<(typeof filtros)[number]>('Todos')
   const [busca, setBusca] = useState('')
   const [selecionado, setSelecionado] = useState<Imovel | null>(null)
@@ -69,13 +72,37 @@ export function ScreenImoveis() {
     <div className="flex flex-col gap-4 px-5 pt-4 pb-28">
       <header className="glass-header -mx-5 px-5 pb-4 pt-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="font-serif text-2xl font-semibold text-foreground">Imóveis</h1>
-            <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              {lista.length} na carteira
-            </p>
+          <div className="flex gap-4">
+            <button
+              onClick={() => setAbaAtiva('imoveis')}
+              className={`font-serif text-2xl font-semibold transition-colors ${abaAtiva === 'imoveis' ? 'text-foreground' : 'text-muted-foreground'}`}
+            >
+              Imóveis
+            </button>
+            <button
+              onClick={() => setAbaAtiva('empreendimentos')}
+              className={`font-serif text-2xl font-semibold transition-colors ${abaAtiva === 'empreendimentos' ? 'text-foreground' : 'text-muted-foreground'}`}
+            >
+              Empreendimentos
+            </button>
           </div>
+          {onCaptar && (
+            <button
+              type="button"
+              onClick={onCaptar}
+              aria-label="Captar novo imóvel"
+              className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary transition-brand active:scale-95"
+            >
+              <Plus className="size-5" />
+            </button>
+          )}
         </div>
+        
+        {abaAtiva === 'imoveis' && (
+          <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            {lista.length} na carteira
+          </p>
+        )}
 
         {/* Busca e Filtros */}
         <div className="mt-4 flex gap-3">
@@ -106,6 +133,13 @@ export function ScreenImoveis() {
             {(filtroFinalidade !== 'Todas' || filtroStatus !== 'Todos') && (
               <span className="absolute -right-1 -top-1 flex size-3 items-center justify-center rounded-full bg-red-500 text-[8px] text-white ring-2 ring-background" />
             )}
+          </button>
+          <button
+            type="button"
+            className="flex size-12 items-center justify-center rounded-2xl border border-border bg-card shadow-sm text-foreground transition-brand active:scale-95"
+            aria-label="Mudar ordenação"
+          >
+            <ArrowUpDown className="size-5" strokeWidth={1.5} />
           </button>
         </div>
       </header>

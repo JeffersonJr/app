@@ -16,6 +16,7 @@ import { clientes, funil } from '@/lib/app-data'
 export default function Page() {
   const [tab, setTab] = useState<TabId>('hoje')
   const [quickAddAberto, setQuickAddAberto] = useState(false)
+  const [quickAddAcao, setQuickAddAcao] = useState<any>(null)
   const [clienteAbertoId, setClienteAbertoId] = useState<string | null>(null)
   const [atendimentoAbertoId, setAtendimentoAbertoId] = useState<string | null>(null)
   const [notificacoesAbertas, setNotificacoesAbertas] = useState(false)
@@ -105,7 +106,7 @@ export default function Page() {
             />
           )}
           {tab === 'atividades' && <ScreenAtividades />}
-          {tab === 'imoveis' && <ScreenImoveis />}
+          {tab === 'imoveis' && <ScreenImoveis onCaptar={() => { setQuickAddAcao('captar-imovel'); setQuickAddAberto(true); }} />}
           {tab === 'clientes' && (
             <ScreenClientes
               clienteAbertoId={clienteAbertoId}
@@ -124,10 +125,10 @@ export default function Page() {
         <TabBar
           active={tab}
           onChange={trocarTab}
-          onQuickAdd={() => setQuickAddAberto(true)}
+          onQuickAdd={() => { setQuickAddAcao(null); setQuickAddAberto(true); }}
         />
 
-        {quickAddAberto && <QuickAddSheet onClose={() => setQuickAddAberto(false)} onAtividadeCriada={abrirAtendimentoPorId} />}
+        {quickAddAberto && <QuickAddSheet onClose={() => setQuickAddAberto(false)} onAtividadeCriada={abrirAtendimentoPorId} defaultAcao={quickAddAcao} />}
         {notificacoesAbertas && (
           <NotificacoesPanel 
             onClose={() => setNotificacoesAbertas(false)} 

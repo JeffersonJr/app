@@ -276,7 +276,6 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
       onClose={() => setMostrarUpsell(false)} 
       onSuccess={() => {
         setMostrarUpsell(false)
-        featureFlags.temIA = true
         iniciarAnaliseIA()
       }}
       origem="imovel" 
@@ -317,11 +316,10 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
           onChange={handleFotos}
         />
 
-        {fotosPreview.length === 0 ? (
+        {fotos.length === 0 ? (
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex w-full flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-primary/30 bg-primary/5 py-10 transition-brand active:scale-[0.98]"
             className="flex h-[320px] w-full flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border bg-card/50 transition-colors"
           >
             <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -563,7 +561,7 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
         <div className="flex flex-col gap-3">
           <button
             type="button"
-            onClick={aplicarResultadoIA}
+            onClick={() => { aplicarResultadoIA(resultado); setFase('formulario') }}
             className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
           >
             <CheckCircle2 className="size-4" strokeWidth={2} />
@@ -742,17 +740,6 @@ export function FormCaptarImovel({ onClose }: { onClose: () => void }) {
         </button>
       </div>
 
-      {/* Preview das fotos (se houver) */}
-      {fotosPreview.length > 0 && (
-        <div className="mb-4 flex gap-2 overflow-x-auto scrollbar-none -mx-0">
-          {fotosPreview.map((src, i) => (
-            <div key={i} className="relative size-16 shrink-0 overflow-hidden rounded-xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
-            </div>
-          ))}
-        </div>
-      )}
 
       {isIaGerado && (
         <div className="mb-6 flex flex-col gap-3 rounded-2xl bg-teal-mid/10 p-4 border border-teal-mid/20">
