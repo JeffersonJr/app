@@ -106,8 +106,8 @@ var __TURBOPACK__imported__module__$5b$next$5d2f$internal$2f$font$2f$google$2f$j
 ;
 ;
 const metadata = {
-    title: 'Microsistec — CRM Imobiliário',
-    description: 'O CRM imobiliário da Microsistec no seu bolso. Funil de negócios, imóveis e clientes com precisão de engenheiro.',
+    title: 'Evolves — CRM Imobiliário',
+    description: 'O CRM imobiliário da Evolves no seu bolso. Funil de negócios, imóveis e clientes com precisão de engenheiro.',
     generator: 'v0.app'
 };
 const viewport = {

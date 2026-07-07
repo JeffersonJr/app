@@ -14,9 +14,9 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Microsistec — CRM Imobiliário',
+  title: 'Evolves — CRM Imobiliário',
   description:
-    'O CRM imobiliário da Microsistec no seu bolso. Funil de negócios, imóveis e clientes com precisão de engenheiro.',
+    'O CRM imobiliário da Evolves no seu bolso. Funil de negócios, imóveis e clientes com precisão de engenheiro.',
   generator: 'v0.app',
 }
 

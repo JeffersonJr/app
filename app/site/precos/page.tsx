@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Check, X, Sparkles } from 'lucide-react'
 
 export const metadata = {
-  title: 'Planos e Preços | Microsistec CRM',
+  title: 'Planos e Preços | Evolves CRM',
 }
 
 export default function PricingPage() {
@@ -77,7 +77,7 @@ export default function PricingPage() {
               <span className="text-slate">/mês</span>
             </div>
             
-            <Link href="mailto:contato@microsistec.com.br" className="block w-full text-center bg-white border border-border hover:bg-fog text-ink font-bold py-3 rounded-xl transition-colors mb-8">
+            <Link href="mailto:contato@evolves.com.br" className="block w-full text-center bg-white border border-border hover:bg-fog text-ink font-bold py-3 rounded-xl transition-colors mb-8">
               Falar com Consultor
             </Link>
 

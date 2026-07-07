@@ -102,7 +102,7 @@ export function IAUpsellPage({ onClose, onSuccess, origem }: { onClose: () => vo
           <span className="absolute inset-0 animate-ping rounded-3xl bg-teal-mid/30" />
         </div>
 
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-teal-light">Microsistec IA</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-teal-light">Evolves IA</p>
         <h1 className="mt-2 font-serif text-3xl font-semibold leading-tight text-primary-foreground text-balance">
           Venda mais com<br />Inteligência Artificial
         </h1>
@@ -258,12 +258,12 @@ export function IAUpsellPage({ onClose, onSuccess, origem }: { onClose: () => vo
                 ) : (
                   <>
                     <Zap className="size-4" strokeWidth={2} />
-                    Contratar Microsistec IA
+                    Contratar Evolves IA
                   </>
                 )}
               </button>
               <a
-                href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20falar%20com%20um%20consultor%20sobre%20a%20Microsistec%20IA."
+                href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20falar%20com%20um%20consultor%20sobre%20a%20Evolves%20IA."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground transition-brand active:scale-[0.98]"

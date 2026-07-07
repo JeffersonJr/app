@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Palette, Type, LayoutTemplate, Zap, Box, Code2, ArrowLeft } from 'lucide-react'
 
 export const metadata = {
-  title: 'Microsistec Design System',
+  title: 'Evolves Design System',
 }
 
 export default function DesignSystemLayout({ children }: { children: React.ReactNode }) {

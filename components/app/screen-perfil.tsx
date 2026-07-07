@@ -90,7 +90,7 @@ export function ScreenPerfil({
             </button>
 
             <a
-              href="https://suporte.microsistec.digital/pt-BR/"
+              href="https://suporte.evolves.digital/pt-BR/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex w-full items-center justify-between p-4 transition-brand active:bg-muted/50"
@@ -118,7 +118,7 @@ export function ScreenPerfil({
                   <Smartphone className="size-5" strokeWidth={1.5} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-semibold text-[15px] text-foreground">Microsistec CRM</span>
+                  <span className="font-semibold text-[15px] text-foreground">Evolves CRM</span>
                   <span className="text-xs text-muted-foreground">Versão 1.0.4 (Build 402)</span>
                 </div>
               </div>
@@ -168,7 +168,7 @@ export function ScreenPerfil({
       <div className="flex flex-col items-center justify-center mt-2 mb-4 gap-1 text-xs text-muted-foreground">
         <p>Desenvolvido por</p>
         <div className="flex items-center gap-1 font-medium">
-          <a href="https://microsistec.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Microsistec</a>
+          <a href="https://evolves.com.br" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Evolves</a>
           <span>&</span>
           <a href="https://evolves.site" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Evolves</a>
         </div>

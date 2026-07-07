@@ -25,8 +25,8 @@ export default function LoginPage() {
       {/* Banner hero */}
       <div className="flex flex-col items-center justify-center bg-primary px-8 pb-10 pt-16">
       {/* Logo */}
-        <img src="/logo.svg" alt="Microsistec" className="size-20 object-contain drop-shadow-md" />
-        <h1 className="mt-4 font-serif text-2xl font-semibold text-primary-foreground">Microsistec CRM</h1>
+        <img src="/logo-evolves.svg" alt="Evolves" className="size-20 object-contain drop-shadow-md" />
+        <h1 className="mt-4 font-serif text-2xl font-semibold text-primary-foreground">Evolves CRM</h1>
         <p className="mt-1 text-sm text-teal-light">O CRM imobiliário no seu bolso</p>
       </div>
 

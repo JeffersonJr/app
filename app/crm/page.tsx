@@ -51,16 +51,16 @@ export default function Page() {
       {/* Container principal */}
       <div className="relative flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background sm:border-x sm:border-border">
 
-        {/* Header global com logo Microsistec e notificações */}
+        {/* Header global com logo Evolves e notificações */}
         <div className="glass-header flex items-center justify-between px-5 py-3">
-        {/* Logo Microsistec */}
+        {/* Logo Evolves */}
           <button type="button" onClick={() => setTab('hoje')} className="flex items-center gap-2 transition-brand active:opacity-70 text-left">
               <img
-                src="/logo.svg"
-                alt="Microsistec"
+                src="/logo-evolves.svg"
+                alt="Evolves"
                 className="size-8 object-contain"
               />
-            <span className="font-serif text-base font-semibold text-foreground">Microsistec</span>
+            <span className="font-serif text-base font-semibold text-foreground">Evolves</span>
           </button>
 
           <div className="flex items-center gap-2">

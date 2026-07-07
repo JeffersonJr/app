@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { LayoutDashboard, Globe, Palette, ArrowRight } from 'lucide-react'
 
 export const metadata = {
-  title: 'Microsistec - Central de Acesso',
+  title: 'Evolves - Central de Acesso',
 }
 
 export default function HubPage() {
@@ -10,7 +10,7 @@ export default function HubPage() {
     <div className="min-h-screen bg-snow flex flex-col items-center justify-center p-6 font-sans">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-extrabold text-ink mb-4">
-          Bem-vindo à <span className="text-teal-deep">Microsistec.</span>
+          Bem-vindo à <span className="text-teal-deep">Evolves.</span>
         </h1>
         <p className="text-slate text-lg">
           Selecione o ambiente que deseja acessar.
