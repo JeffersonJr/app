@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Bell, ChevronRight, HelpCircle, LogOut, ShieldCheck, Target, X, Lock, KeyRound, Smartphone, RefreshCcw } from 'lucide-react'
+import { BRAND } from '@/lib/branding'
 
 export function ScreenPerfil({
   onNotificacoes,
@@ -166,7 +167,7 @@ export function ScreenPerfil({
 
       {/* Desenvolvido Por */}
       <div className="flex flex-col items-center justify-center mt-2 mb-4 gap-1 text-xs text-muted-foreground">
-        <p>Desenvolvido por <a href="https://evolves.site" target="_blank" rel="noopener noreferrer" className="font-medium hover:text-primary transition-colors">evolves tecnologia</a></p>
+        <p>Desenvolvido por <a href={BRAND.companyUrl} target="_blank" rel="noopener noreferrer" className="font-medium hover:text-primary transition-colors">{BRAND.developedBy}</a></p>
       </div>
 
       {/* Security Sheet */}

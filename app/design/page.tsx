@@ -3,6 +3,7 @@
 import React from 'react'
 import { Copy, Check, CheckCircle2, Bot, Calendar, Home, ListFilter, MapPin, Search, User, MessageCircle } from 'lucide-react'
 import { TipoAtividade } from '@/lib/app-data'
+import { BRAND } from '@/lib/branding'
 
 export default function DesignSystemPage() {
   return (
@@ -24,12 +25,15 @@ export default function DesignSystemPage() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <ComponentShowcase 
-            title="Logotipo evolves" 
-            code={`<span className="text-xl font-bold text-ink">\\n  evolves<span className="text-teal-mid">.</span>\\n</span>`}
+            title={`Logotipo ${BRAND.name}`} 
+            code={`import { BRAND } from '@/lib/branding'\\n\\n<div className="flex items-center gap-2">\\n  <img src={BRAND.logoUrl} alt={BRAND.name} className="w-10 h-10 object-contain" />\\n  <span className="text-3xl font-bold text-ink">{BRAND.name}</span>\\n</div>`}
           >
-            <span className="text-4xl font-bold text-ink">
-              evolves<span className="text-teal-mid">.</span>
-            </span>
+            <div className="flex items-center gap-3">
+              <img src={BRAND.logoUrl} alt={BRAND.name} className="w-12 h-12 object-contain" />
+              <span className="text-4xl font-bold text-ink">
+                {BRAND.name}
+              </span>
+            </div>
           </ComponentShowcase>
           
           <ComponentShowcase 

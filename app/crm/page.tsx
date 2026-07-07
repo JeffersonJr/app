@@ -8,6 +8,7 @@ import { ScreenAtividades } from '@/components/app/screen-atividades'
 import { ScreenHoje } from '@/components/app/screen-hoje'
 import { ScreenImoveis } from '@/components/app/screen-imoveis'
 import { ScreenNegocios } from '@/components/app/screen-negocios'
+import { BRAND } from '@/lib/branding'
 import { TabBar, type TabId } from '@/components/app/tab-bar'
 import { NotificacoesPanel } from '@/components/app/notificacoes-panel'
 import { ScreenPerfil } from '@/components/app/screen-perfil'
@@ -53,14 +54,14 @@ export default function Page() {
 
         {/* Header global com logo evolves e notificações */}
         <div className="glass-header flex items-center justify-between px-5 py-3">
-          {/* Logo evolves */}
+          {/* Logo Brand */}
           <button type="button" onClick={() => setTab('hoje')} className="flex items-center gap-2 transition-brand active:opacity-70 text-left">
             <img
-              src="/logo-evolves.svg"
-              alt="evolves"
+              src={BRAND.logoUrl}
+              alt={BRAND.name}
               className="size-8 object-contain"
             />
-            <span className="font-serif text-base font-semibold text-foreground">evolves</span>
+            <span className="font-serif text-base font-semibold text-foreground">{BRAND.name}</span>
           </button>
 
           <div className="flex items-center gap-2">
