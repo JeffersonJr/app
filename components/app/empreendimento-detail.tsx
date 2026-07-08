@@ -269,17 +269,16 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
 
           </div>
         </div>
-      </div>
-
-      <div className="shrink-0 bg-background border-t border-border p-5 pb-[calc(5.25rem+env(safe-area-inset-bottom))] flex flex-col gap-3">
-        <button type="button" onClick={() => setMostrarAgendamento(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-xl shadow-teal-mid/30 transition-transform active:scale-[0.98]">
-          <Calendar className="size-5" strokeWidth={2.5} />
-          Visitar com cliente
-        </button>
-        <button type="button" onClick={() => setShowShareMenu(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-semibold shadow-sm transition-transform active:scale-[0.98]">
-          <Share2 className="size-5" strokeWidth={2.5} />
-          Compartilhar com Lead
-        </button>
+        <div className="shrink-0 bg-background border-t border-border p-5 pb-[calc(5.25rem+env(safe-area-inset-bottom))] flex flex-col gap-3">
+          <button type="button" onClick={() => setMostrarAgendamento(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-xl shadow-teal-mid/30 transition-transform active:scale-[0.98]">
+            <Calendar className="size-5" strokeWidth={2.5} />
+            Visitar com cliente
+          </button>
+          <button type="button" onClick={() => setShowShareMenu(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-semibold shadow-sm transition-transform active:scale-[0.98]">
+            <Share2 className="size-5" strokeWidth={2.5} />
+            Compartilhar com Lead
+          </button>
+        </div>
       </div>
 
       {/* Modal Agendamento */}
