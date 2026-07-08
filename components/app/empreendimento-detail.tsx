@@ -25,6 +25,7 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
   const [buscaLeadShare, setBuscaLeadShare] = useState('')
   const [mostrarNovoLead, setMostrarNovoLead] = useState(false)
   const [novoLeadDefaultName, setNovoLeadDefaultName] = useState('')
+  const [mostrarCronogramaCompleto, setMostrarCronogramaCompleto] = useState(false)
 
   function handleShare(leadName: string) {
     setShowShareMenu(false)
@@ -182,7 +183,7 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
               <div className="mb-8">
                 <h3 className="font-serif text-lg font-semibold text-foreground mb-3">Cronograma de Obras</h3>
                 <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4">
-                  {emp.cronograma.slice(0, 4).map((etapa, idx) => (
+                  {(mostrarCronogramaCompleto ? emp.cronograma : emp.cronograma.slice(0, 4)).map((etapa, idx) => (
                     <div key={idx} className="flex flex-col gap-1">
                       <div className="flex justify-between text-xs font-medium">
                         <span className="text-foreground">{etapa.etapa}</span>
@@ -193,8 +194,11 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
                       </div>
                     </div>
                   ))}
-                  {emp.cronograma.length > 4 && (
-                    <button type="button" className="mt-2 text-xs font-semibold text-primary text-center">Ver cronograma completo</button>
+                  {emp.cronograma.length > 4 && !mostrarCronogramaCompleto && (
+                    <button type="button" onClick={() => setMostrarCronogramaCompleto(true)} className="mt-2 text-xs font-semibold text-primary text-center hover:underline">Ver cronograma completo</button>
+                  )}
+                  {mostrarCronogramaCompleto && (
+                    <button type="button" onClick={() => setMostrarCronogramaCompleto(false)} className="mt-2 text-xs font-semibold text-primary text-center hover:underline">Ocultar cronograma completo</button>
                   )}
                 </div>
               </div>

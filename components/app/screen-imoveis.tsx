@@ -519,7 +519,6 @@ function ImovelDetail({
   const [buscaLeadShare, setBuscaLeadShare] = useState('')
   const [mostrarNovoLead, setMostrarNovoLead] = useState(false)
   const [novoLeadDefaultName, setNovoLeadDefaultName] = useState('')
-  const [mostrarMapa, setMostrarMapa] = useState(false)
   const [mostrarWhatsappModal, setMostrarWhatsappModal] = useState(false)
   const [mostrarAgendaVisita, setMostrarAgendaVisita] = useState(false)
   const [imovelParaVisita, setImovelParaVisita] = useState<Imovel | null>(null)
@@ -753,21 +752,10 @@ function ImovelDetail({
                   </button>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">{imovel.enderecoCompleto}</p>
-                {!mostrarMapa ? (
-                  <button
-                    type="button"
-                    onClick={() => setMostrarMapa(true)}
-                    className="relative aspect-video w-full overflow-hidden rounded-2xl bg-muted border border-border flex flex-col items-center justify-center text-muted-foreground shadow-soft transition-brand hover:opacity-90"
-                  >
-                    <Map className="size-8 opacity-40 mb-2 text-primary" strokeWidth={1.5} />
-                    <span className="text-xs font-semibold text-primary">Tocar para ver o mapa</span>
-                  </button>
-                ) : (
-                  <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border shadow-soft">
-                    {/* Imagem estática simulando um mapa do google maps */}
-                    <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(imovel.enderecoCompleto)}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${encodeURIComponent(imovel.enderecoCompleto)}&key=YOUR_API_KEY`} alt="Mapa" className="w-full h-full object-cover bg-muted" onError={(e) => { e.currentTarget.src = 'https://developers.google.com/static/maps/images/landing/hero_geocoding_api.png' }} />
-                  </div>
-                )}
+                <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border shadow-soft mt-1">
+                  {/* Imagem estática simulando um mapa do google maps */}
+                  <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(imovel.enderecoCompleto)}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${encodeURIComponent(imovel.enderecoCompleto)}&key=YOUR_API_KEY`} alt="Mapa" className="w-full h-full object-cover bg-muted" onError={(e) => { e.currentTarget.src = 'https://developers.google.com/static/maps/images/landing/hero_geocoding_api.png' }} />
+                </div>
               </div>
             )}
 
