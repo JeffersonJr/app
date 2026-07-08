@@ -232,6 +232,7 @@ export function ScreenHoje({
           ))}
         </ul>
       </section>
+      </div>
 
       {/* Atalhos de contato */}
       <section aria-label="Resumo da carteira" className="rounded-2xl bg-cream p-4">
