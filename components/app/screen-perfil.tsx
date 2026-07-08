@@ -22,7 +22,7 @@ export function ScreenPerfil({
     setTimeout(() => setMensagemAtualizacao(''), 3000)
   }
   return (
-    <div className="flex min-h-full flex-col bg-fog pb-40">
+    <div className="flex min-h-full flex-col bg-background pb-40">
       {/* Header Profile */}
       <div className="px-6 pt-10 pb-6 flex items-center gap-4">
         <div className="flex size-[4.5rem] shrink-0 items-center justify-center rounded-full bg-[#2B5250] text-2xl font-semibold text-white shadow-sm">
