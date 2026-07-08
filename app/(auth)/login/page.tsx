@@ -16,8 +16,8 @@ export default function LoginPage() {
     // Simulação de login
     await new Promise((r) => setTimeout(r, 1200))
     setCarregando(false)
-    // Em produção: redirecionar para /
-    window.location.href = '/'
+    // Em produção: redirecionar para /crm
+    window.location.href = '/crm'
   }
 
   return (
@@ -27,12 +27,12 @@ export default function LoginPage() {
         {/* Abstract shapes / gradients */}
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-teal-mid/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute top-1/4 -left-12 w-48 h-48 bg-teal-light/10 rounded-full blur-3xl" />
-        
+
         {/* Pattern overlay */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
       </div>
 
-      <div className="relative flex flex-col items-center pt-16 pb-8 px-6">
+      <div className="relative flex flex-col items-center pt-16 pb-8 px-6 w-full max-w-md mx-auto">
         <div className="flex items-center justify-center p-3 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-xl mb-6">
           <img src="/logo-evolves.svg" alt="evolves" className="size-12 object-contain" />
         </div>
@@ -46,7 +46,7 @@ export default function LoginPage() {
       </div>
 
       {/* Form Container */}
-      <div className="relative flex-1 flex flex-col px-6">
+      <div className="relative flex-1 flex flex-col px-6 w-full max-w-md mx-auto">
         <div className="bg-card rounded-[2rem] p-6 shadow-2xl border border-border/50 animate-in slide-in-from-bottom-10 fade-in duration-500">
           <div className="mb-6">
             <h2 className="font-serif text-2xl font-semibold text-foreground">Bem-vindo</h2>
@@ -111,7 +111,7 @@ export default function LoginPage() {
             >
               {/* Shine effect */}
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
-              
+
               {carregando ? (
                 <span className="flex items-center justify-center gap-2 relative z-10">
                   <svg className="size-5 animate-spin" viewBox="0 0 24 24" fill="none">
