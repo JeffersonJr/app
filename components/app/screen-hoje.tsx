@@ -75,15 +75,15 @@ export function ScreenHoje({
           </p>
         </button>
 
-        {/* Visitas hoje */}
+        {/* Atividades hoje */}
         <button
           onClick={() => document.getElementById('secao-agenda')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
           className="flex flex-col text-left rounded-3xl border border-border/60 bg-card p-5 shadow-soft transition-transform active:scale-95 hover:border-primary/30"
         >
-          <span className="mb-2 block text-[13px] font-medium text-muted-foreground">Visitas hoje</span>
-          <p className="font-sans text-[2.5rem] leading-none font-bold tracking-tight text-foreground mb-1.5">3</p>
+          <span className="mb-2 block text-[13px] font-medium text-muted-foreground">Atividades hoje</span>
+          <p className="font-sans text-[2.5rem] leading-none font-bold tracking-tight text-foreground mb-1.5">{atividadesHoje.length}</p>
           <p className="font-mono text-[11px] font-medium tracking-wide text-[#2B5250]">
-            2 restantes
+            {atividadesHoje.filter(a => !a.concluida).length} restantes
           </p>
         </button>
 
