@@ -185,6 +185,8 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
   const [nomeEmpreendimento, setNomeEmpreendimento] = useState('')
   const [codigo, setCodigo] = useState('')
   const [construtora, setConstrutora] = useState('')
+  const [incorporadora, setIncorporadora] = useState('')
+  const [administradora, setAdministradora] = useState('')
   const [finalidade, setFinalidade] = useState('Residencial')
   const [statusConstrucao, setStatusConstrucao] = useState('Lançamento')
 
@@ -501,8 +503,18 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
           </div>
 
           <div>
-            <Label>Construtora / Incorporadora</Label>
-            <Input value={construtora} onChange={e => setConstrutora(e.target.value)} placeholder="Nome da empresa" />
+            <Label>Construtora</Label>
+            <Input value={construtora} onChange={e => setConstrutora(e.target.value)} placeholder="Nome da construtora" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Incorporadora</Label>
+              <Input value={incorporadora} onChange={e => setIncorporadora(e.target.value)} placeholder="Nome" />
+            </div>
+            <div>
+              <Label>Administradora</Label>
+              <Input value={administradora} onChange={e => setAdministradora(e.target.value)} placeholder="Nome" />
+            </div>
           </div>
 
           {/* Localização básica */}
@@ -600,8 +612,21 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
             </div>
           </div>
           <div>
-            <Label>Construtora / Incorporadora</Label>
-            <Input value={construtora} onChange={e => setConstrutora(e.target.value)} placeholder="Nome da empresa" />
+            <Label>Construtora</Label>
+            <Input value={construtora} onChange={e => setConstrutora(e.target.value)} placeholder="Nome da construtora" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label>Incorporadora</Label>
+              <Input value={incorporadora} onChange={e => setIncorporadora(e.target.value)} placeholder="Nome" />
+            </div>
+            <div>
+              <Label>Administradora</Label>
+              <Input value={administradora} onChange={e => setAdministradora(e.target.value)} placeholder="Nome" />
+            </div>
+          </div>
+          <div>
+            <Label>Status da Obra</Label>
           </div>
         </AccordionSection>
 

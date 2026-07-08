@@ -272,6 +272,10 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
           <Calendar className="size-5" strokeWidth={2.5} />
           Visitar com cliente
         </button>
+        <button type="button" onClick={() => setShowShareMenu(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-semibold shadow-sm transition-transform active:scale-[0.98]">
+          <Share2 className="size-5" strokeWidth={2.5} />
+          Compartilhar com Lead
+        </button>
       </div>
 
       {/* Modal Agendamento */}
