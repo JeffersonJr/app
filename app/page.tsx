@@ -36,21 +36,20 @@ export default function HubPage() {
         </Link>
 
         {/* Card: Sistema Web */}
-        <Link
-          href="/web"
-          className="group glass-panel p-8 rounded-3xl flex flex-col items-center text-center hover:-translate-y-2 transition-transform duration-300 shadow-sm hover:shadow-soft border-2 border-transparent hover:border-primary/20"
+        <div
+          className="group glass-panel p-8 rounded-3xl flex flex-col items-center text-center shadow-sm border-2 border-transparent opacity-60 cursor-not-allowed"
         >
-          <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-white mb-6 shadow-md group-hover:scale-110 transition-transform duration-300">
+          <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center text-muted-foreground mb-6 shadow-sm">
             <Globe className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-bold text-ink mb-1">Sistema Web</h2>
           <p className="text-slate mb-8 flex-1 mt-3">
             A versão desktop completa com relatórios avançados e gestão para telas grandes.
           </p>
-          <div className="text-primary font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
-            Acessar <ArrowRight className="w-4 h-4" />
+          <div className="text-muted-foreground font-bold flex items-center gap-2">
+            Em breve
           </div>
-        </Link>
+        </div>
 
         {/* Card: Site Institucional */}
         <Link

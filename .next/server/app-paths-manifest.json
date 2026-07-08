@@ -4,5 +4,11 @@
   "/(auth)/recuperar-senha/page": "app/(auth)/recuperar-senha/page.js",
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js"
+  "/crm/page": "app/crm/page.js",
+  "/design/page": "app/design/page.js",
+  "/page": "app/page.js",
+  "/site/funcionalidades/page": "app/site/funcionalidades/page.js",
+  "/site/page": "app/site/page.js",
+  "/site/precos/page": "app/site/precos/page.js",
+  "/web/page": "app/web/page.js"
 }
