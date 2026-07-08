@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import type { Empreendimento } from '@/lib/empreendimentos-data'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
+import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
 import { Calendar } from 'lucide-react'
 import { atendimentos } from '@/lib/app-data'
 import { FormNovoLead } from '@/components/app/form-novo-lead'
