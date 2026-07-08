@@ -515,8 +515,11 @@ function ImovelDetail({
   const [editMode, setEditMode] = useState(false)
   const [mostrarUpsell, setMostrarUpsell] = useState(false)
   const [upsellSucesso, setUpsellSucesso] = useState(false)
+  const [buscaLeadShare, setBuscaLeadShare] = useState('')
   const [mostrarMapa, setMostrarMapa] = useState(false)
   const [mostrarWhatsappModal, setMostrarWhatsappModal] = useState(false)
+  const [mostrarAgendaVisita, setMostrarAgendaVisita] = useState(false)
+  const [imovelParaVisita, setImovelParaVisita] = useState<Imovel | null>(null)
   const [msgWhatsapp, setMsgWhatsapp] = useState(`Olá ${imovel.proprietario?.nome}, tudo bem?\nSou da imobiliária e gostaria de falar sobre o seu imóvel (${imovel.codigo}).`)
   const [mostrarLigacao, setMostrarLigacao] = useState(false)
   const [mostrarAgendamento, setMostrarAgendamento] = useState(false)
@@ -884,24 +887,33 @@ function ImovelDetail({
         {/* Share Bottom Sheet */}
         {showShareMenu && (
           <>
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-40 animate-in fade-in duration-200" onClick={() => setShowShareMenu(false)} />
-            <div className="absolute bottom-0 left-0 right-0 bg-card rounded-t-3xl shadow-2xl z-50 animate-in slide-in-from-bottom-full duration-300 pb-[env(safe-area-inset-bottom)]">
+            <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] animate-in fade-in duration-200" onClick={() => setShowShareMenu(false)} />
+            <div className="fixed bottom-0 left-0 right-0 bg-card rounded-t-3xl shadow-2xl z-[100] animate-in slide-in-from-bottom-full duration-300 pb-[env(safe-area-inset-bottom)]">
               <div className="flex justify-center pt-3 pb-2">
                 <div className="h-1.5 w-12 rounded-full bg-border" />
               </div>
               <div className="px-6 py-4">
                 <h3 className="text-lg font-serif font-semibold text-foreground mb-4">Compartilhar com qual Lead?</h3>
-                <ul className="flex flex-col gap-3">
-                  {[
-                    { nome: 'Mariana Costa', fone: '(11) 98765-4321' },
-                    { nome: 'Roberto Alves', fone: '(11) 99123-4567' },
-                    { nome: 'Luciana Mendes', fone: '(11) 91111-2222' }
-                  ].map((lead) => (
-                    <li key={lead.nome}>
+                <div className="relative mb-4">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder="Buscar lead..."
+                    value={buscaLeadShare}
+                    onChange={(e) => setBuscaLeadShare(e.target.value)}
+                    className="w-full h-10 pl-10 pr-4 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <ul className="flex flex-col gap-3 max-h-48 overflow-y-auto">
+                  {atendimentos
+                    .filter(a => a.nome.toLowerCase().includes(buscaLeadShare.toLowerCase()) || (a.telefone && a.telefone.includes(buscaLeadShare)))
+                    .slice(0, 5)
+                    .map((lead) => (
+                    <li key={lead.id}>
                       <button type="button" onClick={() => handleShare(lead.nome)} className="w-full flex items-center justify-between p-4 rounded-2xl bg-muted/40 border border-transparent hover:border-primary/20 active:bg-muted transition-colors text-left">
                         <div>
                           <p className="font-semibold text-foreground text-sm">{lead.nome}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">{lead.fone}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{lead.telefone}</p>
                         </div>
                         <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
                           <Share2 className="size-4" strokeWidth={2} />
@@ -909,6 +921,51 @@ function ImovelDetail({
                       </button>
                     </li>
                   ))}
+                  {atendimentos.filter(a => a.nome.toLowerCase().includes(buscaLeadShare.toLowerCase()) || (a.telefone && a.telefone.includes(buscaLeadShare))).length === 0 && (
+                    <div className="flex flex-col items-center justify-center py-4 gap-3">
+                      <p className="text-center text-sm text-muted-foreground">Nenhum lead encontrado.</p>
+                      {buscaLeadShare.trim().length > 2 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const novoId = `c${Date.now()}`
+                            const nomeLead = buscaLeadShare.trim()
+                            atendimentos.push({
+                              id: novoId,
+                              nome: nomeLead,
+                              iniciais: nomeLead.substring(0, 2).toUpperCase(),
+                              telefone: '',
+                              email: '',
+                              etapa: 'novo',
+                              temperatura: 'frio',
+                              status: 'aberto',
+                              origem: 'Whatsapp',
+                              dataEntrada: 'Hoje',
+                              ultimaInteracao: 'Agora',
+                              interesse: 'Indefinido',
+                              valor: '',
+                              modo: 'venda',
+                              funilId: 'f1',
+                              perfil: { finalidade: '', tipoImovel: '', cidades: [], bairros: [], quartos: null, suites: null, vagas: null, areaMin: null, areaMax: null, valorMin: '', valorMax: '', andar: '', lazer: false, varanda: false, mobiliado: false, aceitaFinanciamento: false },
+                              notas: [],
+                              atividades: [],
+                              emails: [],
+                              documentos: [],
+                              imoveisEnviados: [],
+                              timeline: [{ data: 'Hoje, Agora', evento: 'Lead cadastrado via Compartilhamento', tipo: 'origem' }],
+                              albert: { status: 'idle' }
+                            })
+                            window.dispatchEvent(new CustomEvent('app-data-updated'))
+                            handleShare(nomeLead)
+                          }}
+                          className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-brand active:scale-95"
+                        >
+                          <Plus className="size-4" strokeWidth={2.5} />
+                          Cadastrar "{buscaLeadShare}"
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </ul>
                 <button type="button" onClick={() => handleShare('WhatsApp (Outro)')} className="mt-4 w-full flex items-center justify-center gap-2 h-12 rounded-2xl border border-border bg-background text-sm font-semibold text-foreground active:bg-muted">
                   <MessageCircle className="size-4" /> Enviar para WhatsApp não salvo
