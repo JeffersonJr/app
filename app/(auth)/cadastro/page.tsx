@@ -157,13 +157,12 @@ export default function CadastroPage() {
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className={`h-1 flex-1 rounded-full transition-colors ${
-                    senha.length >= i * 2
+                  className={`h-1 flex-1 rounded-full transition-colors ${senha.length >= i * 2
                       ? senha.length >= 8
                         ? 'bg-teal-mid'
                         : 'bg-amber'
                       : 'bg-fog'
-                  }`}
+                    }`}
                 />
               ))}
             </div>

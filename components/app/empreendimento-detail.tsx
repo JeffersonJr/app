@@ -36,8 +36,8 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
 
   const statusColor =
     emp.status === 'Lançamento' ? 'bg-primary/90 text-white' :
-    emp.status === 'Em Obras' ? 'bg-amber/90 text-ink' :
-    'bg-teal-mid/90 text-white'
+      emp.status === 'Em Obras' ? 'bg-amber/90 text-ink' :
+        'bg-teal-mid/90 text-white'
 
   return (
     <>
@@ -47,225 +47,225 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
           {toastMessage}
         </div>
       )}
-      
+
       <div className="absolute inset-0 z-40 bg-background flex flex-col animate-in slide-in-from-right duration-300">
         <div className="flex-1 overflow-y-auto pb-8">
           <div className="relative aspect-[4/3] shrink-0">
-          <Image
-            src={emp.foto || '/placeholder.svg'}
-            alt={`Foto do empreendimento: ${emp.nome}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 480px) 100vw, 420px"
-            priority
-          />
-          <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 pt-[calc(1rem+env(safe-area-inset-top))]">
-            <button
-              onClick={onBack}
-              type="button"
-              className="flex size-10 items-center justify-center rounded-full bg-teal-shadow/60 text-white backdrop-blur-sm transition-transform active:scale-95"
-            >
-              <ArrowLeft className="size-5" />
-            </button>
-            <div className="flex gap-2">
+            <Image
+              src={emp.foto || '/placeholder.svg'}
+              alt={`Foto do empreendimento: ${emp.nome}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 480px) 100vw, 420px"
+              priority
+            />
+            <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 pt-[calc(1rem+env(safe-area-inset-top))]">
               <button
+                onClick={onBack}
                 type="button"
-                onClick={() => setShowShareMenu(true)}
-                aria-label="Compartilhar"
-                className="flex size-10 items-center justify-center rounded-full bg-teal-shadow/60 text-white backdrop-blur-sm transition-brand active:scale-95"
+                className="flex size-10 items-center justify-center rounded-full bg-teal-shadow/60 text-white backdrop-blur-sm transition-transform active:scale-95"
               >
-                <Share2 className="size-5" strokeWidth={1.5} />
+                <ArrowLeft className="size-5" />
               </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative -mt-6 rounded-t-3xl bg-background px-5 pt-6 flex-1">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                {emp.codigo} · {emp.status}
-              </p>
-              <h1 className="mt-1 font-serif text-xl font-semibold text-foreground text-balance">
-                {emp.nome}
-              </h1>
-              <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                <MapPin className="size-4" strokeWidth={1.5} />
-                {emp.bairro}, {emp.cidade}
-              </p>
-            </div>
-          </div>
-
-          <p className="mt-4 text-[10px] uppercase tracking-wide text-muted-foreground">A partir de</p>
-          <p className="font-mono text-2xl font-semibold text-primary">{emp.precoMin}</p>
-
-          <div className="mt-5 grid grid-cols-4 gap-2 mb-6">
-            <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
-              <BedDouble className="size-5 text-primary" strokeWidth={1.5} />
-              <span className="font-mono text-sm font-medium text-foreground">{emp.minDorms === emp.maxDorms ? emp.minDorms : `${emp.minDorms}-${emp.maxDorms}`}</span>
-              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Dorms</span>
-            </div>
-            <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
-              <Bath className="size-5 text-primary" strokeWidth={1.5} />
-              <span className="font-mono text-sm font-medium text-foreground">{emp.minSuites === emp.maxSuites ? emp.minSuites : `${emp.minSuites}-${emp.maxSuites}`}</span>
-              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Suítes</span>
-            </div>
-            <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
-              <Car className="size-5 text-primary" strokeWidth={1.5} />
-              <span className="font-mono text-sm font-medium text-foreground">{emp.minVagas === emp.maxVagas ? emp.minVagas : `${emp.minVagas}-${emp.maxVagas}`}</span>
-              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Vagas</span>
-            </div>
-            <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
-              <Building2 className="size-5 text-primary" strokeWidth={1.5} />
-              <span className="font-mono text-sm font-medium text-foreground">{emp.unidades}</span>
-              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Unid.</span>
-            </div>
-          </div>
-
-        {/* Description */}
-        <div className="mb-6">
-          <h3 className="font-serif text-lg font-semibold text-foreground mb-2">Sobre o Empreendimento</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">{emp.descricao}</p>
-        </div>
-
-        {/* Torres e Plantas */}
-        {emp.torres && emp.torres.length > 0 && (
-          <div className="mb-6">
-            <h3 className="font-serif text-lg font-semibold text-foreground mb-3">Plantas e Valores</h3>
-            <div className="flex flex-col gap-3">
-              {emp.torres.map((torre, tIdx) => (
-                <div key={tIdx} className="rounded-2xl border border-border bg-card p-4">
-                  <div className="flex items-center justify-between mb-3 border-b border-border pb-3">
-                    <p className="font-semibold text-foreground">{torre.nome}</p>
-                    <span className="rounded-full bg-muted px-2 py-1 text-[10px] font-medium text-muted-foreground uppercase tracking-widest">{torre.status}</span>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    {torre.plantas.map((planta, pIdx) => (
-                      <div key={pIdx} className="flex flex-col rounded-xl bg-muted/30 p-3">
-                        <div className="flex justify-between items-center mb-2">
-                          <p className="text-sm font-semibold text-foreground">{planta.nome} ({planta.areaUtil}m²)</p>
-                          <p className="font-mono text-sm font-bold text-primary">{planta.valor}</p>
-                        </div>
-                        <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground">
-                          <span className="rounded bg-background px-1.5 py-0.5 border border-border">Tipo: {planta.tipo}</span>
-                          <span className="rounded bg-background px-1.5 py-0.5 border border-border">{planta.quartos} dorms</span>
-                          <span className="rounded bg-background px-1.5 py-0.5 border border-border">{planta.banheiros} banheiros</span>
-                          <span className="rounded bg-background px-1.5 py-0.5 border border-border">{planta.vagasGaragem} vagas</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Infraestrutura */}
-        <div className="mb-8">
-          <h3 className="font-serif text-lg font-semibold text-foreground mb-3">Lazer e Infraestrutura</h3>
-          <div className="flex flex-wrap gap-2">
-            {emp.caracteristicas.map((c) => (
-              <span key={c} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                {c}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Cronograma de Obras */}
-        {emp.cronograma && emp.cronograma.length > 0 && (
-          <div className="mb-8">
-            <h3 className="font-serif text-lg font-semibold text-foreground mb-3">Cronograma de Obras</h3>
-            <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4">
-              {emp.cronograma.slice(0, 4).map((etapa, idx) => (
-                <div key={idx} className="flex flex-col gap-1">
-                  <div className="flex justify-between text-xs font-medium">
-                    <span className="text-foreground">{etapa.etapa}</span>
-                    <span className={etapa.porcentagem === 100 ? 'text-teal-500 font-bold' : 'text-primary'}>{etapa.porcentagem}%</span>
-                  </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-                    <div className="h-full bg-primary transition-all" style={{ width: `${etapa.porcentagem}%` }} />
-                  </div>
-                </div>
-              ))}
-              {emp.cronograma.length > 4 && (
-                <button type="button" className="mt-2 text-xs font-semibold text-primary text-center">Ver cronograma completo</button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Incorporadora, Construtora e Administradora */}
-        <div className="mt-6 border-t border-border/50 pt-6">
-          <h3 className="text-sm font-semibold text-foreground mb-4">Incorporadora, Construtora e Administradora</h3>
-          
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3 rounded-2xl border border-border p-3">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold">
-                {emp.construtora.substring(0, 2).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-foreground text-sm truncate">{emp.construtora}</h4>
-                <p className="text-xs text-muted-foreground truncate">Construtora principal</p>
-              </div>
-            </div>
-            
-            {emp.contatos?.map((contato, idx) => (
-              <div key={idx} className="flex items-center gap-3 rounded-2xl border border-border p-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-teal-shadow text-white font-semibold">
-                  {contato.nome.substring(0, 2).toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-foreground text-sm truncate">{contato.nome}</h4>
-                  <p className="text-xs text-muted-foreground truncate">{contato.cargo}</p>
-                </div>
-                <button 
-                  onClick={() => { setMsgWhatsapp(`Olá ${contato.nome}, tudo bem?\nSou da imobiliária e gostaria de falar sobre o ${emp.nome}.`); setMostrarWhatsappModal(true) }}
-                  className="flex size-8 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366]"
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowShareMenu(true)}
+                  aria-label="Compartilhar"
+                  className="flex size-10 items-center justify-center rounded-full bg-teal-shadow/60 text-white backdrop-blur-sm transition-brand active:scale-95"
                 >
-                  <MessageCircle className="size-4" />
+                  <Share2 className="size-5" strokeWidth={1.5} />
                 </button>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
 
-        {clientesCompativeis.length > 0 && (
-          <div className="mt-6 border-t border-border/50 pt-6">
-            <h3 className="text-sm font-semibold text-foreground mb-4">Clientes com perfil compatível</h3>
-            <ul className="flex flex-col gap-3">
-              {clientesCompativeis.map(cliente => (
-                <li key={cliente.id} className="flex items-center justify-between rounded-2xl border border-border bg-background p-3 shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                      {cliente.iniciais}
+          <div className="relative -mt-6 rounded-t-3xl bg-background px-5 pt-6 flex-1">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {emp.codigo} · {emp.status}
+                </p>
+                <h1 className="mt-1 font-serif text-xl font-semibold text-foreground text-balance">
+                  {emp.nome}
+                </h1>
+                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                  <MapPin className="size-4" strokeWidth={1.5} />
+                  {emp.bairro}, {emp.cidade}
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-4 text-[10px] uppercase tracking-wide text-muted-foreground">A partir de</p>
+            <p className="font-mono text-2xl font-semibold text-primary">{emp.precoMin}</p>
+
+            <div className="mt-5 grid grid-cols-4 gap-2 mb-6">
+              <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
+                <BedDouble className="size-5 text-primary" strokeWidth={1.5} />
+                <span className="font-mono text-sm font-medium text-foreground">{emp.minDorms === emp.maxDorms ? emp.minDorms : `${emp.minDorms}-${emp.maxDorms}`}</span>
+                <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Dorms</span>
+              </div>
+              <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
+                <Bath className="size-5 text-primary" strokeWidth={1.5} />
+                <span className="font-mono text-sm font-medium text-foreground">{emp.minSuites === emp.maxSuites ? emp.minSuites : `${emp.minSuites}-${emp.maxSuites}`}</span>
+                <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Suítes</span>
+              </div>
+              <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
+                <Car className="size-5 text-primary" strokeWidth={1.5} />
+                <span className="font-mono text-sm font-medium text-foreground">{emp.minVagas === emp.maxVagas ? emp.minVagas : `${emp.minVagas}-${emp.maxVagas}`}</span>
+                <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Vagas</span>
+              </div>
+              <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
+                <Building2 className="size-5 text-primary" strokeWidth={1.5} />
+                <span className="font-mono text-sm font-medium text-foreground">{emp.unidades}</span>
+                <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Unid.</span>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="mb-6">
+              <h3 className="font-serif text-lg font-semibold text-foreground mb-2">Sobre o Empreendimento</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{emp.descricao}</p>
+            </div>
+
+            {/* Torres e Plantas */}
+            {emp.torres && emp.torres.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-serif text-lg font-semibold text-foreground mb-3">Plantas e Valores</h3>
+                <div className="flex flex-col gap-3">
+                  {emp.torres.map((torre, tIdx) => (
+                    <div key={tIdx} className="rounded-2xl border border-border bg-card p-4">
+                      <div className="flex items-center justify-between mb-3 border-b border-border pb-3">
+                        <p className="font-semibold text-foreground">{torre.nome}</p>
+                        <span className="rounded-full bg-muted px-2 py-1 text-[10px] font-medium text-muted-foreground uppercase tracking-widest">{torre.status}</span>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        {torre.plantas.map((planta, pIdx) => (
+                          <div key={pIdx} className="flex flex-col rounded-xl bg-muted/30 p-3">
+                            <div className="flex justify-between items-center mb-2">
+                              <p className="text-sm font-semibold text-foreground">{planta.nome} ({planta.areaUtil}m²)</p>
+                              <p className="font-mono text-sm font-bold text-primary">{planta.valor}</p>
+                            </div>
+                            <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground">
+                              <span className="rounded bg-background px-1.5 py-0.5 border border-border">Tipo: {planta.tipo}</span>
+                              <span className="rounded bg-background px-1.5 py-0.5 border border-border">{planta.quartos} dorms</span>
+                              <span className="rounded bg-background px-1.5 py-0.5 border border-border">{planta.banheiros} banheiros</span>
+                              <span className="rounded bg-background px-1.5 py-0.5 border border-border">{planta.vagasGaragem} vagas</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{cliente.nome}</p>
-                      <p className="text-xs text-muted-foreground">{cliente.etapa}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Infraestrutura */}
+            <div className="mb-8">
+              <h3 className="font-serif text-lg font-semibold text-foreground mb-3">Lazer e Infraestrutura</h3>
+              <div className="flex flex-wrap gap-2">
+                {emp.caracteristicas.map((c) => (
+                  <span key={c} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Cronograma de Obras */}
+            {emp.cronograma && emp.cronograma.length > 0 && (
+              <div className="mb-8">
+                <h3 className="font-serif text-lg font-semibold text-foreground mb-3">Cronograma de Obras</h3>
+                <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4">
+                  {emp.cronograma.slice(0, 4).map((etapa, idx) => (
+                    <div key={idx} className="flex flex-col gap-1">
+                      <div className="flex justify-between text-xs font-medium">
+                        <span className="text-foreground">{etapa.etapa}</span>
+                        <span className={etapa.porcentagem === 100 ? 'text-teal-500 font-bold' : 'text-primary'}>{etapa.porcentagem}%</span>
+                      </div>
+                      <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                        <div className="h-full bg-primary transition-all" style={{ width: `${etapa.porcentagem}%` }} />
+                      </div>
                     </div>
+                  ))}
+                  {emp.cronograma.length > 4 && (
+                    <button type="button" className="mt-2 text-xs font-semibold text-primary text-center">Ver cronograma completo</button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Incorporadora, Construtora e Administradora */}
+            <div className="mt-6 border-t border-border/50 pt-6">
+              <h3 className="text-sm font-semibold text-foreground mb-4">Incorporadora, Construtora e Administradora</h3>
+
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3 rounded-2xl border border-border p-3">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold">
+                    {emp.construtora.substring(0, 2).toUpperCase()}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleShare(cliente.nome)}
-                    className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand hover:text-primary active:scale-95"
-                  >
-                    <Share2 className="size-4" strokeWidth={1.5} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-foreground text-sm truncate">{emp.construtora}</h4>
+                    <p className="text-xs text-muted-foreground truncate">Construtora principal</p>
+                  </div>
+                </div>
 
-      </div>
+                {emp.contatos?.map((contato, idx) => (
+                  <div key={idx} className="flex items-center gap-3 rounded-2xl border border-border p-3">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-teal-shadow text-white font-semibold">
+                      {contato.nome.substring(0, 2).toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold text-foreground text-sm truncate">{contato.nome}</h4>
+                      <p className="text-xs text-muted-foreground truncate">{contato.cargo}</p>
+                    </div>
+                    <button
+                      onClick={() => { setMsgWhatsapp(`Olá ${contato.nome}, tudo bem?\nSou da imobiliária e gostaria de falar sobre o ${emp.nome}.`); setMostrarWhatsappModal(true) }}
+                      className="flex size-8 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366]"
+                    >
+                      <MessageCircle className="size-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {clientesCompativeis.length > 0 && (
+              <div className="mt-6 border-t border-border/50 pt-6">
+                <h3 className="text-sm font-semibold text-foreground mb-4">Clientes com perfil compatível</h3>
+                <ul className="flex flex-col gap-3">
+                  {clientesCompativeis.map(cliente => (
+                    <li key={cliente.id} className="flex items-center justify-between rounded-2xl border border-border bg-background p-3 shadow-sm">
+                      <div className="flex items-center gap-3">
+                        <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                          {cliente.iniciais}
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-foreground">{cliente.nome}</p>
+                          <p className="text-xs text-muted-foreground">{cliente.etapa}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleShare(cliente.nome)}
+                        className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand hover:text-primary active:scale-95"
+                      >
+                        <Share2 className="size-4" strokeWidth={1.5} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+          </div>
         </div>
       </div>
 
       <div className="shrink-0 bg-background border-t border-border p-5 pb-[calc(5.25rem+env(safe-area-inset-bottom))] flex flex-col gap-3">
         <button type="button" onClick={() => setMostrarAgendamento(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-xl shadow-teal-mid/30 transition-transform active:scale-[0.98]">
-          <Calendar className="size-5" strokeWidth={2.5} /> 
+          <Calendar className="size-5" strokeWidth={2.5} />
           Visitar com cliente
         </button>
       </div>
@@ -276,9 +276,9 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
           <button type="button" onClick={() => setMostrarAgendamento(false)} className="absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]" />
           <div className="relative rounded-t-3xl bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh] overflow-y-auto">
             <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-fog" />
-            <FormNovaAtividade 
-              defaultImoveis={[{...emp, titulo: emp.nome, enderecoCompleto: `${emp.bairro}, ${emp.cidade}`}]}
-              onClose={() => setMostrarAgendamento(false)} 
+            <FormNovaAtividade
+              defaultImoveis={[{ ...emp, titulo: emp.nome, enderecoCompleto: `${emp.bairro}, ${emp.cidade}` }]}
+              onClose={() => setMostrarAgendamento(false)}
               onSalvar={() => {
                 setMostrarAgendamento(false)
                 setToastMessage('Visita agendada com sucesso!')
@@ -342,16 +342,16 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
                 <X className="size-4" />
               </button>
             </div>
-            
+
             <textarea
               value={msgWhatsapp}
               onChange={(e) => setMsgWhatsapp(e.target.value)}
               className="w-full h-32 resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[#25D366]/50 mb-4"
               placeholder="Digite sua mensagem..."
             />
-            
-            <button 
-              type="button" 
+
+            <button
+              type="button"
               onClick={() => {
                 setMostrarWhatsappModal(false)
                 setToastMessage('Redirecionando para o WhatsApp...')

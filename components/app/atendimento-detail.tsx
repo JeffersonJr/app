@@ -43,6 +43,7 @@ import {
   origemConfig,
   tempConfig,
   tipoAtividadeConfig,
+  isAtividadeAtrasada,
   funis,
   atendimentos as dadosAtendimentos,
 } from '@/lib/app-data'
@@ -127,22 +128,45 @@ export function AtendimentoDetail({
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
   const [sheetGanhoPerdido, setSheetGanhoPerdido] = useState<'ganho' | 'perdido' | null>(null)
   const [expandedTimelineItemId, setExpandedTimelineItemId] = useState<string | null>(null)
-  
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      const globalAtendimento = dadosAtendimentos.find(a => a.id === atendimento.id)
+      if (globalAtendimento) {
+        setLocalTimeline([...(globalAtendimento.timeline || [])].sort((a, b) => {
+          if (a.id > b.id) return -1;
+          if (a.id < b.id) return 1;
+          return 0;
+        }))
+        setLocalAtividades([...(globalAtendimento.atividades || [])].sort((a, b) => {
+          const parseDate = (d: string, h: string) => {
+            if (d === 'Hoje') return new Date(`1970-01-01T${h}:00`)
+            if (d === 'Amanhã') return new Date(`1970-01-02T${h}:00`)
+            return new Date(`${d}T${h}:00`)
+          }
+          return parseDate(a.data, a.hora).getTime() - parseDate(b.data, b.hora).getTime()
+        }))
+      }
+    }
+    window.addEventListener('app-data-updated', handleUpdate)
+    return () => window.removeEventListener('app-data-updated', handleUpdate)
+  }, [atendimento.id])
+
   // 4Q e FORD Edit states
   const [editing4Q, setEditing4Q] = useState(false)
   const [form4Q, setForm4Q] = useState({ quem: '', oQue: '', quando: '', quanto: '' })
   const [editingFORD, setEditingFORD] = useState(false)
   const [formFORD, setFormFORD] = useState({ familia: '', ocupacao: '', recreacao: '', sonhos: '' })
-  
+
   // Imóveis selection and sending
   const [imoveisSelecionados, setImoveisSelecionados] = useState<string[]>([])
-  const [previewEnvio, setPreviewEnvio] = useState<{tipo: 'email'|'whatsapp', imoveis: any[]}|null>(null)
+  const [previewEnvio, setPreviewEnvio] = useState<{ tipo: 'email' | 'whatsapp', imoveis: any[] } | null>(null)
   const [textoEnvio, setTextoEnvio] = useState('')
   const [assuntoEnvio, setAssuntoEnvio] = useState('')
   const [termoAberto, setTermoAberto] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [toastMensagem, setToastMensagem] = useState<string | null>(null)
-  
+
   const imoveisEmVisitaAtiva = new Set<string>()
   localAtividades.forEach(a => {
     if (a.tipo === 'visita' && !a.concluida && a.imoveisVisitados) {
@@ -151,7 +175,7 @@ export function AtendimentoDetail({
   })
 
   const [mostrarVincularVisita, setMostrarVincularVisita] = useState(false)
-  
+
   // Busca manual de imóveis
   const [buscaManualImoveis, setBuscaManualImoveis] = useState('')
 
@@ -187,10 +211,10 @@ export function AtendimentoDetail({
   })
 
   // Se a busca manual estiver preenchida, filtramos sobre todos imóveis
-  const imoveisExibidos = buscaManualImoveis 
+  const imoveisExibidos = buscaManualImoveis
     ? imoveis.filter(im => im.titulo.toLowerCase().includes(buscaManualImoveis.toLowerCase()) || im.codigo.toLowerCase().includes(buscaManualImoveis.toLowerCase()))
-    : imoveisCompativeis.length > 0 
-      ? imoveisCompativeis 
+    : imoveisCompativeis.length > 0
+      ? imoveisCompativeis
       : imoveis.filter(im => im.finalidade === atendimento.perfil.finalidade || true).slice(0, 2) // recomendacao fallback
 
   function handleSave4Q() {
@@ -230,7 +254,7 @@ export function AtendimentoDetail({
       endereco: `${i.bairro}, ${i.cidade}`
     }))
     const novosImoveisVisitados = [...(atividade.imoveisVisitados || []), ...imoveisAdicionados]
-    
+
     setLocalAtividades(prev => prev.map(a => a.id === atividadeId ? { ...a, imoveisVisitados: novosImoveisVisitados } : a))
     setImoveisSelecionados([])
     setMostrarVincularVisita(false)
@@ -241,7 +265,7 @@ export function AtendimentoDetail({
   function handleGerarTermoVisita(atividadeId: string) {
     const atividade = localAtividades.find(a => a.id === atividadeId)
     if (!atividade) return
-    
+
     const novoDoc = {
       id: `doc-${Date.now()}`,
       nome: `Termo de Visita - ${atividade.data}.pdf`,
@@ -268,7 +292,7 @@ export function AtendimentoDetail({
     }
   }
 
-  function abrirPreviewEnvio(tipo: 'email'|'whatsapp', imoveisParaEnviar: any[]) {
+  function abrirPreviewEnvio(tipo: 'email' | 'whatsapp', imoveisParaEnviar: any[]) {
     let msg = `Olá ${atendimento?.nome}, separei as seguintes opções de imóveis para você:\n\n`
     imoveisParaEnviar.forEach(im => {
       msg += `- ${im.titulo} (${im.codigo})\n  Preço: ${im.preco}\n\n`
@@ -295,7 +319,7 @@ export function AtendimentoDetail({
 
   function handleConcluirAtividade(id: string, statusConcluida: boolean, feedback?: string, agendarProxima?: boolean) {
     setLocalAtividades((prev) => prev.map((a) => (a.id === id ? { ...a, concluida: statusConcluida } : a)))
-    
+
     if (statusConcluida && feedback) {
       // Add feedback as a note/timeline event
       const evento: EventoTimeline = {
@@ -340,7 +364,7 @@ export function AtendimentoDetail({
         anexadoEm: 'Hoje'
       }
       setLocalDocumentos([...localDocumentos, novoDoc])
-      
+
       const evento: EventoTimeline = {
         id: `evt-${Date.now()}`,
         tipo: 'documento',
@@ -356,7 +380,7 @@ export function AtendimentoDetail({
 
   return (
     <div className="flex flex-col pb-28">
-      
+
       {/* Toast Feedback */}
       {toastMensagem && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top fade-in duration-300">
@@ -368,7 +392,7 @@ export function AtendimentoDetail({
       )}
 
       {mostrarUpsell && <IAUpsellPage onClose={() => setMostrarUpsell(false)} origem="albert" />}
-      
+
       {/* Header imersivo */}
       <div className="bg-primary px-5 pb-5 pt-[calc(1rem+env(safe-area-inset-top))] text-primary-foreground">
         <div className="flex items-center justify-between">
@@ -445,14 +469,15 @@ export function AtendimentoDetail({
             { icon: MessageCircle, label: 'WA' },
             { icon: Mail, label: 'E-mail', onClick: () => setMostrarNovoEmail(true) },
             { icon: StickyNote, label: 'Nota', onClick: () => setMostrarNovaNota(true) },
-            { icon: Bot, label: 'Albert', onClick: () => { 
+            {
+              icon: Bot, label: 'Albert', onClick: () => {
                 if (!featureFlags.temIA) {
                   setMostrarUpsell(true)
                 } else {
                   setMostrarAlbert(true)
-                  setAba('albert') 
+                  setAba('albert')
                 }
-              } 
+              }
             },
           ].map((a) => (
             <button
@@ -519,11 +544,10 @@ export function AtendimentoDetail({
                 setAba(a.id as typeof aba)
               }
             }}
-            className={`flex shrink-0 flex-col items-center gap-1 px-4 py-3 text-[11px] font-semibold transition-brand border-b-2 ${
-              aba === a.id
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground'
-            }`}
+            className={`flex shrink-0 flex-col items-center gap-1 px-4 py-3 text-[11px] font-semibold transition-brand border-b-2 ${aba === a.id
+              ? 'border-primary text-primary'
+              : 'border-transparent text-muted-foreground'
+              }`}
           >
             <a.icon className="size-4" strokeWidth={1.5} />
             {a.label}
@@ -566,11 +590,10 @@ export function AtendimentoDetail({
                         <button
                           type="button"
                           onClick={() => setAtividadeSelecionada(atv)}
-                          className={`w-full text-left flex items-center gap-3 rounded-[1.25rem] p-3.5 transition-brand relative overflow-hidden ${
-                            atv.concluida
-                              ? 'border border-border bg-card/40 opacity-70'
-                              : 'border-transparent bg-card shadow-soft hover:bg-muted/50 border border-border/50'
-                          }`}
+                          className={`w-full text-left flex items-center gap-3 rounded-[1.25rem] p-3.5 transition-brand relative overflow-hidden ${atv.concluida
+                            ? 'border border-border bg-card/40 opacity-70'
+                            : 'border-transparent bg-card shadow-soft hover:bg-muted/50 border border-border/50'
+                            }`}
                         >
                           <div className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${atv.concluida ? 'bg-muted text-muted-foreground' : ((tipoAtividadeConfig as Record<string, any>)[atv.tipo]?.cor || 'bg-muted text-muted-foreground')}`}>
                             {atv.concluida ? (
@@ -602,11 +625,10 @@ export function AtendimentoDetail({
                   key={f}
                   type="button"
                   onClick={() => setFiltroTimeline(f)}
-                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${
-                    filtroTimeline === f
-                      ? 'bg-primary text-primary-foreground'
-                      : 'border border-border bg-card text-muted-foreground'
-                  }`}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${filtroTimeline === f
+                    ? 'bg-primary text-primary-foreground'
+                    : 'border border-border bg-card text-muted-foreground'
+                    }`}
                 >
                   {f}
                 </button>
@@ -636,14 +658,14 @@ export function AtendimentoDetail({
                         <ChevronRight className={`size-4 text-muted-foreground transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                       </div>
                       <p className="mt-0.5 text-sm font-medium text-foreground pr-4 leading-tight">{item.descricao}</p>
-                      
+
                       {/* Expanded Content */}
                       {isExpanded && (
                         <div className="mt-3 pt-3 border-t border-border/50 text-xs text-muted-foreground animate-in slide-in-from-top-1 fade-in duration-200">
                           <p className="font-semibold text-foreground mb-1">Detalhes Adicionais:</p>
                           <p>Origem do registro: {item.tipo === 'whatsapp' ? 'Integração Oficial (API)' : 'Sistema interno'}</p>
                           <p className="mt-1">Registrado por: Atendente Digital (Albert)</p>
-                          
+
                           {item.tipo === 'imovel_enviado' && (
                             <button className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-primary/10 py-2 font-semibold text-primary">
                               <MapPin className="size-4" /> Ver Imóvel Enviado
@@ -719,10 +741,10 @@ export function AtendimentoDetail({
                       {atv.titulo}
                     </p>
                     {atv.descricao && <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{atv.descricao}</p>}
-                    <p className={`mt-2 flex items-center gap-1 font-mono text-[11px] ${atv.concluida ? 'text-muted-foreground' : 'text-primary'}`}>
+                    <p className={`mt-2 flex items-center gap-1 font-mono text-[11px] ${atv.concluida ? 'text-muted-foreground' : (isAtividadeAtrasada(atv.data, atv.hora) ? 'text-red-500' : 'text-primary')}`}>
                       {atv.data === 'Hoje' ? 'Hoje' : atv.data} · {atv.hora}
-                      {!atv.concluida && atv.data !== 'Hoje' && atv.data !== 'Amanhã' && new Date(`${atv.data}T${atv.hora}:00`).getTime() < Date.now() && (
-                        <span className="ml-2 rounded text-[10px] font-bold text-red-500 bg-red-500/10 px-1.5 py-0.5">Atrasada</span>
+                      {!atv.concluida && isAtividadeAtrasada(atv.data, atv.hora) && (
+                        <span className="ml-2 rounded text-[9px] font-bold text-red-500 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5">ATRASADA</span>
                       )}
                     </p>
                   </button>
@@ -763,7 +785,7 @@ export function AtendimentoDetail({
                 {imoveisCompativeis.length > 0 ? 'Baseado no perfil de busca do cliente' : 'Nenhum imóvel exato. Veja estas recomendações ou busque.'}
               </p>
             </div>
-            
+
             {imoveisCompativeis.length === 0 && (
               <div className="relative mb-4">
                 <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -792,8 +814,8 @@ export function AtendimentoDetail({
                   )}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-start gap-3">
-                      <input 
-                        type="checkbox" 
+                      <input
+                        type="checkbox"
                         disabled={imoveisEmVisitaAtiva.has(im.id)}
                         checked={imoveisSelecionados.includes(im.id)}
                         onChange={() => toggleSelecionarImovel(im.id)}
@@ -896,10 +918,10 @@ export function AtendimentoDetail({
                     <div className="flex-1 min-w-0">
                       {editandoDocId === doc.id ? (
                         <div className="flex items-center gap-2">
-                          <input 
-                            type="text" 
-                            value={novoNomeDoc} 
-                            onChange={(e) => setNovoNomeDoc(e.target.value)} 
+                          <input
+                            type="text"
+                            value={novoNomeDoc}
+                            onChange={(e) => setNovoNomeDoc(e.target.value)}
                             className="h-8 w-full rounded border border-border bg-background px-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                             autoFocus
                           />
@@ -983,24 +1005,24 @@ export function AtendimentoDetail({
                     </button>
                   )}
                 </div>
-                
+
                 {editing4Q ? (
                   <div className="flex flex-col gap-3 animate-in fade-in">
                     <div className="flex flex-col gap-1">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quem decide?</span>
-                      <input type="text" value={form4Q.quem} onChange={e => setForm4Q(prev => ({...prev, quem: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
+                      <input type="text" value={form4Q.quem} onChange={e => setForm4Q(prev => ({ ...prev, quem: e.target.value }))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">O quê busca?</span>
-                      <input type="text" value={form4Q.oQue} onChange={e => setForm4Q(prev => ({...prev, oQue: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
+                      <input type="text" value={form4Q.oQue} onChange={e => setForm4Q(prev => ({ ...prev, oQue: e.target.value }))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quando precisa?</span>
-                      <input type="text" value={form4Q.quando} onChange={e => setForm4Q(prev => ({...prev, quando: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
+                      <input type="text" value={form4Q.quando} onChange={e => setForm4Q(prev => ({ ...prev, quando: e.target.value }))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-teal-deep/70">Quanto (Orçamento)?</span>
-                      <input type="text" value={form4Q.quanto} onChange={e => setForm4Q(prev => ({...prev, quanto: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
+                      <input type="text" value={form4Q.quanto} onChange={e => setForm4Q(prev => ({ ...prev, quanto: e.target.value }))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid" />
                     </div>
                   </div>
                 ) : (
@@ -1047,19 +1069,19 @@ export function AtendimentoDetail({
                   <div className="flex flex-col gap-3 animate-in fade-in">
                     <div className="flex flex-col gap-1">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">F (Família)</span>
-                      <input type="text" value={formFORD.familia} onChange={e => setFormFORD(prev => ({...prev, familia: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
+                      <input type="text" value={formFORD.familia} onChange={e => setFormFORD(prev => ({ ...prev, familia: e.target.value }))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">O (Ocupação)</span>
-                      <input type="text" value={formFORD.ocupacao} onChange={e => setFormFORD(prev => ({...prev, ocupacao: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
+                      <input type="text" value={formFORD.ocupacao} onChange={e => setFormFORD(prev => ({ ...prev, ocupacao: e.target.value }))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">R (Recreação)</span>
-                      <input type="text" value={formFORD.recreacao} onChange={e => setFormFORD(prev => ({...prev, recreacao: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
+                      <input type="text" value={formFORD.recreacao} onChange={e => setFormFORD(prev => ({ ...prev, recreacao: e.target.value }))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <span className="text-[11px] font-semibold uppercase tracking-wider text-[#8a5a1e]/70">D (Sonhos)</span>
-                      <input type="text" value={formFORD.sonhos} onChange={e => setFormFORD(prev => ({...prev, sonhos: e.target.value}))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
+                      <input type="text" value={formFORD.sonhos} onChange={e => setFormFORD(prev => ({ ...prev, sonhos: e.target.value }))} className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]" />
                     </div>
                   </div>
                 ) : (
@@ -1152,13 +1174,13 @@ export function AtendimentoDetail({
           <button type="button" onClick={() => setMostrarNovaAtividade(false)} className="absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]" />
           <div className="relative rounded-t-3xl bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-200">
             <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-fog" />
-            <FormNovaAtividade 
+            <FormNovaAtividade
               defaultClienteId={atendimento.id}
               defaultImoveis={imoveis.filter(i => imoveisSelecionados.includes(i.id))}
               onClose={() => {
                 setMostrarNovaAtividade(false)
                 setImoveisSelecionados([])
-              }} 
+              }}
               onSalvar={(id, atv, tml) => {
                 if (tml) handleSalvarInteracao(tml)
                 if (atv) setLocalAtividades([atv, ...localAtividades])
@@ -1232,7 +1254,7 @@ export function AtendimentoDetail({
           }}
         />
       )}
-      
+
       {/* Modal Vincular Visita */}
       {mostrarVincularVisita && (
         <div className="absolute inset-0 z-[70] flex flex-col justify-end">
@@ -1300,17 +1322,16 @@ export function AtendimentoDetail({
               <div className="mb-4">
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mensagem</label>
                 <textarea
-                value={textoEnvio}
-                onChange={(e) => setTextoEnvio(e.target.value)}
-                className="w-full h-48 rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
-              />
+                  value={textoEnvio}
+                  onChange={(e) => setTextoEnvio(e.target.value)}
+                  className="w-full h-48 rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+                />
               </div>
               <button
                 type="button"
                 onClick={handleEnviar}
-                className={`flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-sm font-semibold text-white shadow-xl transition-brand active:scale-[0.98] ${
-                  previewEnvio.tipo === 'whatsapp' ? 'bg-green-600 shadow-green-600/20' : 'bg-primary shadow-primary/20'
-                }`}
+                className={`flex h-14 w-full items-center justify-center gap-2 rounded-2xl text-sm font-semibold text-white shadow-xl transition-brand active:scale-[0.98] ${previewEnvio.tipo === 'whatsapp' ? 'bg-green-600 shadow-green-600/20' : 'bg-primary shadow-primary/20'
+                  }`}
               >
                 <Send className="size-4" />
                 Confirmar e Enviar

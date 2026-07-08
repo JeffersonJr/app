@@ -41,7 +41,14 @@ export function ScreenNegocios({
   const [novoFunilNome, setNovoFunilNome] = useState('')
   const [funisList, setFunisList] = useState(funis)
   const [mostrarGerenciarFunil, setMostrarGerenciarFunil] = useState(false)
-  
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setDados([...dadosAtendimentos])
+    }
+    window.addEventListener('app-data-updated', handleUpdate)
+    return () => window.removeEventListener('app-data-updated', handleUpdate)
+  }, [])
   const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false)
   const [filtroTemp, setFiltroTemp] = useState<Temperatura | 'todas'>('todas')
   const [filtroOrigem, setFiltroOrigem] = useState<OrigemLead[]>([])
@@ -103,8 +110,8 @@ export function ScreenNegocios({
         (filtroPreAtendimento === 'todos' || (filtroPreAtendimento === 'sim' ? a.preAtendimento : !a.preAtendimento)) &&
         (filtroNome === '' || a.nome.toLowerCase().includes(filtroNome.toLowerCase())) &&
         (filtroPeriodo === 'todos' ||
-         (filtroPeriodo === 'hoje' ? a.dataEntrada.toLowerCase() === 'hoje' : true) || // Mock filtering logic
-         (filtroPeriodo === 'essa_semana' ? ['hoje', 'ontem'].includes(a.dataEntrada.toLowerCase()) || a.dataEntrada.includes('/') : true)
+          (filtroPeriodo === 'hoje' ? a.dataEntrada.toLowerCase() === 'hoje' : true) || // Mock filtering logic
+          (filtroPeriodo === 'essa_semana' ? ['hoje', 'ontem'].includes(a.dataEntrada.toLowerCase()) || a.dataEntrada.includes('/') : true)
         ),
     ),
   }))
@@ -120,7 +127,7 @@ export function ScreenNegocios({
     const oldEtapaId = dadosAtendimentos.find(a => a.id === id)?.etapa
     const oldEtapaNome = funilAtivo.etapas?.find((e) => e.id === oldEtapaId)?.label || oldEtapaId || 'desconhecida'
     const etapaNome = funilAtivo.etapas?.find((e) => e.id === etapa)?.label || etapa
-    
+
     const newTimelineEvent: EventoTimeline = {
       id: `tl-${Date.now()}`,
       tipo: 'etapa',
@@ -128,7 +135,7 @@ export function ScreenNegocios({
       data: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
     }
-    
+
     const idx = dadosAtendimentos.findIndex(a => a.id === id)
     if (idx !== -1) {
       dadosAtendimentos[idx].etapa = etapa
@@ -137,6 +144,9 @@ export function ScreenNegocios({
 
     setDados((prev) => prev.map((a) => (a.id === id ? { ...a, etapa, timeline: [newTimelineEvent, ...a.timeline] } : a)))
     setAtendimentoAberto((prev) => (prev?.id === id ? { ...prev, etapa, timeline: [newTimelineEvent, ...prev.timeline] } : prev))
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('app-data-updated'))
+    }
   }
 
   function criarFunil() {
@@ -176,11 +186,10 @@ export function ScreenNegocios({
             type="button"
             onClick={() => setMostrarFiltrosAvancados(true)}
             aria-label="Filtros avançados"
-            className={`flex size-10 relative items-center justify-center rounded-full border border-border bg-card shadow-sm transition-brand active:scale-95 ${
-              (filtroTemp !== 'todas' || filtroOrigem.length > 0 || filtroPreAtendimento !== 'todos' || filtroPeriodo !== 'todos' || filtroNome !== '')
-                ? 'text-primary bg-primary/5 border-primary/30'
-                : 'text-foreground'
-            }`}
+            className={`flex size-10 relative items-center justify-center rounded-full border border-border bg-card shadow-sm transition-brand active:scale-95 ${(filtroTemp !== 'todas' || filtroOrigem.length > 0 || filtroPreAtendimento !== 'todos' || filtroPeriodo !== 'todos' || filtroNome !== '')
+              ? 'text-primary bg-primary/5 border-primary/30'
+              : 'text-foreground'
+              }`}
           >
             <ListFilter className="size-5" strokeWidth={1.5} />
             {(filtroTemp !== 'todas' || filtroOrigem.length > 0 || filtroPreAtendimento !== 'todos' || filtroPeriodo !== 'todos' || filtroNome !== '') && (
@@ -207,7 +216,7 @@ export function ScreenNegocios({
               </span>
             </div>
           </button>
-          
+
           <button
             type="button"
             onClick={() => setMostrarGerenciarFunil(true)}
@@ -228,9 +237,8 @@ export function ScreenNegocios({
                         setFunilAtivo(f)
                         setMostrarSeletorFunil(false)
                       }}
-                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-brand ${
-                        funilAtivo.id === f.id ? 'bg-primary/10 text-primary' : 'hover:bg-muted/50 text-foreground'
-                      }`}
+                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-brand ${funilAtivo.id === f.id ? 'bg-primary/10 text-primary' : 'hover:bg-muted/50 text-foreground'
+                        }`}
                     >
                       <div className="flex-1">
                         <span className="block font-serif text-sm font-semibold">{f.nome}</span>
@@ -294,11 +302,10 @@ export function ScreenNegocios({
               key={f.id}
               type="button"
               onClick={() => setFiltroModo(f.id)}
-              className={`flex-1 rounded-xl py-2 text-xs font-semibold transition-brand ${
-                filtroModo === f.id
-                  ? 'bg-primary/10 text-primary border border-primary/20'
-                  : 'border border-border bg-card text-muted-foreground'
-              }`}
+              className={`flex-1 rounded-xl py-2 text-xs font-semibold transition-brand ${filtroModo === f.id
+                ? 'bg-primary/10 text-primary border border-primary/20'
+                : 'border border-border bg-card text-muted-foreground'
+                }`}
             >
               {f.label}
             </button>
@@ -314,17 +321,15 @@ export function ScreenNegocios({
                 key={etapa.id}
                 type="button"
                 onClick={() => setEstagioAtivo(i)}
-                className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-brand ${
-                  estagioAtivo === i
-                    ? 'bg-teal-deep text-white border border-teal-deep'
-                    : 'border border-border bg-card text-muted-foreground'
-                }`}
+                className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-brand ${estagioAtivo === i
+                  ? 'bg-teal-deep text-white border border-teal-deep'
+                  : 'border border-border bg-card text-muted-foreground'
+                  }`}
               >
                 {etapa.label}
                 <span
-                  className={`flex size-5 items-center justify-center rounded-full font-mono text-[11px] ${
-                    estagioAtivo === i ? 'bg-white/20 text-white' : 'bg-muted text-muted-foreground'
-                  }`}
+                  className={`flex size-5 items-center justify-center rounded-full font-mono text-[11px] ${estagioAtivo === i ? 'bg-white/20 text-white' : 'bg-muted text-muted-foreground'
+                    }`}
                 >
                   {estagio?.atendimentos.length ?? 0}
                 </span>
@@ -370,7 +375,7 @@ export function ScreenNegocios({
           ))}
         </div>
       </div>
-      
+
       {mostrarFiltrosAvancados && (
         <FiltrosAvancadosSheet
           onClose={() => setMostrarFiltrosAvancados(false)}
@@ -395,17 +400,40 @@ export function ScreenNegocios({
             // Update funnel
             setFunisList(prev => prev.map(f => f.id === funilAtualizado.id ? funilAtualizado : f))
             setFunilAtivo(funilAtualizado)
-            
+            const globalIdx = funis.findIndex(f => f.id === funilAtualizado.id)
+            if (globalIdx !== -1) funis[globalIdx] = funilAtualizado
+
             // Apply transfers
             if (Object.keys(transferencias).length > 0) {
               setDados(prev => prev.map(a => {
                 if (a.funilId === funilAtualizado.id && transferencias[a.etapa]) {
-                  return { ...a, etapa: transferencias[a.etapa] }
+                  const novaEtapaId = transferencias[a.etapa]
+                  const oldEtapaNome = funilAtivo.etapas?.find((e) => e.id === a.etapa)?.label || a.etapa
+                  const novaEtapaNome = funilAtualizado.etapas?.find((e) => e.id === novaEtapaId)?.label || novaEtapaId
+                  const newTimelineEvent = {
+                    id: `tl-${Date.now()}-${a.id}`,
+                    tipo: 'etapa' as const,
+                    descricao: `Cliente foi da etapa ${oldEtapaNome} para etapa ${novaEtapaNome}`,
+                    data: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+                    hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                  }
+
+                  const idx = dadosAtendimentos.findIndex(da => da.id === a.id)
+                  if (idx !== -1) {
+                    dadosAtendimentos[idx].etapa = novaEtapaId
+                    dadosAtendimentos[idx].timeline = [newTimelineEvent, ...dadosAtendimentos[idx].timeline]
+                  }
+
+                  return { ...a, etapa: novaEtapaId, timeline: [newTimelineEvent, ...a.timeline] }
                 }
                 return a
               }))
+
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('app-data-updated'))
+              }
             }
-            
+
             setMostrarGerenciarFunil(false)
           }}
         />
@@ -442,9 +470,8 @@ function AtendimentoCard({
               </span>
             )}
             {/* Badge Venda/Locação */}
-            <span className={`ml-auto shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold ${
-              atd.modo === 'venda' ? 'bg-primary/10 text-primary' : 'bg-teal-mid/15 text-teal-deep'
-            }`}>
+            <span className={`ml-auto shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold ${atd.modo === 'venda' ? 'bg-primary/10 text-primary' : 'bg-teal-mid/15 text-teal-deep'
+              }`}>
               {atd.modo === 'venda' ? 'Venda' : 'Locação'}
             </span>
           </div>

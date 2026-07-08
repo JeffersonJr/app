@@ -15,7 +15,7 @@ const TEMPERATURAS = ['quente', 'morno', 'frio'] as const
 
 export function FormNovoLead({ onClose, onSalvar }: { onClose: () => void, onSalvar?: (id: string) => void }) {
   const [nome, setNome] = useState('')
-  const [telefones, setTelefones] = useState<{numero: string, isWhatsapp: boolean}[]>([{numero: '', isWhatsapp: true}])
+  const [telefones, setTelefones] = useState<{ numero: string, isWhatsapp: boolean }[]>([{ numero: '', isWhatsapp: true }])
   const [emails, setEmails] = useState<string[]>([''])
   const [origem, setOrigem] = useState<(typeof ORIGENS)[number]>('Portal: Zap Imóveis')
   const [temperatura, setTemperatura] = useState<(typeof TEMPERATURAS)[number]>('morno')
@@ -23,7 +23,7 @@ export function FormNovoLead({ onClose, onSalvar }: { onClose: () => void, onSal
   function handleSalvar() {
     if (!nome) return
     const novoId = `l${Date.now()}`
-    
+
     atendimentos.push({
       id: novoId,
       nome: nome,
@@ -52,7 +52,7 @@ export function FormNovoLead({ onClose, onSalvar }: { onClose: () => void, onSal
       perfil: { ...perfilVazio },
       albert: { ativo: false, dia: '', hora: '', instrucoes: '' },
     })
-    
+
     if (onSalvar) {
       onSalvar(novoId)
     }
@@ -125,7 +125,7 @@ export function FormNovoLead({ onClose, onSalvar }: { onClose: () => void, onSal
               </div>
             ))}
             {telefones.length < 3 && (
-              <button type="button" onClick={() => setTelefones([...telefones, {numero: '', isWhatsapp: false}])} className="flex items-center gap-2 text-xs font-semibold text-primary mt-1">
+              <button type="button" onClick={() => setTelefones([...telefones, { numero: '', isWhatsapp: false }])} className="flex items-center gap-2 text-xs font-semibold text-primary mt-1">
                 <PlusCircle className="size-3.5" /> Adicionar telefone
               </button>
             )}
@@ -197,9 +197,8 @@ export function FormNovoLead({ onClose, onSalvar }: { onClose: () => void, onSal
                   key={t}
                   type="button"
                   onClick={() => setTemperatura(t)}
-                  className={`flex-1 rounded-xl py-2 text-xs font-semibold transition-brand ${
-                    temperatura === t ? cores[t] : 'border border-border bg-card text-muted-foreground'
-                  }`}
+                  className={`flex-1 rounded-xl py-2 text-xs font-semibold transition-brand ${temperatura === t ? cores[t] : 'border border-border bg-card text-muted-foreground'
+                    }`}
                 >
                   {labels[t]}
                 </button>

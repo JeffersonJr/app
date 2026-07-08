@@ -348,11 +348,11 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
   function moverFoto(index: number, direcao: 'esq' | 'dir') {
     if (direcao === 'esq' && index > 0) {
       const nova = [...fotos]
-      ;[nova[index - 1], nova[index]] = [nova[index], nova[index - 1]]
+        ;[nova[index - 1], nova[index]] = [nova[index], nova[index - 1]]
       setFotos(nova)
     } else if (direcao === 'dir' && index < fotos.length - 1) {
       const nova = [...fotos]
-      ;[nova[index], nova[index + 1]] = [nova[index + 1], nova[index]]
+        ;[nova[index], nova[index + 1]] = [nova[index + 1], nova[index]]
       setFotos(nova)
     }
   }
@@ -407,14 +407,14 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
 
   // ── Upsell IA ─────────────────────────────────────────────────────────────
   if (mostrarUpsell) {
-    return <IAUpsellPage 
-      onClose={() => setMostrarUpsell(false)} 
+    return <IAUpsellPage
+      onClose={() => setMostrarUpsell(false)}
       onSuccess={() => {
         setMostrarUpsell(false)
         setIaAtivada(true)
         iniciarAnaliseIA()
       }}
-      origem="imovel" 
+      origem="imovel"
     />
   }
 
@@ -761,7 +761,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
               </div>
             </div>
           </button>
-          
+
           <button
             type="button"
             onClick={() => setFase('formulario')}
@@ -851,7 +851,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             <CheckCircle2 className="size-5" />
             Salvar Rascunho / Fast
           </button>
-          
+
           <p className="text-center text-xs text-muted-foreground">Você poderá finalizar as fotos e dados completos depois pelo computador.</p>
         </div>
       </div>
@@ -909,302 +909,301 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
       )}
 
       <div className="flex flex-col gap-5 pb-8">
-        
+
         {/* BLOCO 1: NEGOCIAÇÕES E TIPOS */}
         <AccordionSection title="Negociações e Tipos" icon={<FileText className="size-4" strokeWidth={2.5} />} isOpen={openSection === 1} onToggle={() => setOpenSection(openSection === 1 ? 0 : 1)}>
-            <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título do imóvel *</label>
-              <input
-                type="text"
-                value={titulo}
-                onChange={(e) => setTitulo(e.target.value)}
-                placeholder="Ex: Apartamento Jardins 3 quartos"
-                className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring ${titulo ? 'border-teal-mid/40' : 'border-border'}`}
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Código</label>
-                <input type="text" value={codigo} onChange={(e) => setCodigo(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">CIB</label>
-                <input type="text" value={cib} onChange={(e) => setCib(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-            </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título do imóvel *</label>
+            <input
+              type="text"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
+              placeholder="Ex: Apartamento Jardins 3 quartos"
+              className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring ${titulo ? 'border-teal-mid/40' : 'border-border'}`}
+            />
+          </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Finalidade</label>
-                <select value={finalidade} onChange={(e) => {
-                  const newFin = e.target.value as FinalidadeCategoria
-                  setFinalidade(newFin)
-                  setTipoImovel(TIPOS_POR_FINALIDADE[newFin][0])
-                }} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none ${finalidade ? 'border-teal-mid/40' : 'border-border'}`}>
-                  {FINALIDADES.map((f) => <option key={f} value={f}>{f}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipo</label>
-                <select value={tipoImovel} onChange={(e) => setTipoImovel(e.target.value)} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none ${tipoImovel ? 'border-teal-mid/40' : 'border-border'}`}>
-                  {TIPOS_POR_FINALIDADE[finalidade].map((t) => <option key={t} value={t}>{t}</option>)}
-                </select>
-              </div>
-            </div>
-
+          <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Operação</label>
-              <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1 py-1">
-                {(['Venda', 'Locação', 'Temporada', 'Arrendamento'] as const).map((o) => (
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Código</label>
+              <input type="text" value={codigo} onChange={(e) => setCodigo(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">CIB</label>
+              <input type="text" value={cib} onChange={(e) => setCib(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Finalidade</label>
+              <select value={finalidade} onChange={(e) => {
+                const newFin = e.target.value as FinalidadeCategoria
+                setFinalidade(newFin)
+                setTipoImovel(TIPOS_POR_FINALIDADE[newFin][0])
+              }} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none ${finalidade ? 'border-teal-mid/40' : 'border-border'}`}>
+                {FINALIDADES.map((f) => <option key={f} value={f}>{f}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipo</label>
+              <select value={tipoImovel} onChange={(e) => setTipoImovel(e.target.value)} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none ${tipoImovel ? 'border-teal-mid/40' : 'border-border'}`}>
+                {TIPOS_POR_FINALIDADE[finalidade].map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Operação</label>
+            <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1 py-1">
+              {(['Venda', 'Locação', 'Temporada', 'Arrendamento'] as const).map((o) => (
+                <button
+                  key={o}
+                  type="button"
+                  onClick={() => {
+                    if (operacoes.includes(o)) {
+                      setOperacoes(operacoes.filter((op) => op !== o))
+                    } else {
+                      setOperacoes([...operacoes, o])
+                    }
+                  }}
+                  className={`shrink-0 rounded-2xl px-4 py-3 text-sm font-semibold transition-brand ${operacoes.includes(o) ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'}`}
+                >
+                  {o}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Situação</label>
+              <select value={situacaoImovel} onChange={(e) => setSituacaoImovel(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
+                <option value="Pronto">Pronto</option>
+                <option value="Na Planta">Na Planta</option>
+                <option value="Em Obras">Em Obras</option>
+              </select>
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Status</label>
+              <select value={statusImovel} onChange={(e) => setStatusImovel(e.target.value as (typeof STATUS_OPTIONS)[number])} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
+                {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="mt-2 rounded-2xl bg-muted/40 p-4 border border-border/50">
+            <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+              Contrato de Exclusividade
+            </label>
+            <div className="flex flex-col gap-3">
+              <div className="flex gap-2 bg-background p-1.5 rounded-xl border border-border/50">
+                {(['Nenhuma', 'Venda', 'Locação', 'Ambas'] as const).map(tipo => (
                   <button
-                    key={o}
+                    key={tipo}
                     type="button"
-                    onClick={() => {
-                      if (operacoes.includes(o)) {
-                        setOperacoes(operacoes.filter((op) => op !== o))
-                      } else {
-                        setOperacoes([...operacoes, o])
-                      }
-                    }}
-                    className={`shrink-0 rounded-2xl px-4 py-3 text-sm font-semibold transition-brand ${operacoes.includes(o) ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'}`}
+                    onClick={() => setTipoExclusividade(tipo)}
+                    className={`flex-1 rounded-lg py-2 text-xs font-semibold transition-all ${tipoExclusividade === tipo
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-muted-foreground hover:bg-muted/50'
+                      }`}
                   >
-                    {o}
+                    {tipo}
                   </button>
                 ))}
               </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Situação</label>
-                <select value={situacaoImovel} onChange={(e) => setSituacaoImovel(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
-                  <option value="Pronto">Pronto</option>
-                  <option value="Na Planta">Na Planta</option>
-                  <option value="Em Obras">Em Obras</option>
-                </select>
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Status</label>
-                <select value={statusImovel} onChange={(e) => setStatusImovel(e.target.value as (typeof STATUS_OPTIONS)[number])} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none">
-                  {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-            </div>
-            
-            <div className="mt-2 rounded-2xl bg-muted/40 p-4 border border-border/50">
-              <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                Contrato de Exclusividade
-              </label>
-              <div className="flex flex-col gap-3">
-                <div className="flex gap-2 bg-background p-1.5 rounded-xl border border-border/50">
-                  {(['Nenhuma', 'Venda', 'Locação', 'Ambas'] as const).map(tipo => (
-                    <button
-                      key={tipo}
-                      type="button"
-                      onClick={() => setTipoExclusividade(tipo)}
-                      className={`flex-1 rounded-lg py-2 text-xs font-semibold transition-all ${
-                        tipoExclusividade === tipo 
-                          ? 'bg-primary/10 text-primary' 
-                          : 'text-muted-foreground hover:bg-muted/50'
-                      }`}
-                    >
-                      {tipo}
-                    </button>
-                  ))}
+              {tipoExclusividade !== 'Nenhuma' && (
+                <div className="mt-2">
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Validade (Dias)</label>
+                  <input type="number" value={validadeExclusividade} onChange={(e) => setValidadeExclusividade(e.target.value)} placeholder="Ex: 90" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
                 </div>
-
-                {tipoExclusividade !== 'Nenhuma' && (
-                  <div className="mt-2">
-                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Validade (Dias)</label>
-                    <input type="number" value={validadeExclusividade} onChange={(e) => setValidadeExclusividade(e.target.value)} placeholder="Ex: 90" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-                  </div>
-                )}
-              </div>
+              )}
             </div>
+          </div>
         </AccordionSection>
 
         {/* BLOCO 2: LOCALIZAÇÃO */}
         <AccordionSection title="Localização e Prédio" icon={<MapPin className="size-4" strokeWidth={2.5} />} isOpen={openSection === 2} onToggle={() => setOpenSection(openSection === 2 ? 0 : 2)}>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="col-span-1">
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">CEP</label>
-                <input type="text" value={cep} onChange={(e) => setCep(maskCEP(e.target.value))} placeholder="00000-000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-                <button type="button" onClick={() => setModalBuscaCep(!modalBuscaCep)} className="mt-1 text-[10px] font-semibold text-primary underline">Não sei meu CEP</button>
-              </div>
-              <div className="col-span-2">
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Endereço</label>
-                <input type="text" value={endereco} onChange={(e) => setEndereco(e.target.value)} placeholder="Rua, número" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="col-span-1">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">CEP</label>
+              <input type="text" value={cep} onChange={(e) => setCep(maskCEP(e.target.value))} placeholder="00000-000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <button type="button" onClick={() => setModalBuscaCep(!modalBuscaCep)} className="mt-1 text-[10px] font-semibold text-primary underline">Não sei meu CEP</button>
             </div>
-
-            <AnimatePresence>
-              {modalBuscaCep && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="rounded-2xl border border-border bg-muted/30 p-3 mb-2"
-                >
-                  <p className="mb-2 text-xs font-semibold text-foreground">Buscar CEP por endereço</p>
-                  <div className="grid grid-cols-3 gap-2 mb-2">
-                    <div className="col-span-1">
-                      <input type="text" value={buscaUf} onChange={e => setBuscaUf(e.target.value.toUpperCase().slice(0,2))} placeholder="UF" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
-                    </div>
-                    <div className="col-span-2">
-                      <input type="text" value={buscaCidade} onChange={e => setBuscaCidade(e.target.value)} placeholder="Cidade" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <input type="text" value={buscaLogradouro} onChange={e => setBuscaLogradouro(e.target.value)} placeholder="Rua, Avenida..." className="h-10 flex-1 rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
-                    <button type="button" onClick={buscarCepAvancado} disabled={buscandoCep} className="h-10 rounded-xl bg-primary px-4 text-xs font-semibold text-primary-foreground transition-brand disabled:opacity-50">
-                      {buscandoCep ? '...' : 'Buscar'}
-                    </button>
-                  </div>
-                  {resultadosCep.length > 0 && (
-                    <ul className="mt-2 max-h-40 overflow-y-auto rounded-xl border border-border bg-background">
-                      {resultadosCep.map((res: any, idx) => (
-                        <li key={idx}>
-                          <button type="button" onClick={() => {
-                            setCep(maskCEP(res.cep))
-                            setEndereco(res.logradouro)
-                            setBairro(res.bairro)
-                            setCidade(res.localidade)
-                            setModalBuscaCep(false)
-                          }} className="w-full border-b border-border p-2 text-left text-xs hover:bg-muted last:border-0">
-                            <p className="font-semibold">{res.logradouro}</p>
-                            <p className="text-muted-foreground">{res.bairro} - {res.localidade}/{res.uf} · CEP: {res.cep}</p>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-            
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Bairro</label>
-                <input type="text" value={bairro} onChange={(e) => setBairro(e.target.value)} placeholder="Jardins" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cidade</label>
-                <input type="text" value={cidade} onChange={(e) => setCidade(e.target.value)} placeholder="São Paulo" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
+            <div className="col-span-2">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Endereço</label>
+              <input type="text" value={endereco} onChange={(e) => setEndereco(e.target.value)} placeholder="Rua, número" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
+          </div>
 
+          <AnimatePresence>
+            {modalBuscaCep && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="rounded-2xl border border-border bg-muted/30 p-3 mb-2"
+              >
+                <p className="mb-2 text-xs font-semibold text-foreground">Buscar CEP por endereço</p>
+                <div className="grid grid-cols-3 gap-2 mb-2">
+                  <div className="col-span-1">
+                    <input type="text" value={buscaUf} onChange={e => setBuscaUf(e.target.value.toUpperCase().slice(0, 2))} placeholder="UF" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
+                  </div>
+                  <div className="col-span-2">
+                    <input type="text" value={buscaCidade} onChange={e => setBuscaCidade(e.target.value)} placeholder="Cidade" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <input type="text" value={buscaLogradouro} onChange={e => setBuscaLogradouro(e.target.value)} placeholder="Rua, Avenida..." className="h-10 flex-1 rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
+                  <button type="button" onClick={buscarCepAvancado} disabled={buscandoCep} className="h-10 rounded-xl bg-primary px-4 text-xs font-semibold text-primary-foreground transition-brand disabled:opacity-50">
+                    {buscandoCep ? '...' : 'Buscar'}
+                  </button>
+                </div>
+                {resultadosCep.length > 0 && (
+                  <ul className="mt-2 max-h-40 overflow-y-auto rounded-xl border border-border bg-background">
+                    {resultadosCep.map((res: any, idx) => (
+                      <li key={idx}>
+                        <button type="button" onClick={() => {
+                          setCep(maskCEP(res.cep))
+                          setEndereco(res.logradouro)
+                          setBairro(res.bairro)
+                          setCidade(res.localidade)
+                          setModalBuscaCep(false)
+                        }} className="w-full border-b border-border p-2 text-left text-xs hover:bg-muted last:border-0">
+                          <p className="font-semibold">{res.logradouro}</p>
+                          <p className="text-muted-foreground">{res.bairro} - {res.localidade}/{res.uf} · CEP: {res.cep}</p>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Condomínio/Empreendimento</label>
-              <input type="text" value={condominio} onChange={(e) => setCondominio(e.target.value)} placeholder="Nome do prédio ou loteamento" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Bairro</label>
+              <input type="text" value={bairro} onChange={(e) => setBairro(e.target.value)} placeholder="Jardins" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cidade</label>
+              <input type="text" value={cidade} onChange={(e) => setCidade(e.target.value)} placeholder="São Paulo" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Andar</label>
-                <input type="text" value={andar} onChange={(e) => setAndar(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Ano de Construção</label>
-                <input type="text" value={anoConstrucao} onChange={(e) => setAnoConstrucao(e.target.value)} placeholder="YYYY" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Condomínio/Empreendimento</label>
+            <input type="text" value={condominio} onChange={(e) => setCondominio(e.target.value)} placeholder="Nome do prédio ou loteamento" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Andar</label>
+              <input type="text" value={andar} onChange={(e) => setAndar(e.target.value)} placeholder="Opcional" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Ano de Construção</label>
+              <input type="text" value={anoConstrucao} onChange={(e) => setAnoConstrucao(e.target.value)} placeholder="YYYY" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            </div>
+          </div>
         </AccordionSection>
 
         {/* BLOCO 3: COMPOSIÇÃO (Condicional) */}
         {((finalidade === 'Residencial' && !['Terreno', 'Terreno de Condomínio', 'Área', 'Loteamento', 'Garagem'].includes(tipoImovel)) ||
           (finalidade === 'Rural' && ['Chácara', 'Chácara em Condomínio', 'Fazenda', 'Haras', 'Rancho', 'Sítio'].includes(tipoImovel)) ||
           (finalidade === 'Comercial' && ['Casa', 'Sobrado', 'Conjunto Comercial', 'Prédio'].includes(tipoImovel))) && (
-          <AccordionSection title="Composição (Cômodos)" icon={<LayoutGrid className="size-4" strokeWidth={2.5} />} isOpen={openSection === 3} onToggle={() => setOpenSection(openSection === 3 ? 0 : 3)}>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Dormitórios</label>
-                <input type="number" value={quartos} onChange={(e) => setQuartos(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            <AccordionSection title="Composição (Cômodos)" icon={<LayoutGrid className="size-4" strokeWidth={2.5} />} isOpen={openSection === 3} onToggle={() => setOpenSection(openSection === 3 ? 0 : 3)}>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Dormitórios</label>
+                  <input type="number" value={quartos} onChange={(e) => setQuartos(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Suítes</label>
+                  <input type="number" value={suites} onChange={(e) => setSuites(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Banheiros</label>
+                  <input type="number" value={banheiros} onChange={(e) => setBanheiros(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Salas</label>
+                  <input type="number" value={salas} onChange={(e) => setSalas(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vagas</label>
+                  <input type="number" value={vagas} onChange={(e) => setVagas(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
               </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Suítes</label>
-                <input type="number" value={suites} onChange={(e) => setSuites(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+
+              <div className="mt-6">
+                <SearchableTagSelect
+                  label="Acabamento & Características dos Cômodos"
+                  placeholder="Ex: Armários, Piso Porcelanato, Ar Condicionado..."
+                  groups={CARACTERISTICAS_COMODOS_GRUPOS}
+                  popular={CARACTERISTICAS_COMODOS_POPULAR}
+                  selected={caracteristicasComodos}
+                  onChange={setCaracteristicasComodos}
+                  maxVisible={10}
+                />
               </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Banheiros</label>
-                <input type="number" value={banheiros} onChange={(e) => setBanheiros(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Salas</label>
-                <input type="number" value={salas} onChange={(e) => setSalas(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vagas</label>
-                <input type="number" value={vagas} onChange={(e) => setVagas(e.target.value)} placeholder="0" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-            </div>
-            
-            <div className="mt-6">
-              <SearchableTagSelect
-                label="Acabamento & Características dos Cômodos"
-                placeholder="Ex: Armários, Piso Porcelanato, Ar Condicionado..."
-                groups={CARACTERISTICAS_COMODOS_GRUPOS}
-                popular={CARACTERISTICAS_COMODOS_POPULAR}
-                selected={caracteristicasComodos}
-                onChange={setCaracteristicasComodos}
-                maxVisible={10}
-              />
-            </div>
-          </AccordionSection>
-        )}
+            </AccordionSection>
+          )}
 
         {/* BLOCO 4: MEDIDAS E VALORES */}
         <AccordionSection title="Medidas e Valores" icon={<Ruler className="size-4" strokeWidth={2.5} />} isOpen={openSection === 4} onToggle={() => setOpenSection(openSection === 4 ? 0 : 4)}>
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Valor (R$)</label>
+            <input type="text" value={valor} onChange={(e) => setValor(maskCurrency(e.target.value))} placeholder="R$ 890.000,00" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Valor (R$)</label>
-              <input type="text" value={valor} onChange={(e) => setValor(maskCurrency(e.target.value))} placeholder="R$ 890.000,00" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Útil/Const.</label>
+              <input type="number" value={area} onChange={(e) => setArea(e.target.value)} placeholder="m²" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Útil/Const.</label>
-                <input type="number" value={area} onChange={(e) => setArea(e.target.value)} placeholder="m²" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Total</label>
-                <input type="number" value={areaTotal} onChange={(e) => setAreaTotal(e.target.value)} placeholder="m²" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Total</label>
+              <input type="number" value={areaTotal} onChange={(e) => setAreaTotal(e.target.value)} placeholder="m²" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
+          </div>
         </AccordionSection>
 
         {/* BLOCO 5: CARACTERÍSTICAS */}
         <AccordionSection title="Características" icon={<Tag className="size-4" strokeWidth={2.5} />} isOpen={openSection === 5} onToggle={() => setOpenSection(openSection === 5 ? 0 : 5)}>
-            <div className="flex flex-col gap-6 mb-4">
-              <SearchableTagSelect
-                label="Características e Infraestrutura"
-                placeholder="Buscar características..."
-                groups={CARACTERISTICAS_GRUPOS}
-                popular={CARACTERISTICAS_POPULAR}
-                selected={caracteristicasSelecionadas}
-                onChange={setCaracteristicasSelecionadas}
-                maxVisible={10}
-              />
+          <div className="flex flex-col gap-6 mb-4">
+            <SearchableTagSelect
+              label="Características e Infraestrutura"
+              placeholder="Buscar características..."
+              groups={CARACTERISTICAS_GRUPOS}
+              popular={CARACTERISTICAS_POPULAR}
+              selected={caracteristicasSelecionadas}
+              onChange={setCaracteristicasSelecionadas}
+              maxVisible={10}
+            />
 
-              <SearchableTagSelect
-                label="Proximidades"
-                placeholder="Buscar proximidades..."
-                groups={PROXIMIDADES_GRUPOS}
-                popular={PROXIMIDADES_POPULAR}
-                selected={proximidadesSelecionadas}
-                onChange={setProximidadesSelecionadas}
-                maxVisible={10}
-              />
-            </div>
+            <SearchableTagSelect
+              label="Proximidades"
+              placeholder="Buscar proximidades..."
+              groups={PROXIMIDADES_GRUPOS}
+              popular={PROXIMIDADES_POPULAR}
+              selected={proximidadesSelecionadas}
+              onChange={setProximidadesSelecionadas}
+              maxVisible={10}
+            />
+          </div>
 
-            <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Descrição do imóvel</label>
-              <textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={4} placeholder="Conte a história do imóvel, detalhes e proximidades..." className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              {observacoes && titulo && (
-                <p className="mt-1.5 flex items-center gap-1 text-[10px] text-teal-mid font-medium">
-                  <Sparkles className="size-2.5" strokeWidth={2} />
-                  Preenchido pela IA
-                </p>
-              )}
-            </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Descrição do imóvel</label>
+            <textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={4} placeholder="Conte a história do imóvel, detalhes e proximidades..." className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            {observacoes && titulo && (
+              <p className="mt-1.5 flex items-center gap-1 text-[10px] text-teal-mid font-medium">
+                <Sparkles className="size-2.5" strokeWidth={2} />
+                Preenchido pela IA
+              </p>
+            )}
+          </div>
         </AccordionSection>
 
         {/* BLOCO 6: PROPRIETÁRIO */}
@@ -1219,14 +1218,14 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
         {/* BLOCO 7: MÍDIA */}
         <AccordionSection title="Mídia" icon={<ImageIcon className="size-4" strokeWidth={2.5} />} isOpen={openSection === 7} onToggle={() => setOpenSection(openSection === 7 ? 0 : 7)}>
           <div className="flex flex-col gap-4">
-            
+
             {/* Gerenciamento de Fotos */}
             <div>
               <div className="mb-2 flex items-center justify-between">
                 <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Fotos ({fotos.length})</label>
                 <button type="button" onClick={() => fileInputRef.current?.click()} className="text-xs font-semibold text-primary">Adicionar +</button>
               </div>
-              
+
               <div className="flex flex-col gap-3">
                 {fotos.length === 0 ? (
                   <div className="flex h-32 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/30 text-muted-foreground">
@@ -1327,7 +1326,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
                 <input type="text" value={agua} onChange={(e) => setAgua(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Captador 1</label>
@@ -1362,13 +1361,13 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
         {/* BLOCO 10: SEO E OTIMIZAÇÃO */}
         <AccordionSection title="SEO e Otimização" icon={<Search className="size-4" strokeWidth={2.5} />} isOpen={openSection === 10} onToggle={() => setOpenSection(openSection === 10 ? 0 : 10)}>
           <div className="flex flex-col gap-4">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => {
                 setSeoTitulo(`${tipoImovel}, ${bairro || 'Centro'}, ${cidade || 'SP'}`)
                 setSeoPalavras(`${tipoImovel} em ${bairro || 'Centro'}, ${tipoImovel} em ${cidade || 'SP'}, ${quartos ? quartos + ' dorms' : ''}`)
                 setSeoDescricao(`${tipoImovel} à venda em ${bairro || 'Centro'}, ${cidade || 'SP'} com ${area ? area + 'm²' : ''}. Código: ${codigo || '1000'}`)
-              }} 
+              }}
               className="flex items-center justify-center gap-2 rounded-xl bg-teal-mid/10 py-3 text-sm font-semibold text-teal-deep transition-colors hover:bg-teal-mid/20"
             >
               <Sparkles className="size-4" strokeWidth={2} />

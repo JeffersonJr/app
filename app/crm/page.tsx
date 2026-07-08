@@ -92,11 +92,18 @@ export default function Page() {
         <div className="flex-1 overflow-y-auto overscroll-contain">
           {tab === 'hoje' && (
             <ScreenHoje
-              onVerFunil={() => trocarTab('negocios')}
-              onVerCliente={abrirClientePorLead}
+              onVerFunil={() => setTab('negocios')}
+              onVerCliente={(id) => {
+                setClienteAbertoId(id)
+                setTab('clientes')
+              }}
               onVerPerfil={() => setTab('perfil')}
               onVerAtendimento={abrirAtendimentoPorId}
-              onAbrirNovaAtividade={() => { setQuickAddAcao('nova-atividade'); setQuickAddAberto(true); }}
+              onAbrirNovaAtividade={() => {
+                setQuickAddAcao('atividade')
+                setQuickAddAberto(true)
+              }}
+              onVerAtividades={() => setTab('atividades')}
             />
           )}
           {tab === 'negocios' && (

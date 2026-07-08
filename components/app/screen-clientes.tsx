@@ -88,11 +88,10 @@ export function ScreenClientes({
             key={s}
             type="button"
             onClick={() => setSegmento(s)}
-            className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-brand ${
-              segmento === s
-                ? 'bg-primary text-primary-foreground'
-                : 'border border-border bg-card text-muted-foreground'
-            }`}
+            className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-brand ${segmento === s
+              ? 'bg-primary text-primary-foreground'
+              : 'border border-border bg-card text-muted-foreground'
+              }`}
           >
             {s}
           </button>
@@ -236,9 +235,8 @@ function ClienteDetail({ cliente, onBack }: { cliente: Cliente; onBack: () => vo
           {localTimeline.map((item, i) => (
             <li key={item.evento} className="relative">
               <span
-                className={`absolute -left-[26px] top-1 size-2.5 rounded-full ${
-                  i === 0 ? 'bg-amber' : 'bg-teal-mid'
-                }`}
+                className={`absolute -left-[26px] top-1 size-2.5 rounded-full ${i === 0 ? 'bg-amber' : 'bg-teal-mid'
+                  }`}
                 aria-hidden="true"
               />
               <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">

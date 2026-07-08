@@ -129,6 +129,34 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
     const [atividadeSelecionada, setAtividadeSelecionada] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [sheetGanhoPerdido, setSheetGanhoPerdido] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [expandedTimelineItemId, setExpandedTimelineItemId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const handleUpdate = ()=>{
+            const globalAtendimento = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$app$2d$data$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["atendimentos"].find((a)=>a.id === atendimento.id);
+            if (globalAtendimento) {
+                setLocalTimeline([
+                    ...globalAtendimento.timeline || []
+                ].sort((a, b)=>{
+                    if (a.id > b.id) return -1;
+                    if (a.id < b.id) return 1;
+                    return 0;
+                }));
+                setLocalAtividades([
+                    ...globalAtendimento.atividades || []
+                ].sort((a, b)=>{
+                    const parseDate = (d, h)=>{
+                        if (d === 'Hoje') return new Date(`1970-01-01T${h}:00`);
+                        if (d === 'Amanhã') return new Date(`1970-01-02T${h}:00`);
+                        return new Date(`${d}T${h}:00`);
+                    };
+                    return parseDate(a.data, a.hora).getTime() - parseDate(b.data, b.hora).getTime();
+                }));
+            }
+        };
+        window.addEventListener('app-data-updated', handleUpdate);
+        return ()=>window.removeEventListener('app-data-updated', handleUpdate);
+    }, [
+        atendimento.id
+    ]);
     // 4Q e FORD Edit states
     const [editing4Q, setEditing4Q] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [form4Q, setForm4Q] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
@@ -406,19 +434,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                             className: "size-4"
                         }, void 0, false, {
                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                            lineNumber: 364,
+                            lineNumber: 388,
                             columnNumber: 13
                         }, this),
                         toastMensagem
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                    lineNumber: 363,
+                    lineNumber: 387,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 362,
+                lineNumber: 386,
                 columnNumber: 9
             }, this),
             mostrarUpsell && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$ia$2d$upsell$2d$page$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["IAUpsellPage"], {
@@ -426,7 +454,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                 origem: "albert"
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 370,
+                lineNumber: 394,
                 columnNumber: 25
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -445,12 +473,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                     strokeWidth: 1.5
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 381,
+                                    lineNumber: 405,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 375,
+                                lineNumber: 399,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -468,14 +496,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                         strokeWidth: 2
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 391,
+                                                        lineNumber: 415,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Ganho"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 386,
+                                                lineNumber: 410,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -488,14 +516,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                         strokeWidth: 2
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 399,
+                                                        lineNumber: 423,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Perdido"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 394,
+                                                lineNumber: 418,
                                                 columnNumber: 17
                                             }, this)
                                         ]
@@ -505,19 +533,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: atendimento.status === 'ganho' ? '🏆 Ganho' : '✗ Perdido'
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 405,
+                                        lineNumber: 429,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 383,
+                                lineNumber: 407,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 374,
+                        lineNumber: 398,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -531,13 +559,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         className: `absolute -bottom-0.5 -right-0.5 size-4 rounded-full border-2 border-primary ${__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$app$2d$data$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tempConfig"][atendimento.temperatura].bg}`
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 416,
+                                        lineNumber: 440,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 414,
+                                lineNumber: 438,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -548,7 +576,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: atendimento.nome
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 419,
+                                        lineNumber: 443,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -556,7 +584,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: atendimento.telefone
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 420,
+                                        lineNumber: 444,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -564,19 +592,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: atendimento.email
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 421,
+                                        lineNumber: 445,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 418,
+                                lineNumber: 442,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 413,
+                        lineNumber: 437,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -587,7 +615,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 children: atendimento.origem
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 427,
+                                lineNumber: 451,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -595,7 +623,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 children: etapasFunil.find((e)=>e.id === atendimento.etapa)?.label || atendimento.etapa
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 430,
+                                lineNumber: 454,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -606,7 +634,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 433,
+                                lineNumber: 457,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -617,13 +645,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 436,
+                                lineNumber: 460,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 426,
+                        lineNumber: 450,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -669,7 +697,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         strokeWidth: 1.5
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 464,
+                                        lineNumber: 489,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -677,18 +705,18 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: a.label
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 465,
+                                        lineNumber: 490,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, a.label, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 458,
+                                lineNumber: 483,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 442,
+                        lineNumber: 466,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -704,12 +732,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                     strokeWidth: 2
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 478,
+                                    lineNumber: 503,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 472,
+                                lineNumber: 497,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -720,7 +748,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Etapa no funil"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 481,
+                                        lineNumber: 506,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -728,7 +756,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: etapasFunil.find((e)=>e.id === atendimento.etapa)?.label || atendimento.etapa
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 482,
+                                        lineNumber: 507,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -737,18 +765,18 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: `h-1 w-6 rounded-full ${i <= etapaIdx ? 'bg-teal-light' : 'bg-teal-shadow/60'}`
                                             }, e.id, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 487,
+                                                lineNumber: 512,
                                                 columnNumber: 17
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 485,
+                                        lineNumber: 510,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 480,
+                                lineNumber: 505,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -761,24 +789,24 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                     strokeWidth: 2
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 497,
+                                    lineNumber: 522,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 491,
+                                lineNumber: 516,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 471,
+                        lineNumber: 496,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 373,
+                lineNumber: 397,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -830,19 +858,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 strokeWidth: 1.5
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 528,
+                                lineNumber: 552,
                                 columnNumber: 13
                             }, this),
                             a.label
                         ]
                     }, a.id, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 512,
+                        lineNumber: 537,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 503,
+                lineNumber: 528,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -858,7 +886,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Histórico"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 540,
+                                        lineNumber: 564,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -871,20 +899,20 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 strokeWidth: 2
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 546,
+                                                lineNumber: 570,
                                                 columnNumber: 17
                                             }, this),
                                             " Registro"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 541,
+                                        lineNumber: 565,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 539,
+                                lineNumber: 563,
                                 columnNumber: 13
                             }, this),
                             localAtividades.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -897,14 +925,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: "size-3.5"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 554,
+                                                lineNumber: 578,
                                                 columnNumber: 19
                                             }, this),
                                             "Atividades"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 553,
+                                        lineNumber: 577,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -925,19 +953,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 strokeWidth: 1.5
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 577,
+                                                                lineNumber: 600,
                                                                 columnNumber: 31
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "text-lg",
                                                                 children: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$app$2d$data$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tipoAtividadeConfig"][atv.tipo]?.emoji || '📋'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 579,
+                                                                lineNumber: 602,
                                                                 columnNumber: 31
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 575,
+                                                            lineNumber: 598,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -948,7 +976,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     children: atv.titulo
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 583,
+                                                                    lineNumber: 606,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -956,42 +984,42 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     children: atv.hora
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 586,
+                                                                    lineNumber: 609,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 582,
+                                                            lineNumber: 605,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
                                                             className: `size-4 ${atv.concluida ? 'text-muted-foreground/30' : 'text-muted-foreground opacity-50'}`
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 590,
+                                                            lineNumber: 613,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 566,
+                                                    lineNumber: 590,
                                                     columnNumber: 25
                                                 }, this)
                                             }, atv.id, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 565,
+                                                lineNumber: 589,
                                                 columnNumber: 23
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 557,
+                                        lineNumber: 581,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 552,
+                                lineNumber: 576,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1003,12 +1031,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: f
                                     }, f, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 601,
+                                        lineNumber: 624,
                                         columnNumber: 17
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 599,
+                                lineNumber: 622,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ol", {
@@ -1024,7 +1052,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                     children: iconeTimeline(item.tipo)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 621,
+                                                    lineNumber: 643,
                                                     columnNumber: 21
                                                 }, this),
                                                 item.importante && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1032,7 +1060,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                     children: "⭐"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 625,
+                                                    lineNumber: 647,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1052,20 +1080,20 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 633,
+                                                                    lineNumber: 655,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
                                                                     className: `size-4 text-muted-foreground transition-transform ${isExpanded ? 'rotate-90' : ''}`
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 636,
+                                                                    lineNumber: 658,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 632,
+                                                            lineNumber: 654,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1073,7 +1101,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             children: item.descricao
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 638,
+                                                            lineNumber: 660,
                                                             columnNumber: 23
                                                         }, this),
                                                         isExpanded && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1084,7 +1112,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     children: "Detalhes Adicionais:"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 643,
+                                                                    lineNumber: 665,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1094,7 +1122,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 644,
+                                                                    lineNumber: 666,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1102,7 +1130,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     children: "Registrado por: Atendente Digital (Albert)"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 645,
+                                                                    lineNumber: 667,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 item.tipo === 'imovel_enviado' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1112,32 +1140,32 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                             className: "size-4"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                            lineNumber: 649,
+                                                                            lineNumber: 671,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         " Ver Imóvel Enviado"
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 648,
+                                                                    lineNumber: 670,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 642,
+                                                            lineNumber: 664,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 627,
+                                                    lineNumber: 649,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, item.id, true, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 620,
+                                            lineNumber: 642,
                                             columnNumber: 19
                                         }, this);
                                     }),
@@ -1146,13 +1174,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Nenhum registro para este filtro."
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 659,
+                                        lineNumber: 681,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 616,
+                                lineNumber: 638,
                                 columnNumber: 13
                             }, this),
                             mostrarNovaNota && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1163,7 +1191,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Nova nota"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 666,
+                                        lineNumber: 688,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1174,7 +1202,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         className: "w-full resize-none rounded-xl border border-border bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 667,
+                                        lineNumber: 689,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1190,7 +1218,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Cancelar"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 675,
+                                                lineNumber: 697,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1203,25 +1231,25 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Salvar nota"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 680,
+                                                lineNumber: 702,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 674,
+                                        lineNumber: 696,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 665,
+                                lineNumber: 687,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 538,
+                        lineNumber: 562,
                         columnNumber: 11
                     }, this),
                     aba === 'atividades' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1234,7 +1262,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Atividades"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 695,
+                                        lineNumber: 717,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1247,20 +1275,20 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 strokeWidth: 2
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 701,
+                                                lineNumber: 723,
                                                 columnNumber: 17
                                             }, this),
                                             " Agendar"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 696,
+                                        lineNumber: 718,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 694,
+                                lineNumber: 716,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1289,7 +1317,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 713,
+                                                                lineNumber: 735,
                                                                 columnNumber: 23
                                                             }, this),
                                                             atv.importante && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$star$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Star$3e$__["Star"], {
@@ -1297,13 +1325,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 strokeWidth: 0
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 716,
+                                                                lineNumber: 738,
                                                                 columnNumber: 42
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 712,
+                                                        lineNumber: 734,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1311,7 +1339,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                         children: atv.titulo
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 718,
+                                                        lineNumber: 740,
                                                         columnNumber: 21
                                                     }, this),
                                                     atv.descricao && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1319,38 +1347,38 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                         children: atv.descricao
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 721,
+                                                        lineNumber: 743,
                                                         columnNumber: 39
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                        className: `mt-2 flex items-center gap-1 font-mono text-[11px] ${atv.concluida ? 'text-muted-foreground' : 'text-primary'}`,
+                                                        className: `mt-2 flex items-center gap-1 font-mono text-[11px] ${atv.concluida ? 'text-muted-foreground' : (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$app$2d$data$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isAtividadeAtrasada"])(atv.data, atv.hora) ? 'text-red-500' : 'text-primary'}`,
                                                         children: [
                                                             atv.data === 'Hoje' ? 'Hoje' : atv.data,
                                                             " · ",
                                                             atv.hora,
-                                                            !atv.concluida && atv.data !== 'Hoje' && atv.data !== 'Amanhã' && new Date(`${atv.data}T${atv.hora}:00`).getTime() < Date.now() && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "ml-2 rounded text-[10px] font-bold text-red-500 bg-red-500/10 px-1.5 py-0.5",
-                                                                children: "Atrasada"
+                                                            !atv.concluida && (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$app$2d$data$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isAtividadeAtrasada"])(atv.data, atv.hora) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "ml-2 rounded text-[9px] font-bold text-red-500 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5",
+                                                                children: "ATRASADA"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 725,
+                                                                lineNumber: 747,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 722,
+                                                        lineNumber: 744,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 707,
+                                                lineNumber: 729,
                                                 columnNumber: 19
                                             }, this)
                                         }, atv.id, false, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 706,
+                                            lineNumber: 728,
                                             columnNumber: 17
                                         }, this)),
                                     localAtividades.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1358,13 +1386,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Nenhuma atividade agendada."
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 732,
+                                        lineNumber: 754,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 704,
+                                lineNumber: 726,
                                 columnNumber: 13
                             }, this),
                             mostrarNovaAtividade && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1376,7 +1404,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         className: "absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 738,
+                                        lineNumber: 760,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1388,12 +1416,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                     className: "h-1 w-10 rounded-full bg-border"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 740,
+                                                    lineNumber: 762,
                                                     columnNumber: 75
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 740,
+                                                lineNumber: 762,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1410,30 +1438,30 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 742,
+                                                    lineNumber: 764,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 741,
+                                                lineNumber: 763,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 739,
+                                        lineNumber: 761,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 737,
+                                lineNumber: 759,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 693,
+                        lineNumber: 715,
                         columnNumber: 11
                     }, this),
                     aba === 'imoveis' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1446,7 +1474,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Imóveis compatíveis"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 761,
+                                        lineNumber: 783,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1454,13 +1482,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: imoveisCompativeis.length > 0 ? 'Baseado no perfil de busca do cliente' : 'Nenhum imóvel exato. Veja estas recomendações ou busque.'
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 762,
+                                        lineNumber: 784,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 760,
+                                lineNumber: 782,
                                 columnNumber: 13
                             }, this),
                             imoveisCompativeis.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1470,7 +1498,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         className: "absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 769,
+                                        lineNumber: 791,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1481,13 +1509,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         className: "w-full rounded-2xl border border-border bg-card pl-10 pr-4 py-3 text-sm text-foreground outline-none focus:border-primary"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 770,
+                                        lineNumber: 792,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 768,
+                                lineNumber: 790,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1501,7 +1529,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                     children: "Fora do perfil"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 784,
+                                                    lineNumber: 806,
                                                     columnNumber: 21
                                                 }, this),
                                                 imoveisEmVisitaAtiva.has(im.id) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1511,14 +1539,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             className: "size-3"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 790,
+                                                            lineNumber: 812,
                                                             columnNumber: 23
                                                         }, this),
                                                         " Já em visita"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 789,
+                                                    lineNumber: 811,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1535,7 +1563,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     className: "mt-1 size-5 rounded border-border text-primary focus:ring-primary disabled:opacity-50"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 795,
+                                                                    lineNumber: 817,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1545,7 +1573,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                             children: im.codigo
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                            lineNumber: 803,
+                                                                            lineNumber: 825,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1553,7 +1581,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                             children: im.titulo
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                            lineNumber: 804,
+                                                                            lineNumber: 826,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1565,7 +1593,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                            lineNumber: 805,
+                                                                            lineNumber: 827,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1573,19 +1601,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                             children: im.preco
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                            lineNumber: 806,
+                                                                            lineNumber: 828,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 802,
+                                                                    lineNumber: 824,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 794,
+                                                            lineNumber: 816,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1593,13 +1621,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             children: im.status
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 809,
+                                                            lineNumber: 831,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 793,
+                                                    lineNumber: 815,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1617,14 +1645,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     strokeWidth: 1.5
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 815,
+                                                                    lineNumber: 837,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 "Enviar por e-mail"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 814,
+                                                            lineNumber: 836,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1639,26 +1667,26 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     strokeWidth: 1.5
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 819,
+                                                                    lineNumber: 841,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 "WhatsApp"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 818,
+                                                            lineNumber: 840,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 813,
+                                                    lineNumber: 835,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, im.id, true, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 782,
+                                            lineNumber: 804,
                                             columnNumber: 17
                                         }, this)),
                                     imoveisExibidos.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1666,13 +1694,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Nenhum imóvel encontrado."
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 826,
+                                        lineNumber: 848,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 780,
+                                lineNumber: 802,
                                 columnNumber: 13
                             }, this),
                             imoveisSelecionados.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1689,7 +1717,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 834,
+                                                lineNumber: 856,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1699,13 +1727,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Limpar"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 837,
+                                                lineNumber: 859,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 833,
+                                        lineNumber: 855,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1724,14 +1752,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 strokeWidth: 1.5
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 842,
+                                                                lineNumber: 864,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "WhatsApp"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 841,
+                                                        lineNumber: 863,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1744,20 +1772,20 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 strokeWidth: 1.5
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 846,
+                                                                lineNumber: 868,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "E-mail"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 845,
+                                                        lineNumber: 867,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 840,
+                                                lineNumber: 862,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1773,14 +1801,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 strokeWidth: 1.5
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 852,
+                                                                lineNumber: 874,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "Agendar Visita"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 851,
+                                                        lineNumber: 873,
                                                         columnNumber: 21
                                                     }, this),
                                                     localAtividades.some((a)=>a.tipo === 'visita' && !a.concluida) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1793,14 +1821,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 strokeWidth: 1.5
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 857,
+                                                                lineNumber: 879,
                                                                 columnNumber: 25
                                                             }, this),
                                                             "Vincular a Visita"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 856,
+                                                        lineNumber: 878,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1813,38 +1841,38 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 strokeWidth: 1.5
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 862,
+                                                                lineNumber: 884,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "Gerar Termo"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 861,
+                                                        lineNumber: 883,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 850,
+                                                lineNumber: 872,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 839,
+                                        lineNumber: 861,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 832,
+                                lineNumber: 854,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 759,
+                        lineNumber: 781,
                         columnNumber: 11
                     }, this),
                     aba === 'documentos' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1857,7 +1885,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Documentos"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 877,
+                                        lineNumber: 899,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1870,20 +1898,20 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 strokeWidth: 2
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 879,
+                                                lineNumber: 901,
                                                 columnNumber: 17
                                             }, this),
                                             " Anexar"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 878,
+                                        lineNumber: 900,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 876,
+                                lineNumber: 898,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1893,7 +1921,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 className: "hidden"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 882,
+                                lineNumber: 904,
                                 columnNumber: 13
                             }, this),
                             localDocumentos.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1904,7 +1932,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         strokeWidth: 1
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 885,
+                                        lineNumber: 907,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1912,7 +1940,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Nenhum documento anexado"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 886,
+                                        lineNumber: 908,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1922,13 +1950,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Anexar documento"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 887,
+                                        lineNumber: 909,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 884,
+                                lineNumber: 906,
                                 columnNumber: 15
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                                 className: "flex flex-col gap-3",
@@ -1940,7 +1968,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 strokeWidth: 1.5
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 895,
+                                                lineNumber: 917,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1956,7 +1984,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             autoFocus: true
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 899,
+                                                            lineNumber: 921,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1966,13 +1994,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             children: "OK"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 906,
+                                                            lineNumber: 928,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 898,
+                                                    lineNumber: 920,
                                                     columnNumber: 25
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                                     children: [
@@ -1981,7 +2009,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             children: doc.nome
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 912,
+                                                            lineNumber: 934,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1993,14 +2021,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 913,
+                                                            lineNumber: 935,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 896,
+                                                lineNumber: 918,
                                                 columnNumber: 21
                                             }, this),
                                             editandoDocId !== doc.id && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2015,12 +2043,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             strokeWidth: 1.5
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 920,
+                                                            lineNumber: 942,
                                                             columnNumber: 27
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 919,
+                                                        lineNumber: 941,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2035,12 +2063,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             strokeWidth: 1.5
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 923,
+                                                            lineNumber: 945,
                                                             columnNumber: 27
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 922,
+                                                        lineNumber: 944,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2052,35 +2080,35 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             strokeWidth: 1.5
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 926,
+                                                            lineNumber: 948,
                                                             columnNumber: 27
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 925,
+                                                        lineNumber: 947,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 918,
+                                                lineNumber: 940,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, doc.id, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 894,
+                                        lineNumber: 916,
                                         columnNumber: 19
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 892,
+                                lineNumber: 914,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 875,
+                        lineNumber: 897,
                         columnNumber: 11
                     }, this),
                     aba === 'perfil' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2090,7 +2118,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 children: "O que está buscando"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 940,
+                                lineNumber: 962,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2101,7 +2129,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         value: atendimento.perfil.finalidade || '—'
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 942,
+                                        lineNumber: 964,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoRow, {
@@ -2109,7 +2137,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         value: atendimento.perfil.tipoImovel || '—'
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 943,
+                                        lineNumber: 965,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoRow, {
@@ -2117,7 +2145,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         value: atendimento.perfil.cidades.join(', ') || '—'
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 944,
+                                        lineNumber: 966,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoRow, {
@@ -2125,7 +2153,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         value: atendimento.perfil.bairros.join(', ') || '—'
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 945,
+                                        lineNumber: 967,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2136,7 +2164,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 value: atendimento.perfil.quartos?.toString() ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 947,
+                                                lineNumber: 969,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoCard, {
@@ -2144,7 +2172,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 value: atendimento.perfil.suites?.toString() ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 948,
+                                                lineNumber: 970,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoCard, {
@@ -2152,13 +2180,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 value: atendimento.perfil.vagas?.toString() ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 949,
+                                                lineNumber: 971,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 946,
+                                        lineNumber: 968,
                                         columnNumber: 15
                                     }, this),
                                     (atendimento.perfil.areaMin || atendimento.perfil.areaMax) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoRow, {
@@ -2166,7 +2194,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         value: `${atendimento.perfil.areaMin ?? '?'} – ${atendimento.perfil.areaMax ?? '?'} m²`
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 952,
+                                        lineNumber: 974,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoRow, {
@@ -2174,7 +2202,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         value: `${atendimento.perfil.valorMin || '?'} até ${atendimento.perfil.valorMax || '?'}`
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 954,
+                                        lineNumber: 976,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoRow, {
@@ -2182,7 +2210,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         value: atendimento.perfil.prazoParaComprar || '—'
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 955,
+                                        lineNumber: 977,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2192,34 +2220,34 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 label: "Lazer/Piscina"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 957,
+                                                lineNumber: 979,
                                                 columnNumber: 46
                                             }, this),
                                             atendimento.perfil.varanda && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(TagChip, {
                                                 label: "Varanda"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 958,
+                                                lineNumber: 980,
                                                 columnNumber: 48
                                             }, this),
                                             atendimento.perfil.mobiliado && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(TagChip, {
                                                 label: "Mobiliado"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 959,
+                                                lineNumber: 981,
                                                 columnNumber: 50
                                             }, this),
                                             atendimento.perfil.aceitaFinanciamento && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(TagChip, {
                                                 label: "Aceita financiamento"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 960,
+                                                lineNumber: 982,
                                                 columnNumber: 60
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 956,
+                                        lineNumber: 978,
                                         columnNumber: 15
                                     }, this),
                                     atendimento.perfil.observacoes && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2230,7 +2258,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Observações"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 964,
+                                                lineNumber: 986,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2238,13 +2266,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: atendimento.perfil.observacoes
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 965,
+                                                lineNumber: 987,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 963,
+                                        lineNumber: 985,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2260,14 +2288,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "size-5"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 973,
+                                                                lineNumber: 995,
                                                                 columnNumber: 21
                                                             }, this),
                                                             "Qualificação 4Q"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 972,
+                                                        lineNumber: 994,
                                                         columnNumber: 19
                                                     }, this),
                                                     !editing4Q ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2279,12 +2307,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             strokeWidth: 1.5
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 978,
+                                                            lineNumber: 1000,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 977,
+                                                        lineNumber: 999,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                         type: "button",
@@ -2293,13 +2321,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                         children: "Salvar"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 981,
+                                                        lineNumber: 1003,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 971,
+                                                lineNumber: 993,
                                                 columnNumber: 17
                                             }, this),
                                             editing4Q ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2313,7 +2341,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "Quem decide?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 990,
+                                                                lineNumber: 1012,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2326,13 +2354,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 991,
+                                                                lineNumber: 1013,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 989,
+                                                        lineNumber: 1011,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2343,7 +2371,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "O quê busca?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 994,
+                                                                lineNumber: 1016,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2356,13 +2384,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 995,
+                                                                lineNumber: 1017,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 993,
+                                                        lineNumber: 1015,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2373,7 +2401,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "Quando precisa?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 998,
+                                                                lineNumber: 1020,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2386,13 +2414,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 999,
+                                                                lineNumber: 1021,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 997,
+                                                        lineNumber: 1019,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2403,7 +2431,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "Quanto (Orçamento)?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1002,
+                                                                lineNumber: 1024,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2416,19 +2444,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-teal-mid"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1003,
+                                                                lineNumber: 1025,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1001,
+                                                        lineNumber: 1023,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 988,
+                                                lineNumber: 1010,
                                                 columnNumber: 19
                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "flex flex-col gap-3",
@@ -2441,7 +2469,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "Quem decide?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1009,
+                                                                lineNumber: 1031,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2449,13 +2477,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: atendimento.perfil.metodo4Q?.quem || '—'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1010,
+                                                                lineNumber: 1032,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1008,
+                                                        lineNumber: 1030,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2466,7 +2494,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "O quê busca?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1013,
+                                                                lineNumber: 1035,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2474,13 +2502,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: atendimento.perfil.metodo4Q?.oQue || '—'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1014,
+                                                                lineNumber: 1036,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1012,
+                                                        lineNumber: 1034,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2491,7 +2519,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "Quando precisa?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1017,
+                                                                lineNumber: 1039,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2499,13 +2527,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: atendimento.perfil.metodo4Q?.quando || '—'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1018,
+                                                                lineNumber: 1040,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1016,
+                                                        lineNumber: 1038,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2516,7 +2544,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "Quanto (Orçamento)?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1021,
+                                                                lineNumber: 1043,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2524,25 +2552,25 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: atendimento.perfil.metodo4Q?.quanto || '—'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1022,
+                                                                lineNumber: 1044,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1020,
+                                                        lineNumber: 1042,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1007,
+                                                lineNumber: 1029,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 970,
+                                        lineNumber: 992,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2558,14 +2586,14 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "size-5"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1032,
+                                                                lineNumber: 1054,
                                                                 columnNumber: 21
                                                             }, this),
                                                             "Rapport FORD"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1031,
+                                                        lineNumber: 1053,
                                                         columnNumber: 19
                                                     }, this),
                                                     !editingFORD ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2577,12 +2605,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             strokeWidth: 1.5
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 1037,
+                                                            lineNumber: 1059,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1036,
+                                                        lineNumber: 1058,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                         type: "button",
@@ -2591,13 +2619,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                         children: "Salvar"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1040,
+                                                        lineNumber: 1062,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1030,
+                                                lineNumber: 1052,
                                                 columnNumber: 17
                                             }, this),
                                             editingFORD ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2611,7 +2639,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "F (Família)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1049,
+                                                                lineNumber: 1071,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2624,13 +2652,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1050,
+                                                                lineNumber: 1072,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1048,
+                                                        lineNumber: 1070,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2641,7 +2669,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "O (Ocupação)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1053,
+                                                                lineNumber: 1075,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2654,13 +2682,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1054,
+                                                                lineNumber: 1076,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1052,
+                                                        lineNumber: 1074,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2671,7 +2699,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "R (Recreação)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1057,
+                                                                lineNumber: 1079,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2684,13 +2712,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1058,
+                                                                lineNumber: 1080,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1056,
+                                                        lineNumber: 1078,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2701,7 +2729,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "D (Sonhos)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1061,
+                                                                lineNumber: 1083,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2714,19 +2742,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 className: "h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#8a5a1e]"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1062,
+                                                                lineNumber: 1084,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1060,
+                                                        lineNumber: 1082,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1047,
+                                                lineNumber: 1069,
                                                 columnNumber: 19
                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "flex flex-col gap-3",
@@ -2739,7 +2767,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "F (Família)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1068,
+                                                                lineNumber: 1090,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2747,13 +2775,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: atendimento.perfil.metodoFORD?.familia || '—'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1069,
+                                                                lineNumber: 1091,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1067,
+                                                        lineNumber: 1089,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2764,7 +2792,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "O (Ocupação)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1072,
+                                                                lineNumber: 1094,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2772,13 +2800,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: atendimento.perfil.metodoFORD?.ocupacao || '—'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1073,
+                                                                lineNumber: 1095,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1071,
+                                                        lineNumber: 1093,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2789,7 +2817,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "R (Recreação)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1076,
+                                                                lineNumber: 1098,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2797,13 +2825,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: atendimento.perfil.metodoFORD?.recreacao || '—'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1077,
+                                                                lineNumber: 1099,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1075,
+                                                        lineNumber: 1097,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2814,7 +2842,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: "D (Sonhos)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1080,
+                                                                lineNumber: 1102,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2822,37 +2850,37 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                 children: atendimento.perfil.metodoFORD?.sonhos || '—'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                lineNumber: 1081,
+                                                                lineNumber: 1103,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                        lineNumber: 1079,
+                                                        lineNumber: 1101,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1066,
+                                                lineNumber: 1088,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1029,
+                                        lineNumber: 1051,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 941,
+                                lineNumber: 963,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 939,
+                        lineNumber: 961,
                         columnNumber: 11
                     }, this),
                     aba === 'albert' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2867,12 +2895,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                             strokeWidth: 1.5
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1095,
+                                            lineNumber: 1117,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1094,
+                                        lineNumber: 1116,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2882,7 +2910,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Albert IA"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1098,
+                                                lineNumber: 1120,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2890,19 +2918,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Assistente de follow-up automático"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1099,
+                                                lineNumber: 1121,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1097,
+                                        lineNumber: 1119,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1093,
+                                lineNumber: 1115,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2915,7 +2943,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                             children: "follow-up automático"
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1105,
+                                            lineNumber: 1127,
                                             columnNumber: 39
                                         }, this),
                                         " com ",
@@ -2924,12 +2952,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 1104,
+                                    lineNumber: 1126,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1103,
+                                lineNumber: 1125,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2943,7 +2971,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                     className: "size-2 rounded-full bg-teal-mid animate-pulse"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 1113,
+                                                    lineNumber: 1135,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2951,13 +2979,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                     children: "Follow-up ativo"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 1114,
+                                                    lineNumber: 1136,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1112,
+                                            lineNumber: 1134,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2970,7 +2998,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1116,
+                                            lineNumber: 1138,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2978,25 +3006,25 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                             children: atendimento.albert.instrucoes
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1117,
+                                            lineNumber: 1139,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 1111,
+                                    lineNumber: 1133,
                                     columnNumber: 17
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-sm text-muted-foreground",
                                     children: "Nenhum follow-up agendado para este atendimento."
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 1120,
+                                    lineNumber: 1142,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1109,
+                                lineNumber: 1131,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3009,7 +3037,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Dia do follow-up"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1126,
+                                                lineNumber: 1148,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3017,13 +3045,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: "h-12 w-full rounded-2xl border border-border bg-card px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1127,
+                                                lineNumber: 1149,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1125,
+                                        lineNumber: 1147,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3033,7 +3061,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Horário"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1130,
+                                                lineNumber: 1152,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3041,13 +3069,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: "h-12 w-full rounded-2xl border border-border bg-card px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1131,
+                                                lineNumber: 1153,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1129,
+                                        lineNumber: 1151,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3057,7 +3085,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Instrução para o Albert"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1134,
+                                                lineNumber: 1156,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -3066,13 +3094,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: "w-full resize-none rounded-2xl border border-border bg-card p-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1135,
+                                                lineNumber: 1157,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1133,
+                                        lineNumber: 1155,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3081,25 +3109,25 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Ativar follow-up do Albert"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1141,
+                                        lineNumber: 1163,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1124,
+                                lineNumber: 1146,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1092,
+                        lineNumber: 1114,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 535,
+                lineNumber: 559,
                 columnNumber: 7
             }, this),
             mostrarNovaAtividade && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3111,7 +3139,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                         className: "absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]"
                     }, void 0, false, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1152,
+                        lineNumber: 1174,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3121,7 +3149,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 className: "mx-auto mb-4 h-1 w-10 rounded-full bg-fog"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1154,
+                                lineNumber: 1176,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$form$2d$nova$2d$atividade$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormNovaAtividade"], {
@@ -3142,19 +3170,19 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1155,
+                                lineNumber: 1177,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1153,
+                        lineNumber: 1175,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1151,
+                lineNumber: 1173,
                 columnNumber: 9
             }, this),
             mostrarNovoEmail && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3166,7 +3194,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                         className: "absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]"
                     }, void 0, false, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1176,
+                        lineNumber: 1198,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3176,7 +3204,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 className: "mx-auto mb-4 h-1 w-10 rounded-full bg-fog"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1178,
+                                lineNumber: 1200,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3187,7 +3215,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Enviar e-mail"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1180,
+                                        lineNumber: 1202,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3199,18 +3227,18 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                             strokeWidth: 1.5
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1182,
+                                            lineNumber: 1204,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1181,
+                                        lineNumber: 1203,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1179,
+                                lineNumber: 1201,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3222,7 +3250,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         className: "h-11 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1186,
+                                        lineNumber: 1208,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -3231,7 +3259,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         className: "w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1187,
+                                        lineNumber: 1209,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3244,72 +3272,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1188,
+                                        lineNumber: 1210,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1185,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1177,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1175,
-                columnNumber: 9
-            }, this),
-            mostrarNovaInteracao && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "absolute inset-0 z-50 flex flex-col justify-end",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        type: "button",
-                        onClick: ()=>setMostrarNovaInteracao(false),
-                        className: "absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]"
-                    }, void 0, false, {
-                        fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1198,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh]",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex justify-center pt-3 pb-1 shrink-0",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "h-1 w-10 rounded-full bg-border"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 1200,
-                                    columnNumber: 69
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1200,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex-1 overflow-y-auto px-6 py-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$form$2d$nova$2d$atividade$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormNovaAtividade"], {
-                                    defaultClienteId: atendimento.id,
-                                    onClose: ()=>setMostrarNovaInteracao(false),
-                                    onSalvar: (id, atv, tml)=>{
-                                        if (tml) handleSalvarInteracao(tml);
-                                    }
-                                }, void 0, false, {
-                                    fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 1202,
-                                    columnNumber: 15
-                                }, this)
-                            }, void 0, false, {
-                                fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1201,
+                                lineNumber: 1207,
                                 columnNumber: 13
                             }, this)
                         ]
@@ -3324,6 +3293,65 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                 lineNumber: 1197,
                 columnNumber: 9
             }, this),
+            mostrarNovaInteracao && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute inset-0 z-50 flex flex-col justify-end",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        type: "button",
+                        onClick: ()=>setMostrarNovaInteracao(false),
+                        className: "absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]"
+                    }, void 0, false, {
+                        fileName: "[project]/components/app/atendimento-detail.tsx",
+                        lineNumber: 1220,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh]",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex justify-center pt-3 pb-1 shrink-0",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "h-1 w-10 rounded-full bg-border"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/app/atendimento-detail.tsx",
+                                    lineNumber: 1222,
+                                    columnNumber: 69
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/app/atendimento-detail.tsx",
+                                lineNumber: 1222,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex-1 overflow-y-auto px-6 py-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))]",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$form$2d$nova$2d$atividade$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FormNovaAtividade"], {
+                                    defaultClienteId: atendimento.id,
+                                    onClose: ()=>setMostrarNovaInteracao(false),
+                                    onSalvar: (id, atv, tml)=>{
+                                        if (tml) handleSalvarInteracao(tml);
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/components/app/atendimento-detail.tsx",
+                                    lineNumber: 1224,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/app/atendimento-detail.tsx",
+                                lineNumber: 1223,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/app/atendimento-detail.tsx",
+                        lineNumber: 1221,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/app/atendimento-detail.tsx",
+                lineNumber: 1219,
+                columnNumber: 9
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$atividade$2d$detalhe$2d$sheet$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AtividadeDetalheSheet"], {
                 atividade: atividadeSelecionada,
                 onClose: ()=>setAtividadeSelecionada(null),
@@ -3334,7 +3362,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                 }
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1215,
+                lineNumber: 1237,
                 columnNumber: 7
             }, this),
             sheetGanhoPerdido && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$app$2f$ganho$2d$perdido$2d$sheet$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["GanhoPerdidoSheet"], {
@@ -3345,7 +3373,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                 }
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1227,
+                lineNumber: 1249,
                 columnNumber: 9
             }, this),
             mostrarVincularVisita && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3357,7 +3385,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                         className: "absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]"
                     }, void 0, false, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1239,
+                        lineNumber: 1261,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3367,7 +3395,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 className: "mx-auto mb-4 h-1 w-10 rounded-full bg-fog"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1241,
+                                lineNumber: 1263,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -3375,7 +3403,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 children: "Vincular a Visita Existente"
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1242,
+                                lineNumber: 1264,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3383,7 +3411,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                 children: "Selecione uma visita futura para anexar os imóveis selecionados."
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1243,
+                                lineNumber: 1265,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3405,7 +3433,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     children: atv.titulo
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 1255,
+                                                                    lineNumber: 1277,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3417,13 +3445,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                                    lineNumber: 1256,
+                                                                    lineNumber: 1278,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 1254,
+                                                            lineNumber: 1276,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3434,45 +3462,45 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                            lineNumber: 1258,
+                                                            lineNumber: 1280,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                    lineNumber: 1253,
+                                                    lineNumber: 1275,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1248,
+                                                lineNumber: 1270,
                                                 columnNumber: 21
                                             }, this)
                                         }, atv.id, false, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1247,
+                                            lineNumber: 1269,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 1245,
+                                    lineNumber: 1267,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1244,
+                                lineNumber: 1266,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1240,
+                        lineNumber: 1262,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1238,
+                lineNumber: 1260,
                 columnNumber: 9
             }, this),
             previewEnvio && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3484,7 +3512,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                         className: "absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]"
                     }, void 0, false, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1274,
+                        lineNumber: 1296,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3496,12 +3524,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                     className: "h-1 w-10 rounded-full bg-border"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 1277,
+                                    lineNumber: 1299,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1276,
+                                lineNumber: 1298,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3515,7 +3543,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1280,
+                                        lineNumber: 1302,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3527,18 +3555,18 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                             strokeWidth: 1.5
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1284,
+                                            lineNumber: 1306,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1283,
+                                        lineNumber: 1305,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1279,
+                                lineNumber: 1301,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3552,7 +3580,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Assunto do e-mail"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1290,
+                                                lineNumber: 1312,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3563,13 +3591,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: "h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1291,
+                                                lineNumber: 1313,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1289,
+                                        lineNumber: 1311,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3580,7 +3608,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Mensagem"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1301,
+                                                lineNumber: 1323,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -3589,13 +3617,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: "w-full h-48 rounded-2xl border border-border bg-background p-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1302,
+                                                lineNumber: 1324,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1300,
+                                        lineNumber: 1322,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3607,32 +3635,32 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: "size-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1315,
+                                                lineNumber: 1336,
                                                 columnNumber: 17
                                             }, this),
                                             "Confirmar e Enviar"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1308,
+                                        lineNumber: 1330,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1287,
+                                lineNumber: 1309,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1275,
+                        lineNumber: 1297,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1273,
+                lineNumber: 1295,
                 columnNumber: 9
             }, this),
             termoAberto && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3644,7 +3672,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                         className: "absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]"
                     }, void 0, false, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1326,
+                        lineNumber: 1347,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3656,12 +3684,12 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                     className: "h-1 w-10 rounded-full bg-border"
                                 }, void 0, false, {
                                     fileName: "[project]/components/app/atendimento-detail.tsx",
-                                    lineNumber: 1329,
+                                    lineNumber: 1350,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1328,
+                                lineNumber: 1349,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3672,7 +3700,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                         children: "Termo de Visita"
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1332,
+                                        lineNumber: 1353,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3684,18 +3712,18 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                             strokeWidth: 1.5
                                         }, void 0, false, {
                                             fileName: "[project]/components/app/atendimento-detail.tsx",
-                                            lineNumber: 1334,
+                                            lineNumber: 1355,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1333,
+                                        lineNumber: 1354,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1331,
+                                lineNumber: 1352,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3708,7 +3736,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 className: "size-10 text-muted-foreground mb-3"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1339,
+                                                lineNumber: 1360,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3716,7 +3744,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Termo gerado com sucesso"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1340,
+                                                lineNumber: 1361,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3730,13 +3758,13 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1341,
+                                                lineNumber: 1362,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1338,
+                                        lineNumber: 1359,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3748,7 +3776,7 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Baixar PDF"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1344,
+                                                lineNumber: 1365,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3758,37 +3786,37 @@ function AtendimentoDetail({ atendimento, onBack, onStatusChange, onEtapaChange 
                                                 children: "Assinatura Digital"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                                lineNumber: 1347,
+                                                lineNumber: 1368,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                                        lineNumber: 1343,
+                                        lineNumber: 1364,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                                lineNumber: 1337,
+                                lineNumber: 1358,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/app/atendimento-detail.tsx",
-                        lineNumber: 1327,
+                        lineNumber: 1348,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1325,
+                lineNumber: 1346,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/app/atendimento-detail.tsx",
-        lineNumber: 358,
+        lineNumber: 382,
         columnNumber: 5
     }, this);
 }
@@ -3802,7 +3830,7 @@ function InfoRow({ label, value }) {
                 children: label
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1363,
+                lineNumber: 1384,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3810,13 +3838,13 @@ function InfoRow({ label, value }) {
                 children: value
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1364,
+                lineNumber: 1385,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/app/atendimento-detail.tsx",
-        lineNumber: 1362,
+        lineNumber: 1383,
         columnNumber: 5
     }, this);
 }
@@ -3829,7 +3857,7 @@ function InfoCard({ label, value }) {
                 children: value
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1372,
+                lineNumber: 1393,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3837,13 +3865,13 @@ function InfoCard({ label, value }) {
                 children: label
             }, void 0, false, {
                 fileName: "[project]/components/app/atendimento-detail.tsx",
-                lineNumber: 1373,
+                lineNumber: 1394,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/app/atendimento-detail.tsx",
-        lineNumber: 1371,
+        lineNumber: 1392,
         columnNumber: 5
     }, this);
 }
@@ -3853,7 +3881,7 @@ function TagChip({ label }) {
         children: label
     }, void 0, false, {
         fileName: "[project]/components/app/atendimento-detail.tsx",
-        lineNumber: 1380,
+        lineNumber: 1401,
         columnNumber: 5
     }, this);
 }

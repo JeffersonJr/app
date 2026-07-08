@@ -6,29 +6,31 @@ import { type TipoAtividade, tipoAtividadeConfig, atendimentos, perfilVazio, imo
 
 const TIPOS: TipoAtividade[] = ['visita', 'reuniao', 'ligacao', 'prazo', 'pos-venda', 'albert']
 
-export function FormNovaAtividade({ 
-  onClose, 
+export function FormNovaAtividade({
+  onClose,
   onSalvar,
   defaultClienteId,
-  defaultImoveis
-}: { 
-  onClose: () => void, 
+  defaultImoveis,
+  atividadeInicial,
+}: {
+  onClose: () => void,
   onSalvar?: (atendimentoId: string, novaAtividade?: any, novaTimeline?: any) => void,
   defaultClienteId?: string,
-  defaultImoveis?: any[]
+  defaultImoveis?: any[],
+  atividadeInicial?: any,
 }) {
   const [aba, setAba] = useState<'nota' | 'atividade' | 'email'>('atividade')
-  const [tipo, setTipo] = useState<TipoAtividade>('visita')
-  const [titulo, setTitulo] = useState('')
-  const [descricao, setDescricao] = useState('')
-  const [data, setData] = useState('')
-  const [hora, setHora] = useState('')
-  const [importante, setImportante] = useState(false)
+  const [tipo, setTipo] = useState<TipoAtividade>(atividadeInicial?.tipo || 'visita')
+  const [titulo, setTitulo] = useState(atividadeInicial?.titulo || '')
+  const [descricao, setDescricao] = useState(atividadeInicial?.descricao || '')
+  const [data, setData] = useState(atividadeInicial?.data && atividadeInicial.data !== 'Hoje' && atividadeInicial.data !== 'Amanhã' ? atividadeInicial.data : '')
+  const [hora, setHora] = useState(atividadeInicial?.hora || '')
+  const [importante, setImportante] = useState(atividadeInicial?.importante || false)
   const [emailAssunto, setEmailAssunto] = useState('')
   const [emailCorpo, setEmailCorpo] = useState('')
   const [imoveisSelecionados, setImoveisSelecionados] = useState<any[]>(defaultImoveis || [])
   const [buscaImovel, setBuscaImovel] = useState('')
-  
+
   const clienteInicial = defaultClienteId ? atendimentos.find(a => a.id === defaultClienteId) : null
   const [clienteBusca, setClienteBusca] = useState(clienteInicial ? clienteInicial.nome : '')
   const [clienteIdSelecionado, setClienteIdSelecionado] = useState(defaultClienteId || '')
@@ -38,47 +40,74 @@ export function FormNovaAtividade({
   const [novoWhatsapp, setNovoWhatsapp] = useState('')
   const [novoEmail, setNovoEmail] = useState('')
 
-  const atendimentosFiltrados = clienteBusca 
+  const atendimentosFiltrados = clienteBusca
     ? atendimentos.filter(a => a.nome.toLowerCase().includes(clienteBusca.toLowerCase()))
     : atendimentos
 
   function handleSalvar() {
     const clienteIndex = clienteIdSelecionado ? atendimentos.findIndex(a => a.id === clienteIdSelecionado) : -1
-    
+
     if (clienteIdSelecionado && clienteIndex === -1 && aba !== 'atividade') {
       onClose()
       return
     }
 
-    const agendadaPara = data || new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
-    const asHora = hora || new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    const now = new Date()
+    const hojeStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+    const agendadaPara = data || hojeStr
+    const asHora = hora || now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
 
     let novaAtividade: any = null
     let novoTimeline: any = null
 
     if (aba === 'atividade') {
-      novaAtividade = {
-        id: `a${Date.now()}`,
-        tipo,
-        titulo,
-        descricao,
-        data: agendadaPara,
-        hora: asHora,
-        importante,
-        concluida: false,
-        criadoEm: new Date().toISOString(),
-        telefone: clienteIndex >= 0 ? atendimentos[clienteIndex].telefone : '',
-        whatsapp: clienteIndex >= 0 ? atendimentos[clienteIndex].telefone : '',
-        cliente: clienteIndex >= 0 ? atendimentos[clienteIndex].nome : 'Atividade Interna',
-        imoveisVisitados: imoveisSelecionados.map(i => ({ id: i.id, nome: i.titulo || i.nome, visitado: false, endereco: i.enderecoCompleto || `${i.bairro}, ${i.cidade}` }))
-      }
-      if (clienteIndex >= 0) {
-        atendimentos[clienteIndex].atividades = [...(atendimentos[clienteIndex].atividades || []), novaAtividade]
-        atividadesHoje.push(novaAtividade)
+      if (atividadeInicial) {
+        // Modo edição
+        novaAtividade = {
+          ...atividadeInicial,
+          tipo,
+          titulo,
+          descricao,
+          data: agendadaPara,
+          hora: asHora,
+          importante,
+          imoveisVisitados: imoveisSelecionados.map(i => ({ id: i.id, nome: i.titulo || i.nome, visitado: false, endereco: i.enderecoCompleto || `${i.bairro}, ${i.cidade}` }))
+        }
+
+        // Atualizar no array global atividadesHoje
+        const idxHoje = atividadesHoje.findIndex(a => a.id === atividadeInicial.id)
+        if (idxHoje !== -1) atividadesHoje[idxHoje] = novaAtividade
+
+        // Atualizar no cliente
+        if (clienteIndex >= 0 && atendimentos[clienteIndex].atividades) {
+          const idxCli = atendimentos[clienteIndex].atividades!.findIndex((a: any) => a.id === atividadeInicial.id)
+          if (idxCli !== -1) atendimentos[clienteIndex].atividades![idxCli] = novaAtividade
+        }
       } else {
-        atividadesHoje.push(novaAtividade)
+        // Modo criação
+        novaAtividade = {
+          id: `a${Date.now()}`,
+          tipo,
+          titulo,
+          descricao,
+          data: agendadaPara,
+          hora: asHora,
+          importante,
+          concluida: false,
+          criadoEm: new Date().toISOString(),
+          telefone: clienteIndex >= 0 ? atendimentos[clienteIndex].telefone : '',
+          whatsapp: clienteIndex >= 0 ? atendimentos[clienteIndex].telefone : '',
+          cliente: clienteIndex >= 0 ? atendimentos[clienteIndex].nome : 'Atividade Interna',
+          imoveisVisitados: imoveisSelecionados.map(i => ({ id: i.id, nome: i.titulo || i.nome, visitado: false, endereco: i.enderecoCompleto || `${i.bairro}, ${i.cidade}` }))
+        }
+        if (clienteIndex >= 0) {
+          atendimentos[clienteIndex].atividades = [...(atendimentos[clienteIndex].atividades || []), novaAtividade]
+          atividadesHoje.push(novaAtividade)
+        } else {
+          atividadesHoje.push(novaAtividade)
+        }
       }
-      
+
       if (clienteIndex >= 0) {
         novoTimeline = {
           id: `t${Date.now()}`,
@@ -116,7 +145,11 @@ export function FormNovaAtividade({
     if (onSalvar) {
       onSalvar(clienteIdSelecionado, novaAtividade, novoTimeline)
     }
-    
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('app-data-updated'))
+    }
+
     onClose()
   }
 
@@ -181,9 +214,8 @@ export function FormNovaAtividade({
             key={t}
             type="button"
             onClick={() => setAba(t)}
-            className={`flex-1 rounded-xl py-2 text-xs font-semibold uppercase tracking-wider transition-brand ${
-              aba === t ? 'bg-card text-primary shadow-sm' : 'text-muted-foreground'
-            }`}
+            className={`flex-1 rounded-xl py-2 text-xs font-semibold uppercase tracking-wider transition-brand ${aba === t ? 'bg-card text-primary shadow-sm' : 'text-muted-foreground'
+              }`}
           >
             {t}
           </button>
@@ -202,11 +234,10 @@ export function FormNovaAtividade({
                     key={t}
                     type="button"
                     onClick={() => setTipo(t)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${
-                      tipo === t
-                        ? 'bg-primary text-primary-foreground'
-                        : 'border border-border bg-card text-muted-foreground'
-                    }`}
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${tipo === t
+                      ? 'bg-primary text-primary-foreground'
+                      : 'border border-border bg-card text-muted-foreground'
+                      }`}
                   >
                     {tipoAtividadeConfig[t].emoji} {tipoAtividadeConfig[t].label}
                   </button>
@@ -328,55 +359,55 @@ export function FormNovaAtividade({
           </div>
         )}
 
-          {/* Mini-formulário de contato do novo cliente */}
-          {!defaultClienteId && criarClienteAberto && (
-            <div className="mt-3 rounded-2xl border border-primary/30 bg-primary/5 p-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="flex items-center justify-between mb-1">
-                <p className="text-sm font-semibold text-foreground">Contatos de <span className="text-primary">{clienteBusca}</span></p>
-                <button type="button" onClick={() => setCriarClienteAberto(false)} className="flex size-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
-                  <X className="size-3.5" strokeWidth={2} />
-                </button>
-              </div>
-              <div>
-                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Telefone</label>
-                <input
-                  type="tel"
-                  value={novoTelefone}
-                  onChange={(e) => setNovoTelefone(e.target.value)}
-                  placeholder="(11) 99999-9999"
-                  className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">WhatsApp</label>
-                <input
-                  type="tel"
-                  value={novoWhatsapp}
-                  onChange={(e) => setNovoWhatsapp(e.target.value)}
-                  placeholder="(11) 99999-9999"
-                  className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">E-mail</label>
-                <input
-                  type="email"
-                  value={novoEmail}
-                  onChange={(e) => setNovoEmail(e.target.value)}
-                  placeholder="nome@email.com"
-                  className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleCriarCliente}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground transition-brand active:scale-[0.98]"
-              >
-                <PlusCircle className="size-4" strokeWidth={2} />
-                Criar cliente e selecionar
+        {/* Mini-formulário de contato do novo cliente */}
+        {!defaultClienteId && criarClienteAberto && (
+          <div className="mt-3 rounded-2xl border border-primary/30 bg-primary/5 p-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-sm font-semibold text-foreground">Contatos de <span className="text-primary">{clienteBusca}</span></p>
+              <button type="button" onClick={() => setCriarClienteAberto(false)} className="flex size-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <X className="size-3.5" strokeWidth={2} />
               </button>
             </div>
-          )}
+            <div>
+              <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Telefone</label>
+              <input
+                type="tel"
+                value={novoTelefone}
+                onChange={(e) => setNovoTelefone(e.target.value)}
+                placeholder="(11) 99999-9999"
+                className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">WhatsApp</label>
+              <input
+                type="tel"
+                value={novoWhatsapp}
+                onChange={(e) => setNovoWhatsapp(e.target.value)}
+                placeholder="(11) 99999-9999"
+                className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">E-mail</label>
+              <input
+                type="email"
+                value={novoEmail}
+                onChange={(e) => setNovoEmail(e.target.value)}
+                placeholder="nome@email.com"
+                className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={handleCriarCliente}
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground transition-brand active:scale-[0.98]"
+            >
+              <PlusCircle className="size-4" strokeWidth={2} />
+              Criar cliente e selecionar
+            </button>
+          </div>
+        )}
 
         {/* Data e Hora */}
         {aba === 'atividade' && (
@@ -420,11 +451,11 @@ export function FormNovaAtividade({
               {buscaImovel && (
                 <div className="mt-2 w-full max-h-40 overflow-y-auto rounded-2xl border border-border bg-card p-2 shadow-sm">
                   {imoveis
-                    .filter(i => 
+                    .filter(i =>
                       !imoveisSelecionados.find(s => s.id === i.id) &&
-                      (i.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) || 
-                       i.codigo.toLowerCase().includes(buscaImovel.toLowerCase()) || 
-                       i.bairro.toLowerCase().includes(buscaImovel.toLowerCase()))
+                      (i.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
+                        i.codigo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
+                        i.bairro.toLowerCase().includes(buscaImovel.toLowerCase()))
                     )
                     .map(i => (
                       <button
@@ -444,14 +475,14 @@ export function FormNovaAtividade({
                         <PlusCircle className="ml-auto size-4 text-muted-foreground" />
                       </button>
                     ))}
-                  {imoveis.filter(i => 
+                  {imoveis.filter(i =>
                     !imoveisSelecionados.find(s => s.id === i.id) &&
-                    (i.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) || 
-                     i.codigo.toLowerCase().includes(buscaImovel.toLowerCase()) || 
-                     i.bairro.toLowerCase().includes(buscaImovel.toLowerCase()))
+                    (i.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
+                      i.codigo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
+                      i.bairro.toLowerCase().includes(buscaImovel.toLowerCase()))
                   ).length === 0 && (
-                    <p className="p-3 text-center text-xs text-muted-foreground">Nenhum imóvel encontrado.</p>
-                  )}
+                      <p className="p-3 text-center text-xs text-muted-foreground">Nenhum imóvel encontrado.</p>
+                    )}
                 </div>
               )}
               {imoveisSelecionados.length > 0 && (
@@ -480,11 +511,10 @@ export function FormNovaAtividade({
             <button
               type="button"
               onClick={() => setImportante(!importante)}
-              className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold transition-brand ${
-                importante
-                  ? 'border-amber bg-amber/10 text-[#8a5a1e]'
-                  : 'border-border bg-card text-muted-foreground'
-              }`}
+              className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold transition-brand ${importante
+                ? 'border-amber bg-amber/10 text-[#8a5a1e]'
+                : 'border-border bg-card text-muted-foreground'
+                }`}
             >
               <Star
                 className={`size-5 ${importante ? 'fill-amber text-amber' : 'text-muted-foreground'}`}

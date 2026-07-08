@@ -14,7 +14,7 @@ import {
   Users2,
   MessageCircle,
 } from 'lucide-react'
-import { atividadesHoje, funil, tempConfig, tipoAtividadeConfig } from '@/lib/app-data'
+import { atividadesHoje, funil, tempConfig, tipoAtividadeConfig, isAtividadeAtrasada } from '@/lib/app-data'
 import { AtividadeDetalheSheet } from '@/components/app/atividade-detalhe-sheet'
 
 export function ScreenHoje({
@@ -23,15 +23,31 @@ export function ScreenHoje({
   onVerPerfil,
   onVerAtendimento,
   onAbrirNovaAtividade,
+  onVerAtividades,
 }: {
   onVerFunil: () => void
   onVerCliente: (id: string) => void
   onVerPerfil?: () => void
   onVerAtendimento?: (id: string) => void
   onAbrirNovaAtividade?: () => void
+  onVerAtividades?: () => void
 }) {
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
-  const [localAtividades, setLocalAtividades] = useState(() => [...atividadesHoje])
+  const getHojeStr = () => {
+    const d = new Date()
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  }
+
+  const isHoje = (dataStr?: string) => {
+    if (!dataStr || dataStr === 'Hoje') return true
+    if (dataStr === getHojeStr()) return true
+    const d = new Date()
+    const ptBrHoje = d.toLocaleDateString('pt-BR')
+    if (dataStr === ptBrHoje) return true
+    return false
+  }
+
+  const [localAtividades, setLocalAtividades] = useState(() => atividadesHoje.filter(a => isHoje(a.data)))
   const leadsQuentes = funil
     .flatMap((estagio) => estagio.leads.map((lead) => ({ ...lead, estagio: estagio.nome })))
     .filter((lead) => lead.temperatura === 'quente')
@@ -40,8 +56,13 @@ export function ScreenHoje({
   const pendentes = localAtividades.filter((a) => !a.concluida)
 
   useEffect(() => {
-    setLocalAtividades([...atividadesHoje])
-  }, [atividadesHoje.length])
+    const handleUpdate = () => {
+      setLocalAtividades(atividadesHoje.filter(a => isHoje(a.data)))
+    }
+    setLocalAtividades(atividadesHoje.filter(a => isHoje(a.data)))
+    window.addEventListener('app-data-updated', handleUpdate)
+    return () => window.removeEventListener('app-data-updated', handleUpdate)
+  }, [])
 
 
   const horaAtual = new Date().getHours()
@@ -81,9 +102,9 @@ export function ScreenHoje({
           className="flex flex-col text-left rounded-3xl border border-border/60 bg-card p-5 shadow-soft transition-transform active:scale-95 hover:border-primary/30"
         >
           <span className="mb-2 block text-[13px] font-medium text-muted-foreground">Atividades hoje</span>
-          <p className="font-sans text-[2.5rem] leading-none font-bold tracking-tight text-foreground mb-1.5">{atividadesHoje.length}</p>
+          <p className="font-sans text-[2.5rem] leading-none font-bold tracking-tight text-foreground mb-1.5">{localAtividades.length}</p>
           <p className="font-mono text-[11px] font-medium tracking-wide text-[#2B5250]">
-            {atividadesHoje.filter(a => !a.concluida).length} restantes
+            {pendentes.length} restantes
           </p>
         </button>
 
@@ -97,16 +118,26 @@ export function ScreenHoje({
         </div>
       </section>
 
-      {/* Agenda do dia */}
-      <section id="secao-agenda" aria-label="Agenda de hoje" className="scroll-mt-6">
+      {/* Agenda */}
+      <section id="secao-agenda" aria-label="Sua agenda" className="scroll-mt-6">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="flex items-center gap-2 font-serif text-lg font-semibold text-foreground">
-            <Calendar className="size-4.5 text-primary" strokeWidth={1.5} />
+            <CalendarDays className="size-4.5 text-primary" strokeWidth={1.5} />
             Sua agenda
           </h2>
-          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            {pendentes.length} pendentes
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+              {pendentes.length} Pendentes
+            </span>
+            <button
+              type="button"
+              onClick={onVerAtividades}
+              className="flex items-center gap-0.5 text-xs font-semibold text-primary"
+            >
+              Ver completa
+              <ChevronRight className="size-3.5" strokeWidth={2} />
+            </button>
+          </div>
         </div>
         <ul className="flex flex-col gap-2">
           {localAtividades
@@ -146,11 +177,13 @@ export function ScreenHoje({
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <span className={`font-mono text-xs font-bold ${atv.concluida ? 'text-muted-foreground' : 'text-primary'}`}>
+                    <span className={`font-mono text-xs font-bold ${atv.concluida ? 'text-muted-foreground' : (isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'text-red-500' : 'text-primary')}`}>
                       {atv.hora}
                     </span>
                     {!atv.concluida && (
-                      <span className="text-[9px] font-semibold text-teal-mid bg-teal-mid/10 px-1.5 py-0.5 rounded-md">HOJE</span>
+                      <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-md ${isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'text-red-500 bg-red-500/10 border border-red-500/20' : 'text-teal-mid bg-teal-mid/10'}`}>
+                        {isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'ATRASADA' : 'HOJE'}
+                      </span>
                     )}
                   </div>
                 </button>
@@ -265,7 +298,7 @@ export function ScreenHoje({
           const atvGlob = atividadesHoje.find((a) => a.id === id)
           if (atvGlob) atvGlob.concluida = statusConcluida
           setAtividadeSelecionada(null)
-          
+
           if (agendar && onAbrirNovaAtividade) {
             onAbrirNovaAtividade()
           }
@@ -274,7 +307,7 @@ export function ScreenHoje({
           setAtividadeSelecionada(null)
           // Na vida real, buscaria o ID do atendimento correspondente. 
           // Aqui enviamos o ID do lead principal para demonstração.
-          onVerAtendimento?.('l1') 
+          onVerAtendimento?.('l1')
         }}
       />
     </div>

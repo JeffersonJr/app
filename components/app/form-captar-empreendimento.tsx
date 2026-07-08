@@ -640,7 +640,7 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
                 <p className="mb-2 text-xs font-semibold text-foreground">Buscar CEP por endereço</p>
                 <div className="grid grid-cols-3 gap-2 mb-2">
                   <div className="col-span-1">
-                    <input type="text" value={buscaUf} onChange={e => setBuscaUf(e.target.value.toUpperCase().slice(0,2))} placeholder="UF" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
+                    <input type="text" value={buscaUf} onChange={e => setBuscaUf(e.target.value.toUpperCase().slice(0, 2))} placeholder="UF" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
                   </div>
                   <div className="col-span-2">
                     <input type="text" value={buscaCidade} onChange={e => setBuscaCidade(e.target.value)} placeholder="Cidade" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
@@ -856,11 +856,10 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
                 key={etapa}
                 type="button"
                 onClick={() => setEtapaCronograma(etapa)}
-                className={`shrink-0 rounded-xl px-3 py-2 text-xs font-semibold transition-brand ${
-                  etapaCronograma === etapa
+                className={`shrink-0 rounded-xl px-3 py-2 text-xs font-semibold transition-brand ${etapaCronograma === etapa
                     ? 'bg-primary text-primary-foreground'
                     : 'border border-border bg-card text-muted-foreground'
-                }`}
+                  }`}
               >
                 {etapa}
               </button>
@@ -969,11 +968,10 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
               setFotoArrastando(false)
               handleFotos(e.dataTransfer.files)
             }}
-            className={`flex flex-col items-center justify-center gap-2 h-28 w-full rounded-2xl border-2 border-dashed transition-brand ${
-              fotoArrastando
+            className={`flex flex-col items-center justify-center gap-2 h-28 w-full rounded-2xl border-2 border-dashed transition-brand ${fotoArrastando
                 ? 'border-primary bg-primary/5'
                 : 'border-border bg-muted/30 hover:border-primary/40'
-            }`}
+              }`}
           >
             <ImageIcon className="size-6 text-muted-foreground" strokeWidth={1.5} />
             <p className="text-xs text-muted-foreground text-center">
@@ -1078,11 +1076,10 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
                     key={t.id}
                     type="button"
                     onClick={() => setTorreSelecionada(t.id)}
-                    className={`shrink-0 rounded-xl px-4 py-2 text-xs font-semibold border transition-brand ${
-                      torreSelecionada === t.id
+                    className={`shrink-0 rounded-xl px-4 py-2 text-xs font-semibold border transition-brand ${torreSelecionada === t.id
                         ? 'bg-primary text-primary-foreground border-primary'
                         : 'border-border bg-card text-muted-foreground'
-                    }`}
+                      }`}
                   >
                     {t.nome} ({t.plantas.length} unidade{t.plantas.length !== 1 ? 's' : ''})
                   </button>
@@ -1272,11 +1269,10 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
                     onClick={() => setWebsitesSelecionados(prev =>
                       prev.includes(w) ? prev.filter(x => x !== w) : [...prev, w]
                     )}
-                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${
-                      websitesSelecionados.includes(w)
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${websitesSelecionados.includes(w)
                         ? 'bg-primary text-primary-foreground'
                         : 'border border-border bg-card text-muted-foreground'
-                    }`}
+                      }`}
                   >
                     {w}
                   </button>

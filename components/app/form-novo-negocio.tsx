@@ -14,7 +14,7 @@ export function FormNovoNegocio({ onClose, onSalvar }: { onClose: () => void, on
   const [clienteIdSelecionado, setClienteIdSelecionado] = useState('')
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false)
   const [criarClienteAberto, setCriarClienteAberto] = useState(false)
-  const [telefones, setTelefones] = useState<{numero: string, isWhatsapp: boolean}[]>([{numero: '', isWhatsapp: true}])
+  const [telefones, setTelefones] = useState<{ numero: string, isWhatsapp: boolean }[]>([{ numero: '', isWhatsapp: true }])
   const [telPrincipalIdx, setTelPrincipalIdx] = useState(0)
   const [emails, setEmails] = useState<string[]>([''])
   const [emailPrincipalIdx, setEmailPrincipalIdx] = useState(0)
@@ -83,7 +83,7 @@ export function FormNovoNegocio({ onClose, onSalvar }: { onClose: () => void, on
     setClienteIdSelecionado(novoId)
     setNomeCliente(novoNome)
     setCriarClienteAberto(false)
-    setTelefones([{numero: '', isWhatsapp: true}])
+    setTelefones([{ numero: '', isWhatsapp: true }])
     setEmails([''])
     return novoId
   }
@@ -209,13 +209,13 @@ export function FormNovoNegocio({ onClose, onSalvar }: { onClose: () => void, on
                     </div>
                   ))}
                   {telefones.length < 3 && (
-                    <button type="button" onClick={() => setTelefones([...telefones, {numero: '', isWhatsapp: false}])} className="flex items-center gap-2 text-[10px] font-semibold text-primary mt-1">
+                    <button type="button" onClick={() => setTelefones([...telefones, { numero: '', isWhatsapp: false }])} className="flex items-center gap-2 text-[10px] font-semibold text-primary mt-1">
                       <PlusCircle className="size-3" /> Adicionar telefone
                     </button>
                   )}
                 </div>
               </div>
-              
+
               <div>
                 <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">E-mails (até 3)</label>
                 <div className="flex flex-col gap-2">
@@ -275,9 +275,8 @@ export function FormNovoNegocio({ onClose, onSalvar }: { onClose: () => void, on
                 key={f}
                 type="button"
                 onClick={() => setFinalidade(f)}
-                className={`flex-1 rounded-xl py-2.5 text-sm font-semibold transition-brand ${
-                  finalidade === f ? 'bg-primary text-primary-foreground' : 'border border-border bg-card text-muted-foreground'
-                }`}
+                className={`flex-1 rounded-xl py-2.5 text-sm font-semibold transition-brand ${finalidade === f ? 'bg-primary text-primary-foreground' : 'border border-border bg-card text-muted-foreground'
+                  }`}
               >
                 {f}
               </button>
@@ -330,9 +329,8 @@ export function FormNovoNegocio({ onClose, onSalvar }: { onClose: () => void, on
                 key={q}
                 type="button"
                 onClick={() => setQuartos(q)}
-                className={`flex-1 rounded-xl py-2.5 text-sm font-semibold transition-brand ${
-                  quartos === q ? 'bg-primary text-primary-foreground' : 'border border-border bg-card text-muted-foreground'
-                }`}
+                className={`flex-1 rounded-xl py-2.5 text-sm font-semibold transition-brand ${quartos === q ? 'bg-primary text-primary-foreground' : 'border border-border bg-card text-muted-foreground'
+                  }`}
               >
                 {q}
               </button>
@@ -370,9 +368,8 @@ export function FormNovoNegocio({ onClose, onSalvar }: { onClose: () => void, on
                 key={p}
                 type="button"
                 onClick={() => setPrazo(p)}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${
-                  prazo === p ? 'bg-primary text-primary-foreground' : 'border border-border bg-card text-muted-foreground'
-                }`}
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${prazo === p ? 'bg-primary text-primary-foreground' : 'border border-border bg-card text-muted-foreground'
+                  }`}
               >
                 {p}
               </button>
@@ -399,9 +396,9 @@ export function FormNovoNegocio({ onClose, onSalvar }: { onClose: () => void, on
               if (onSalvar) onSalvar(clienteIdSelecionado)
               onClose()
             } else if (nomeCliente) {
-               const idCriado = handleCriarCliente()
-               if (onSalvar) onSalvar(idCriado)
-               onClose()
+              const idCriado = handleCriarCliente()
+              if (onSalvar) onSalvar(idCriado)
+              onClose()
             }
           }}
           className="h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"

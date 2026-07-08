@@ -579,7 +579,7 @@ export function getFunil(funilId: string, filtroModo?: 'venda' | 'locacao' | 'to
   })
   const funil = funis.find(f => f.id === funilId)
   const etapas = funil?.etapas || []
-  
+
   return etapas.map((e) => ({
     id: e.id,
     nome: e.label,
@@ -672,23 +672,27 @@ export const clientes: Cliente[] = [
 
 export type Atividade = {
   id: string
+  data?: string
   hora: string
   titulo: string
   cliente: string
   telefone?: string
   whatsapp?: string
-  tipo: 'visita' | 'ligacao' | 'reuniao' | 'tarefa' | 'whatsapp'
+  tipo: 'visita' | 'ligacao' | 'reuniao' | 'tarefa' | 'whatsapp' | string
   concluida: boolean
   descricao?: string
+  importante?: boolean
   imoveisVisitados?: { id: string; nome: string; visitado: boolean; endereco: string }[]
 }
 
 export const atividadesHoje: Atividade[] = [
   { id: 'a1', hora: '11:00', titulo: 'Ligar para follow-up de proposta', cliente: 'André Souza', telefone: '(11) 99999-1111', tipo: 'ligacao', concluida: false, descricao: 'Perguntar se ele já analisou a proposta que enviei ontem e verificar se a esposa também aprovou o layout do apartamento.' },
-  { id: 'a2', hora: '15:00', titulo: 'Visita — Cobertura e Imóveis', cliente: 'Mariana Costa', whatsapp: '(11) 98765-4321', tipo: 'visita', concluida: false, descricao: 'Visita para conhecer opções em Alphaville.', imoveisVisitados: [
-    { id: 'v1', nome: 'Casa em condomínio', visitado: false, endereco: 'Alameda Rio Negro, Barueri' },
-    { id: 'v2', nome: 'Cobertura duplex', visitado: false, endereco: 'Rua Jacques Félix, São Paulo' },
-  ] },
+  {
+    id: 'a2', hora: '15:00', titulo: 'Visita — Cobertura e Imóveis', cliente: 'Mariana Costa', whatsapp: '(11) 98765-4321', tipo: 'visita', concluida: false, descricao: 'Visita para conhecer opções em Alphaville.', imoveisVisitados: [
+      { id: 'v1', nome: 'Casa em condomínio', visitado: false, endereco: 'Alameda Rio Negro, Barueri' },
+      { id: 'v2', nome: 'Cobertura duplex', visitado: false, endereco: 'Rua Jacques Félix, São Paulo' },
+    ]
+  },
   { id: 'a3', hora: '17:30', titulo: 'Enviar documentação do MS-1108', cliente: 'Beatriz Rocha', whatsapp: '(11) 96543-2109', tipo: 'whatsapp', concluida: false },
   { id: 'a4', hora: '09:00', titulo: 'Reunião de equipe — metas da semana', cliente: 'Equipe Central', tipo: 'reuniao', concluida: true },
 ]
@@ -819,3 +823,35 @@ export const funil = [
   { id: 'agendado', nome: 'Agendado', leads: atendimentos.filter(a => a.etapa === 'agendado').map(a => ({ id: a.id, nome: a.nome, iniciais: a.iniciais, interesse: a.interesse, valor: a.valor, temperatura: a.temperatura, origem: a.origem, atualizado: a.ultimaInteracao })) },
   { id: 'negociando', nome: 'Negociando', leads: atendimentos.filter(a => a.etapa === 'negociando').map(a => ({ id: a.id, nome: a.nome, iniciais: a.iniciais, interesse: a.interesse, valor: a.valor, temperatura: a.temperatura, origem: a.origem, atualizado: a.ultimaInteracao })) },
 ]
+
+export function isAtividadeAtrasada(dataStr?: string, horaStr?: string) {
+  if (!horaStr) return false
+  const now = new Date()
+  const horaAtual = now.getHours()
+  const minutoAtual = now.getMinutes()
+
+  if (!dataStr || dataStr === 'Hoje') {
+    const [h, m] = horaStr.split(':').map(Number)
+    if (h < horaAtual) return true
+    if (h === horaAtual && m < minutoAtual) return true
+    return false
+  }
+
+  if (dataStr === 'Amanhã') return false
+
+  // Handle YYYY-MM-DD
+  if (dataStr.includes('-')) {
+    const atvDate = new Date(`${dataStr}T${horaStr.replace('h', '')}:00`)
+    return atvDate.getTime() < now.getTime()
+  }
+
+  // Handle DD/MM/YYYY
+  if (dataStr.includes('/')) {
+    const [d, mo, y] = dataStr.split('/')
+    if (!d || !mo || !y) return false
+    const atvDate = new Date(`${y}-${mo}-${d}T${horaStr.replace('h', '')}:00`)
+    return atvDate.getTime() < now.getTime()
+  }
+
+  return false
+}

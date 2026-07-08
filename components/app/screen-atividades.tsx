@@ -1,28 +1,65 @@
 'use client'
 
-import { useState } from 'react'
-import { CalendarDays, CheckCircle2, Circle, Clock } from 'lucide-react'
-import { atividadesHoje, tipoAtividadeConfig } from '@/lib/app-data'
+import { useState, useEffect } from 'react'
+import { CalendarDays, CheckCircle2, Circle, Clock, ChevronLeft, ChevronRight } from 'lucide-react'
+import { atividadesHoje, tipoAtividadeConfig, isAtividadeAtrasada } from '@/lib/app-data'
 import type { Atividade } from '@/lib/app-data'
 
 export function ScreenAtividades() {
-  const [atividades, setAtividades] = useState<Atividade[]>(() => {
-    return [...atividadesHoje].sort((a, b) => {
+  const getHojeStr = () => {
+    const d = new Date()
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  }
+
+  const [dataFiltro, setDataFiltro] = useState(getHojeStr())
+
+  const carregarAtividades = () => {
+    const list = [...atividadesHoje].filter(a => {
+      // Se não tem data ou é 'Hoje', assumimos que é a data atual
+      const dataAtv = a.data && a.data !== 'Hoje' && a.data !== 'Amanhã' ? a.data : getHojeStr()
+      return dataAtv === dataFiltro
+    }).sort((a, b) => {
       const getT = (atv: Atividade) => {
-        let d = '1970-01-01'
-        if (atv.hora) { // some activities might lack 'data' prop here but we treat them as 'Hoje' if missing
-          d = new Date().toISOString().split('T')[0] // default Hoje
-        }
-        return new Date(`${d}T${atv.hora.replace('h', '')}:00`).getTime()
+        return new Date(`1970-01-01T${(atv.hora || '00:00').replace('h', '')}:00`).getTime()
       }
       return getT(a) - getT(b)
     })
-  })
+    setAtividades(list)
+  }
+
+  const [atividades, setAtividades] = useState<Atividade[]>([])
+
+  useEffect(() => {
+    carregarAtividades()
+  }, [dataFiltro])
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      carregarAtividades()
+    }
+    window.addEventListener('app-data-updated', handleUpdate)
+    return () => window.removeEventListener('app-data-updated', handleUpdate)
+  }, [dataFiltro])
 
   const toggleAtividade = (id: string) => {
     setAtividades(prev =>
       prev.map(a => (a.id === id ? { ...a, concluida: !a.concluida } : a))
     )
+    const globalIdx = atividadesHoje.findIndex(a => a.id === id)
+    if (globalIdx !== -1) atividadesHoje[globalIdx].concluida = !atividadesHoje[globalIdx].concluida
+    window.dispatchEvent(new CustomEvent('app-data-updated'))
+  }
+
+  const navegarData = (dias: number) => {
+    const [y, m, d] = dataFiltro.split('-').map(Number)
+    const novaData = new Date(y, m - 1, d + dias)
+    setDataFiltro(`${novaData.getFullYear()}-${String(novaData.getMonth() + 1).padStart(2, '0')}-${String(novaData.getDate()).padStart(2, '0')}`)
+  }
+
+  const formatarDataExibicao = (dataStr: string) => {
+    if (dataStr === getHojeStr()) return 'Hoje'
+    const [y, m, d] = dataStr.split('-')
+    return `${d}/${m}/${y}`
   }
 
   const pendentes = atividades.filter(a => !a.concluida)
@@ -43,6 +80,32 @@ export function ScreenAtividades() {
           <CalendarDays className="size-6" strokeWidth={1.5} />
         </div>
       </header>
+
+      {/* Navegador de Data */}
+      <div className="flex items-center justify-between rounded-2xl bg-card p-3 shadow-sm border border-border">
+        <button
+          type="button"
+          onClick={() => navegarData(-1)}
+          className="flex size-10 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-colors hover:bg-muted/80 active:scale-95"
+        >
+          <ChevronLeft className="size-5" />
+        </button>
+        <div className="flex flex-col items-center">
+          <span className="text-sm font-semibold text-foreground">
+            {formatarDataExibicao(dataFiltro)}
+          </span>
+          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+            {atividades.length} atividades
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => navegarData(1)}
+          className="flex size-10 items-center justify-center rounded-xl bg-muted text-muted-foreground transition-colors hover:bg-muted/80 active:scale-95"
+        >
+          <ChevronRight className="size-5" />
+        </button>
+      </div>
 
       <section>
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
@@ -67,11 +130,11 @@ export function ScreenAtividades() {
                         {atv.titulo}
                       </p>
                       <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1 font-medium text-muted-foreground">
+                        <span className={`flex items-center gap-1 font-medium ${!atv.concluida && isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'text-red-500' : 'text-muted-foreground'}`}>
                           <Clock className="size-3" />
                           {atv.hora}
-                          {!atv.concluida && new Date(`${new Date().toISOString().split('T')[0]}T${atv.hora.replace('h', '')}:00`).getTime() < Date.now() && (
-                            <span className="ml-1 rounded text-[10px] font-bold text-red-500 bg-red-500/10 px-1.5 py-0.5">Atrasada</span>
+                          {!atv.concluida && isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) && (
+                            <span className="ml-1 rounded text-[9px] font-bold text-red-500 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5">ATRASADA</span>
                           )}
                         </span>
                         <span>•</span>

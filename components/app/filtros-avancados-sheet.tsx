@@ -102,33 +102,30 @@ export function FiltrosAvancadosSheet({
               <button
                 type="button"
                 onClick={() => setFiltroPreAtendimento('todos')}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
-                  filtroPreAtendimento === 'todos'
-                    ? 'border-primary bg-primary text-primary-foreground shadow-md shadow-primary/20'
-                    : 'border-border bg-transparent text-muted-foreground'
-                }`}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${filtroPreAtendimento === 'todos'
+                  ? 'border-primary bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                  : 'border-border bg-transparent text-muted-foreground'
+                  }`}
               >
                 Todos
               </button>
               <button
                 type="button"
                 onClick={() => setFiltroPreAtendimento('sim')}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
-                  filtroPreAtendimento === 'sim'
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-border bg-transparent text-muted-foreground'
-                }`}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${filtroPreAtendimento === 'sim'
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border bg-transparent text-muted-foreground'
+                  }`}
               >
                 Em pré-atendimento
               </button>
               <button
                 type="button"
                 onClick={() => setFiltroPreAtendimento('nao')}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
-                  filtroPreAtendimento === 'nao'
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-border bg-transparent text-muted-foreground'
-                }`}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${filtroPreAtendimento === 'nao'
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border bg-transparent text-muted-foreground'
+                  }`}
               >
                 Atendimento iniciado
               </button>
@@ -203,11 +200,10 @@ export function FiltrosAvancadosSheet({
               <button
                 type="button"
                 onClick={() => setFiltroTemp('todas')}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
-                  filtroTemp === 'todas'
-                    ? 'border-primary bg-primary text-primary-foreground shadow-md shadow-primary/20'
-                    : 'border-border bg-transparent text-muted-foreground'
-                }`}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${filtroTemp === 'todas'
+                  ? 'border-primary bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                  : 'border-border bg-transparent text-muted-foreground'
+                  }`}
               >
                 Todas
               </button>
@@ -216,11 +212,10 @@ export function FiltrosAvancadosSheet({
                   key={t}
                   type="button"
                   onClick={() => setFiltroTemp(t)}
-                  className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
-                    filtroTemp === t
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border bg-transparent text-muted-foreground'
-                  }`}
+                  className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${filtroTemp === t
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border bg-transparent text-muted-foreground'
+                    }`}
                 >
                   <span className={`size-2.5 rounded-full border ${tempConfig[t].bg} border-card shadow-sm`} />
                   {tempConfig[t].label}
@@ -258,43 +253,41 @@ export function FiltrosAvancadosSheet({
                   onClick={() => setFiltroOrigem([])}
                   className="flex w-full items-center gap-3 rounded-xl p-3 text-left hover:bg-muted transition-colors"
                 >
-                  <div className={`flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${
-                    filtroOrigem.length === 0 ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-card'
-                  }`}>
+                  <div className={`flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${filtroOrigem.length === 0 ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-card'
+                    }`}>
                     {filtroOrigem.length === 0 && <Check className="size-3.5" />}
                   </div>
                   <span className="text-sm font-medium text-foreground">Todas as origens</span>
                 </button>
                 {origensFiltradas.map((origem) => (
-                <button
-                  key={origem}
-                  type="button"
-                  onClick={() => {
-                    if (filtroOrigem.includes(origem)) {
-                      setFiltroOrigem(filtroOrigem.filter(o => o !== origem))
-                    } else {
-                      setFiltroOrigem([...filtroOrigem, origem])
-                    }
-                  }}
-                  className="flex w-full items-center gap-3 rounded-xl p-3 text-left hover:bg-muted transition-colors"
-                >
-                  <div className={`flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${
-                    filtroOrigem.includes(origem) ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-card'
-                  }`}>
-                    {filtroOrigem.includes(origem) && <Check className="size-3.5" />}
+                  <button
+                    key={origem}
+                    type="button"
+                    onClick={() => {
+                      if (filtroOrigem.includes(origem)) {
+                        setFiltroOrigem(filtroOrigem.filter(o => o !== origem))
+                      } else {
+                        setFiltroOrigem([...filtroOrigem, origem])
+                      }
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl p-3 text-left hover:bg-muted transition-colors"
+                  >
+                    <div className={`flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${filtroOrigem.includes(origem) ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-card'
+                      }`}>
+                      {filtroOrigem.includes(origem) && <Check className="size-3.5" />}
+                    </div>
+                    <span className="text-sm font-medium text-foreground">{origem}</span>
+                  </button>
+                ))}
+                {origensFiltradas.length === 0 && (
+                  <div className="p-4 text-center text-sm text-muted-foreground">
+                    Nenhuma origem encontrada.
                   </div>
-                  <span className="text-sm font-medium text-foreground">{origem}</span>
-                </button>
-              ))}
-              {origensFiltradas.length === 0 && (
-                <div className="p-4 text-center text-sm text-muted-foreground">
-                  Nenhuma origem encontrada.
-                </div>
-              )}
+                )}
               </div>
             </div>
           </div>
-          
+
           <div className="mt-2 flex gap-3">
             <button
               type="button"
