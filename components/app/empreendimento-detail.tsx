@@ -53,7 +53,7 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
       )}
 
       <div className="absolute inset-0 z-40 bg-background flex flex-col animate-in slide-in-from-right duration-300">
-        <div className="flex-1 overflow-y-auto pb-8">
+        <div className="flex-1 overflow-y-auto pb-28">
           <div className="relative aspect-[4/3] shrink-0">
             <Image
               src={emp.foto || '/placeholder.svg'}
