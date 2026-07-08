@@ -173,7 +173,7 @@ export function ScreenPerfil({
       {showSecurity && (
         <div className="absolute inset-0 z-50 flex flex-col justify-end">
           <div
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200 cursor-pointer"
             onClick={() => setShowSecurity(false)}
           />
           <div className="relative z-50 w-full rounded-t-[2.5rem] bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom-full duration-300">

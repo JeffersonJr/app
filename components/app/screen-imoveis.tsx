@@ -225,7 +225,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
 
             {mostrarMenuOrdenacao && (
               <>
-                <div className="fixed inset-0 z-30" onClick={() => setMostrarMenuOrdenacao(false)} />
+                <div className="fixed inset-0 z-30 cursor-pointer" onClick={() => setMostrarMenuOrdenacao(false)} />
                 <div className="absolute right-0 mt-2 w-48 rounded-2xl border border-border bg-card p-2 shadow-xl z-40 animate-in fade-in slide-in-from-top-2 duration-150">
                   {[
                     { id: 'padrao', label: 'Padrão (Relevância)' },
@@ -890,7 +890,7 @@ function ImovelDetail({
         {/* Share Bottom Sheet */}
         {showShareMenu && (
           <>
-            <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] animate-in fade-in duration-200" onClick={() => setShowShareMenu(false)} />
+            <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] animate-in fade-in duration-200 cursor-pointer" onClick={() => setShowShareMenu(false)} />
             <div className="fixed bottom-0 left-0 right-0 bg-card rounded-t-3xl shadow-2xl z-[100] animate-in slide-in-from-bottom-full duration-300 pb-[env(safe-area-inset-bottom)]">
               <div className="flex justify-center pt-3 pb-2">
                 <div className="h-1.5 w-12 rounded-full bg-border" />
@@ -952,7 +952,7 @@ function ImovelDetail({
             {/* Modal Novo Lead sobre o ShareMenu */}
             {mostrarNovoLead && (
               <>
-                <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[110]" onClick={() => setMostrarNovoLead(false)} />
+                <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[110] cursor-pointer" onClick={() => setMostrarNovoLead(false)} />
                 <div className="fixed inset-x-4 top-10 bottom-4 bg-card rounded-3xl shadow-2xl z-[110] animate-in fade-in zoom-in-95 overflow-hidden flex flex-col">
                   <div className="flex-1 overflow-y-auto p-5">
                     <FormNovoLead 
@@ -990,7 +990,7 @@ function ImovelDetail({
         {/* WhatsApp Editor Modal */}
         {mostrarWhatsappModal && (
           <div className="absolute inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setMostrarWhatsappModal(false)} />
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm cursor-pointer" onClick={() => setMostrarWhatsappModal(false)} />
             <div className="relative w-full max-w-sm rounded-3xl bg-card p-5 shadow-2xl border border-border animate-in fade-in zoom-in-95">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">

@@ -69,7 +69,7 @@ export function GerenciarFunilSheet({
 
   return (
     <div className="absolute inset-0 z-50 flex flex-col justify-end">
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose} />
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200 cursor-pointer" onClick={onClose} />
       <div className="relative z-50 flex h-[85vh] w-full flex-col rounded-t-[2.5rem] bg-card shadow-2xl animate-in slide-in-from-bottom-full duration-300">
         <div className="flex justify-center pt-3 pb-1 shrink-0">
           <div className="h-1.5 w-12 rounded-full bg-border" />
