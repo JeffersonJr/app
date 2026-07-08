@@ -13,8 +13,8 @@ const ORIGENS = [
 
 const TEMPERATURAS = ['quente', 'morno', 'frio'] as const
 
-export function FormNovoLead({ onClose, onSalvar }: { onClose: () => void, onSalvar?: (id: string) => void }) {
-  const [nome, setNome] = useState('')
+export function FormNovoLead({ onClose, onSalvar, defaultName }: { onClose: () => void, onSalvar?: (id: string) => void, defaultName?: string }) {
+  const [nome, setNome] = useState(defaultName || '')
   const [telefones, setTelefones] = useState<{ numero: string, isWhatsapp: boolean }[]>([{ numero: '', isWhatsapp: true }])
   const [emails, setEmails] = useState<string[]>([''])
   const [origem, setOrigem] = useState<(typeof ORIGENS)[number]>('Portal: Zap Imóveis')

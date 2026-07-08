@@ -8,9 +8,9 @@ import {
 } from 'lucide-react'
 import type { Empreendimento } from '@/lib/empreendimentos-data'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
-import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
 import { Calendar } from 'lucide-react'
 import { atendimentos } from '@/lib/app-data'
+import { FormNovoLead } from '@/components/app/form-novo-lead'
 
 export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onBack: () => void }) {
   const [showShareMenu, setShowShareMenu] = useState(false)
@@ -22,6 +22,8 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
   const [mostrarLigacao, setMostrarLigacao] = useState(false)
   const [mostrarAgendamento, setMostrarAgendamento] = useState(false)
   const [buscaLeadShare, setBuscaLeadShare] = useState('')
+  const [mostrarNovoLead, setMostrarNovoLead] = useState(false)
+  const [novoLeadDefaultName, setNovoLeadDefaultName] = useState('')
 
   function handleShare(leadName: string) {
     setShowShareMenu(false)
@@ -334,35 +336,8 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
                       <button
                         type="button"
                         onClick={() => {
-                          const novoId = `c${Date.now()}`
-                          const nomeLead = buscaLeadShare.trim()
-                          atendimentos.push({
-                            id: novoId,
-                            nome: nomeLead,
-                            iniciais: nomeLead.substring(0, 2).toUpperCase(),
-                            telefone: '',
-                            email: '',
-                            etapa: 'novo',
-                            temperatura: 'frio',
-                            status: 'aberto',
-                            origem: 'Whatsapp',
-                            dataEntrada: 'Hoje',
-                            ultimaInteracao: 'Agora',
-                            interesse: 'Indefinido',
-                            valor: '',
-                            modo: 'venda',
-                            funilId: 'f1',
-                            perfil: { finalidade: '', tipoImovel: '', cidades: [], bairros: [], quartos: null, suites: null, vagas: null, areaMin: null, areaMax: null, valorMin: '', valorMax: '', andar: '', lazer: false, varanda: false, mobiliado: false, aceitaFinanciamento: false },
-                            notas: [],
-                            atividades: [],
-                            emails: [],
-                            documentos: [],
-                            imoveisEnviados: [],
-                            timeline: [{ data: 'Hoje, Agora', evento: 'Lead cadastrado via Compartilhamento', tipo: 'origem' }],
-                            albert: { status: 'idle' }
-                          })
-                          window.dispatchEvent(new CustomEvent('app-data-updated'))
-                          handleShare(nomeLead)
+                          setNovoLeadDefaultName(buscaLeadShare.trim())
+                          setMostrarNovoLead(true)
                         }}
                         className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-brand active:scale-95"
                       >
@@ -378,6 +353,28 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
               </button>
             </div>
           </div>
+
+          {/* Modal Novo Lead sobre o ShareMenu */}
+          {mostrarNovoLead && (
+            <>
+              <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[110]" onClick={() => setMostrarNovoLead(false)} />
+              <div className="fixed inset-x-4 top-10 bottom-4 bg-card rounded-3xl shadow-2xl z-[110] animate-in fade-in zoom-in-95 overflow-hidden flex flex-col">
+                <div className="flex-1 overflow-y-auto p-5">
+                  <FormNovoLead 
+                    defaultName={novoLeadDefaultName}
+                    onClose={() => setMostrarNovoLead(false)}
+                    onSalvar={(id) => {
+                      const lead = atendimentos.find(a => a.id === id)
+                      if (lead) {
+                        handleShare(lead.nome)
+                      }
+                      setMostrarNovoLead(false)
+                    }}
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
 
