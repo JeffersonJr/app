@@ -117,12 +117,15 @@ export function ScreenNegocios({
   }
 
   function handleEtapaChange(id: string, etapa: EtapaFunil) {
+    const oldEtapaId = dadosAtendimentos.find(a => a.id === id)?.etapa
+    const oldEtapaNome = funilAtivo.etapas?.find((e) => e.id === oldEtapaId)?.label || oldEtapaId || 'desconhecida'
     const etapaNome = funilAtivo.etapas?.find((e) => e.id === etapa)?.label || etapa
+    
     const newTimelineEvent: EventoTimeline = {
       id: `tl-${Date.now()}`,
       tipo: 'etapa',
-      descricao: `Negócio movido para a etapa: ${etapaNome}`,
-      data: 'Hoje',
+      descricao: `Cliente foi da etapa ${oldEtapaNome} para etapa ${etapaNome}`,
+      data: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
     }
     
