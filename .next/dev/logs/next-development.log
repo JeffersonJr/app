@@ -1,4 +1,4 @@
-{"timestamp":"01:57:14.841","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"01:57:16.202","source":"Server","level":"ERROR","message":"⨯ Error: ENOENT: no such file or directory, open '/Users/jefferson/Documents/GitHub/app/.next/dev/server/app/_not-found/page/build-manifest.json'"}
-{"timestamp":"01:57:19.209","source":"Server","level":"LOG","message":"○ Compiling /_error ..."}
-{"timestamp":"01:57:20.132","source":"Server","level":"ERROR","message":"⨯ Error: ENOENT: no such file or directory, open '/Users/jefferson/Documents/GitHub/app/.next/dev/server/app/_not-found/page/build-manifest.json'"}
+{"timestamp":"00:00:00.896","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:03.063","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:05.843","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:56.702","source":"Server","level":"LOG","message":"✓ Compiled in 528ms"}
