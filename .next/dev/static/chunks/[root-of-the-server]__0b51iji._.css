@@ -922,6 +922,10 @@
     bottom: calc(var(--spacing) * 20);
   }
 
+  .bottom-24 {
+    bottom: calc(var(--spacing) * 24);
+  }
+
   .-left-\[9px\] {
     left: -9px;
   }
@@ -2618,6 +2622,10 @@
     }
   }
 
+  .bg-foreground {
+    background-color: var(--foreground);
+  }
+
   .bg-fuchsia-50 {
     background-color: var(--color-fuchsia-50);
   }
@@ -3823,6 +3831,10 @@
 
   .text-amber-900 {
     color: var(--color-amber-900);
+  }
+
+  .text-background {
+    color: var(--background);
   }
 
   .text-blue-600 {

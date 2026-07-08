@@ -20,6 +20,7 @@ export default function Page() {
   const [clienteAbertoId, setClienteAbertoId] = useState<string | null>(null)
   const [atendimentoAbertoId, setAtendimentoAbertoId] = useState<string | null>(null)
   const [notificacoesAbertas, setNotificacoesAbertas] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
 
   // Um lead do funil abre o perfil do cliente correspondente
   function abrirClientePorLead(leadId: string) {
@@ -31,7 +32,12 @@ export default function Page() {
     setTab('clientes')
   }
 
-  function abrirAtendimentoPorId(id: string) {
+  function abrirAtendimentoPorId(id: string | null | undefined) {
+    if (!id) {
+      setToastMessage('Atividade criada com sucesso!')
+      setTimeout(() => setToastMessage(''), 3000)
+      return
+    }
     setTab('negocios')
     setAtendimentoAbertoId(id)
   }
@@ -142,6 +148,15 @@ export default function Page() {
             onClose={() => setNotificacoesAbertas(false)}
             onVerAtendimento={abrirAtendimentoPorId}
           />
+        )}
+
+        {/* Toast Feedback */}
+        {toastMessage && (
+          <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-bottom-5 fade-in duration-300">
+            <div className="rounded-2xl bg-foreground px-4 py-3 text-sm font-semibold text-background shadow-xl">
+              {toastMessage}
+            </div>
+          </div>
         )}
       </div>
     </main>
