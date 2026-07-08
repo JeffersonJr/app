@@ -5,6 +5,7 @@ import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, R
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { SearchableTagSelect } from '@/components/app/searchable-tag-select'
+import { maskCEP, maskCurrency, maskPhone } from '@/lib/masks'
 import {
   STATUS_CONSTRUCAO,
   PROXIMIDADES_POPULAR,
@@ -769,7 +770,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Valor (R$)</label>
-              <input type="text" value={valor} onChange={(e) => setValor(e.target.value)} placeholder="0,00" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <input type="text" value={valor} onChange={(e) => setValor(maskCurrency(e.target.value))} placeholder="R$ 0,00" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Útil (m²)</label>
@@ -799,7 +800,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Telefone</label>
-              <input type="text" value={telefoneProprietario} onChange={(e) => setTelefoneProprietario(e.target.value)} placeholder="(00) 00000-0000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <input type="text" value={telefoneProprietario} onChange={(e) => setTelefoneProprietario(maskPhone(e.target.value))} placeholder="(00) 00000-0000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
           </div>
 
@@ -989,7 +990,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             <div className="grid grid-cols-3 gap-2">
               <div className="col-span-1">
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">CEP</label>
-                <input type="text" value={cep} onChange={(e) => setCep(e.target.value)} placeholder="00000-000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                <input type="text" value={cep} onChange={(e) => setCep(maskCEP(e.target.value))} placeholder="00000-000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
               </div>
               <div className="col-span-2">
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Endereço</label>
@@ -1071,7 +1072,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
         <AccordionSection title="Medidas e Valores" icon={<Ruler className="size-4" strokeWidth={2.5} />} isOpen={openSection === 4} onToggle={() => setOpenSection(openSection === 4 ? 0 : 4)}>
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Valor (R$)</label>
-              <input type="text" value={valor} onChange={(e) => setValor(e.target.value)} placeholder="R$ 890.000" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <input type="text" value={valor} onChange={(e) => setValor(maskCurrency(e.target.value))} placeholder="R$ 890.000,00" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -1125,7 +1126,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
         <AccordionSection title="Proprietário" icon={<UserCircle className="size-4" strokeWidth={2.5} />} isOpen={openSection === 6} onToggle={() => setOpenSection(openSection === 6 ? 0 : 6)}>
           <div className="flex flex-col gap-3">
             <input type="text" value={proprietario} onChange={(e) => setProprietario(e.target.value)} placeholder="Nome completo" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-            <input type="tel" value={telefoneProprietario} onChange={(e) => setTelefoneProprietario(e.target.value)} placeholder="Telefone / WhatsApp" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+            <input type="tel" value={telefoneProprietario} onChange={(e) => setTelefoneProprietario(maskPhone(e.target.value))} placeholder="Telefone / WhatsApp" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
             <input type="email" value={emailProprietario} onChange={(e) => setEmailProprietario(e.target.value)} placeholder="E-mail" className="h-11 w-full rounded-xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
           </div>
         </AccordionSection>
@@ -1216,7 +1217,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">IPTU Nº</label>
-                <input type="text" value={iptu} onChange={(e) => setIptu(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                <input type="text" value={iptu} onChange={(e) => setIptu(maskCurrency(e.target.value))} placeholder="R$ 0,00" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
               </div>
             </div>
 

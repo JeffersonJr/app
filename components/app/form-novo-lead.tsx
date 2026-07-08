@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { X } from 'lucide-react'
+import { maskPhone } from '@/lib/masks'
 
 const ORIGENS = [
   'Portal ZAP', 'Portal VivaReal', 'Portal OLX', 'Site Próprio',
@@ -53,7 +54,7 @@ export function FormNovoLead({ onClose }: { onClose: () => void }) {
           <input
             type="tel"
             value={telefone}
-            onChange={(e) => setTelefone(e.target.value)}
+            onChange={(e) => setTelefone(maskPhone(e.target.value))}
             placeholder="(11) 99999-9999"
             className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />

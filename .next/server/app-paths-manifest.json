@@ -9,6 +9,5 @@
   "/page": "app/page.js",
   "/site/funcionalidades/page": "app/site/funcionalidades/page.js",
   "/site/page": "app/site/page.js",
-  "/site/precos/page": "app/site/precos/page.js",
-  "/web/page": "app/web/page.js"
+  "/site/precos/page": "app/site/precos/page.js"
 }

@@ -41,7 +41,7 @@ export function ScreenHoje({
   const saudacao = horaAtual < 12 ? 'Bom dia' : horaAtual < 18 ? 'Boa tarde' : 'Boa noite'
 
   return (
-    <div className="flex flex-col gap-6 px-5 md:px-8 pt-4 md:pt-10 pb-28 md:pb-12 w-full">
+    <div className="flex flex-col gap-6 px-5 pt-4 pb-28">
       <header className="flex flex-col gap-1">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           Terça · 07 Jul
@@ -52,7 +52,7 @@ export function ScreenHoje({
       </header>
 
       {/* Indicadores do dia */}
-      <section aria-label="Indicadores do dia" className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+      <section aria-label="Indicadores do dia" className="grid grid-cols-2 gap-3 mt-2">
         {/* Leads Quentes */}
         <button
           onClick={() => document.getElementById('secao-leads')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
@@ -81,7 +81,7 @@ export function ScreenHoje({
         </button>
 
         {/* Propostas */}
-        <div className="col-span-2 md:col-span-1 flex flex-col rounded-3xl border border-border/60 bg-card p-5 shadow-soft transition-brand">
+        <div className="col-span-2 flex flex-col rounded-3xl border border-border/60 bg-card p-5 shadow-soft transition-brand">
           <span className="mb-2 block text-[13px] font-medium text-muted-foreground">Propostas</span>
           <p className="font-sans text-[2.5rem] leading-none font-bold tracking-tight text-foreground mb-1.5">R$ 4,2M</p>
           <p className="font-mono text-[11px] font-medium tracking-wide text-[#2B5250]">
@@ -90,9 +90,8 @@ export function ScreenHoje({
         </div>
       </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-        {/* Agenda do dia */}
-        <section id="secao-agenda" aria-label="Agenda de hoje" className="scroll-mt-6 w-full">
+      {/* Agenda do dia */}
+      <section id="secao-agenda" aria-label="Agenda de hoje" className="scroll-mt-6">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="flex items-center gap-2 font-serif text-lg font-semibold text-foreground">
             <Calendar className="size-4.5 text-primary" strokeWidth={1.5} />
@@ -232,7 +231,6 @@ export function ScreenHoje({
           ))}
         </ul>
       </section>
-      </div>
 
       {/* Atalhos de contato */}
       <section aria-label="Resumo da carteira" className="rounded-2xl bg-cream p-4">

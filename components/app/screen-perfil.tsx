@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Bell, ChevronRight, HelpCircle, LogOut, ShieldCheck, Target, X, Lock, KeyRound, Smartphone, RefreshCcw } from 'lucide-react'
-import { BRAND } from '@/lib/branding'
 
 export function ScreenPerfil({
   onNotificacoes,
@@ -23,7 +22,7 @@ export function ScreenPerfil({
     setTimeout(() => setMensagemAtualizacao(''), 3000)
   }
   return (
-    <div className="flex min-h-full flex-col bg-fog pb-40 md:px-8 w-full">
+    <div className="flex min-h-full flex-col bg-fog pb-40">
       {/* Header Profile */}
       <div className="px-6 pt-10 pb-6 flex items-center gap-4">
         <div className="flex size-[4.5rem] shrink-0 items-center justify-center rounded-full bg-[#2B5250] text-2xl font-semibold text-white shadow-sm">
@@ -167,7 +166,7 @@ export function ScreenPerfil({
 
       {/* Desenvolvido Por */}
       <div className="flex flex-col items-center justify-center mt-2 mb-4 gap-1 text-xs text-muted-foreground">
-        <p>Desenvolvido por <a href={BRAND.companyUrl} target="_blank" rel="noopener noreferrer" className="font-medium hover:text-primary transition-colors">{BRAND.developedBy}</a></p>
+        <p>Desenvolvido por <a href="https://evolves.site" target="_blank" rel="noopener noreferrer" className="font-medium hover:text-primary transition-colors">evolves tecnologia</a></p>
       </div>
 
       {/* Security Sheet */}

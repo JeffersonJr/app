@@ -35,19 +35,20 @@ export default function HubPage() {
           </div>
         </Link>
 
-        {/* Card: Sistema Web */}
+        {/* Card: Sistema Web (Disabled) */}
         <div
-          className="group glass-panel p-8 rounded-3xl flex flex-col items-center text-center shadow-sm border-2 border-transparent opacity-60 cursor-not-allowed"
+          className="group glass-panel p-8 rounded-3xl flex flex-col items-center text-center shadow-none border-2 border-border/50 opacity-60 cursor-not-allowed bg-fog/30"
         >
-          <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center text-muted-foreground mb-6 shadow-sm">
+          <div className="w-16 h-16 rounded-2xl bg-slate/20 flex items-center justify-center text-slate mb-6">
             <Globe className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-bold text-ink mb-1">Sistema Web</h2>
-          <p className="text-slate mb-8 flex-1 mt-3">
-            A versão desktop completa com relatórios avançados e gestão para telas grandes.
+          <span className="text-xs font-bold text-amber bg-amber/10 px-2 py-0.5 rounded-full mb-3 uppercase tracking-wider">Em breve</span>
+          <p className="text-slate mb-8 flex-1">
+            A versão desktop completa com relatórios avançados e gestão de equipe.
           </p>
-          <div className="text-muted-foreground font-bold flex items-center gap-2">
-            Em breve
+          <div className="text-slate/50 font-bold flex items-center gap-2">
+            Indisponível
           </div>
         </div>
 

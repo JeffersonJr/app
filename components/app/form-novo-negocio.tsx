@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { X, Search, Check, PlusCircle } from 'lucide-react'
 import { atendimentos, perfilVazio } from '@/lib/app-data'
+import { maskCurrency } from '@/lib/masks'
 
 const TIPOS_IMOVEL = ['Apartamento', 'Casa', 'Studio', 'Cobertura', 'Terreno', 'Sala Comercial', 'Galpão', 'Outro'] as const
 const CIDADES = ['São Paulo', 'Barueri', 'Osasco', 'Guarulhos', 'Santo André', 'São Bernardo', 'Mogi das Cruzes', 'Outra'] as const
@@ -245,14 +246,14 @@ export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
             <input
               type="text"
               value={valorMin}
-              onChange={(e) => setValorMin(e.target.value)}
+              onChange={(e) => setValorMin(maskCurrency(e.target.value))}
               placeholder="Mínimo"
               className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
             <input
               type="text"
               value={valorMax}
-              onChange={(e) => setValorMax(e.target.value)}
+              onChange={(e) => setValorMax(maskCurrency(e.target.value))}
               placeholder="Máximo"
               className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />

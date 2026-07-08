@@ -28,6 +28,7 @@ import {
 } from 'lucide-react'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
+import { maskCEP } from '@/lib/masks'
 import { SearchableTagSelect } from '@/components/app/searchable-tag-select'
 import {
   STATUS_CONSTRUCAO,
@@ -472,7 +473,7 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
                 <Label>CEP</Label>
-                <Input value={cep} onChange={e => setCep(e.target.value)} placeholder="00000-000" />
+                <Input value={cep} onChange={e => setCep(maskCEP(e.target.value))} placeholder="00000-000" />
               </div>
               <div>
                 <Label>Cidade</Label>
@@ -575,7 +576,7 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
           <div className="grid grid-cols-3 gap-3">
             <div>
               <Label required>CEP</Label>
-              <Input value={cep} onChange={e => setCep(e.target.value)} placeholder="15093-393" />
+              <Input value={cep} onChange={e => setCep(maskCEP(e.target.value))} placeholder="15093-393" />
             </div>
             <div>
               <Label required>Estado</Label>

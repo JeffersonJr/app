@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { ArrowLeft, Eye, EyeOff, Lock, Mail, Phone, User } from 'lucide-react'
+import { maskPhone } from '@/lib/masks'
 
 const CARGOS = [
   'Corretor de Imóveis',
@@ -94,7 +95,7 @@ export default function CadastroPage() {
             <input
               type="tel"
               value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
+              onChange={(e) => setTelefone(maskPhone(e.target.value))}
               placeholder="(11) 99999-9999"
               required
               autoComplete="tel"

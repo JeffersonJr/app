@@ -178,7 +178,7 @@ function ClienteDetail({ cliente, onBack }: { cliente: Cliente; onBack: () => vo
   }
 
   return (
-    <div className="flex flex-col pb-28 md:px-12 md:pt-10 w-full">
+    <div className="flex flex-col pb-28">
       {/* Header imersivo */}
       <div className="bg-primary px-5 pb-6 pt-[calc(1rem+env(safe-area-inset-top))] text-primary-foreground">
         <button
