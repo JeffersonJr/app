@@ -62,11 +62,9 @@ export default function LoginPage() {
   return (
     <div className="flex flex-1 flex-col relative overflow-hidden bg-background">
       <div className="relative flex flex-col items-center pt-16 pb-8 px-6 w-full max-w-md mx-auto">
-        <div className="flex items-center justify-center p-3 rounded-3xl bg-primary/10 border border-primary/20 shadow-sm mb-6">
-          <img src="/logo-evolves.svg" alt="evolves" className="size-12 object-contain filter invert" />
-        </div>
+        <img src="/logo-evolves.svg" alt="evolves" className="size-20 object-contain mb-4" />
         <h1 className="font-serif text-3xl font-bold text-foreground text-center">
-          evolves CRM
+          evolves
         </h1>
         <p className="mt-2 text-sm font-medium text-muted-foreground text-center flex items-center gap-1.5">
           <Sparkles className="size-3.5" />
