@@ -47,6 +47,7 @@ import {
   funis,
   atendimentos as dadosAtendimentos,
 } from '@/lib/app-data'
+import { empreendimentosMock } from '@/lib/empreendimentos-data'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { AtividadeDetalheSheet } from '@/components/app/atividade-detalhe-sheet'
@@ -166,6 +167,8 @@ export function AtendimentoDetail({
   const [termoAberto, setTermoAberto] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [toastMensagem, setToastMensagem] = useState<string | null>(null)
+  
+  const [abaImoveis, setAbaImoveis] = useState<'imoveis' | 'empreendimentos'>('imoveis')
 
   const imoveisEmVisitaAtiva = new Set<string>()
   localAtividades.forEach(a => {
@@ -210,12 +213,18 @@ export function AtendimentoDetail({
     return true
   })
 
-  // Se a busca manual estiver preenchida, filtramos sobre todos imóveis
-  const imoveisExibidos = buscaManualImoveis
-    ? imoveis.filter(im => im.titulo.toLowerCase().includes(buscaManualImoveis.toLowerCase()) || im.codigo.toLowerCase().includes(buscaManualImoveis.toLowerCase()))
-    : imoveisCompativeis.length > 0
-      ? imoveisCompativeis
-      : imoveis.filter(im => im.finalidade === atendimento.perfil.finalidade || true).slice(0, 2) // recomendacao fallback
+  // Se a busca manual estiver preenchida, filtramos sobre todos imóveis ou empreendimentos
+  const imoveisExibidos = abaImoveis === 'imoveis' ? (
+    buscaManualImoveis
+      ? imoveis.filter(im => im.titulo.toLowerCase().includes(buscaManualImoveis.toLowerCase()) || im.codigo.toLowerCase().includes(buscaManualImoveis.toLowerCase()))
+      : imoveisCompativeis.length > 0
+        ? imoveisCompativeis
+        : imoveis.filter(im => im.finalidade === atendimento.perfil.finalidade || true).slice(0, 2)
+  ) : (
+    buscaManualImoveis
+      ? empreendimentosMock.filter(emp => emp.nome.toLowerCase().includes(buscaManualImoveis.toLowerCase()) || emp.codigo.toLowerCase().includes(buscaManualImoveis.toLowerCase()))
+      : empreendimentosMock.slice(0, 3)
+  )
 
   function handleSave4Q() {
     if (atendimento) {
@@ -293,9 +302,9 @@ export function AtendimentoDetail({
   }
 
   function abrirPreviewEnvio(tipo: 'email' | 'whatsapp', imoveisParaEnviar: any[]) {
-    let msg = `Olá ${atendimento?.nome}, separei as seguintes opções de imóveis para você:\n\n`
+    let msg = `Olá ${atendimento?.nome}, separei as seguintes opções para você:\n\n`
     imoveisParaEnviar.forEach(im => {
-      msg += `- ${im.titulo} (${im.codigo})\n  Preço: ${im.preco}\n\n`
+      msg += `- ${im.titulo || im.nome} (${im.codigo})\n  Preço: ${im.preco || im.precoMin}\n\n`
     })
     msg += `O que acha de agendarmos uma visita?`
     setTextoEnvio(msg)
@@ -780,20 +789,35 @@ export function AtendimentoDetail({
         {aba === 'imoveis' && (
           <div>
             <div className="mb-4">
-              <h2 className="font-serif text-lg font-semibold">Imóveis compatíveis</h2>
+              <h2 className="font-serif text-lg font-semibold">Opções de Imóveis</h2>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {imoveisCompativeis.length > 0 ? 'Baseado no perfil de busca do cliente' : 'Nenhum imóvel exato. Veja estas recomendações ou busque.'}
+                Baseado no perfil de busca do cliente
               </p>
             </div>
 
-            {imoveisCompativeis.length === 0 && (
+            <div className="mb-4 flex rounded-full bg-muted/50 p-1 w-full max-w-sm">
+              <button
+                onClick={() => { setAbaImoveis('imoveis'); setBuscaManualImoveis(''); setImoveisSelecionados([]) }}
+                className={`relative flex-1 rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${abaImoveis === 'imoveis' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Imóveis ({imoveisCompativeis.length})
+              </button>
+              <button
+                onClick={() => { setAbaImoveis('empreendimentos'); setBuscaManualImoveis(''); setImoveisSelecionados([]) }}
+                className={`relative flex-1 rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${abaImoveis === 'empreendimentos' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Empreendimentos
+              </button>
+            </div>
+
+            {((abaImoveis === 'imoveis' && imoveisCompativeis.length === 0) || abaImoveis === 'empreendimentos') && (
               <div className="relative mb-4">
                 <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <input
                   type="text"
                   value={buscaManualImoveis}
                   onChange={(e) => setBuscaManualImoveis(e.target.value)}
-                  placeholder="Pesquisar por código ou título..."
+                  placeholder={`Pesquisar por código ou título...`}
                   className="w-full rounded-2xl border border-border bg-card pl-10 pr-4 py-3 text-sm text-foreground outline-none focus:border-primary"
                 />
               </div>
@@ -802,7 +826,7 @@ export function AtendimentoDetail({
             <ul className={`flex flex-col gap-3 ${imoveisSelecionados.length > 0 ? 'pb-40' : ''}`}>
               {imoveisExibidos.map((im) => (
                 <li key={im.id} className={`relative rounded-[1.25rem] bg-card shadow-soft p-4 border transition-colors ${imoveisSelecionados.includes(im.id) ? 'border-primary bg-primary/5' : 'border-transparent'} ${imoveisEmVisitaAtiva.has(im.id) ? 'opacity-80' : ''}`}>
-                  {imoveisCompativeis.length === 0 && !buscaManualImoveis && !imoveisEmVisitaAtiva.has(im.id) && (
+                  {abaImoveis === 'imoveis' && imoveisCompativeis.length === 0 && !buscaManualImoveis && !imoveisEmVisitaAtiva.has(im.id) && (
                     <span className="absolute -top-2.5 right-4 rounded-full bg-amber text-[#8a5a1e] px-2 py-0.5 text-[10px] font-bold shadow-sm">
                       Fora do perfil
                     </span>
@@ -823,12 +847,12 @@ export function AtendimentoDetail({
                       />
                       <div>
                         <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{im.codigo}</p>
-                        <p className="mt-1 text-sm font-semibold text-foreground">{im.titulo}</p>
+                        <p className="mt-1 text-sm font-semibold text-foreground">{'titulo' in im ? im.titulo : im.nome}</p>
                         <p className="text-xs text-muted-foreground">{im.bairro}, {im.cidade}</p>
-                        <p className="mt-1 font-mono text-sm font-semibold text-primary">{im.preco}</p>
+                        <p className="mt-1 font-mono text-sm font-semibold text-primary">{'preco' in im ? im.preco : im.precoMin}</p>
                       </div>
                     </div>
-                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${im.status === 'Livre' ? 'bg-teal-mid/20 text-teal-deep' : 'bg-amber/20 text-[#8a5a1e]'}`}>
+                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${im.status === 'Livre' || im.status === 'Lançamento' ? 'bg-teal-mid/20 text-teal-deep' : 'bg-amber/20 text-[#8a5a1e]'}`}>
                       {im.status}
                     </span>
                   </div>
@@ -845,7 +869,7 @@ export function AtendimentoDetail({
                 </li>
               ))}
               {imoveisExibidos.length === 0 && (
-                <p className="text-sm text-muted-foreground">Nenhum imóvel encontrado.</p>
+                <p className="text-sm text-muted-foreground">Nenhuma opção encontrada.</p>
               )}
             </ul>
 
@@ -1137,6 +1161,33 @@ export function AtendimentoDetail({
                   </div>
                   <p className="text-sm text-foreground">📅 {atendimento.albert.dia} · {atendimento.albert.hora}</p>
                   <p className="mt-1 text-xs text-muted-foreground">{atendimento.albert.instrucoes}</p>
+
+                  <div className="mt-4 border-t border-teal-mid/20 pt-4">
+                    <p className="text-xs font-semibold text-teal-deep mb-3 uppercase tracking-wide">Plano de Ação do Albert</p>
+                    <div className="flex flex-col gap-3 relative before:absolute before:inset-y-2 before:left-[11px] before:w-px before:bg-teal-mid/30">
+                      <div className="flex gap-3 relative">
+                        <div className="size-6 shrink-0 rounded-full bg-teal-mid/20 border-2 border-teal-mid flex items-center justify-center text-teal-deep z-10"><MessageCircle className="size-3" /></div>
+                        <div>
+                          <p className="text-xs font-semibold text-foreground">Envio de WhatsApp Inicial</p>
+                          <p className="text-[10px] text-muted-foreground">Albert envia mensagem personalizada baseada nas instruções.</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 relative">
+                        <div className="size-6 shrink-0 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground z-10"><Bot className="size-3" /></div>
+                        <div>
+                          <p className="text-xs font-semibold text-foreground">Análise de Resposta</p>
+                          <p className="text-[10px] text-muted-foreground">O Albert processa a resposta usando IA e identifica o humor e o interesse do lead.</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 relative">
+                        <div className="size-6 shrink-0 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground z-10"><Target className="size-3" /></div>
+                        <div>
+                          <p className="text-xs font-semibold text-foreground">Atualização do CRM</p>
+                          <p className="text-[10px] text-muted-foreground">O lead é movido de etapa e uma notificação é gerada para o corretor.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground">Nenhum follow-up agendado para este atendimento.</p>

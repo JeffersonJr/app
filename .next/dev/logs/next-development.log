@@ -21,3 +21,5 @@
 {"timestamp":"00:14:36.272","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
 {"timestamp":"00:14:45.562","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
 {"timestamp":"00:16:17.314","source":"Server","level":"LOG","message":"✓ Compiled in 401ms"}
+{"timestamp":"00:19:33.906","source":"Server","level":"LOG","message":"✓ Compiled in 2.2s"}
+{"timestamp":"00:20:08.163","source":"Server","level":"LOG","message":"✓ Compiled in 224ms"}
