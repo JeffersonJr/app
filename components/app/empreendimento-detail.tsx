@@ -1,12 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import {
   ArrowLeft, Bath, BedDouble, Building2, Car, MapPin, Search, Share2,
   Check, Phone, MessageCircle, Bot, PenLine, X, Mic, PhoneOff, CheckCircle2, ChevronRight
 } from 'lucide-react'
 import type { Empreendimento } from '@/lib/empreendimentos-data'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
+import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
+import { Calendar } from 'lucide-react'
+import { atendimentos } from '@/lib/app-data'
 
 export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onBack: () => void }) {
   const [showShareMenu, setShowShareMenu] = useState(false)
@@ -16,6 +20,7 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
   const [mostrarWhatsappModal, setMostrarWhatsappModal] = useState(false)
   const [msgWhatsapp, setMsgWhatsapp] = useState(`Olá ${emp.contatos?.[0]?.nome}, tudo bem?\nGostaria de saber mais sobre o ${emp.nome}.`)
   const [mostrarLigacao, setMostrarLigacao] = useState(false)
+  const [mostrarAgendamento, setMostrarAgendamento] = useState(false)
 
   function handleShare(leadName: string) {
     setShowShareMenu(false)
@@ -23,90 +28,99 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
     setTimeout(() => setToastMessage(''), 3000)
   }
 
+  const clientesCompativeis = atendimentos.filter(a => {
+    if (!a.perfil) return false
+    if (a.perfil.cidades && a.perfil.cidades.length > 0 && emp.cidade && !a.perfil.cidades.includes(emp.cidade)) return false
+    return true
+  }).slice(0, 3)
+
   const statusColor =
     emp.status === 'Lançamento' ? 'bg-primary/90 text-white' :
     emp.status === 'Em Obras' ? 'bg-amber/90 text-ink' :
     'bg-teal-mid/90 text-white'
 
   return (
-    <div className="absolute inset-0 z-40 bg-background flex flex-col overflow-hidden animate-in slide-in-from-right duration-300">
+    <>
       {toastMessage && (
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[60] animate-in fade-in slide-in-from-top-4">
-          <div className="rounded-full bg-black/80 px-4 py-2 text-sm font-semibold text-white shadow-lg flex items-center gap-2">
-            <Check className="size-4 text-green-400" />
-            {toastMessage}
-          </div>
+        <div className="absolute top-[calc(1rem+env(safe-area-inset-top))] left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-top-5">
+          <CheckCircle2 className="size-4 inline-block mr-1.5 align-text-bottom" />
+          {toastMessage}
         </div>
       )}
-
-      {/* Header and Image */}
-      <div className="relative h-72 shrink-0">
-        <button
-          onClick={onBack}
-          type="button"
-          className="absolute left-5 top-5 z-20 flex size-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-transform active:scale-90"
-        >
-          <ArrowLeft className="size-5" />
-        </button>
-        
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={emp.foto} alt={emp.nome} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        
-        <span className={`absolute right-5 top-5 rounded-full px-3 py-1.5 text-xs font-semibold backdrop-blur-md ${statusColor}`}>
-          {emp.status}
-        </span>
-
-        <div className="absolute bottom-5 left-5 right-5">
-          <h1 className="font-serif text-2xl font-bold text-white mb-1 leading-tight">{emp.nome}</h1>
-          <p className="flex items-center gap-1.5 text-sm text-white/80">
-            <Building2 className="size-4" /> {emp.construtora}
-          </p>
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto px-5 pt-6 pb-32">
-        {/* Basic Info */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="size-4 text-primary" /> {emp.bairro}, {emp.cidade}
-            </span>
-            <span className="flex items-center gap-1.5 font-mono text-xs">
-              <Search className="size-3.5" /> Código: {emp.codigo}
-            </span>
-          </div>
-          <div className="text-right">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">A partir de</p>
-            <p className="font-mono text-xl font-bold text-primary">{emp.precoMin}</p>
+      
+      <div className="absolute inset-0 z-40 bg-background flex flex-col animate-in slide-in-from-right duration-300">
+        <div className="flex-1 overflow-y-auto pb-8">
+          <div className="relative aspect-[4/3] shrink-0">
+          <Image
+            src={emp.foto || '/placeholder.svg'}
+            alt={`Foto do empreendimento: ${emp.nome}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 480px) 100vw, 420px"
+            priority
+          />
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4 pt-[calc(1rem+env(safe-area-inset-top))]">
+            <button
+              onClick={onBack}
+              type="button"
+              className="flex size-10 items-center justify-center rounded-full bg-teal-shadow/60 text-white backdrop-blur-sm transition-transform active:scale-95"
+            >
+              <ArrowLeft className="size-5" />
+            </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowShareMenu(true)}
+                aria-label="Compartilhar"
+                className="flex size-10 items-center justify-center rounded-full bg-teal-shadow/60 text-white backdrop-blur-sm transition-brand active:scale-95"
+              >
+                <Share2 className="size-5" strokeWidth={1.5} />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Units / Composition Info */}
-        <div className="grid grid-cols-4 gap-2 mb-6">
-          <div className="flex flex-col items-center justify-center gap-1 rounded-2xl bg-muted/50 py-3">
-            <BedDouble className="size-5 text-primary" strokeWidth={1.5} />
-            <span className="text-[11px] font-semibold text-foreground">
-              {emp.minDorms === emp.maxDorms ? emp.minDorms : `${emp.minDorms}-${emp.maxDorms}`} dorms
-            </span>
+        <div className="relative -mt-6 rounded-t-3xl bg-background px-5 pt-6 flex-1">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                {emp.codigo} · {emp.status}
+              </p>
+              <h1 className="mt-1 font-serif text-xl font-semibold text-foreground text-balance">
+                {emp.nome}
+              </h1>
+              <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                <MapPin className="size-4" strokeWidth={1.5} />
+                {emp.bairro}, {emp.cidade}
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col items-center justify-center gap-1 rounded-2xl bg-muted/50 py-3">
-            <Bath className="size-5 text-primary" strokeWidth={1.5} />
-            <span className="text-[11px] font-semibold text-foreground">
-              {emp.minSuites === emp.maxSuites ? emp.minSuites : `${emp.minSuites}-${emp.maxSuites}`} suítes
-            </span>
+
+          <p className="mt-4 text-[10px] uppercase tracking-wide text-muted-foreground">A partir de</p>
+          <p className="font-mono text-2xl font-semibold text-primary">{emp.precoMin}</p>
+
+          <div className="mt-5 grid grid-cols-4 gap-2 mb-6">
+            <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
+              <BedDouble className="size-5 text-primary" strokeWidth={1.5} />
+              <span className="font-mono text-sm font-medium text-foreground">{emp.minDorms === emp.maxDorms ? emp.minDorms : `${emp.minDorms}-${emp.maxDorms}`}</span>
+              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Dorms</span>
+            </div>
+            <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
+              <Bath className="size-5 text-primary" strokeWidth={1.5} />
+              <span className="font-mono text-sm font-medium text-foreground">{emp.minSuites === emp.maxSuites ? emp.minSuites : `${emp.minSuites}-${emp.maxSuites}`}</span>
+              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Suítes</span>
+            </div>
+            <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
+              <Car className="size-5 text-primary" strokeWidth={1.5} />
+              <span className="font-mono text-sm font-medium text-foreground">{emp.minVagas === emp.maxVagas ? emp.minVagas : `${emp.minVagas}-${emp.maxVagas}`}</span>
+              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Vagas</span>
+            </div>
+            <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-3">
+              <Building2 className="size-5 text-primary" strokeWidth={1.5} />
+              <span className="font-mono text-sm font-medium text-foreground">{emp.unidades}</span>
+              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Unid.</span>
+            </div>
           </div>
-          <div className="flex flex-col items-center justify-center gap-1 rounded-2xl bg-muted/50 py-3">
-            <Car className="size-5 text-primary" strokeWidth={1.5} />
-            <span className="text-[11px] font-semibold text-foreground">
-              {emp.minVagas === emp.maxVagas ? emp.minVagas : `${emp.minVagas}-${emp.maxVagas}`} vagas
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center gap-1 rounded-2xl bg-muted/50 py-3">
-            <Building2 className="size-5 text-primary" strokeWidth={1.5} />
-            <span className="text-[11px] font-semibold text-foreground">{emp.unidades} unid.</span>
-          </div>
-        </div>
 
         {/* Description */}
         <div className="mb-6">
@@ -182,13 +196,23 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
           </div>
         )}
 
-        {/* Informações da Construtora/Contatos */}
-        <div className="mb-8 p-4 rounded-2xl bg-muted/40 border border-border">
-          <h3 className="text-sm font-semibold text-foreground mb-3">Contatos Comerciais - {emp.construtora}</h3>
+        {/* Incorporadora, Construtora e Administradora */}
+        <div className="mt-6 border-t border-border/50 pt-6">
+          <h3 className="text-sm font-semibold text-foreground mb-4">Incorporadora, Construtora e Administradora</h3>
           
           <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3 rounded-2xl border border-border p-3">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold">
+                {emp.construtora.substring(0, 2).toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-semibold text-foreground text-sm truncate">{emp.construtora}</h4>
+                <p className="text-xs text-muted-foreground truncate">Construtora principal</p>
+              </div>
+            </div>
+            
             {emp.contatos?.map((contato, idx) => (
-              <div key={idx} className="flex items-center gap-3">
+              <div key={idx} className="flex items-center gap-3 rounded-2xl border border-border p-3">
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-teal-shadow text-white font-semibold">
                   {contato.nome.substring(0, 2).toUpperCase()}
                 </div>
@@ -207,14 +231,63 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
           </div>
         </div>
 
+        {clientesCompativeis.length > 0 && (
+          <div className="mt-6 border-t border-border/50 pt-6">
+            <h3 className="text-sm font-semibold text-foreground mb-4">Clientes com perfil compatível</h3>
+            <ul className="flex flex-col gap-3">
+              {clientesCompativeis.map(cliente => (
+                <li key={cliente.id} className="flex items-center justify-between rounded-2xl border border-border bg-background p-3 shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                      {cliente.iniciais}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{cliente.nome}</p>
+                      <p className="text-xs text-muted-foreground">{cliente.etapa}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleShare(cliente.nome)}
+                    className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand hover:text-primary active:scale-95"
+                  >
+                    <Share2 className="size-4" strokeWidth={1.5} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+      </div>
+        </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-5 bg-background border-t border-border pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
-        <button type="button" onClick={() => setShowShareMenu(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/30 transition-transform active:scale-[0.98]">
-          <Share2 className="size-5" strokeWidth={2.5} /> 
-          Compartilhar com Lead
+      <div className="shrink-0 bg-background border-t border-border p-5 pb-[calc(5.25rem+env(safe-area-inset-bottom))] flex flex-col gap-3">
+        <button type="button" onClick={() => setMostrarAgendamento(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-xl shadow-teal-mid/30 transition-transform active:scale-[0.98]">
+          <Calendar className="size-5" strokeWidth={2.5} /> 
+          Visitar com cliente
         </button>
       </div>
+
+      {/* Modal Agendamento */}
+      {mostrarAgendamento && (
+        <div className="absolute inset-0 z-[60] flex flex-col justify-end pointer-events-auto">
+          <button type="button" onClick={() => setMostrarAgendamento(false)} className="absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]" />
+          <div className="relative rounded-t-3xl bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh] overflow-y-auto">
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-fog" />
+            <FormNovaAtividade 
+              defaultImoveis={[{...emp, titulo: emp.nome, enderecoCompleto: `${emp.bairro}, ${emp.cidade}`}]}
+              onClose={() => setMostrarAgendamento(false)} 
+              onSalvar={() => {
+                setMostrarAgendamento(false)
+                setToastMessage('Visita agendada com sucesso!')
+                setTimeout(() => setToastMessage(''), 3000)
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Share Bottom Sheet */}
       {showShareMenu && (
@@ -291,6 +364,6 @@ export function EmpreendimentoDetail({ emp, onBack }: { emp: Empreendimento; onB
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }

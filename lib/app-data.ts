@@ -1,23 +1,33 @@
 export type Temperatura = 'quente' | 'morno' | 'frio'
 
 export type OrigemLead =
-  | 'Portal ZAP'
-  | 'Portal VivaReal'
-  | 'Portal OLX'
-  | 'Site Próprio'
-  | 'Facebook'
-  | 'Instagram'
-  | 'Indicação'
-  | 'Cliente de Porta'
-  | 'WhatsApp'
-  | 'Ligação'
-  | 'Ativo'
-  | 'Novo'
-  | 'Outro'
+  | 'Anúncio no Jornal' | 'Captação' | 'Facebook' | 'Fifty' | 'Indicação' | 'Já conhecia a imobiliária'
+  | 'Outros' | 'Parceria' | 'Placa' | 'Plantão' | 'Porta' | 'Revista' | 'Robô' | 'Rádio / TV'
+  | 'SCI' | 'Telefone' | 'Vitrine' | 'Whatsapp'
+  | 'Chats' | 'Chats: Albert' | 'Chats: Tawk.to'
+  | 'Marketing' | 'Marketing: Actwork' | 'Marketing: Externo' | 'Marketing: Facebook' | 'Marketing: Google'
+  | 'Marketing: Instagram' | 'Marketing: Leadlovers' | 'Marketing: Leads4sales' | 'Marketing: Leadster'
+  | 'Marketing: TikTok' | 'Marketing: Whatsapp' | 'Marketing: Youtube'
+  | 'Portal: 123i' | 'Portal: acharei' | 'Portal: AchouMudou' | 'Portal: AlugarJa' | 'Portal: Brasileiro Imóveis'
+  | 'Portal: campainha' | 'Portal: Casa Jaú' | 'Portal: Casa Mineira' | 'Portal: Chave Fácil' | 'Portal: Chaves na Mão'
+  | 'Portal: Cliquei Mudei' | 'Portal: DF Imóveis' | 'Portal: Diario Imoveis' | 'Portal: Epungo' | 'Portal: Grupo OLX'
+  | 'Portal: Grupo SP' | 'Portal: Grupozap' | 'Portal: Guia de Imóveis' | 'Portal: Guia de Imóveis IMB'
+  | 'Portal: Guia Imóvel & Cia' | 'Portal: iBex Imóveis' | 'Portal: Imocasa' | 'Portal: iMudou'
+  | 'Portal: Imóveis em exposição' | 'Portal: Imóveis SC' | 'Portal: Imóvel Web' | 'Portal: Linklar'
+  | 'Portal: Local do Imóvel' | 'Portal: Loop Imóveis' | 'Portal: Mercado Livre' | 'Portal: Moving Imóveis'
+  | 'Portal: Olho Mágico' | 'Portal: Olx' | 'Portal: Outros' | 'Portal: Portais Imobiliários' | 'Portal: Portal CRECI'
+  | 'Portal: Portal Lugar Certo' | 'Portal: Storia Imóveis' | 'Portal: Trocalar' | 'Portal: VaptVupt'
+  | 'Portal: Viva Real' | 'Portal: WImoveis' | 'Portal: Zap Imóveis' | 'Portal: ZoopImoveis'
+  | 'Website: Agende uma ligação' | 'Website: Cadastre seu imóvel' | 'Website: Fale conosco' | 'Website: Formulário Whatsapp'
+  | 'Website: Formulário Whatsapp - Imóvel' | 'Website: Imóvel sob encomenda' | 'Website: Landing Page'
+  | 'Website: Mais informações do empreendimento' | 'Website: Mais informações do Imóvel'
+  | 'Website: Mais informações Empreendimento (Resultado de Pesquisa)'
+  | 'Website: Mais informações Imovel (Resultado de Pesquisa)'
+  | 'Website: Trabalhe Conosco'
 
 export type EtapaFunil = string
 
-export type TipoAtividade = 'visita' | 'reuniao' | 'ligacao' | 'prazo' | 'pos-venda'
+export type TipoAtividade = 'visita' | 'reuniao' | 'ligacao' | 'prazo' | 'pos-venda' | 'albert'
 
 export type StatusAtendimento = 'aberto' | 'ganho' | 'perdido'
 
@@ -122,10 +132,14 @@ export type Atendimento = {
   nome: string
   iniciais: string
   email: string
+  emailsAdicionais?: string[]
   telefone: string
+  telefonesAdicionais?: string[]
+  whatsappsAdicionais?: string[]
   etapa: EtapaFunil
   temperatura: Temperatura
   status: StatusAtendimento
+  preAtendimento?: boolean
   origem: OrigemLead
   dataEntrada: string
   ultimaInteracao: string
@@ -209,7 +223,7 @@ export const atendimentos: Atendimento[] = [
     etapa: 'agendado',
     temperatura: 'quente',
     status: 'aberto',
-    origem: 'Portal ZAP',
+    origem: 'Portal: Zap Imóveis',
     dataEntrada: '30/06/2026',
     ultimaInteracao: 'há 12 min',
     interesse: 'Apto 2 dorms · Jardins',
@@ -259,7 +273,7 @@ export const atendimentos: Atendimento[] = [
     etapa: 'agendado',
     temperatura: 'quente',
     status: 'aberto',
-    origem: 'Instagram',
+    origem: 'Marketing: Instagram',
     dataEntrada: '28/06/2026',
     ultimaInteracao: 'há 40 min',
     interesse: 'Cobertura · Vila Nova',
@@ -314,7 +328,7 @@ export const atendimentos: Atendimento[] = [
     etapa: 'qualificando',
     temperatura: 'morno',
     status: 'aberto',
-    origem: 'Site Próprio',
+    origem: 'Website: Landing Page',
     dataEntrada: '04/07/2026',
     ultimaInteracao: 'há 2 h',
     interesse: 'Casa em condomínio',
@@ -368,7 +382,7 @@ export const atendimentos: Atendimento[] = [
     etapa: 'qualificando',
     temperatura: 'frio',
     status: 'aberto',
-    origem: 'WhatsApp',
+    origem: 'Whatsapp',
     dataEntrada: '07/07/2026',
     ultimaInteracao: 'há 15 min',
     interesse: 'Terreno galpão',
@@ -420,7 +434,7 @@ export const atendimentos: Atendimento[] = [
     etapa: 'conhecendo',
     temperatura: 'morno',
     status: 'aberto',
-    origem: 'Portal VivaReal',
+    origem: 'Portal: Viva Real',
     dataEntrada: '02/07/2026',
     ultimaInteracao: 'há 5 h',
     interesse: 'Apto 3 dorms · Moema',
@@ -445,7 +459,7 @@ export const atendimentos: Atendimento[] = [
     etapa: 'conhecendo',
     temperatura: 'morno',
     status: 'aberto',
-    origem: 'Site Próprio',
+    origem: 'Website: Landing Page',
     dataEntrada: '06/07/2026',
     ultimaInteracao: 'há 1 dia',
     interesse: 'Casa em condomínio (Downsize)',
@@ -472,7 +486,7 @@ export const atendimentos: Atendimento[] = [
     etapa: 'negociando',
     temperatura: 'quente',
     status: 'aberto',
-    origem: 'Site Próprio',
+    origem: 'Website: Landing Page',
     dataEntrada: '25/06/2026',
     ultimaInteracao: 'há 1 h',
     interesse: 'Casa cond. Alphaville',
@@ -501,7 +515,7 @@ export const atendimentos: Atendimento[] = [
     etapa: 'negociando',
     temperatura: 'quente',
     status: 'aberto',
-    origem: 'Portal ZAP',
+    origem: 'Portal: Zap Imóveis',
     dataEntrada: '20/06/2026',
     ultimaInteracao: 'há 30 min',
     interesse: 'Studio Centro · Venda',
@@ -638,7 +652,10 @@ export type Cliente = {
   iniciais: string
   tipo: 'Comprador' | 'Locatário' | 'Proprietário'
   telefone: string
+  telefonesAdicionais?: string[]
+  whatsappsAdicionais?: string[]
   email: string
+  emailsAdicionais?: string[]
   temperatura: Temperatura
   ultimoContato: string
   timeline: { data: string; evento: string; tipo: string }[]
@@ -690,19 +707,100 @@ export const etapaConfig: Record<EtapaFunil, { label: string; cor: string }> = {
 }
 
 export const origemConfig: Record<OrigemLead, { cor: string }> = {
-  'Portal ZAP': { cor: 'bg-orange-100 text-orange-700' },
-  'Portal VivaReal': { cor: 'bg-blue-100 text-blue-700' },
-  'Portal OLX': { cor: 'bg-purple-100 text-purple-700' },
-  'Site Próprio': { cor: 'bg-teal-deep text-white' },
+  // Gerais / Tradicionais
+  'Anúncio no Jornal': { cor: 'bg-slate/10 text-slate' },
+  'Captação': { cor: 'bg-teal-mid/10 text-teal-deep' },
+  'Facebook': { cor: 'bg-blue-100 text-blue-800' },
+  'Fifty': { cor: 'bg-purple-100 text-purple-700' },
   'Indicação': { cor: 'bg-amber/15 text-amber' },
-  'Ativo': { cor: 'bg-purple-500/15 text-purple-600' },
-  Facebook: { cor: 'bg-blue-100 text-blue-800' },
-  Instagram: { cor: 'bg-pink-100 text-pink-700' },
-  'Cliente de Porta': { cor: 'bg-yellow-100 text-yellow-700' },
-  WhatsApp: { cor: 'bg-green-100 text-green-800' },
-  Ligação: { cor: 'bg-gray-100 text-gray-700' },
-  Novo: { cor: 'bg-teal-mid/15 text-teal-deep' },
-  Outro: { cor: 'bg-fog text-slate' },
+  'Já conhecia a imobiliária': { cor: 'bg-emerald-100 text-emerald-800' },
+  'Outros': { cor: 'bg-fog text-slate' },
+  'Parceria': { cor: 'bg-indigo-100 text-indigo-700' },
+  'Placa': { cor: 'bg-yellow-100 text-yellow-800' },
+  'Plantão': { cor: 'bg-orange-100 text-orange-800' },
+  'Porta': { cor: 'bg-red-100 text-red-700' },
+  'Revista': { cor: 'bg-rose-100 text-rose-700' },
+  'Robô': { cor: 'bg-cyan-100 text-cyan-800' },
+  'Rádio / TV': { cor: 'bg-sky-100 text-sky-800' },
+  'SCI': { cor: 'bg-gray-100 text-gray-700' },
+  'Telefone': { cor: 'bg-zinc-100 text-zinc-700' },
+  'Vitrine': { cor: 'bg-lime-100 text-lime-800' },
+  'Whatsapp': { cor: 'bg-green-100 text-green-800' },
+  // Chats
+  'Chats': { cor: 'bg-blue-50 text-blue-600' },
+  'Chats: Albert': { cor: 'bg-teal-mid/15 text-teal-deep' },
+  'Chats: Tawk.to': { cor: 'bg-emerald-50 text-emerald-600' },
+  // Marketing
+  'Marketing': { cor: 'bg-fuchsia-50 text-fuchsia-700' },
+  'Marketing: Actwork': { cor: 'bg-fuchsia-100 text-fuchsia-800' },
+  'Marketing: Externo': { cor: 'bg-fuchsia-100 text-fuchsia-800' },
+  'Marketing: Facebook': { cor: 'bg-blue-100 text-blue-800' },
+  'Marketing: Google': { cor: 'bg-red-100 text-red-700' },
+  'Marketing: Instagram': { cor: 'bg-pink-100 text-pink-700' },
+  'Marketing: Leadlovers': { cor: 'bg-orange-100 text-orange-700' },
+  'Marketing: Leads4sales': { cor: 'bg-amber-100 text-amber-700' },
+  'Marketing: Leadster': { cor: 'bg-blue-100 text-blue-700' },
+  'Marketing: TikTok': { cor: 'bg-slate-100 text-slate-800' },
+  'Marketing: Whatsapp': { cor: 'bg-green-100 text-green-800' },
+  'Marketing: Youtube': { cor: 'bg-red-100 text-red-700' },
+  // Portais
+  'Portal: 123i': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: acharei': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: AchouMudou': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: AlugarJa': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Brasileiro Imóveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: campainha': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Casa Jaú': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Casa Mineira': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Chave Fácil': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Chaves na Mão': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Cliquei Mudei': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: DF Imóveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Diario Imoveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Epungo': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Grupo OLX': { cor: 'bg-purple-100 text-purple-700' },
+  'Portal: Grupo SP': { cor: 'bg-purple-100 text-purple-700' },
+  'Portal: Grupozap': { cor: 'bg-orange-100 text-orange-700' },
+  'Portal: Guia de Imóveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Guia de Imóveis IMB': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Guia Imóvel & Cia': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: iBex Imóveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Imocasa': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: iMudou': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Imóveis em exposição': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Imóveis SC': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Imóvel Web': { cor: 'bg-orange-50 text-orange-600' },
+  'Portal: Linklar': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Local do Imóvel': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Loop Imóveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Mercado Livre': { cor: 'bg-yellow-100 text-yellow-800' },
+  'Portal: Moving Imóveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Olho Mágico': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Olx': { cor: 'bg-purple-100 text-purple-700' },
+  'Portal: Outros': { cor: 'bg-gray-100 text-gray-700' },
+  'Portal: Portais Imobiliários': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Portal CRECI': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Portal Lugar Certo': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Storia Imóveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Trocalar': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: VaptVupt': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Viva Real': { cor: 'bg-blue-100 text-blue-700' },
+  'Portal: WImoveis': { cor: 'bg-blue-50 text-blue-700' },
+  'Portal: Zap Imóveis': { cor: 'bg-orange-100 text-orange-700' },
+  'Portal: ZoopImoveis': { cor: 'bg-blue-50 text-blue-700' },
+  // Websites
+  'Website: Agende uma ligação': { cor: 'bg-teal-deep text-white' },
+  'Website: Cadastre seu imóvel': { cor: 'bg-teal-deep text-white' },
+  'Website: Fale conosco': { cor: 'bg-teal-deep text-white' },
+  'Website: Formulário Whatsapp': { cor: 'bg-green-100 text-green-800' },
+  'Website: Formulário Whatsapp - Imóvel': { cor: 'bg-green-100 text-green-800' },
+  'Website: Imóvel sob encomenda': { cor: 'bg-teal-deep text-white' },
+  'Website: Landing Page': { cor: 'bg-teal-deep text-white' },
+  'Website: Mais informações do empreendimento': { cor: 'bg-teal-deep text-white' },
+  'Website: Mais informações do Imóvel': { cor: 'bg-teal-deep text-white' },
+  'Website: Mais informações Empreendimento (Resultado de Pesquisa)': { cor: 'bg-teal-deep text-white' },
+  'Website: Mais informações Imovel (Resultado de Pesquisa)': { cor: 'bg-teal-deep text-white' },
+  'Website: Trabalhe Conosco': { cor: 'bg-teal-deep text-white' }
 }
 
 export const tipoAtividadeConfig: Record<TipoAtividade, { label: string; emoji: string; cor: string }> = {
@@ -711,6 +809,7 @@ export const tipoAtividadeConfig: Record<TipoAtividade, { label: string; emoji: 
   ligacao: { label: 'Ligação', emoji: '📞', cor: 'bg-green-100 text-green-700' },
   prazo: { label: 'Prazo', emoji: '⏰', cor: 'bg-amber/15 text-[#8a5a1e]' },
   'pos-venda': { label: 'Pós-venda', emoji: '🤝', cor: 'bg-purple-100 text-purple-700' },
+  albert: { label: 'Albert', emoji: '🤖', cor: 'bg-primary/10 text-primary' },
 }
 
 // Legacy funil structure kept for screen-hoje compatibility

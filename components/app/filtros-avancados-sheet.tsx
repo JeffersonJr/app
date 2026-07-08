@@ -1,6 +1,8 @@
 'use client'
 
-import { X } from 'lucide-react'
+import { useState } from 'react'
+
+import { X, Check, Search, ChevronDown } from 'lucide-react'
 import { origemConfig, tempConfig, type OrigemLead, type Temperatura } from '@/lib/app-data'
 
 export function FiltrosAvancadosSheet({
@@ -9,15 +11,34 @@ export function FiltrosAvancadosSheet({
   setFiltroTemp,
   filtroOrigem,
   setFiltroOrigem,
+  filtroPreAtendimento,
+  setFiltroPreAtendimento,
+  filtroPeriodo,
+  setFiltroPeriodo,
+  filtroNome,
+  setFiltroNome,
 }: {
   onClose: () => void
   filtroTemp: Temperatura | 'todas'
   setFiltroTemp: (v: Temperatura | 'todas') => void
-  filtroOrigem: OrigemLead | 'todas'
-  setFiltroOrigem: (v: OrigemLead | 'todas') => void
+  filtroOrigem: OrigemLead[]
+  setFiltroOrigem: (v: OrigemLead[]) => void
+  filtroPreAtendimento: 'todos' | 'sim' | 'nao'
+  setFiltroPreAtendimento: (v: 'todos' | 'sim' | 'nao') => void
+  filtroPeriodo: string
+  setFiltroPeriodo: (v: string) => void
+  filtroNome: string
+  setFiltroNome: (v: string) => void
 }) {
+  const isPersonalizado = filtroPeriodo.startsWith('personalizado')
+  const [dataDe, setDataDe] = useState(isPersonalizado ? filtroPeriodo.split(':')[1] || '' : '')
+  const [dataAte, setDataAte] = useState(isPersonalizado ? filtroPeriodo.split(':')[2] || '' : '')
+
   const origens = Object.keys(origemConfig) as OrigemLead[]
   const temperaturas: Temperatura[] = ['quente', 'morno', 'frio']
+  const [buscaOrigem, setBuscaOrigem] = useState('')
+
+  const origensFiltradas = origens.filter(o => o.toLowerCase().includes(buscaOrigem.toLowerCase()))
 
   return (
     <div className="absolute inset-0 z-50 flex flex-col justify-end">
@@ -49,7 +70,130 @@ export function FiltrosAvancadosSheet({
         </div>
 
         {/* Form */}
-        <div className="flex flex-col gap-6 p-6 overflow-y-auto pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+        <div className="flex flex-col gap-6 p-6 overflow-y-auto pb-[calc(1.5rem+env(safe-area-inset-bottom))] max-h-[85vh]">
+          {/* Nome */}
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Nome do Cliente
+            </label>
+            <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:ring-2 focus-within:ring-ring">
+              <Search className="size-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Buscar por nome..."
+                value={filtroNome}
+                onChange={(e) => setFiltroNome(e.target.value)}
+                className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground text-foreground"
+              />
+              {filtroNome && (
+                <button type="button" onClick={() => setFiltroNome('')} className="text-muted-foreground hover:text-foreground">
+                  <X className="size-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Pré-atendimento */}
+          <div>
+            <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Pré-atendimento
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setFiltroPreAtendimento('todos')}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
+                  filtroPreAtendimento === 'todos'
+                    ? 'border-primary bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                    : 'border-border bg-transparent text-muted-foreground'
+                }`}
+              >
+                Todos
+              </button>
+              <button
+                type="button"
+                onClick={() => setFiltroPreAtendimento('sim')}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
+                  filtroPreAtendimento === 'sim'
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border bg-transparent text-muted-foreground'
+                }`}
+              >
+                Em pré-atendimento
+              </button>
+              <button
+                type="button"
+                onClick={() => setFiltroPreAtendimento('nao')}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
+                  filtroPreAtendimento === 'nao'
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border bg-transparent text-muted-foreground'
+                }`}
+              >
+                Atendimento iniciado
+              </button>
+            </div>
+          </div>
+
+          {/* Período de Criação */}
+          <div>
+            <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Período de Criação
+            </label>
+            <div className="relative">
+              <select
+                value={isPersonalizado ? 'personalizado' : filtroPeriodo}
+                onChange={(e) => {
+                  const val = e.target.value
+                  if (val === 'personalizado') {
+                    setFiltroPeriodo(`personalizado:${dataDe}:${dataAte}`)
+                  } else {
+                    setFiltroPeriodo(val)
+                  }
+                }}
+                className="w-full appearance-none rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
+              >
+                <option value="todos">Qualquer período</option>
+                <option value="hoje">Hoje</option>
+                <option value="essa_semana">Esta semana</option>
+                <option value="esse_mes">Este mês</option>
+                <option value="ultimos_3_meses">Últimos 3 meses</option>
+                <option value="personalizado">Personalizado</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-muted-foreground">
+                <ChevronDown className="size-4" />
+              </div>
+            </div>
+            {isPersonalizado && (
+              <div className="mt-3 flex gap-4 animate-in fade-in slide-in-from-top-2">
+                <div className="flex-1">
+                  <label className="mb-2 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">De</label>
+                  <input
+                    type="date"
+                    value={dataDe}
+                    onChange={e => {
+                      setDataDe(e.target.value)
+                      setFiltroPeriodo(`personalizado:${e.target.value}:${dataAte}`)
+                    }}
+                    className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="mb-2 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Até</label>
+                  <input
+                    type="date"
+                    value={dataAte}
+                    onChange={e => {
+                      setDataAte(e.target.value)
+                      setFiltroPeriodo(`personalizado:${dataDe}:${e.target.value}`)
+                    }}
+                    className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Temperatura */}
           <div>
             <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -86,36 +230,68 @@ export function FiltrosAvancadosSheet({
           </div>
 
           {/* Origem */}
-          <div>
-            <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="flex flex-col min-h-[30dvh] max-h-[40dvh]">
+            <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-muted-foreground shrink-0">
               Origem do Lead
             </label>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => setFiltroOrigem('todas')}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
-                  filtroOrigem === 'todas'
-                    ? 'border-primary bg-primary text-primary-foreground shadow-md shadow-primary/20'
-                    : 'border-border bg-transparent text-muted-foreground'
-                }`}
-              >
-                Todas as origens
-              </button>
-              {origens.map((origem) => (
+            <div className="flex-1 overflow-y-auto rounded-2xl border border-border bg-background shadow-inner flex flex-col">
+              <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border p-2">
+                <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-3 py-2">
+                  <Search className="size-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder="Buscar origem..."
+                    value={buscaOrigem}
+                    onChange={(e) => setBuscaOrigem(e.target.value)}
+                    className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground text-foreground"
+                  />
+                  {buscaOrigem && (
+                    <button type="button" onClick={() => setBuscaOrigem('')} className="text-muted-foreground hover:text-foreground">
+                      <X className="size-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col gap-1 p-2">
+                <button
+                  type="button"
+                  onClick={() => setFiltroOrigem([])}
+                  className="flex w-full items-center gap-3 rounded-xl p-3 text-left hover:bg-muted transition-colors"
+                >
+                  <div className={`flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${
+                    filtroOrigem.length === 0 ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-card'
+                  }`}>
+                    {filtroOrigem.length === 0 && <Check className="size-3.5" />}
+                  </div>
+                  <span className="text-sm font-medium text-foreground">Todas as origens</span>
+                </button>
+                {origensFiltradas.map((origem) => (
                 <button
                   key={origem}
                   type="button"
-                  onClick={() => setFiltroOrigem(origem)}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-brand border ${
-                    filtroOrigem === origem
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border bg-transparent text-muted-foreground'
-                  }`}
+                  onClick={() => {
+                    if (filtroOrigem.includes(origem)) {
+                      setFiltroOrigem(filtroOrigem.filter(o => o !== origem))
+                    } else {
+                      setFiltroOrigem([...filtroOrigem, origem])
+                    }
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl p-3 text-left hover:bg-muted transition-colors"
                 >
-                  {origem}
+                  <div className={`flex size-5 shrink-0 items-center justify-center rounded border transition-colors ${
+                    filtroOrigem.includes(origem) ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-card'
+                  }`}>
+                    {filtroOrigem.includes(origem) && <Check className="size-3.5" />}
+                  </div>
+                  <span className="text-sm font-medium text-foreground">{origem}</span>
                 </button>
               ))}
+              {origensFiltradas.length === 0 && (
+                <div className="p-4 text-center text-sm text-muted-foreground">
+                  Nenhuma origem encontrada.
+                </div>
+              )}
+              </div>
             </div>
           </div>
           
@@ -124,7 +300,12 @@ export function FiltrosAvancadosSheet({
               type="button"
               onClick={() => {
                 setFiltroTemp('todas')
-                setFiltroOrigem('todas')
+                setFiltroOrigem([])
+                setFiltroPreAtendimento('todos')
+                setFiltroPeriodo('todos')
+                setDataDe('')
+                setDataAte('')
+                setFiltroNome('')
               }}
               className="flex-1 rounded-2xl border border-border bg-transparent py-3.5 font-semibold text-foreground transition-brand active:scale-[0.98]"
             >

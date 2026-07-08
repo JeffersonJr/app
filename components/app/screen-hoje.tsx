@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Bell,
   Calendar,
@@ -22,11 +22,13 @@ export function ScreenHoje({
   onVerCliente,
   onVerPerfil,
   onVerAtendimento,
+  onAbrirNovaAtividade,
 }: {
   onVerFunil: () => void
   onVerCliente: (id: string) => void
   onVerPerfil?: () => void
   onVerAtendimento?: (id: string) => void
+  onAbrirNovaAtividade?: () => void
 }) {
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
   const [localAtividades, setLocalAtividades] = useState(() => [...atividadesHoje])
@@ -36,6 +38,11 @@ export function ScreenHoje({
     .slice(0, 3)
 
   const pendentes = localAtividades.filter((a) => !a.concluida)
+
+  useEffect(() => {
+    setLocalAtividades([...atividadesHoje])
+  }, [atividadesHoje.length])
+
 
   const horaAtual = new Date().getHours()
   const saudacao = horaAtual < 12 ? 'Bom dia' : horaAtual < 18 ? 'Boa tarde' : 'Boa noite'
@@ -258,6 +265,10 @@ export function ScreenHoje({
           const atvGlob = atividadesHoje.find((a) => a.id === id)
           if (atvGlob) atvGlob.concluida = statusConcluida
           setAtividadeSelecionada(null)
+          
+          if (agendar && onAbrirNovaAtividade) {
+            onAbrirNovaAtividade()
+          }
         }}
         onVerNegocio={(cliente) => {
           setAtividadeSelecionada(null)

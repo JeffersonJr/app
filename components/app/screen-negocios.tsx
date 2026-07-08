@@ -16,7 +16,7 @@ import {
 import { AtendimentoDetail } from '@/components/app/atendimento-detail'
 import { FiltrosAvancadosSheet } from '@/components/app/filtros-avancados-sheet'
 import { GerenciarFunilSheet } from '@/components/app/gerenciar-funil-sheet'
-import { type Temperatura, type OrigemLead } from '@/lib/app-data'
+import { type Temperatura, type OrigemLead, type EventoTimeline } from '@/lib/app-data'
 
 type FiltroModo = 'todos' | 'venda' | 'locacao'
 
@@ -44,7 +44,10 @@ export function ScreenNegocios({
   
   const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false)
   const [filtroTemp, setFiltroTemp] = useState<Temperatura | 'todas'>('todas')
-  const [filtroOrigem, setFiltroOrigem] = useState<OrigemLead | 'todas'>('todas')
+  const [filtroOrigem, setFiltroOrigem] = useState<OrigemLead[]>([])
+  const [filtroPreAtendimento, setFiltroPreAtendimento] = useState<'todos' | 'sim' | 'nao'>('todos')
+  const [filtroPeriodo, setFiltroPeriodo] = useState('todos')
+  const [filtroNome, setFiltroNome] = useState('')
 
   // Swipe state
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -96,7 +99,13 @@ export function ScreenNegocios({
         a.etapa === e.id &&
         (filtroModo === 'todos' || a.modo === filtroModo) &&
         (filtroTemp === 'todas' || a.temperatura === filtroTemp) &&
-        (filtroOrigem === 'todas' || a.origem === filtroOrigem),
+        (filtroOrigem.length === 0 || filtroOrigem.includes(a.origem)) &&
+        (filtroPreAtendimento === 'todos' || (filtroPreAtendimento === 'sim' ? a.preAtendimento : !a.preAtendimento)) &&
+        (filtroNome === '' || a.nome.toLowerCase().includes(filtroNome.toLowerCase())) &&
+        (filtroPeriodo === 'todos' ||
+         (filtroPeriodo === 'hoje' ? a.dataEntrada.toLowerCase() === 'hoje' : true) || // Mock filtering logic
+         (filtroPeriodo === 'essa_semana' ? ['hoje', 'ontem'].includes(a.dataEntrada.toLowerCase()) || a.dataEntrada.includes('/') : true)
+        ),
     ),
   }))
 
@@ -108,8 +117,23 @@ export function ScreenNegocios({
   }
 
   function handleEtapaChange(id: string, etapa: EtapaFunil) {
-    setDados((prev) => prev.map((a) => (a.id === id ? { ...a, etapa } : a)))
-    setAtendimentoAberto((prev) => (prev?.id === id ? { ...prev, etapa } : prev))
+    const etapaNome = funilAtivo.etapas?.find((e) => e.id === etapa)?.label || etapa
+    const newTimelineEvent: EventoTimeline = {
+      id: `tl-${Date.now()}`,
+      tipo: 'etapa',
+      descricao: `Negócio movido para a etapa: ${etapaNome}`,
+      data: 'Hoje',
+      hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+    }
+    
+    const idx = dadosAtendimentos.findIndex(a => a.id === id)
+    if (idx !== -1) {
+      dadosAtendimentos[idx].etapa = etapa
+      dadosAtendimentos[idx].timeline = [newTimelineEvent, ...dadosAtendimentos[idx].timeline]
+    }
+
+    setDados((prev) => prev.map((a) => (a.id === id ? { ...a, etapa, timeline: [newTimelineEvent, ...a.timeline] } : a)))
+    setAtendimentoAberto((prev) => (prev?.id === id ? { ...prev, etapa, timeline: [newTimelineEvent, ...prev.timeline] } : prev))
   }
 
   function criarFunil() {
@@ -150,14 +174,14 @@ export function ScreenNegocios({
             onClick={() => setMostrarFiltrosAvancados(true)}
             aria-label="Filtros avançados"
             className={`flex size-10 relative items-center justify-center rounded-full border border-border bg-card shadow-sm transition-brand active:scale-95 ${
-              (filtroTemp !== 'todas' || filtroOrigem !== 'todas')
+              (filtroTemp !== 'todas' || filtroOrigem.length > 0 || filtroPreAtendimento !== 'todos' || filtroPeriodo !== 'todos' || filtroNome !== '')
                 ? 'text-primary bg-primary/5 border-primary/30'
                 : 'text-foreground'
             }`}
           >
             <ListFilter className="size-5" strokeWidth={1.5} />
-            {(filtroTemp !== 'todas' || filtroOrigem !== 'todas') && (
-              <span className="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-primary border-2 border-card" />
+            {(filtroTemp !== 'todas' || filtroOrigem.length > 0 || filtroPreAtendimento !== 'todos' || filtroPeriodo !== 'todos' || filtroNome !== '') && (
+              <span className="absolute -right-0.5 -top-0.5 size-2.5 rounded-full bg-primary border-2 border-background" />
             )}
           </button>
         </div>
@@ -351,6 +375,12 @@ export function ScreenNegocios({
           setFiltroTemp={setFiltroTemp}
           filtroOrigem={filtroOrigem}
           setFiltroOrigem={setFiltroOrigem}
+          filtroPreAtendimento={filtroPreAtendimento}
+          setFiltroPreAtendimento={setFiltroPreAtendimento}
+          filtroPeriodo={filtroPeriodo}
+          setFiltroPeriodo={setFiltroPeriodo}
+          filtroNome={filtroNome}
+          setFiltroNome={setFiltroNome}
         />
       )}
       {mostrarGerenciarFunil && (

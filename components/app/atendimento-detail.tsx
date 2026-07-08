@@ -9,7 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
-  Edit2,
+  Download, Edit2,
   FileText,
   Flame,
   Mail,
@@ -31,7 +31,8 @@ import {
   Trash2,
   Edit3,
   MapPin,
-  Search
+  Search,
+  Link as LinkIcon
 } from 'lucide-react'
 import {
   type Atendimento,
@@ -43,13 +44,13 @@ import {
   tempConfig,
   tipoAtividadeConfig,
   funis,
+  atendimentos as dadosAtendimentos,
 } from '@/lib/app-data'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { AtividadeDetalheSheet } from '@/components/app/atividade-detalhe-sheet'
 import { GanhoPerdidoSheet } from '@/components/app/ganho-perdido-sheet'
-import { RegistrarAtividadeSheet } from '@/components/app/registrar-atividade-sheet'
-
+import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
 type Etapa = string
 
 const FILTROS_TIMELINE = ['Todos', 'Atividades', 'E-mails', 'Imóveis', 'Notas', 'Outros'] as const
@@ -105,14 +106,16 @@ export function AtendimentoDetail({
   const [nota, setNota] = useState('')
   const [mostrarNovaInteracao, setMostrarNovaInteracao] = useState(false)
   const [localTimeline, setLocalTimeline] = useState(() => {
-    return [...(atendimento.timeline || [])].sort((a, b) => {
+    const globalAtendimento = dadosAtendimentos.find(a => a.id === atendimento.id)
+    return [...(globalAtendimento?.timeline || atendimento.timeline || [])].sort((a, b) => {
       if (a.id > b.id) return -1;
       if (a.id < b.id) return 1;
       return 0;
     })
   })
   const [localAtividades, setLocalAtividades] = useState(() => {
-    return [...(atendimento.atividades || [])].sort((a, b) => {
+    const globalAtendimento = dadosAtendimentos.find(a => a.id === atendimento.id)
+    return [...(globalAtendimento?.atividades || atendimento.atividades || [])].sort((a, b) => {
       const parseDate = (d: string, h: string) => {
         if (d === 'Hoje') return new Date(`1970-01-01T${h}:00`)
         if (d === 'Amanhã') return new Date(`1970-01-02T${h}:00`)
@@ -138,6 +141,16 @@ export function AtendimentoDetail({
   const [assuntoEnvio, setAssuntoEnvio] = useState('')
   const [termoAberto, setTermoAberto] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [toastMensagem, setToastMensagem] = useState<string | null>(null)
+  
+  const imoveisEmVisitaAtiva = new Set<string>()
+  localAtividades.forEach(a => {
+    if (a.tipo === 'visita' && !a.concluida && a.imoveisVisitados) {
+      a.imoveisVisitados.forEach(imv => imoveisEmVisitaAtiva.add(imv.id))
+    }
+  })
+
+  const [mostrarVincularVisita, setMostrarVincularVisita] = useState(false)
   
   // Busca manual de imóveis
   const [buscaManualImoveis, setBuscaManualImoveis] = useState('')
@@ -205,7 +218,41 @@ export function AtendimentoDetail({
 
   function handleMarcarVisitaMassa() {
     setMostrarNovaAtividade(true)
+  }
+
+  function handleVincularVisita(atividadeId: string) {
+    const atividade = localAtividades.find(a => a.id === atividadeId)
+    if (!atividade) return
+    const imoveisAdicionados = imoveis.filter(i => imoveisSelecionados.includes(i.id)).map(i => ({
+      id: i.id,
+      nome: i.titulo,
+      visitado: false,
+      endereco: `${i.bairro}, ${i.cidade}`
+    }))
+    const novosImoveisVisitados = [...(atividade.imoveisVisitados || []), ...imoveisAdicionados]
+    
+    setLocalAtividades(prev => prev.map(a => a.id === atividadeId ? { ...a, imoveisVisitados: novosImoveisVisitados } : a))
     setImoveisSelecionados([])
+    setMostrarVincularVisita(false)
+    setToastMensagem('Imóvel anexado à visita com sucesso!')
+    setTimeout(() => setToastMensagem(null), 3000)
+  }
+
+  function handleGerarTermoVisita(atividadeId: string) {
+    const atividade = localAtividades.find(a => a.id === atividadeId)
+    if (!atividade) return
+    
+    const novoDoc = {
+      id: `doc-${Date.now()}`,
+      nome: `Termo de Visita - ${atividade.data}.pdf`,
+      tipo: 'pdf',
+      url: '#',
+      anexadoEm: new Date().toLocaleDateString('pt-BR')
+    }
+    setLocalDocumentos([...localDocumentos, novoDoc])
+    setToastMensagem('Termo gerado e salvo na aba Documentos!')
+    setTimeout(() => setToastMensagem(null), 3000)
+    setAtividadeSelecionada(null) // Optional: close the sheet
   }
 
   function handleGerarTermo() {
@@ -213,6 +260,7 @@ export function AtendimentoDetail({
   }
 
   function toggleSelecionarImovel(id: string) {
+    if (imoveisEmVisitaAtiva.has(id)) return
     if (imoveisSelecionados.includes(id)) {
       setImoveisSelecionados(imoveisSelecionados.filter(i => i !== id))
     } else {
@@ -266,6 +314,11 @@ export function AtendimentoDetail({
     setAtividadeSelecionada(null)
   }
 
+  function handleDownloadDoc(nome: string) {
+    setToastMensagem(`Baixando ${nome}...`)
+    setTimeout(() => setToastMensagem(null), 3000)
+  }
+
   function handleDeletarDoc(id: string) {
     setLocalDocumentos(localDocumentos.filter(d => d.id !== id))
   }
@@ -303,6 +356,17 @@ export function AtendimentoDetail({
 
   return (
     <div className="flex flex-col pb-28">
+      
+      {/* Toast Feedback */}
+      {toastMensagem && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] animate-in slide-in-from-top fade-in duration-300">
+          <div className="bg-primary text-primary-foreground px-4 py-3 rounded-full shadow-2xl flex items-center gap-2 text-sm font-semibold">
+            <CheckCircle2 className="size-4" />
+            {toastMensagem}
+          </div>
+        </div>
+      )}
+
       {mostrarUpsell && <IAUpsellPage onClose={() => setMostrarUpsell(false)} origem="albert" />}
       
       {/* Header imersivo */}
@@ -670,29 +734,22 @@ export function AtendimentoDetail({
             </ul>
 
             {mostrarNovaAtividade && (
-              <RegistrarAtividadeSheet
-                onClose={() => setMostrarNovaAtividade(false)}
-                onSave={(evento) => {
-                  setMostrarNovaAtividade(false)
-                  // Handle saving to localAtividades...
-                  const atv = {
-                    id: evento.id,
-                    hora: evento.hora,
-                    data: evento.data,
-                    titulo: evento.descricao.split('] ')[1]?.split(' -')[0] || evento.descricao,
-                    descricao: evento.descricao,
-                    cliente: atendimento.nome,
-                    telefone: atendimento.telefone,
-                    whatsapp: atendimento.telefone,
-                    tipo: 'visita' as const, // Na verdade precisamos do tipo exato que está no título [Tipo]...
-                    concluida: false,
-                    importante: evento.importante || false,
-                    criadoEm: 'Agora'
-                  }
-                  setLocalAtividades((prev) => [atv, ...prev])
-                }}
-                clienteDados={{ nome: atendimento.nome, telefone: atendimento.telefone, email: atendimento.email }}
-              />
+              <div className="absolute inset-0 z-50 flex flex-col justify-end">
+                <button type="button" onClick={() => setMostrarNovaAtividade(false)} className="absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]" />
+                <div className="relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh]">
+                  <div className="flex justify-center pt-3 pb-1 shrink-0"><div className="h-1 w-10 rounded-full bg-border" /></div>
+                  <div className="flex-1 overflow-y-auto px-6 py-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+                    <FormNovaAtividade
+                      defaultClienteId={atendimento.id}
+                      onClose={() => setMostrarNovaAtividade(false)}
+                      onSalvar={(id, atv, tml) => {
+                        if (atv) setLocalAtividades((prev) => [atv, ...prev])
+                        if (tml) handleSalvarInteracao(tml)
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         )}
@@ -722,19 +779,25 @@ export function AtendimentoDetail({
 
             <ul className={`flex flex-col gap-3 ${imoveisSelecionados.length > 0 ? 'pb-40' : ''}`}>
               {imoveisExibidos.map((im) => (
-                <li key={im.id} className={`relative rounded-[1.25rem] bg-card shadow-soft p-4 border transition-colors ${imoveisSelecionados.includes(im.id) ? 'border-primary bg-primary/5' : 'border-transparent'}`}>
-                  {imoveisCompativeis.length === 0 && !buscaManualImoveis && (
+                <li key={im.id} className={`relative rounded-[1.25rem] bg-card shadow-soft p-4 border transition-colors ${imoveisSelecionados.includes(im.id) ? 'border-primary bg-primary/5' : 'border-transparent'} ${imoveisEmVisitaAtiva.has(im.id) ? 'opacity-80' : ''}`}>
+                  {imoveisCompativeis.length === 0 && !buscaManualImoveis && !imoveisEmVisitaAtiva.has(im.id) && (
                     <span className="absolute -top-2.5 right-4 rounded-full bg-amber text-[#8a5a1e] px-2 py-0.5 text-[10px] font-bold shadow-sm">
                       Fora do perfil
+                    </span>
+                  )}
+                  {imoveisEmVisitaAtiva.has(im.id) && (
+                    <span className="absolute -top-2.5 right-4 rounded-full bg-teal-mid/20 text-teal-deep border border-teal-mid/30 px-2 py-0.5 text-[10px] font-bold shadow-sm flex items-center gap-1">
+                      <Calendar className="size-3" /> Já em visita
                     </span>
                   )}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-start gap-3">
                       <input 
                         type="checkbox" 
+                        disabled={imoveisEmVisitaAtiva.has(im.id)}
                         checked={imoveisSelecionados.includes(im.id)}
                         onChange={() => toggleSelecionarImovel(im.id)}
-                        className="mt-1 size-5 rounded border-border text-primary focus:ring-primary"
+                        className="mt-1 size-5 rounded border-border text-primary focus:ring-primary disabled:opacity-50"
                       />
                       <div>
                         <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{im.codigo}</p>
@@ -789,6 +852,12 @@ export function AtendimentoDetail({
                       <Calendar className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
                       Agendar Visita
                     </button>
+                    {localAtividades.some(a => a.tipo === 'visita' && !a.concluida) && (
+                      <button type="button" onClick={() => setMostrarVincularVisita(true)} className="flex-1 rounded-xl bg-teal-mid/10 py-2.5 text-xs font-semibold text-teal-deep active:scale-95 transition-brand">
+                        <LinkIcon className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
+                        Vincular a Visita
+                      </button>
+                    )}
                     <button type="button" onClick={handleGerarTermo} className="flex-1 rounded-xl bg-amber/10 py-2.5 text-xs font-semibold text-[#8a5a1e] active:scale-95 transition-brand">
                       <DocumentIcon className="mb-0.5 inline size-4 mr-1" strokeWidth={1.5} />
                       Gerar Termo
@@ -847,6 +916,9 @@ export function AtendimentoDetail({
                     </div>
                     {editandoDocId !== doc.id && (
                       <div className="flex items-center gap-1 shrink-0">
+                        <button type="button" onClick={() => handleDownloadDoc(doc.nome)} className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-brand active:scale-95">
+                          <Download className="size-4" strokeWidth={1.5} />
+                        </button>
                         <button type="button" onClick={() => { setEditandoDocId(doc.id); setNovoNomeDoc(doc.nome); }} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-primary transition-brand active:scale-95">
                           <Edit3 className="size-4" strokeWidth={1.5} />
                         </button>
@@ -1080,7 +1152,20 @@ export function AtendimentoDetail({
           <button type="button" onClick={() => setMostrarNovaAtividade(false)} className="absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]" />
           <div className="relative rounded-t-3xl bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-200">
             <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-fog" />
-            <FormNovaAtividade onClose={() => setMostrarNovaAtividade(false)} />
+            <FormNovaAtividade 
+              defaultClienteId={atendimento.id}
+              defaultImoveis={imoveis.filter(i => imoveisSelecionados.includes(i.id))}
+              onClose={() => {
+                setMostrarNovaAtividade(false)
+                setImoveisSelecionados([])
+              }} 
+              onSalvar={(id, atv, tml) => {
+                if (tml) handleSalvarInteracao(tml)
+                if (atv) setLocalAtividades([atv, ...localAtividades])
+                setMostrarNovaAtividade(false)
+                setImoveisSelecionados([])
+              }}
+            />
           </div>
         </div>
       )}
@@ -1109,11 +1194,21 @@ export function AtendimentoDetail({
       )}
       {/* Registrar Interação Sheet */}
       {mostrarNovaInteracao && (
-        <RegistrarAtividadeSheet
-          onClose={() => setMostrarNovaInteracao(false)}
-          onSave={handleSalvarInteracao}
-          clienteDados={{ nome: atendimento.nome, telefone: atendimento.telefone, email: atendimento.email }}
-        />
+        <div className="absolute inset-0 z-50 flex flex-col justify-end">
+          <button type="button" onClick={() => setMostrarNovaInteracao(false)} className="absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]" />
+          <div className="relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh]">
+            <div className="flex justify-center pt-3 pb-1 shrink-0"><div className="h-1 w-10 rounded-full bg-border" /></div>
+            <div className="flex-1 overflow-y-auto px-6 py-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+              <FormNovaAtividade
+                defaultClienteId={atendimento.id}
+                onClose={() => setMostrarNovaInteracao(false)}
+                onSalvar={(id, atv, tml) => {
+                  if (tml) handleSalvarInteracao(tml)
+                }}
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Atividade Detalhe Sheet */}
@@ -1121,6 +1216,7 @@ export function AtendimentoDetail({
         atividade={atividadeSelecionada}
         onClose={() => setAtividadeSelecionada(null)}
         onConcluir={handleConcluirAtividade}
+        onGerarTermo={handleGerarTermoVisita}
         onVerNegocio={() => {
           setAtividadeSelecionada(null)
         }}
@@ -1136,6 +1232,42 @@ export function AtendimentoDetail({
           }}
         />
       )}
+      
+      {/* Modal Vincular Visita */}
+      {mostrarVincularVisita && (
+        <div className="absolute inset-0 z-[70] flex flex-col justify-end">
+          <button type="button" onClick={() => setMostrarVincularVisita(false)} className="absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]" />
+          <div className="relative flex flex-col max-h-[80dvh] rounded-t-3xl bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-200">
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-fog" />
+            <h3 className="font-serif text-lg font-semibold mb-4">Vincular a Visita Existente</h3>
+            <p className="text-sm text-muted-foreground mb-4">Selecione uma visita futura para anexar os imóveis selecionados.</p>
+            <div className="flex-1 overflow-y-auto">
+              <ul className="flex flex-col gap-3">
+                {localAtividades.filter(a => a.tipo === 'visita' && !a.concluida).map(atv => (
+                  <li key={atv.id}>
+                    <button
+                      type="button"
+                      onClick={() => handleVincularVisita(atv.id)}
+                      className="w-full text-left rounded-2xl bg-muted/50 p-4 border border-border/50 hover:bg-muted transition-brand"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-sm">{atv.titulo}</p>
+                          <p className="text-xs text-muted-foreground">{atv.data} às {atv.hora}</p>
+                        </div>
+                        <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-md">
+                          {atv.imoveisVisitados?.length || 0} imóveis
+                        </span>
+                      </div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Preview Envio Sheet */}
       {previewEnvio && (
         <div className="absolute inset-0 z-[60] flex flex-col justify-end">
@@ -1225,63 +1357,6 @@ export function AtendimentoDetail({
 }
 
 // ─── Subcomponents ─────────────────────────────────────────────────────────────
-function FormNovaAtividade({ onClose }: { onClose: () => void }) {
-  const [tipo, setTipo] = useState<TipoAtividade>('visita')
-  const [importante, setImportante] = useState(false)
-
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-serif text-lg font-semibold">Nova atividade</h3>
-        <button type="button" onClick={onClose} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
-          <X className="size-4" strokeWidth={1.5} />
-        </button>
-      </div>
-      <div className="flex flex-col gap-3">
-        {/* Tipo */}
-        <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipo</label>
-          <div className="flex flex-wrap gap-2">
-            {(['visita', 'reuniao', 'ligacao', 'prazo', 'pos-venda'] as TipoAtividade[]).map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setTipo(t)}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-brand ${tipo === t ? 'bg-primary text-primary-foreground' : 'border border-border bg-card text-muted-foreground'}`}
-              >
-                {tipoAtividadeConfig[t].emoji} {tipoAtividadeConfig[t].label}
-              </button>
-            ))}
-          </div>
-        </div>
-        <input type="text" placeholder="Título da atividade" className="h-11 w-full rounded-2xl border border-border bg-card px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-        <textarea rows={2} placeholder="Descrição (opcional)" className="w-full resize-none rounded-2xl border border-border bg-card p-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Data</label>
-            <input type="date" className="h-11 w-full rounded-2xl border border-border bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Hora</label>
-            <input type="time" className="h-11 w-full rounded-2xl border border-border bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={() => setImportante(!importante)}
-          className={`flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm font-semibold transition-brand ${importante ? 'border-amber bg-amber/10 text-[#8a5a1e]' : 'border-border bg-card text-muted-foreground'}`}
-        >
-          <Star className={`size-4 ${importante ? 'fill-amber text-amber' : ''}`} strokeWidth={1.5} />
-          Marcar como importante
-        </button>
-        <button type="button" onClick={onClose} className="h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]">
-          Salvar atividade
-        </button>
-      </div>
-    </div>
-  )
-}
-
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-3 rounded-2xl bg-card shadow-soft px-4 py-3">

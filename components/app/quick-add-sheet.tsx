@@ -74,13 +74,13 @@ export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }
 
         {/* Formulários inline */}
         {acaoAtiva === 'novo-lead' && (
-          <FormNovoLead onClose={() => { setAcaoAtiva(null); onClose() }} />
+          <FormNovoLead onClose={() => { setAcaoAtiva(null); onClose() }} onSalvar={onAtividadeCriada} />
         )}
         {acaoAtiva === 'nova-atividade' && (
           <FormNovaAtividade onClose={() => { setAcaoAtiva(null); onClose() }} onSalvar={onAtividadeCriada} />
         )}
         {acaoAtiva === 'novo-negocio' && (
-          <FormNovoNegocio onClose={() => { setAcaoAtiva(null); onClose() }} />
+          <FormNovoNegocio onClose={() => { setAcaoAtiva(null); onClose() }} onSalvar={onAtividadeCriada} />
         )}
         {acaoAtiva === 'captar-imovel' && (
           <FormCaptarImovel onClose={() => { setAcaoAtiva(null); onClose() }} />

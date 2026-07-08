@@ -96,6 +96,7 @@ export default function Page() {
               onVerCliente={abrirClientePorLead}
               onVerPerfil={() => setTab('perfil')}
               onVerAtendimento={abrirAtendimentoPorId}
+              onAbrirNovaAtividade={() => { setQuickAddAcao('nova-atividade'); setQuickAddAberto(true); }}
             />
           )}
           {tab === 'negocios' && (

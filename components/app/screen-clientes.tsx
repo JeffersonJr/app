@@ -10,7 +10,7 @@ import {
   PlusCircle
 } from 'lucide-react'
 import { clientes, tempConfig, type Cliente, type EventoTimeline } from '@/lib/app-data'
-import { RegistrarAtividadeSheet } from '@/components/app/registrar-atividade-sheet'
+import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
 
 const segmentos = ['Todos', 'Comprador', 'Locatário', 'Proprietário'] as const
 
@@ -262,10 +262,21 @@ function ClienteDetail({ cliente, onBack }: { cliente: Cliente; onBack: () => vo
 
       {/* Sheet Registrar Interação */}
       {mostrarNovaInteracao && (
-        <RegistrarAtividadeSheet
-          onClose={() => setMostrarNovaInteracao(false)}
-          onSave={handleSalvarInteracao}
-        />
+        <div className="absolute inset-0 z-50 flex flex-col justify-end">
+          <button type="button" onClick={() => setMostrarNovaInteracao(false)} className="absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]" />
+          <div className="relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh]">
+            <div className="flex justify-center pt-3 pb-1 shrink-0"><div className="h-1 w-10 rounded-full bg-border" /></div>
+            <div className="flex-1 overflow-y-auto px-6 py-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+              <FormNovaAtividade
+                defaultClienteId={cliente.id}
+                onClose={() => setMostrarNovaInteracao(false)}
+                onSalvar={(id, atv, tml) => {
+                  if (tml) handleSalvarInteracao(tml)
+                }}
+              />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

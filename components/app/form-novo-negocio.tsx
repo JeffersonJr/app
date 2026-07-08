@@ -1,22 +1,23 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Search, Check, PlusCircle } from 'lucide-react'
+import { X, Search, Check, PlusCircle, Star } from 'lucide-react'
 import { atendimentos, perfilVazio } from '@/lib/app-data'
-import { maskCurrency } from '@/lib/masks'
+import { maskCurrency, maskPhone } from '@/lib/masks'
 
 const TIPOS_IMOVEL = ['Apartamento', 'Casa', 'Studio', 'Cobertura', 'Terreno', 'Sala Comercial', 'Galpão', 'Outro'] as const
 const CIDADES = ['São Paulo', 'Barueri', 'Osasco', 'Guarulhos', 'Santo André', 'São Bernardo', 'Mogi das Cruzes', 'Outra'] as const
 const PRAZOS = ['Imediato', '1-3 meses', '3-6 meses', 'Acima de 6 meses'] as const
 
-export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
+export function FormNovoNegocio({ onClose, onSalvar }: { onClose: () => void, onSalvar?: (id: string) => void }) {
   const [nomeCliente, setNomeCliente] = useState('')
   const [clienteIdSelecionado, setClienteIdSelecionado] = useState('')
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false)
   const [criarClienteAberto, setCriarClienteAberto] = useState(false)
-  const [novoTelefone, setNovoTelefone] = useState('')
-  const [novoWhatsapp, setNovoWhatsapp] = useState('')
-  const [novoEmail, setNovoEmail] = useState('')
+  const [telefones, setTelefones] = useState<{numero: string, isWhatsapp: boolean}[]>([{numero: '', isWhatsapp: true}])
+  const [telPrincipalIdx, setTelPrincipalIdx] = useState(0)
+  const [emails, setEmails] = useState<string[]>([''])
+  const [emailPrincipalIdx, setEmailPrincipalIdx] = useState(0)
   const [finalidade, setFinalidade] = useState<'Venda' | 'Locação'>('Venda')
   const [tipoImovel, setTipoImovel] = useState<(typeof TIPOS_IMOVEL)[number]>('Apartamento')
   const [cidade, setCidade] = useState<(typeof CIDADES)[number]>('São Paulo')
@@ -39,13 +40,28 @@ export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
   function handleCriarCliente() {
     const novoId = `c${Date.now()}`
     const novoNome = nomeCliente
+
+    const validEmailIdx = emailPrincipalIdx < emails.length ? emailPrincipalIdx : 0
+    const emailPrincipal = emails[validEmailIdx] || `${novoNome.toLowerCase().replace(/\s/g, '')}@email.com`
+    const emailsSecundarios = emails.filter((_, idx) => idx !== validEmailIdx).filter(Boolean)
+
+    const validTelIdx = telPrincipalIdx < telefones.length ? telPrincipalIdx : 0
+    const telPrincipalObj = telefones[validTelIdx]
+    const telPrincipal = telPrincipalObj?.numero || '(11) 99999-9999'
+    const telefonesSecundariosObj = telefones.filter((_, idx) => idx !== validTelIdx)
+    const telefonesAdicionais = telefonesSecundariosObj.map(t => t.numero).filter(Boolean)
+    const whatsappsAdicionais = telefonesSecundariosObj.filter(t => t.isWhatsapp).map(t => t.numero).filter(Boolean)
+
     atendimentos.push({
       id: novoId,
       nome: novoNome,
       iniciais: novoNome.substring(0, 2).toUpperCase(),
-      email: novoEmail || `${novoNome.toLowerCase().replace(/\s/g, '')}@email.com`,
-      telefone: novoTelefone || novoWhatsapp || '(11) 99999-9999',
-      origem: 'Novo',
+      email: emailPrincipal,
+      emailsAdicionais: emailsSecundarios,
+      telefone: telPrincipal,
+      telefonesAdicionais,
+      whatsappsAdicionais,
+      origem: 'Outros',
       etapa: 'qualificando',
       temperatura: 'frio',
       status: 'aberto',
@@ -67,9 +83,9 @@ export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
     setClienteIdSelecionado(novoId)
     setNomeCliente(novoNome)
     setCriarClienteAberto(false)
-    setNovoTelefone('')
-    setNovoWhatsapp('')
-    setNovoEmail('')
+    setTelefones([{numero: '', isWhatsapp: true}])
+    setEmails([''])
+    return novoId
   }
 
   return (
@@ -146,16 +162,101 @@ export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
                 </button>
               </div>
               <div>
-                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Telefone</label>
-                <input type="tel" value={novoTelefone} onChange={(e) => setNovoTelefone(e.target.value)} placeholder="(11) 99999-9999" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Telefones (até 3)</label>
+                <div className="flex flex-col gap-2">
+                  {telefones.map((tel, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <input
+                        type="tel"
+                        value={tel.numero}
+                        onChange={(e) => {
+                          const newTels = [...telefones]
+                          newTels[idx].numero = maskPhone(e.target.value)
+                          setTelefones(newTels)
+                        }}
+                        placeholder="(11) 99999-9999"
+                        className="h-10 flex-1 rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newTels = [...telefones]
+                          newTels[idx].isWhatsapp = !newTels[idx].isWhatsapp
+                          setTelefones(newTels)
+                        }}
+                        className={`flex size-10 items-center justify-center rounded-xl border transition-colors ${tel.isWhatsapp ? 'bg-[#25D366]/10 border-[#25D366]/30 text-[#25D366]' : 'bg-card border-border text-muted-foreground'}`}
+                        title={tel.isWhatsapp ? "É WhatsApp" : "Não é WhatsApp"}
+                      >
+                        <span className="font-bold text-[10px] text-center leading-none">WA</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTelPrincipalIdx(idx)}
+                        className={`flex size-10 items-center justify-center rounded-xl border transition-colors ${telPrincipalIdx === idx ? 'bg-amber-500/10 border-amber-500/30 text-amber-500' : 'bg-card border-border text-muted-foreground'}`}
+                        title={telPrincipalIdx === idx ? "Telefone Principal" : "Definir como Principal"}
+                      >
+                        <Star className={`size-4 ${telPrincipalIdx === idx ? 'fill-current' : ''}`} />
+                      </button>
+                      {telefones.length > 1 && (
+                        <button type="button" onClick={() => {
+                          setTelefones(telefones.filter((_, i) => i !== idx))
+                          if (telPrincipalIdx === idx) setTelPrincipalIdx(0)
+                          else if (telPrincipalIdx > idx) setTelPrincipalIdx(telPrincipalIdx - 1)
+                        }} className="flex size-10 items-center justify-center rounded-xl bg-red-50 text-red-500">
+                          <X className="size-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  {telefones.length < 3 && (
+                    <button type="button" onClick={() => setTelefones([...telefones, {numero: '', isWhatsapp: false}])} className="flex items-center gap-2 text-[10px] font-semibold text-primary mt-1">
+                      <PlusCircle className="size-3" /> Adicionar telefone
+                    </button>
+                  )}
+                </div>
               </div>
+              
               <div>
-                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">WhatsApp</label>
-                <input type="tel" value={novoWhatsapp} onChange={(e) => setNovoWhatsapp(e.target.value)} placeholder="(11) 99999-9999" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-              </div>
-              <div>
-                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">E-mail</label>
-                <input type="email" value={novoEmail} onChange={(e) => setNovoEmail(e.target.value)} placeholder="nome@email.com" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">E-mails (até 3)</label>
+                <div className="flex flex-col gap-2">
+                  {emails.map((em, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <input
+                        type="email"
+                        value={em}
+                        onChange={(e) => {
+                          const newEmails = [...emails]
+                          newEmails[idx] = e.target.value
+                          setEmails(newEmails)
+                        }}
+                        placeholder="nome@email.com"
+                        className="h-10 flex-1 rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setEmailPrincipalIdx(idx)}
+                        className={`flex size-10 items-center justify-center rounded-xl border transition-colors ${emailPrincipalIdx === idx ? 'bg-amber-500/10 border-amber-500/30 text-amber-500' : 'bg-card border-border text-muted-foreground'}`}
+                        title={emailPrincipalIdx === idx ? "E-mail Principal" : "Definir como Principal"}
+                      >
+                        <Star className={`size-4 ${emailPrincipalIdx === idx ? 'fill-current' : ''}`} />
+                      </button>
+                      {emails.length > 1 && (
+                        <button type="button" onClick={() => {
+                          setEmails(emails.filter((_, i) => i !== idx))
+                          if (emailPrincipalIdx === idx) setEmailPrincipalIdx(0)
+                          else if (emailPrincipalIdx > idx) setEmailPrincipalIdx(emailPrincipalIdx - 1)
+                        }} className="flex size-10 items-center justify-center rounded-xl bg-red-50 text-red-500">
+                          <X className="size-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  {emails.length < 3 && (
+                    <button type="button" onClick={() => setEmails([...emails, ''])} className="flex items-center gap-2 text-[10px] font-semibold text-primary mt-1">
+                      <PlusCircle className="size-3" /> Adicionar e-mail
+                    </button>
+                  )}
+                </div>
               </div>
               <button type="button" onClick={handleCriarCliente} className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground transition-brand active:scale-[0.98]">
                 <PlusCircle className="size-4" strokeWidth={2} />
@@ -293,7 +394,16 @@ export function FormNovoNegocio({ onClose }: { onClose: () => void }) {
 
         <button
           type="button"
-          onClick={onClose}
+          onClick={() => {
+            if (clienteIdSelecionado) {
+              if (onSalvar) onSalvar(clienteIdSelecionado)
+              onClose()
+            } else if (nomeCliente) {
+               const idCriado = handleCriarCliente()
+               if (onSalvar) onSalvar(idCriado)
+               onClose()
+            }
+          }}
           className="h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
         >
           Criar negócio

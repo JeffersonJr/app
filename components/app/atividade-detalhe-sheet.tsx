@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Calendar, CheckCircle2, ChevronRight, Clock, MessageSquare, Target, User, X, PartyPopper, Phone, MessageCircle, MapPin } from 'lucide-react'
-import { type Atividade, tipoAtividadeConfig } from '@/lib/app-data'
+import { Calendar, CheckCircle2, ChevronRight, Clock, MessageSquare, Target, User, X, PartyPopper, Phone, MessageCircle, MapPin, FileText as DocumentIcon, Search, ArrowUp, ArrowDown } from 'lucide-react'
+import { type Atividade, tipoAtividadeConfig, imoveis } from '@/lib/app-data'
 import { useEffect } from 'react'
 import confetti from 'canvas-confetti'
 
@@ -11,11 +11,13 @@ export function AtividadeDetalheSheet({
   onClose,
   onVerNegocio,
   onConcluir,
+  onGerarTermo
 }: {
   atividade: Atividade | null
   onClose: () => void
   onVerNegocio: (clienteNome: string) => void
   onConcluir: (id: string, statusConcluida: boolean, feedback?: string, agendarProxima?: boolean) => void
+  onGerarTermo?: (atividadeId: string) => void
 }) {
   const [feedback, setFeedback] = useState('')
   const [agendarProxima, setAgendarProxima] = useState(false)
@@ -24,7 +26,10 @@ export function AtividadeDetalheSheet({
   const [novaHora, setNovaHora] = useState('')
   const [sucesso, setSucesso] = useState(false)
   const [sucessoRemarcar, setSucessoRemarcar] = useState(false)
+  const [emojiFeedback, setEmojiFeedback] = useState<'ruim' | 'neutra' | 'boa' | null>(null)
   const [visitadosLocais, setVisitadosLocais] = useState<Record<string, boolean>>({})
+  const [buscandoImovel, setBuscandoImovel] = useState(false)
+  const [buscaImovelTexto, setBuscaImovelTexto] = useState('')
 
   useEffect(() => {
     // Reset all state when a new atividade is opened
@@ -33,6 +38,7 @@ export function AtividadeDetalheSheet({
     setRemarcando(false)
     setNovaData('')
     setNovaHora('')
+    setEmojiFeedback(null)
     if (atividade?.tipo === 'visita') {
       setAgendarProxima(true)
       const inicialVisitados: Record<string, boolean> = {}
@@ -40,6 +46,8 @@ export function AtividadeDetalheSheet({
         inicialVisitados[imv.id] = imv.visitado
       })
       setVisitadosLocais(inicialVisitados)
+      setBuscandoImovel(false)
+      setBuscaImovelTexto('')
     } else {
       setAgendarProxima(false)
       setVisitadosLocais({})
@@ -48,12 +56,33 @@ export function AtividadeDetalheSheet({
 
   if (!atividade) return null
 
+  function handleReorder(idx: number, dir: 'up' | 'down') {
+    if (!atividade || !atividade.imoveisVisitados) return
+    const newArr = [...atividade.imoveisVisitados]
+    const targetIdx = dir === 'up' ? idx - 1 : idx + 1
+    if (targetIdx < 0 || targetIdx >= newArr.length) return
+    const temp = newArr[idx]
+    newArr[idx] = newArr[targetIdx]
+    newArr[targetIdx] = temp
+    
+    // Altera a referência diretamente como estava sendo feito
+    atividade.imoveisVisitados = newArr
+    // Força re-render limpo usando um estado que já mapeia as visitas
+    setVisitadosLocais(prev => ({ ...prev }))
+  }
+
   function handleConcluir() {
     // Save the visited status back to the activity object
     if (atividade?.imoveisVisitados) {
       atividade.imoveisVisitados.forEach(imv => {
         if (visitadosLocais[imv.id]) imv.visitado = true
       })
+    }
+
+    let finalFeedback = feedback
+    if (emojiFeedback) {
+      const emojiMap = { ruim: '👎 Ruim', neutra: '😐 Neutra', boa: '👍 Boa' }
+      finalFeedback = finalFeedback ? `[${emojiMap[emojiFeedback]}] ${finalFeedback}` : `[${emojiMap[emojiFeedback]}]`
     }
 
     setSucesso(true)
@@ -64,7 +93,7 @@ export function AtividadeDetalheSheet({
       colors: ['#0d9488', '#14b8a6', '#5eead4']
     })
     setTimeout(() => {
-      onConcluir(atividade!.id, true, feedback, agendarProxima)
+      onConcluir(atividade!.id, true, finalFeedback, agendarProxima)
     }, 1500)
   }
 
@@ -199,20 +228,22 @@ export function AtividadeDetalheSheet({
           </a>
         )}
 
-        {/* Múltiplos imóveis para visita */}
-        {atividade.tipo === 'visita' && atividade.imoveisVisitados && atividade.imoveisVisitados.length > 0 && (
+        {/* Múltiplos imóveis vinculados */}
+        {atividade.tipo === 'visita' && (
           <div className="mt-6 rounded-2xl border border-border bg-card p-4 shadow-sm">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                 <MapPin className="size-3.5" />
                 Roteiro de visita
               </h3>
-              <span className="font-mono text-xs font-bold text-primary">
-                {Object.values(visitadosLocais).filter(Boolean).length} / {atividade.imoveisVisitados.length}
-              </span>
+              {atividade.imoveisVisitados && atividade.imoveisVisitados.length > 0 && (
+                <span className="font-mono text-xs font-bold text-primary">
+                  {Object.values(visitadosLocais).filter(Boolean).length} / {atividade.imoveisVisitados.length}
+                </span>
+              )}
             </div>
             <div className="flex flex-col gap-3">
-              {atividade.imoveisVisitados.map((imv) => (
+              {atividade.imoveisVisitados?.map((imv, idx) => (
                 <div key={imv.id} className="flex flex-col gap-2 rounded-xl bg-muted/50 p-3">
                   <div className="flex items-start gap-3">
                     <button
@@ -231,17 +262,109 @@ export function AtividadeDetalheSheet({
                       <p className="text-xs text-muted-foreground mt-0.5">{imv.endereco}</p>
                     </div>
                   </div>
-                  <a
-                    href={`https://maps.google.com/?q=${encodeURIComponent(imv.endereco)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ml-8 flex w-fit items-center gap-1.5 rounded-lg bg-background px-2.5 py-1.5 text-xs font-semibold text-primary shadow-sm border border-border hover:bg-muted active:scale-95"
-                  >
-                    <MapPin className="size-3" />
-                    Navegar até o local
-                  </a>
+                  <div className="ml-8 flex items-center justify-between">
+                    <a
+                      href={`https://maps.google.com/?q=${encodeURIComponent(imv.endereco)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex w-fit items-center gap-1.5 rounded-lg bg-background px-2.5 py-1.5 text-xs font-semibold text-primary shadow-sm border border-border hover:bg-muted active:scale-95 transition-all"
+                    >
+                      <MapPin className="size-3" />
+                      Navegar até o local
+                    </a>
+                    {atividade.imoveisVisitados && atividade.imoveisVisitados.length > 1 && (
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => handleReorder(idx, 'up')}
+                          disabled={idx === 0}
+                          className="flex size-7 items-center justify-center rounded-lg border border-border bg-background shadow-sm hover:bg-muted disabled:opacity-50 disabled:active:scale-100 active:scale-95 transition-all"
+                        >
+                          <ArrowUp className="size-3.5 text-muted-foreground" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleReorder(idx, 'down')}
+                          disabled={idx === atividade.imoveisVisitados!.length - 1}
+                          className="flex size-7 items-center justify-center rounded-lg border border-border bg-background shadow-sm hover:bg-muted disabled:opacity-50 disabled:active:scale-100 active:scale-95 transition-all"
+                        >
+                          <ArrowDown className="size-3.5 text-muted-foreground" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
+
+              {!buscandoImovel ? (
+                <button
+                  type="button"
+                  onClick={() => setBuscandoImovel(true)}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-primary/40 bg-primary/5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 active:scale-[0.98]"
+                >
+                  <Search className="size-4" />
+                  Buscar e anexar outro imóvel
+                </button>
+              ) : (
+                <div className="flex flex-col gap-2 rounded-xl border border-border bg-background p-3 shadow-sm">
+                  <div className="flex items-center gap-2 border-b border-border pb-2">
+                    <Search className="size-4 text-muted-foreground" />
+                    <input
+                      type="text"
+                      autoFocus
+                      placeholder="Código, bairro ou tipo..."
+                      value={buscaImovelTexto}
+                      onChange={(e) => setBuscaImovelTexto(e.target.value)}
+                      className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+                    />
+                    <button type="button" onClick={() => { setBuscandoImovel(false); setBuscaImovelTexto(''); }} className="p-1 text-muted-foreground hover:text-foreground">
+                      <X className="size-4" />
+                    </button>
+                  </div>
+                  {buscaImovelTexto && (
+                    <div className="mt-1 flex max-h-40 flex-col overflow-y-auto rounded-lg">
+                      {imoveis
+                        .filter(i => 
+                          i.codigo.toLowerCase().includes(buscaImovelTexto.toLowerCase()) ||
+                          i.bairro.toLowerCase().includes(buscaImovelTexto.toLowerCase()) ||
+                          i.titulo.toLowerCase().includes(buscaImovelTexto.toLowerCase()) ||
+                          i.tipoImovel.toLowerCase().includes(buscaImovelTexto.toLowerCase())
+                        )
+                        .filter(i => !atividade.imoveisVisitados?.find(v => v.id === i.id))
+                        .map(imv => (
+                          <button
+                            key={imv.id}
+                            type="button"
+                            onClick={() => {
+                              if (!atividade.imoveisVisitados) atividade.imoveisVisitados = [];
+                              atividade.imoveisVisitados.push({
+                                id: imv.id,
+                                nome: `${imv.tipoImovel} em ${imv.bairro}`,
+                                visitado: false,
+                                endereco: imv.enderecoCompleto || ''
+                              });
+                              setVisitadosLocais(prev => ({...prev, [imv.id]: false}));
+                              setBuscandoImovel(false);
+                              setBuscaImovelTexto('');
+                            }}
+                            className="flex flex-col border-b border-border py-2 text-left hover:bg-muted last:border-0"
+                          >
+                            <span className="text-xs font-semibold text-foreground">{imv.codigo} - {imv.tipoImovel} em {imv.bairro}</span>
+                            <span className="text-[10px] text-muted-foreground">{imv.preco}</span>
+                          </button>
+                        ))}
+                      {imoveis.filter(i => 
+                          i.codigo.toLowerCase().includes(buscaImovelTexto.toLowerCase()) ||
+                          i.bairro.toLowerCase().includes(buscaImovelTexto.toLowerCase()) ||
+                          i.titulo.toLowerCase().includes(buscaImovelTexto.toLowerCase()) ||
+                          i.tipoImovel.toLowerCase().includes(buscaImovelTexto.toLowerCase())
+                        ).length === 0 && (
+                        <div className="p-3 text-center text-xs text-muted-foreground">Nenhum imóvel encontrado</div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -261,6 +384,20 @@ export function AtividadeDetalheSheet({
             <MessageSquare className="size-3.5" />
             Feedback da atividade
           </h3>
+          <div className="flex gap-2 mb-3">
+            <button type="button" onClick={() => setEmojiFeedback('ruim')} className={`flex-1 flex flex-col items-center justify-center gap-1 p-2 rounded-xl border transition-colors ${emojiFeedback === 'ruim' ? 'border-red-500 bg-red-50 text-red-700' : 'border-border bg-card hover:bg-muted'}`}>
+              <span className="text-2xl">👎</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide">Ruim</span>
+            </button>
+            <button type="button" onClick={() => setEmojiFeedback('neutra')} className={`flex-1 flex flex-col items-center justify-center gap-1 p-2 rounded-xl border transition-colors ${emojiFeedback === 'neutra' ? 'border-amber bg-amber/10 text-[#8a5a1e]' : 'border-border bg-card hover:bg-muted'}`}>
+              <span className="text-2xl">😐</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide">Neutra</span>
+            </button>
+            <button type="button" onClick={() => setEmojiFeedback('boa')} className={`flex-1 flex flex-col items-center justify-center gap-1 p-2 rounded-xl border transition-colors ${emojiFeedback === 'boa' ? 'border-green-500 bg-green-50 text-green-700' : 'border-border bg-card hover:bg-muted'}`}>
+              <span className="text-2xl">👍</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide">Boa</span>
+            </button>
+          </div>
           <textarea
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
@@ -281,6 +418,19 @@ export function AtividadeDetalheSheet({
             <span className="text-xs text-muted-foreground">Continuar o fluxo com este cliente</span>
           </div>
         </label>
+
+        {atividade.tipo === 'visita' && !atividade.concluida && onGerarTermo && (
+          <div className="mt-6 mb-2">
+            <button
+              type="button"
+              onClick={() => onGerarTermo(atividade.id)}
+              className="flex w-full h-12 items-center justify-center gap-2 rounded-2xl bg-amber/10 text-[#8a5a1e] text-sm font-semibold transition-transform hover:bg-amber/20 active:scale-95 border border-amber/20"
+            >
+              <DocumentIcon className="size-4.5" />
+              Gerar Termo de Visita
+            </button>
+          </div>
+        )}
 
         {remarcando ? (
           <div className="mt-6 flex flex-col gap-4 animate-in fade-in duration-200">

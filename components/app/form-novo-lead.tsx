@@ -1,23 +1,63 @@
 'use client'
 
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, PlusCircle } from 'lucide-react'
 import { maskPhone } from '@/lib/masks'
+import { atendimentos, perfilVazio } from '@/lib/app-data'
 
 const ORIGENS = [
-  'Portal ZAP', 'Portal VivaReal', 'Portal OLX', 'Site Próprio',
-  'Facebook', 'Instagram', 'Indicação', 'Cliente de Porta',
-  'WhatsApp', 'Ligação', 'Outro',
+  'Portal: Zap Imóveis', 'Portal: Viva Real', 'Portal: Olx', 'Outros',
+  'Facebook', 'Marketing: Instagram', 'Indicação', 'Porta',
+  'Whatsapp', 'Telefone'
 ] as const
 
 const TEMPERATURAS = ['quente', 'morno', 'frio'] as const
 
-export function FormNovoLead({ onClose }: { onClose: () => void }) {
+export function FormNovoLead({ onClose, onSalvar }: { onClose: () => void, onSalvar?: (id: string) => void }) {
   const [nome, setNome] = useState('')
-  const [telefone, setTelefone] = useState('')
-  const [email, setEmail] = useState('')
-  const [origem, setOrigem] = useState<(typeof ORIGENS)[number]>('Portal ZAP')
+  const [telefones, setTelefones] = useState<{numero: string, isWhatsapp: boolean}[]>([{numero: '', isWhatsapp: true}])
+  const [emails, setEmails] = useState<string[]>([''])
+  const [origem, setOrigem] = useState<(typeof ORIGENS)[number]>('Portal: Zap Imóveis')
   const [temperatura, setTemperatura] = useState<(typeof TEMPERATURAS)[number]>('morno')
+
+  function handleSalvar() {
+    if (!nome) return
+    const novoId = `l${Date.now()}`
+    
+    atendimentos.push({
+      id: novoId,
+      nome: nome,
+      iniciais: nome.substring(0, 2).toUpperCase(),
+      email: emails[0] || `${nome.toLowerCase().replace(/\s/g, '')}@email.com`,
+      emailsAdicionais: emails.slice(1).filter(Boolean),
+      telefone: telefones[0]?.numero || '(11) 99999-9999',
+      telefonesAdicionais: telefones.slice(1).map(t => t.numero).filter(Boolean),
+      whatsappsAdicionais: telefones.filter(t => t.isWhatsapp).map(t => t.numero).filter(Boolean),
+      origem: origem,
+      etapa: 'qualificando',
+      temperatura: temperatura,
+      status: 'aberto',
+      dataEntrada: new Date().toLocaleDateString('pt-BR'),
+      ultimaInteracao: 'Agora',
+      interesse: 'A definir',
+      valor: '-',
+      modo: 'venda',
+      funilId: 'principal',
+      atividades: [],
+      notas: [],
+      documentos: [],
+      emails: [],
+      timeline: [],
+      imoveisEnviados: [],
+      perfil: { ...perfilVazio },
+      albert: { ativo: false, dia: '', hora: '', instrucoes: '' },
+    })
+    
+    if (onSalvar) {
+      onSalvar(novoId)
+    }
+    onClose()
+  }
 
   return (
     <div>
@@ -49,28 +89,80 @@ export function FormNovoLead({ onClose }: { onClose: () => void }) {
 
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Telefone *
+            Telefones (até 3) *
           </label>
-          <input
-            type="tel"
-            value={telefone}
-            onChange={(e) => setTelefone(maskPhone(e.target.value))}
-            placeholder="(11) 99999-9999"
-            className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
+          <div className="flex flex-col gap-2">
+            {telefones.map((tel, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <input
+                  type="tel"
+                  value={tel.numero}
+                  onChange={(e) => {
+                    const newTels = [...telefones]
+                    newTels[idx].numero = maskPhone(e.target.value)
+                    setTelefones(newTels)
+                  }}
+                  placeholder="(11) 99999-9999"
+                  className="h-12 flex-1 rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newTels = [...telefones]
+                    newTels[idx].isWhatsapp = !newTels[idx].isWhatsapp
+                    setTelefones(newTels)
+                  }}
+                  className={`flex size-12 items-center justify-center rounded-2xl border transition-colors ${tel.isWhatsapp ? 'bg-[#25D366]/10 border-[#25D366]/30 text-[#25D366]' : 'bg-card border-border text-muted-foreground'}`}
+                  title={tel.isWhatsapp ? "É WhatsApp" : "Não é WhatsApp"}
+                >
+                  <span className="font-bold text-[10px] text-center leading-none">WA</span>
+                </button>
+                {idx > 0 && (
+                  <button type="button" onClick={() => setTelefones(telefones.filter((_, i) => i !== idx))} className="flex size-12 items-center justify-center rounded-2xl bg-red-50 text-red-500">
+                    <X className="size-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+            {telefones.length < 3 && (
+              <button type="button" onClick={() => setTelefones([...telefones, {numero: '', isWhatsapp: false}])} className="flex items-center gap-2 text-xs font-semibold text-primary mt-1">
+                <PlusCircle className="size-3.5" /> Adicionar telefone
+              </button>
+            )}
+          </div>
         </div>
 
         <div>
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            E-mail
+            E-mails (até 3)
           </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="cliente@email.com"
-            className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
+          <div className="flex flex-col gap-2">
+            {emails.map((em, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <input
+                  type="email"
+                  value={em}
+                  onChange={(e) => {
+                    const newEmails = [...emails]
+                    newEmails[idx] = e.target.value
+                    setEmails(newEmails)
+                  }}
+                  placeholder="cliente@email.com"
+                  className="h-12 flex-1 rounded-2xl border border-border bg-background px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+                {idx > 0 && (
+                  <button type="button" onClick={() => setEmails(emails.filter((_, i) => i !== idx))} className="flex size-12 items-center justify-center rounded-2xl bg-red-50 text-red-500">
+                    <X className="size-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+            {emails.length < 3 && (
+              <button type="button" onClick={() => setEmails([...emails, ''])} className="flex items-center gap-2 text-xs font-semibold text-primary mt-1">
+                <PlusCircle className="size-3.5" /> Adicionar e-mail
+              </button>
+            )}
+          </div>
         </div>
 
         <div>
@@ -118,10 +210,10 @@ export function FormNovoLead({ onClose }: { onClose: () => void }) {
 
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleSalvar}
           className="h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
         >
-          Salvar lead
+          Adicionar lead
         </button>
       </div>
     </div>

@@ -28,15 +28,17 @@ import {
   Mic,
   PhoneOff
 } from 'lucide-react'
-import { imoveis, type Imovel } from '@/lib/app-data'
+import { imoveis, type Imovel, atendimentos } from '@/lib/app-data'
 import { empreendimentosMock, type Empreendimento } from '@/lib/empreendimentos-data'
 import { FiltrosAvancadosImoveisSheet } from '@/components/app/filtros-avancados-imoveis-sheet'
 import { FormCaptarImovel } from '@/components/app/form-captar-imovel'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { FormCaptarEmpreendimento } from '@/components/app/form-captar-empreendimento'
 import { EmpreendimentoDetail } from '@/components/app/empreendimento-detail'
+import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
+import { Calendar } from 'lucide-react'
 
-const filtros = ['Todos', 'Venda', 'Locação', 'Livre', 'Reservado'] as const
+const filtros = ['Todos', 'Venda', 'Locação', 'Livre', 'Reservado', 'Favoritos'] as const
 
 const statusStyle: Record<Imovel['status'], string> = {
   Livre: 'bg-teal-mid/90 text-white',
@@ -59,6 +61,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   const [ordenacao, setOrdenacao] = useState<'padrao' | 'menor-preco' | 'maior-preco' | 'maior-area'>('padrao')
   const [mostrarMenuOrdenacao, setMostrarMenuOrdenacao] = useState(false)
   const [mostrarCadastroEmpreendimento, setMostrarCadastroEmpreendimento] = useState(false)
+  const [favoritosIds, setFavoritosIds] = useState<Set<string>>(new Set())
 
   const filtrosAplicados = useMemo(() => {
     const res: Record<string, string> = {}
@@ -71,8 +74,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
     const filtrados = imoveis.filter((im) => {
       const matchFiltro =
         filtro === 'Todos' ||
-        im.finalidade === filtro ||
-        im.status === filtro
+        (filtro === 'Favoritos' ? favoritosIds.has(im.id) : im.finalidade === filtro || im.status === filtro)
       const q = busca.trim().toLowerCase()
       const matchBusca =
         !q ||
@@ -117,6 +119,15 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
           if (idx !== -1) {
             imoveis[idx] = novo
           }
+        }}
+        isFavorito={favoritosIds.has(selecionado.id)}
+        toggleFavorito={() => {
+          setFavoritosIds(prev => {
+            const newSet = new Set(prev)
+            if (newSet.has(selecionado.id)) newSet.delete(selecionado.id)
+            else newSet.add(selecionado.id)
+            return newSet
+          })
         }}
       />
     )
@@ -268,10 +279,33 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
 
       {/* Cards fotográficos — apenas na aba Imóveis */}
       {abaAtiva === 'imoveis' && (
-        <ul className="flex flex-col gap-4">
-          {lista.map((im) => (
-            <li key={im.id}>
-              <button
+        lista.length === 0 ? (
+          filtro === 'Favoritos' ? (
+            <div className="flex flex-col items-center justify-center gap-5 py-12 text-center">
+              <div className="flex size-20 items-center justify-center rounded-3xl bg-primary/10">
+                <Heart className="size-10 text-primary" strokeWidth={1.5} />
+              </div>
+              <div>
+                <p className="font-serif text-lg font-semibold text-foreground">Nenhum imóvel favorito</p>
+                <p className="mt-1 text-sm text-muted-foreground px-4">Para favoritar um imóvel, acesse os detalhes dele e toque no ícone de coração no canto superior da tela.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-5 py-12 text-center">
+              <div className="flex size-20 items-center justify-center rounded-3xl bg-primary/10">
+                <Search className="size-10 text-primary" strokeWidth={1.5} />
+              </div>
+              <div>
+                <p className="font-serif text-lg font-semibold text-foreground">Nenhum imóvel encontrado</p>
+                <p className="mt-1 text-sm text-muted-foreground px-4">Tente ajustar seus filtros ou termos de busca para encontrar o que procura.</p>
+              </div>
+            </div>
+          )
+        ) : (
+          <ul className="flex flex-col gap-4">
+            {lista.map((im) => (
+              <li key={im.id}>
+                <button
                 type="button"
                 onClick={() => setSelecionado(im)}
                 className="w-full overflow-hidden rounded-[1.25rem] border-transparent bg-card shadow-soft text-left transition-brand active:scale-[0.98]"
@@ -289,9 +323,16 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
                   >
                     {im.status}
                   </span>
-                  <span className="absolute right-3 top-3 rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
-                    {im.codigo}
-                  </span>
+                  <div className="absolute right-3 top-3 flex items-center gap-1.5">
+                    {favoritosIds.has(im.id) && (
+                      <span className="flex size-6 items-center justify-center rounded-full bg-rose-500/90 text-white backdrop-blur-sm shadow-sm">
+                        <Heart className="size-3.5 fill-current" strokeWidth={1.5} />
+                      </span>
+                    )}
+                    <span className="rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+                      {im.codigo}
+                    </span>
+                  </div>
                 </div>
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3">
@@ -329,6 +370,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
             </li>
           ))}
         </ul>
+        )
       )}
 
       {/* Aba Empreendimentos */}
@@ -461,7 +503,19 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   )
 }
 
-function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: () => void; onUpdate: (novo: Imovel) => void }) {
+function ImovelDetail({
+  imovel,
+  onBack,
+  onUpdate,
+  isFavorito,
+  toggleFavorito
+}: {
+  imovel: Imovel;
+  onBack: () => void;
+  onUpdate: (novo: Imovel) => void;
+  isFavorito: boolean;
+  toggleFavorito: () => void;
+}) {
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
   const [editMode, setEditMode] = useState(false)
@@ -471,6 +525,15 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
   const [mostrarWhatsappModal, setMostrarWhatsappModal] = useState(false)
   const [msgWhatsapp, setMsgWhatsapp] = useState(`Olá ${imovel.proprietario?.nome}, tudo bem?\nSou da imobiliária e gostaria de falar sobre o seu imóvel (${imovel.codigo}).`)
   const [mostrarLigacao, setMostrarLigacao] = useState(false)
+  const [mostrarAgendamento, setMostrarAgendamento] = useState(false)
+
+  const clientesCompativeis = atendimentos.filter(a => {
+    if (!a.perfil) return false
+    if (a.perfil.tipoImovel && imovel.tipoImovel && a.perfil.tipoImovel !== imovel.tipoImovel) return false
+    if (a.perfil.finalidade && imovel.finalidade && a.perfil.finalidade !== imovel.finalidade) return false
+    if (a.perfil.cidades && a.perfil.cidades.length > 0 && imovel.cidade && !a.perfil.cidades.includes(imovel.cidade)) return false
+    return true
+  }).slice(0, 3)
 
   function handleShare(leadName: string) {
     setShowShareMenu(false)
@@ -501,8 +564,9 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
           {toastMessage}
         </div>
       )}
-      <div className="flex flex-col pb-8">
-      <div className="relative aspect-[4/3]">
+      <div className="absolute inset-0 z-40 bg-background flex flex-col animate-in slide-in-from-right duration-300">
+        <div className="flex-1 overflow-y-auto pb-8">
+          <div className="relative aspect-[4/3] shrink-0">
         <Image
           src={imovel.foto || '/placeholder.svg'}
           alt={`Foto do imóvel: ${imovel.titulo}`}
@@ -531,10 +595,15 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
             </button>
             <button
               type="button"
-              aria-label="Favoritar"
-              className="flex size-10 items-center justify-center rounded-full bg-teal-shadow/60 text-white backdrop-blur-sm transition-brand active:scale-95"
+              onClick={toggleFavorito}
+              aria-label={isFavorito ? "Remover dos favoritos" : "Favoritar"}
+              className={`flex size-10 items-center justify-center rounded-full backdrop-blur-sm transition-brand active:scale-95 ${
+                isFavorito
+                  ? 'bg-rose-500/90 text-white'
+                  : 'bg-teal-shadow/60 text-white'
+              }`}
             >
-              <Heart className="size-5" strokeWidth={1.5} />
+              <Heart className={`size-5 ${isFavorito ? 'fill-current' : ''}`} strokeWidth={1.5} />
             </button>
             <button
               type="button"
@@ -756,14 +825,68 @@ function ImovelDetail({ imovel, onBack, onUpdate }: { imovel: Imovel; onBack: ()
             )}
           </div>
         )}
+
+        {clientesCompativeis.length > 0 && (
+          <div className="mt-6 border-t border-border/50 pt-6">
+            <h3 className="text-sm font-semibold text-foreground mb-4">Clientes com perfil compatível</h3>
+            <ul className="flex flex-col gap-3">
+              {clientesCompativeis.map(cliente => (
+                <li key={cliente.id} className="flex items-center justify-between rounded-2xl border border-border p-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                      {cliente.iniciais}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{cliente.nome}</p>
+                      <p className="text-xs text-muted-foreground">{cliente.etapa}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleShare(cliente.nome)}
+                    className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand hover:text-primary active:scale-95"
+                  >
+                    <Share2 className="size-4" strokeWidth={1.5} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        </div>
       </div>
 
-      <div className="px-5 pb-[calc(80px+env(safe-area-inset-bottom))]">
-        <button type="button" onClick={() => setShowShareMenu(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-xl shadow-primary/30 transition-transform active:scale-[0.98]">
+      <div className="shrink-0 bg-background border-t border-border p-5 pb-[calc(5.25rem+env(safe-area-inset-bottom))] flex flex-col gap-3">
+        <button type="button" onClick={() => setMostrarAgendamento(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-xl shadow-teal-mid/30 transition-transform active:scale-[0.98]">
+          <Calendar className="size-5" strokeWidth={2.5} /> 
+          Visitar com cliente
+        </button>
+        <button type="button" onClick={() => setShowShareMenu(true)} className="w-full flex items-center justify-center gap-2.5 h-14 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-semibold shadow-sm transition-transform active:scale-[0.98]">
           <Share2 className="size-5" strokeWidth={2.5} /> 
           Compartilhar com Lead
         </button>
       </div>
+
+      
+      {/* Modal Agendamento */}
+      {mostrarAgendamento && (
+        <div className="absolute inset-0 z-50 flex flex-col justify-end">
+          <button type="button" onClick={() => setMostrarAgendamento(false)} className="absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]" />
+          <div className="relative rounded-t-3xl bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh] overflow-y-auto">
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-fog" />
+            <FormNovaAtividade 
+              defaultImoveis={[imovel]}
+              onClose={() => setMostrarAgendamento(false)} 
+              onSalvar={() => {
+                setMostrarAgendamento(false)
+                setToastMessage('Visita agendada com sucesso!')
+                setTimeout(() => setToastMessage(''), 3000)
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Share Bottom Sheet */}
       {showShareMenu && (

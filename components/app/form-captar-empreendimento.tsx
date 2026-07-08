@@ -1,6 +1,7 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   X,
   Zap,
@@ -197,6 +198,45 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
   const [numero, setNumero] = useState('')
   const [numeroPortal, setNumeroPortal] = useState('')
   const [zona, setZona] = useState('')
+
+  // Busca CEP Avançada
+  const [modalBuscaCep, setModalBuscaCep] = useState(false)
+  const [buscaUf, setBuscaUf] = useState('SP')
+  const [buscaCidade, setBuscaCidade] = useState('')
+  const [buscaLogradouro, setBuscaLogradouro] = useState('')
+  const [resultadosCep, setResultadosCep] = useState<any[]>([])
+  const [buscandoCep, setBuscandoCep] = useState(false)
+
+  useEffect(() => {
+    const limpo = cep.replace(/\D/g, '')
+    if (limpo.length === 8) {
+      fetch(`https://viacep.com.br/ws/${limpo}/json/`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.erro) {
+            if (data.logradouro) setEndereco(data.logradouro)
+            if (data.bairro) setBairro(data.bairro)
+            if (data.localidade) setCidade(data.localidade)
+            if (data.uf) setEstado(data.uf)
+          }
+        })
+        .catch(console.error)
+    }
+  }, [cep])
+
+  async function buscarCepAvancado() {
+    if (!buscaUf || buscaCidade.length < 3 || buscaLogradouro.length < 3) return
+    setBuscandoCep(true)
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${buscaUf}/${encodeURI(buscaCidade)}/${encodeURI(buscaLogradouro)}/json/`)
+      const data = await res.json()
+      setResultadosCep(Array.isArray(data) ? data : [])
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setBuscandoCep(false)
+    }
+  }
 
   // Características
   const [proximidadesSelecionadas, setProximidadesSelecionadas] = useState<string[]>([])
@@ -577,6 +617,7 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
             <div>
               <Label required>CEP</Label>
               <Input value={cep} onChange={e => setCep(maskCEP(e.target.value))} placeholder="15093-393" />
+              <button type="button" onClick={() => setModalBuscaCep(!modalBuscaCep)} className="mt-1 text-[10px] font-semibold text-primary underline">Não sei meu CEP</button>
             </div>
             <div>
               <Label required>Estado</Label>
@@ -587,6 +628,52 @@ export function FormCaptarEmpreendimento({ onClose }: { onClose: () => void }) {
               <Input value={cidade} onChange={e => setCidade(e.target.value)} placeholder="São José do Rio Preto" />
             </div>
           </div>
+
+          <AnimatePresence>
+            {modalBuscaCep && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="rounded-2xl border border-border bg-muted/30 p-3 mb-2"
+              >
+                <p className="mb-2 text-xs font-semibold text-foreground">Buscar CEP por endereço</p>
+                <div className="grid grid-cols-3 gap-2 mb-2">
+                  <div className="col-span-1">
+                    <input type="text" value={buscaUf} onChange={e => setBuscaUf(e.target.value.toUpperCase().slice(0,2))} placeholder="UF" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
+                  </div>
+                  <div className="col-span-2">
+                    <input type="text" value={buscaCidade} onChange={e => setBuscaCidade(e.target.value)} placeholder="Cidade" className="h-10 w-full rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <input type="text" value={buscaLogradouro} onChange={e => setBuscaLogradouro(e.target.value)} placeholder="Rua, Avenida..." className="h-10 flex-1 rounded-xl border border-border bg-background px-3 text-xs text-foreground focus:outline-none focus:border-primary" />
+                  <button type="button" onClick={buscarCepAvancado} disabled={buscandoCep} className="h-10 rounded-xl bg-primary px-4 text-xs font-semibold text-primary-foreground transition-brand disabled:opacity-50">
+                    {buscandoCep ? '...' : 'Buscar'}
+                  </button>
+                </div>
+                {resultadosCep.length > 0 && (
+                  <ul className="mt-2 max-h-40 overflow-y-auto rounded-xl border border-border bg-background">
+                    {resultadosCep.map((res: any, idx) => (
+                      <li key={idx}>
+                        <button type="button" onClick={() => {
+                          setCep(maskCEP(res.cep))
+                          setEndereco(res.logradouro)
+                          setBairro(res.bairro)
+                          setCidade(res.localidade)
+                          setEstado(res.uf)
+                          setModalBuscaCep(false)
+                        }} className="w-full border-b border-border p-2 text-left text-xs hover:bg-muted last:border-0">
+                          <p className="font-semibold">{res.logradouro}</p>
+                          <p className="text-muted-foreground">{res.bairro} - {res.localidade}/{res.uf} · CEP: {res.cep}</p>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Linha 2: Bairro, Bairro Comercial */}
           <div className="grid grid-cols-2 gap-3">
