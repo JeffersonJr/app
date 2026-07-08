@@ -17,6 +17,21 @@ export default function WebSystemPage() {
   const [activeTab, setActiveTab] = useState<TabType>('hoje')
   const [notificacoesAbertas, setNotificacoesAbertas] = useState(false)
   
+  const [atendimentoAbertoId, setAtendimentoAbertoId] = useState<string | null>(null)
+  const [clienteAbertoId, setClienteAbertoId] = useState<string | null>(null)
+
+  const abrirClientePorLead = (leadId: string) => {
+    // Simulando busca pelo ID do cliente
+    setClienteAbertoId('c1')
+    setActiveTab('clientes')
+  }
+
+  const abrirAtendimentoPorId = (id: string) => {
+    setAtendimentoAbertoId(id)
+    setActiveTab('kanban')
+    setNotificacoesAbertas(false)
+  }
+
   const navItems = [
     { id: 'hoje', label: 'Painel Hoje', icon: <LayoutDashboard className="w-5 h-5" /> },
     { id: 'kanban', label: 'Negócios', icon: <DollarSign className="w-5 h-5" /> },
@@ -124,17 +139,43 @@ export default function WebSystemPage() {
 
             {/* Render Screen */}
             <div className="flex-1 overflow-y-auto scrollbar-none pb-24 md:pb-0 relative">
-              {activeTab === 'hoje' && <ScreenHoje setTab={setActiveTab} />}
-              {activeTab === 'kanban' && <ScreenNegocios />}
-              {activeTab === 'clientes' && <ScreenClientes onNotificacoes={() => setNotificacoesAbertas(true)} />}
+              {activeTab === 'hoje' && (
+                <ScreenHoje 
+                  onVerFunil={() => setActiveTab('kanban')}
+                  onVerCliente={abrirClientePorLead}
+                  onVerPerfil={() => setActiveTab('perfil')}
+                  onVerAtendimento={abrirAtendimentoPorId}
+                />
+              )}
+              {activeTab === 'kanban' && (
+                <ScreenNegocios 
+                  onVerCliente={abrirClientePorLead}
+                  abrirAtendimentoId={atendimentoAbertoId}
+                  onAtendimentoAberto={() => setAtendimentoAbertoId(null)}
+                />
+              )}
+              {activeTab === 'clientes' && (
+                <ScreenClientes 
+                  clienteAbertoId={clienteAbertoId}
+                  onFecharCliente={() => setClienteAbertoId(null)}
+                  onAbrirCliente={setClienteAbertoId}
+                />
+              )}
               {activeTab === 'imoveis' && <ScreenImoveis />}
-              {activeTab === 'perfil' && <ScreenPerfil onNotificacoes={() => setNotificacoesAbertas(true)} />}
+              {activeTab === 'perfil' && (
+                <ScreenPerfil 
+                  onNotificacoes={() => setNotificacoesAbertas(true)} 
+                  onLogout={() => {}}
+                />
+              )}
             </div>
             
-            <NotificacoesPanel 
-              aberta={notificacoesAbertas} 
-              onClose={() => setNotificacoesAbertas(false)} 
-            />
+            {notificacoesAbertas && (
+              <NotificacoesPanel 
+                onClose={() => setNotificacoesAbertas(false)} 
+                onVerAtendimento={abrirAtendimentoPorId}
+              />
+            )}
           </div>
         </div>
       </main>

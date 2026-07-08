@@ -1,8 +1,0 @@
-{
-  "/(auth)/cadastro/page": "/cadastro",
-  "/(auth)/login/page": "/login",
-  "/(auth)/recuperar-senha/page": "/recuperar-senha",
-  "/_global-error/page": "/_global-error",
-  "/_not-found/page": "/_not-found",
-  "/page": "/"
-}
