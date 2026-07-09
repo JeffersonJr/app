@@ -454,6 +454,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
 
         {fotos.length === 0 ? (
           <button
+            id="tour-target-imoveis-ia"
             type="button"
             onClick={() => fileInputRef.current?.click()}
             className="flex h-[320px] w-full flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border bg-card/50 transition-colors"
@@ -515,6 +516,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             </button>
           )}
           <button
+            id="tour-target-preencher-manualmente"
             type="button"
             onClick={() => setFase('escolha_modo_manual')}
             className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold text-muted-foreground transition-brand active:scale-[0.98]"
@@ -544,6 +546,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
 
         <div className="flex flex-col gap-4">
           <button
+            id="tour-target-imoveis-fast"
             type="button"
             onClick={() => setFase('formulario_fast')}
             className="flex flex-col items-center gap-3 rounded-3xl border-2 border-primary/20 bg-primary/5 p-6 text-center transition-brand active:scale-[0.98] hover:border-primary/40 hover:bg-primary/10"
@@ -558,6 +561,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
           </button>
 
           <button
+            id="tour-target-imoveis-completo"
             type="button"
             onClick={() => setFase('formulario')}
             className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-6 text-center shadow-soft transition-brand active:scale-[0.98] hover:border-border/80"
@@ -568,6 +572,21 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             <div>
               <p className="text-base font-semibold text-foreground mb-1">Cadastro Completo</p>
               <p className="text-xs text-muted-foreground">Preencha todos os dados, características e informações para já publicar.</p>
+            </div>
+          </button>
+
+          <button
+            id="tour-target-imoveis-ia"
+            type="button"
+            onClick={() => setFase('upload')}
+            className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-gradient-to-br from-primary/5 to-teal-deep/5 p-6 text-center shadow-soft transition-brand active:scale-[0.98] hover:border-primary/30"
+          >
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-teal-shadow/20">
+              <Sparkles className="size-7 text-teal-deep" strokeWidth={1.5} />
+            </div>
+            <div>
+              <p className="text-base font-semibold text-foreground mb-1">Cadastro com IA</p>
+              <p className="text-xs text-muted-foreground">Envie fotos e deixe a Inteligência Artificial preencher os dados para você.</p>
             </div>
           </button>
         </div>

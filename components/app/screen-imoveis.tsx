@@ -38,6 +38,7 @@ import { FormNovoLead } from '@/components/app/form-novo-lead'
 import { EmpreendimentoDetail } from '@/components/app/empreendimento-detail'
 import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
 import { Calendar } from 'lucide-react'
+import { useOnboarding } from '@/lib/contexts/OnboardingContext'
 
 const filtros = ['Todos', 'Venda', 'Locação', 'Livre', 'Reservado', 'Favoritos'] as const
 
@@ -47,8 +48,8 @@ const statusStyle: Record<Imovel['status'], string> = {
   Proposta: 'bg-teal-shadow/90 text-white',
 }
 
-
 export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
+  const { startTour } = useOnboarding()
   const [abaAtiva, setAbaAtiva] = useState<'imoveis' | 'empreendimentos'>('imoveis')
   const [filtro, setFiltro] = useState<(typeof filtros)[number]>('Todos')
   const [busca, setBusca] = useState('')
@@ -170,6 +171,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
           {onCaptar && (
             <button
               type="button"
+              id="tour-target-add-fab"
               onClick={abaAtiva === 'empreendimentos' ? () => setMostrarCadastroEmpreendimento(true) : onCaptar}
               aria-label={abaAtiva === 'empreendimentos' ? 'Cadastrar empreendimento' : 'Captar novo imóvel'}
               className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary transition-brand active:scale-95"
@@ -294,6 +296,13 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
                 <p className="font-serif text-lg font-semibold text-foreground">Nenhum imóvel encontrado</p>
                 <p className="mt-1 text-sm text-muted-foreground px-4">Tente ajustar seus filtros ou termos de busca para encontrar o que procura.</p>
               </div>
+              <button
+                type="button"
+                onClick={() => startTour('imoveis')}
+                className="mt-2 text-sm font-semibold text-primary underline underline-offset-4"
+              >
+                Ver dicas de como cadastrar
+              </button>
             </div>
           )
         ) : (

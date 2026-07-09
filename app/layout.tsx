@@ -28,6 +28,9 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
+import { OnboardingProvider } from '@/lib/contexts/OnboardingContext'
+import { SpotlightTour } from '@/components/ui/SpotlightTour'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -40,7 +43,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased font-sans" suppressHydrationWarning>
-        {children}
+        <OnboardingProvider>
+          {children}
+          <SpotlightTour />
+        </OnboardingProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

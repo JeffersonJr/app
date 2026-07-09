@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Bell, ChevronRight, HelpCircle, LogOut, ShieldCheck, Target, X, Lock, KeyRound, Smartphone, RefreshCcw } from 'lucide-react'
+import { Bell, ChevronRight, HelpCircle, LogOut, ShieldCheck, Target, X, Lock, KeyRound, Smartphone, RefreshCcw, BookOpen } from 'lucide-react'
+import { useOnboarding } from '@/lib/contexts/OnboardingContext'
 
 export function ScreenPerfil({
   onNotificacoes,
@@ -10,6 +11,7 @@ export function ScreenPerfil({
   onNotificacoes: () => void
   onLogout: () => void
 }) {
+  const { startTour } = useOnboarding()
   const [showSecurity, setShowSecurity] = useState(false)
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
   const [newPassword, setNewPassword] = useState('')
@@ -50,6 +52,79 @@ export function ScreenPerfil({
           <p className="mt-3 font-mono text-[11px] font-medium tracking-wide text-muted-foreground">
             64% · faltam 12 dias
           </p>
+        </div>
+
+        {/* Trilha de Conhecimento */}
+        <div id="tour-target-profile">
+          <span className="mb-3 block px-1 text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground">
+            Trilha de Conhecimento
+          </span>
+          <div className="flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-soft">
+            <button
+              type="button"
+              onClick={() => startTour('general')}
+              className="flex items-center justify-between border-b border-border/60 p-4 transition-brand active:bg-muted/50"
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <BookOpen className="size-[22px]" strokeWidth={1.5} />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-semibold text-[15px] text-foreground">Tour Geral</span>
+                  <span className="text-xs text-muted-foreground">Visão completa do app</span>
+                </div>
+              </div>
+              <ChevronRight className="size-5 text-muted-foreground" strokeWidth={1.5} />
+            </button>
+            <button
+              type="button"
+              onClick={() => startTour('imoveis')}
+              className="flex items-center justify-between border-b border-border/60 p-4 transition-brand active:bg-muted/50"
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <BookOpen className="size-[22px]" strokeWidth={1.5} />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-semibold text-[15px] text-foreground">Como cadastrar imóveis</span>
+                  <span className="text-xs text-muted-foreground">Tipos de cadastro</span>
+                </div>
+              </div>
+              <ChevronRight className="size-5 text-muted-foreground" strokeWidth={1.5} />
+            </button>
+            <button
+              type="button"
+              onClick={() => startTour('clientes')}
+              className="flex items-center justify-between border-b border-border/60 p-4 transition-brand active:bg-muted/50"
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <BookOpen className="size-[22px]" strokeWidth={1.5} />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-semibold text-[15px] text-foreground">Gestão de clientes</span>
+                  <span className="text-xs text-muted-foreground">Organizando sua base</span>
+                </div>
+              </div>
+              <ChevronRight className="size-5 text-muted-foreground" strokeWidth={1.5} />
+            </button>
+            <button
+              type="button"
+              onClick={() => startTour('albert')}
+              className="flex w-full items-center justify-between p-4 transition-brand active:bg-muted/50"
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <BookOpen className="size-[22px]" strokeWidth={1.5} />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-semibold text-[15px] text-foreground">Conheça o Albert</span>
+                  <span className="text-xs text-muted-foreground">Sua IA assistente</span>
+                </div>
+              </div>
+              <ChevronRight className="size-5 text-muted-foreground" strokeWidth={1.5} />
+            </button>
+          </div>
         </div>
 
         {/* Conta */}

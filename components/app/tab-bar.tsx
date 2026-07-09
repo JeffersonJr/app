@@ -34,6 +34,7 @@ export function TabBar({
         ))}
 
         <button
+          id="tour-target-add-fab"
           type="button"
           onClick={onQuickAdd}
           aria-label="Adicionar novo"
@@ -62,6 +63,7 @@ function TabButton({
   const Icon = tab.icon
   return (
     <button
+      id={`tab-${tab.id}`}
       type="button"
       onClick={() => onChange(tab.id)}
       aria-current={active ? 'page' : undefined}

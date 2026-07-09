@@ -80,7 +80,7 @@ export function ScreenHoje({
       </header>
 
       {/* Indicadores do dia */}
-      <section aria-label="Indicadores do dia" className="grid grid-cols-2 gap-3 mt-2">
+      <section id="tour-target-goals" aria-label="Indicadores do dia" className="grid grid-cols-2 gap-3 mt-2">
         {/* Leads Quentes */}
         <button
           onClick={() => document.getElementById('secao-leads')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}

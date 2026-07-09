@@ -12,8 +12,11 @@ import { TabBar, type TabId } from '@/components/app/tab-bar'
 import { NotificacoesPanel } from '@/components/app/notificacoes-panel'
 import { ScreenPerfil } from '@/components/app/screen-perfil'
 import { clientes, funil } from '@/lib/app-data'
+import { useOnboarding } from '@/lib/contexts/OnboardingContext'
+import { useEffect } from 'react'
 
 export default function Page() {
+  const { isFirstLogin, startTour } = useOnboarding()
   const [tab, setTab] = useState<TabId>('hoje')
   const [quickAddAberto, setQuickAddAberto] = useState(false)
   const [quickAddAcao, setQuickAddAcao] = useState<any>(null)
@@ -21,6 +24,12 @@ export default function Page() {
   const [atendimentoAbertoId, setAtendimentoAbertoId] = useState<string | null>(null)
   const [notificacoesAbertas, setNotificacoesAbertas] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
+
+  useEffect(() => {
+    if (isFirstLogin) {
+      startTour('general')
+    }
+  }, [isFirstLogin, startTour])
 
   // Um lead do funil abre o perfil do cliente correspondente
   function abrirClientePorLead(leadId: string) {
@@ -84,6 +93,7 @@ export default function Page() {
 
             {/* Botão de Perfil */}
             <button
+              id="tour-target-profile-btn"
               onClick={() => setTab('perfil')}
               type="button"
               aria-label="Meu Perfil"

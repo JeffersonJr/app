@@ -18,6 +18,8 @@ const acoes = [
   { id: 'captar-empreendimento' as const, icon: Building2, titulo: 'Cadastrar empreendimento', desc: 'Novo lançamento ou projeto' },
 ]
 
+import { useOnboarding } from '@/lib/contexts/OnboardingContext'
+
 export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }: { onClose: () => void, onAtividadeCriada?: (atendimentoId: string) => void, defaultAcao?: Acao }) {
   const [acaoAtiva, setAcaoAtiva] = useState<Acao>(defaultAcao)
 
@@ -28,12 +30,16 @@ export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }
   return (
     <div className="absolute inset-0 z-50 flex flex-col justify-end">
       <button
+        id="tour-target-quickadd-backdrop"
         type="button"
         aria-label="Fechar"
         onClick={onClose}
         className="absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]"
       />
-      <div className="relative rounded-t-3xl bg-card px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh] overflow-y-auto">
+      <div 
+        id="tour-target-quickadd-menu"
+        className="relative rounded-t-3xl bg-card px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh] overflow-y-auto"
+      >
         <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-fog" aria-hidden="true" />
 
         {/* Menu inicial */}
@@ -54,6 +60,7 @@ export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }
               {acoes.map((acao) => (
                 <li key={acao.id}>
                   <button
+                    id={acao.id === 'captar-imovel' ? 'tour-target-quickadd-imovel' : undefined}
                     type="button"
                     onClick={() => handleSelect(acao.id)}
                     className="flex w-full items-center gap-4 rounded-2xl border border-border bg-background p-4 text-left transition-brand active:scale-[0.98] active:bg-muted"

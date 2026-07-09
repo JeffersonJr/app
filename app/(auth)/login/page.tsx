@@ -152,7 +152,7 @@ export default function LoginPage() {
               onClick={() => setMostrarCadastro(true)} 
               className="font-semibold text-primary hover:underline underline-offset-4 transition-all cursor-pointer"
             >
-              Criar agora
+              Trial de 15 dias
             </button>
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function LoginPage() {
               <X className="size-5" />
             </button>
             <div className="mb-6 pr-8">
-              <h2 className="font-serif text-2xl font-semibold text-foreground">Criar conta</h2>
+              <h2 className="font-serif text-2xl font-semibold text-foreground">Trial de 15 dias</h2>
               <p className="text-sm text-muted-foreground mt-1">evolves CRM</p>
             </div>
 
@@ -223,9 +223,9 @@ export default function LoginPage() {
                 {carregando ? (
                   <span className="flex items-center gap-2 relative z-10">
                     <svg className="size-5 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                    Cadastrando...
+                    Iniciando...
                   </span>
-                ) : <span className="relative z-10">Concluir cadastro</span>}
+                ) : <span className="relative z-10">Iniciar Trial</span>}
               </button>
             </form>
           </div>
