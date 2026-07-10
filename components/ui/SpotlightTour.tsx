@@ -37,6 +37,8 @@ export function SpotlightTour() {
       return;
     }
 
+    let animationFrameId: number;
+
     const updateRect = () => {
       const tourData = ONBOARDING_TOURS[activeTour];
       const step = tourData[currentStep];
@@ -44,38 +46,35 @@ export function SpotlightTour() {
       
       if (element) {
         const rect = element.getBoundingClientRect();
-        // Add a small padding around the element
         const padding = 8;
-        setTargetRect({
-          top: rect.top - padding,
-          left: rect.left - padding,
-          width: rect.width + padding * 2,
-          height: rect.height + padding * 2,
-        });
         
-        // Scroll logic removed to prevent jumping during modal animations
+        setTargetRect(prev => {
+          const next = {
+            top: rect.top - padding,
+            left: rect.left - padding,
+            width: rect.width + padding * 2,
+            height: rect.height + padding * 2,
+          };
+          if (!prev || 
+              prev.top !== next.top || 
+              prev.left !== next.left || 
+              prev.width !== next.width || 
+              prev.height !== next.height) {
+            return next;
+          }
+          return prev;
+        });
       } else {
-        // Fallback or retry if element is not immediately available
         setTargetRect(null);
-        console.warn(`Tour target #${step.targetId} not found.`);
       }
+      
+      animationFrameId = requestAnimationFrame(updateRect);
     };
 
     updateRect();
 
-    // Re-calculate on resize or scroll
-    window.addEventListener('resize', updateRect);
-    window.addEventListener('scroll', updateRect, true);
-
-    // Track for 1.5s to follow animations (e.g. modals sliding up)
-    const interval = setInterval(updateRect, 100);
-    const timeout = setTimeout(() => clearInterval(interval), 1500);
-
     return () => {
-      window.removeEventListener('resize', updateRect);
-      window.removeEventListener('scroll', updateRect, true);
-      clearInterval(interval);
-      clearTimeout(timeout);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [activeTour, currentStep]);
 
@@ -175,64 +174,75 @@ export function SpotlightTour() {
 
           {/* Dialog Card */}
           <motion.div
-            className="absolute z-10 w-[320px] bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col"
+            className="absolute z-10 w-[340px] bg-card rounded-[2rem] shadow-2xl overflow-hidden border border-border/80 flex flex-col backdrop-blur-md"
             style={cardStyle}
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            initial={{ opacity: 0, y: 15, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-              <span className="text-xs font-semibold tracking-wider text-indigo-600 uppercase">
-                {activeTour === 'general' ? 'Tour Inicial' : `Tour ${activeTour}`}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border/50 bg-muted/20">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                {activeTour === 'general' ? 'Tour Inicial' : `Conhecendo ${activeTour}`}
               </span>
               <button 
                 onClick={skipTour}
-                className="p-1 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100"
+                className="flex size-7 items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground transition-all active:scale-95"
                 aria-label="Pular tour"
               >
-                <X size={16} />
+                <X size={14} />
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-5">
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
+            <div className="px-6 py-5 flex-1">
+              <h3 className="font-serif text-lg font-bold text-foreground mb-2 leading-tight">
                 {stepInfo.title}
               </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 {stepInfo.text}
               </p>
             </div>
 
             {/* Footer */}
-            <div className="px-5 py-4 bg-gray-50 flex items-center justify-between border-t border-gray-100">
-              <div className="text-sm font-medium text-gray-500">
-                {currentStep + 1} de {totalSteps}
+            <div className="px-6 py-4 bg-muted/10 flex items-center justify-between border-t border-border/50">
+              {/* iOS-style Dots Indicator */}
+              <div className="flex items-center gap-1.5">
+                {Array.from({ length: totalSteps }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === currentStep 
+                        ? 'w-4.5 bg-primary' 
+                        : 'w-1.5 bg-border'
+                    }`}
+                  />
+                ))}
               </div>
+
               <div className="flex gap-2">
                 {currentStep > 0 && (
                   <button
                     onClick={prevStep}
-                    className="flex items-center justify-center p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-200 rounded-lg transition-colors"
+                    className="flex size-9 items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-all active:scale-95 border border-border"
                   >
-                    <ChevronLeft size={18} />
+                    <ChevronLeft size={16} />
                   </button>
                 )}
                 <button
                   onClick={handleNext}
-                  className="flex items-center gap-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+                  className="flex items-center gap-1.5 bg-primary hover:bg-primary/95 text-primary-foreground px-4 py-2 rounded-xl text-xs font-semibold transition-all shadow-md shadow-primary/10 active:scale-98"
                 >
                   {isLastStep ? (
                     <>
                       {stepInfo.finalActionLabel || 'Concluir'}
-                      <Check size={16} />
+                      <Check size={14} />
                     </>
                   ) : (
                     <>
                       Próximo
-                      <ChevronRight size={16} />
+                      <ChevronRight size={14} />
                     </>
                   )}
                 </button>

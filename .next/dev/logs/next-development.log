@@ -1,88 +1,17 @@
-{"timestamp":"00:00:01.245","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:02.517","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:00:18.221","source":"Server","level":"WARN","message":"⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from \"192.168.0.39\".\nCross-origin access to Next.js dev resources is blocked by default for safety.\n\nTo allow this host in development, add it to \"allowedDevOrigins\" in next.config.js and restart the dev server:\n\n// next.config.js\nmodule.exports = {\n  allowedDevOrigins: ['192.168.0.39'],\n}\n\nRead more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins"}
-{"timestamp":"00:00:36.544","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:00:51.170","source":"Browser","level":"WARN","message":"Tour target #tour-target-imoveis-fast not found."}
-{"timestamp":"00:00:51.264","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-imoveis-fast not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:00:51.264","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-imoveis-fast not found.\u001b[39m"}
-{"timestamp":"00:01:07.106","source":"Browser","level":"WARN","message":"Tour target #tour-target-goals not found."}
-{"timestamp":"00:01:07.109","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-goals not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:07.111","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-goals not found.\u001b[39m"}
-{"timestamp":"00:01:07.407","source":"Browser","level":"WARN","message":"Tour target #tour-target-goals not found."}
-{"timestamp":"00:01:07.424","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-goals not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:07.424","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-goals not found.\u001b[39m"}
-{"timestamp":"00:01:07.698","source":"Browser","level":"WARN","message":"Tour target #tour-target-goals not found."}
-{"timestamp":"00:01:07.699","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-goals not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:07.699","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-goals not found.\u001b[39m"}
-{"timestamp":"00:01:08.400","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #secao-leads not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:08.400","source":"Browser","level":"WARN","message":"\u001b[33mTour target #secao-leads not found.\u001b[39m"}
-{"timestamp":"00:01:08.400","source":"Browser","level":"WARN","message":"Tour target #secao-leads not found."}
-{"timestamp":"00:01:08.699","source":"Browser","level":"WARN","message":"Tour target #secao-leads not found."}
-{"timestamp":"00:01:08.700","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #secao-leads not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:08.700","source":"Browser","level":"WARN","message":"\u001b[33mTour target #secao-leads not found.\u001b[39m"}
-{"timestamp":"00:01:08.998","source":"Browser","level":"WARN","message":"Tour target #secao-leads not found."}
-{"timestamp":"00:01:08.998","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #secao-leads not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:08.998","source":"Browser","level":"WARN","message":"\u001b[33mTour target #secao-leads not found.\u001b[39m"}
-{"timestamp":"00:01:12.853","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-goals not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:12.854","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-goals not found.\u001b[39m"}
-{"timestamp":"00:01:12.855","source":"Browser","level":"WARN","message":"Tour target #tour-target-goals not found."}
-{"timestamp":"00:01:13.166","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-goals not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:13.167","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-goals not found.\u001b[39m"}
-{"timestamp":"00:01:13.167","source":"Browser","level":"WARN","message":"Tour target #tour-target-goals not found."}
-{"timestamp":"00:01:13.465","source":"Browser","level":"WARN","message":"Tour target #tour-target-goals not found."}
-{"timestamp":"00:01:13.465","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-goals not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:13.466","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-goals not found.\u001b[39m"}
-{"timestamp":"00:01:14.820","source":"Browser","level":"WARN","message":"Tour target #secao-leads not found."}
-{"timestamp":"00:01:14.821","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #secao-leads not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:14.822","source":"Browser","level":"WARN","message":"\u001b[33mTour target #secao-leads not found.\u001b[39m"}
-{"timestamp":"00:01:15.132","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #secao-leads not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:01:15.132","source":"Browser","level":"WARN","message":"\u001b[33mTour target #secao-leads not found.\u001b[39m"}
-{"timestamp":"00:01:15.133","source":"Browser","level":"WARN","message":"Tour target #secao-leads not found."}
-{"timestamp":"00:03:55.957","source":"Server","level":"LOG","message":"✓ Compiled in 977ms"}
-{"timestamp":"00:04:11.586","source":"Server","level":"LOG","message":"✓ Compiled in 132ms"}
-{"timestamp":"00:04:32.824","source":"Server","level":"LOG","message":"✓ Compiled in 492ms"}
-{"timestamp":"00:04:55.317","source":"Server","level":"LOG","message":"✓ Compiled in 3.8s"}
-{"timestamp":"00:05:10.092","source":"Server","level":"LOG","message":"✓ Compiled in 474ms"}
-{"timestamp":"00:05:28.910","source":"Server","level":"WARN","message":"⚠ Fast Refresh had to perform a full reload when ./lib/data/onboardingData.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload"}
-{"timestamp":"00:05:28.915","source":"Server","level":"LOG","message":"✓ Compiled in 423ms"}
-{"timestamp":"00:05:29.737","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:06:01.950","source":"Server","level":"LOG","message":"✓ Compiled in 357ms"}
-{"timestamp":"00:07:23.269","source":"Server","level":"LOG","message":"✓ Compiled in 171ms"}
-{"timestamp":"00:34:37.906","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:34:43.423","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:37:25.870","source":"Server","level":"LOG","message":"✓ Compiled in 284ms"}
-{"timestamp":"00:37:45.603","source":"Server","level":"LOG","message":"✓ Compiled in 138ms"}
-{"timestamp":"00:37:59.574","source":"Server","level":"WARN","message":"⚠ Fast Refresh had to perform a full reload when ./lib/data/onboardingData.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload"}
-{"timestamp":"00:37:59.584","source":"Server","level":"LOG","message":"✓ Compiled in 491ms"}
-{"timestamp":"00:38:00.287","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:38:01.845","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
-{"timestamp":"00:38:46.597","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:38:46.598","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
-{"timestamp":"00:38:49.377","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:38:49.378","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
-{"timestamp":"00:38:49.378","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
-{"timestamp":"00:38:51.570","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
-{"timestamp":"00:38:51.570","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:38:51.571","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
-{"timestamp":"00:38:52.885","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:38:52.886","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
-{"timestamp":"00:38:52.886","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
-{"timestamp":"00:48:07.227","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:48:07.238","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
-{"timestamp":"00:48:07.240","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
-{"timestamp":"00:51:28.141","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:70:17)\\u001b[22m\""}
-{"timestamp":"00:51:28.147","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
-{"timestamp":"00:51:28.148","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
-{"timestamp":"00:53:35.106","source":"Server","level":"LOG","message":"✓ Compiled in 251ms"}
-{"timestamp":"00:55:33.450","source":"Server","level":"LOG","message":"✓ Compiled in 652ms"}
-{"timestamp":"00:55:33.460","source":"Server","level":"WARN","message":"⚠ Fast Refresh had to perform a full reload when ./lib/contexts/OnboardingContext.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload"}
-{"timestamp":"00:55:34.457","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"01:13:38.502","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"01:13:43.519","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"01:13:43.613","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
-{"timestamp":"01:13:43.767","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:60:17)\\u001b[22m\""}
-{"timestamp":"01:13:43.767","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
-{"timestamp":"01:14:06.116","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"01:14:06.386","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
-{"timestamp":"01:14:06.389","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:60:17)\\u001b[22m\""}
-{"timestamp":"01:14:06.389","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
+{"timestamp":"00:00:01.156","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:03.175","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:17.573","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:17.636","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
+{"timestamp":"00:00:17.683","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:60:17)\\u001b[22m\""}
+{"timestamp":"00:00:17.683","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
+{"timestamp":"00:00:28.284","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:60:17)\\u001b[22m\""}
+{"timestamp":"00:00:28.286","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
+{"timestamp":"00:00:28.286","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
+{"timestamp":"00:05:13.817","source":"Server","level":"LOG","message":"✓ Compiled in 508ms"}
+{"timestamp":"00:05:26.236","source":"Server","level":"LOG","message":"✓ Compiled in 88ms"}
+{"timestamp":"00:10:59.527","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:11:02.882","source":"Browser","level":"WARN","message":"Tour target #tour-target-quickadd-menu not found."}
+{"timestamp":"00:11:02.883","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTour target #tour-target-quickadd-menu not found.\\u001b[39m\" \"\\u001b[2m(components/ui/SpotlightTour.tsx:60:17)\\u001b[22m\""}
+{"timestamp":"00:11:02.883","source":"Browser","level":"WARN","message":"\u001b[33mTour target #tour-target-quickadd-menu not found.\u001b[39m"}
+{"timestamp":"00:14:48.788","source":"Server","level":"LOG","message":"✓ Compiled in 515ms"}
+{"timestamp":"00:15:18.942","source":"Server","level":"LOG","message":"✓ Compiled in 816ms"}
