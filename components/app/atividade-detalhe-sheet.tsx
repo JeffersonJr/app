@@ -48,6 +48,15 @@ export function AtividadeDetalheSheet({
   const [avaliacaoImpressao, setAvaliacaoImpressao] = useState('')
   const [avaliacoesSalvas, setAvaliacoesSalvas] = useState<Record<string, { reacao: string; impressao: string }>>({})
 
+  // Inline Property Evaluation States
+  const [inlineFeedbackAtivo, setInlineFeedbackAtivo] = useState<string | null>(null)
+  const [inlineFeedbacks, setInlineFeedbacks] = useState<Record<string, string>>({})
+  const [inlineReacoes, setInlineReacoes] = useState<Record<string, 'gostou' | 'neutro' | 'nao_gostou'>>({})
+  const [inlineGravando, setInlineGravando] = useState(false)
+  const [inlineTempoGravacao, setInlineTempoGravacao] = useState(0)
+  const [inlineTranscrevendo, setInlineTranscrevendo] = useState(false)
+  const inlineTimerRef = useRef<any>(null)
+
   // Evaluation Audio Recording States
   const [evalGravando, setEvalGravando] = useState(false)
   const [evalTempoGravacao, setEvalTempoGravacao] = useState(0)
@@ -80,6 +89,13 @@ export function AtividadeDetalheSheet({
     setEvalAudioUrl(null)
     setEvalTranscrevendo(false)
     if (evalTimerRef.current) clearInterval(evalTimerRef.current)
+    setInlineFeedbackAtivo(null)
+    setInlineFeedbacks({})
+    setInlineReacoes({})
+    setInlineGravando(false)
+    setInlineTempoGravacao(0)
+    setInlineTranscrevendo(false)
+    if (inlineTimerRef.current) clearInterval(inlineTimerRef.current)
     if (atividade?.tipo === 'visita') {
       setAgendarProxima(true)
       const inicialVisitados: Record<string, boolean> = {}
@@ -173,6 +189,42 @@ export function AtividadeDetalheSheet({
     setEvalTempoGravacao(0)
   }
 
+  // Inline Property Audio Recording Helpers
+  function startInlineRecording(id: string) {
+    setInlineFeedbackAtivo(id)
+    setInlineGravando(true)
+    setInlineTempoGravacao(0)
+    setInlineTranscrevendo(false)
+    inlineTimerRef.current = setInterval(() => {
+      setInlineTempoGravacao(prev => prev + 1)
+    }, 1000)
+  }
+
+  function stopInlineRecording(id: string) {
+    if (inlineTimerRef.current) clearInterval(inlineTimerRef.current)
+    setInlineGravando(false)
+    setInlineTranscrevendo(true)
+
+    setTimeout(() => {
+      setInlineTranscrevendo(false)
+      const transQuotes = [
+        "Cliente achou a sala bem ventilada e ampla, mas gostaria de um andar mais alto.",
+        "Gostou bastante da área de lazer e piscina, considerou excelente opção.",
+        "Localização excelente, porém necessita de pintura e troca de pisos."
+      ]
+      const text = transQuotes[Math.floor(Math.random() * transQuotes.length)]
+      setInlineFeedbacks(prev => ({ ...prev, [id]: text }))
+    }, 1500)
+  }
+
+  function deleteInlineRecording(id: string) {
+    setInlineFeedbacks(prev => {
+      const copy = { ...prev }
+      delete copy[id]
+      return copy
+    })
+  }
+
   // Visit Property Evaluation Flow Helpers
   function iniciarAvaliacoes() {
     if (!atividade || !atividade.imoveisVisitados) {
@@ -189,8 +241,10 @@ export function AtividadeDetalheSheet({
     // Start with the first visited property
     setImoveisAvaliacaoPendentes(visitados)
     setIndiceAvaliacaoAtual(0)
-    setAvaliacaoReacao(null)
-    setAvaliacaoImpressao('')
+    
+    const firstImv = visitados[0]
+    setAvaliacaoReacao(inlineReacoes[firstImv.id] || null)
+    setAvaliacaoImpressao(inlineFeedbacks[firstImv.id] || '')
   }
 
   function handleSalvarAvaliacao() {
@@ -217,9 +271,11 @@ export function AtividadeDetalheSheet({
 
     // Go to next or finish
     if (indiceAvaliacaoAtual + 1 < imoveisAvaliacaoPendentes.length) {
-      setIndiceAvaliacaoAtual(indiceAvaliacaoAtual + 1)
-      setAvaliacaoReacao(null)
-      setAvaliacaoImpressao('')
+      const nextIdx = indiceAvaliacaoAtual + 1
+      setIndiceAvaliacaoAtual(nextIdx)
+      const nextImv = imoveisAvaliacaoPendentes[nextIdx]
+      setAvaliacaoReacao(inlineReacoes[nextImv.id] || null)
+      setAvaliacaoImpressao(inlineFeedbacks[nextImv.id] || '')
     } else {
       // All evaluated! Complete the activity!
       setIndiceAvaliacaoAtual(null)
@@ -643,6 +699,95 @@ export function AtividadeDetalheSheet({
                               </div>
                             )}
                           </div>
+
+                          {visitadosLocais[imv.id] && (
+                            <div className="mt-3 ml-8 p-3 rounded-xl border border-border/80 bg-background/50 flex flex-col gap-3">
+                              {/* Reação/Gostou */}
+                              <div className="flex items-center justify-between">
+                                <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Avaliação rápida</span>
+                                <div className="flex gap-1.5">
+                                  {(['gostou', 'neutro', 'nao_gostou'] as const).map(reac => (
+                                    <button
+                                      key={reac}
+                                      type="button"
+                                      onClick={() => setInlineReacoes(prev => ({ ...prev, [imv.id]: reac }))}
+                                      className={`size-7 rounded-lg border text-xs flex items-center justify-center transition-all active:scale-95 ${inlineReacoes[imv.id] === reac ? 'border-primary bg-primary/10 shadow-sm' : 'border-border'}`}
+                                    >
+                                      {reac === 'gostou' ? '👍' : reac === 'neutro' ? '😐' : '👎'}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Gravação de Voz Inline */}
+                              <div className="flex flex-col gap-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[10px] font-semibold text-foreground flex items-center gap-1">
+                                    <Mic className="size-3 text-primary" />
+                                    Feedback por Voz
+                                  </span>
+                                  {inlineFeedbacks[imv.id] && (
+                                    <button
+                                      type="button"
+                                      onClick={() => deleteInlineRecording(imv.id)}
+                                      className="text-red-500 hover:text-red-750 text-[10px] underline"
+                                    >
+                                      Remover
+                                    </button>
+                                  )}
+                                </div>
+
+                                {!inlineGravando && !inlineFeedbacks[imv.id] && (
+                                  <button
+                                    type="button"
+                                    onClick={() => startInlineRecording(imv.id)}
+                                    className="flex w-full h-8 items-center justify-center gap-1.5 rounded-lg border border-primary/20 bg-primary/5 text-primary text-[10px] font-bold transition-all hover:bg-primary/10"
+                                  >
+                                    <Mic className="size-3" />
+                                    Gravar Comentário
+                                  </button>
+                                )}
+
+                                {inlineGravando && inlineFeedbackAtivo === imv.id && (
+                                  <div className="flex items-center justify-between bg-red-550/15 border border-red-500/20 rounded-lg px-2.5 py-1">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="size-2 rounded-full bg-red-500 animate-ping" />
+                                      <span className="text-[10px] font-semibold text-red-700">Gravando...</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-mono text-[10px] font-bold text-red-700">{formatTime(inlineTempoGravacao)}</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => stopInlineRecording(imv.id)}
+                                        className="bg-red-500 text-white rounded px-2 py-0.5 text-[9px] font-bold shadow-sm active:scale-95 transition-all"
+                                      >
+                                        Parar
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {inlineTranscrevendo && inlineFeedbackAtivo === imv.id && (
+                                  <div className="flex items-center justify-center gap-1 py-1 text-[10px] text-primary font-semibold">
+                                    <svg className="size-3 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                                    Transcrevendo...
+                                  </div>
+                                )}
+
+                                {(inlineFeedbacks[imv.id] || (inlineFeedbackAtivo !== imv.id && inlineGravando)) && (
+                                  <textarea
+                                    value={inlineFeedbacks[imv.id] || ''}
+                                    onChange={(e) => {
+                                      const text = e.target.value
+                                      setInlineFeedbacks(prev => ({ ...prev, [imv.id]: text }))
+                                    }}
+                                    placeholder="Comentários transcritos..."
+                                    className="w-full resize-none rounded-lg border border-border bg-background p-2 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none h-16"
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ))}
 
