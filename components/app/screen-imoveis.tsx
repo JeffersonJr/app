@@ -26,7 +26,13 @@ import {
   PenLine,
   X,
   Mic,
-  PhoneOff
+  PhoneOff,
+  ChevronDown,
+  Sparkles,
+  Play,
+  Send,
+  Video,
+  Tv
 } from 'lucide-react'
 import { imoveis, type Imovel, atendimentos } from '@/lib/app-data'
 import { empreendimentosMock, type Empreendimento } from '@/lib/empreendimentos-data'
@@ -50,6 +56,23 @@ const statusStyle: Record<Imovel['status'], string> = {
 
 export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   const { startTour } = useOnboarding()
+  
+  // Tenant Switching States
+  const tenants = [
+    { id: 'evolves-prime', nome: 'Evolves Prime', creci: 'CRECI 4321-J', logo: '💼' },
+    { id: 'lopes-imob', nome: 'Lopes Imobiliária', creci: 'CRECI 9876-J', logo: '🏢' },
+    { id: 'remax-parceria', nome: 'Remax Parceria', creci: 'CRECI 7755-J', logo: '🏠' }
+  ]
+  const [tenantAtivo, setTenantAtivo] = useState(tenants[0])
+  const [mostrarTenantSelector, setMostrarTenantSelector] = useState(false)
+  const [alternandoTenant, setAlternandoTenant] = useState(false)
+
+  // Social Media Multi-Selection States
+  const [modoSelecao, setModoSelecao] = useState(false)
+  const [selecionadosPublicacao, setSelecionadosPublicacao] = useState<Set<string>>(new Set())
+  const [publicandoRedes, setPublicandoRedes] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+
   const [abaAtiva, setAbaAtiva] = useState<'imoveis' | 'empreendimentos'>('imoveis')
   const [filtro, setFiltro] = useState<(typeof filtros)[number]>('Todos')
   const [busca, setBusca] = useState('')
@@ -79,7 +102,13 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   }, [filtroFinalidade, filtroStatus])
 
   const lista = useMemo(() => {
-    const filtrados = imoveis.filter((im) => {
+    let baseImoveis = imoveis
+    if (tenantAtivo.id === 'lopes-imob') {
+      baseImoveis = imoveis.filter((_, idx) => idx % 2 === 0)
+    } else if (tenantAtivo.id === 'remax-parceria') {
+      baseImoveis = imoveis.filter((_, idx) => idx % 2 !== 0)
+    }
+    const filtrados = baseImoveis.filter((im) => {
       const matchFiltro =
         filtro === 'Todos' ||
         (filtro === 'Favoritos' ? favoritosIds.has(im.id) : im.finalidade === filtro || im.status === filtro)
@@ -114,7 +143,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
       return [...filtrados].sort((a, b) => (b.area || 0) - (a.area || 0))
     }
     return filtrados
-  }, [filtro, busca, filtroFinalidade, filtroStatus, ordenacao])
+  }, [filtro, busca, filtroFinalidade, filtroStatus, ordenacao, tenantAtivo])
 
   if (selecionado) {
     return (
@@ -151,8 +180,58 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   }
 
   return (
-    <div className="flex flex-col gap-4 px-5 pt-4 pb-28">
-      <header className="glass-header -mx-5 px-5 pb-4 pt-4">
+    <div className="flex flex-col gap-4 px-5 pt-4 pb-28 relative">
+      {toastMessage && (
+        <div className="absolute top-[calc(1rem+env(safe-area-inset-top))] left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-full bg-teal-mid text-white text-sm font-semibold shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-top-5">
+          <CheckCircle2 className="size-4 inline-block mr-1.5 align-text-bottom" />
+          {toastMessage}
+        </div>
+      )}
+      {/* Multi-Tenant Switcher */}
+      <div className="flex items-center justify-between border-b border-border/40 pb-3 mb-1 animate-in fade-in duration-300">
+        <button
+          type="button"
+          onClick={() => setMostrarTenantSelector(true)}
+          className="flex items-center gap-2 hover:opacity-85 transition-all text-left"
+        >
+          <span className="text-2xl">{tenantAtivo.logo}</span>
+          <div>
+            <h1 className="text-sm font-bold text-foreground flex items-center gap-1">
+              {tenantAtivo.nome}
+              <ChevronDown className="size-4 text-primary shrink-0" />
+            </h1>
+            <p className="text-[10px] text-muted-foreground font-mono">{tenantAtivo.creci}</p>
+          </div>
+        </button>
+
+        {/* Multi-Selection Mode Trigger */}
+        {abaAtiva === 'imoveis' && (
+          <button
+            type="button"
+            onClick={() => {
+              setModoSelecao(prev => {
+                if (prev) setSelecionadosPublicacao(new Set())
+                return !prev
+              })
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${modoSelecao ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+          >
+            <Share2 className="size-3.5" />
+            {modoSelecao ? 'Cancelar' : 'Divulgar'}
+          </button>
+        )}
+      </div>
+
+      {alternandoTenant && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="flex flex-col items-center gap-3">
+            <span className="text-4xl animate-bounce">{tenantAtivo.logo}</span>
+            <span className="text-sm font-semibold text-foreground">Alternando para {tenantAtivo.nome}...</span>
+          </div>
+        </div>
+      )}
+
+      <header className="glass-header -mx-5 px-5 pb-4 pt-1">
         <div className="flex items-center justify-between">
           <div className="flex rounded-full bg-muted/50 p-1">
             <button
@@ -379,8 +458,29 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
               <li key={im.id}>
                 <button
                   type="button"
-                  onClick={() => setSelecionado(im)}
-                  className="w-full overflow-hidden rounded-[1.25rem] border-transparent bg-card shadow-soft text-left transition-brand active:scale-[0.98]"
+                  onClick={() => {
+                    if (modoSelecao) {
+                      setSelecionadosPublicacao(prev => {
+                        const newSet = new Set(prev)
+                        if (newSet.has(im.id)) {
+                          newSet.delete(im.id)
+                        } else {
+                          if (newSet.size >= 10) {
+                            setToastMessage('Limite de 10 imóveis atingido!')
+                            setTimeout(() => setToastMessage(''), 3000)
+                          } else {
+                            newSet.add(im.id)
+                          }
+                        }
+                        return newSet
+                      })
+                    } else {
+                      setSelecionado(im)
+                    }
+                  }}
+                  className={`w-full overflow-hidden rounded-[1.25rem] border bg-card shadow-soft text-left transition-brand active:scale-[0.98] ${
+                    modoSelecao && selecionadosPublicacao.has(im.id) ? 'border-primary ring-2 ring-primary/20' : 'border-transparent'
+                  }`}
                 >
                   <div className="relative aspect-[4/3]">
                     <Image
@@ -395,16 +495,27 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
                     >
                       {im.status}
                     </span>
-                    <div className="absolute right-3 top-3 flex items-center gap-1.5">
-                      {favoritosIds.has(im.id) && (
-                        <span className="flex size-6 items-center justify-center rounded-full bg-rose-500/90 text-white backdrop-blur-sm shadow-sm">
-                          <Heart className="size-3.5 fill-current" strokeWidth={1.5} />
+                    
+                    {modoSelecao ? (
+                      <div className="absolute right-3 top-3 z-10 flex size-8 items-center justify-center rounded-full bg-background shadow-md border border-border">
+                        <div className={`size-4.5 rounded-md flex items-center justify-center transition-all ${
+                          selecionadosPublicacao.has(im.id) ? 'bg-primary text-primary-foreground' : 'border-2 border-muted-foreground/50'
+                        }`}>
+                          {selecionadosPublicacao.has(im.id) && <Check className="size-3" strokeWidth={3} />}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="absolute right-3 top-3 flex items-center gap-1.5">
+                        {favoritosIds.has(im.id) && (
+                          <span className="flex size-6 items-center justify-center rounded-full bg-rose-500/90 text-white backdrop-blur-sm shadow-sm">
+                            <Heart className="size-3.5 fill-current" strokeWidth={1.5} />
+                          </span>
+                        )}
+                        <span className="rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+                          {im.codigo}
                         </span>
-                      )}
-                      <span className="rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
-                        {im.codigo}
-                      </span>
-                    </div>
+                      </div>
+                    )}
                   </div>
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-3">
@@ -571,6 +682,113 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
           </div>
         </div>
       )}
+
+      {/* Floating Multi-Selection Action Bar */}
+      {modoSelecao && (
+        <div className="fixed bottom-24 left-4 right-4 z-50 rounded-2xl bg-card border border-border/80 shadow-2xl p-4 flex items-center justify-between gap-4 animate-in slide-in-from-bottom-5 duration-200">
+          <div className="flex flex-col">
+            <span className="text-xs font-bold text-foreground">{selecionadosPublicacao.size} / 10 selecionados</span>
+            <span className="text-[10px] text-muted-foreground">Selecione para postagem social</span>
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={selecionadosPublicacao.size === 0}
+              onClick={() => {
+                setPublicandoRedes(true)
+                setTimeout(() => {
+                  setPublicandoRedes(false)
+                  setModoSelecao(false)
+                  setSelecionadosPublicacao(new Set())
+                  setToastMessage('Publicado com sucesso no Instagram, TikTok e YouTube!')
+                  setTimeout(() => setToastMessage(''), 3000)
+                }, 3000)
+              }}
+              className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-sm transition-all active:scale-95 disabled:opacity-50"
+            >
+              <Sparkles className="size-3.5" />
+              Publicar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Tenant Switcher Modal */}
+      {mostrarTenantSelector && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-end">
+          <button
+            type="button"
+            onClick={() => setMostrarTenantSelector(false)}
+            className="absolute inset-0 bg-teal-shadow/55 backdrop-blur-[2px]"
+          />
+          <div className="relative rounded-t-3xl bg-card p-6 shadow-2xl animate-in slide-in-from-bottom duration-250 max-h-[80vh] overflow-y-auto z-10">
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-border" />
+            <h3 className="font-serif text-lg font-bold text-foreground mb-4">Alternar Imobiliária Parceira</h3>
+            <ul className="flex flex-col gap-2">
+              {tenants.map(t => (
+                <li key={t.id}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMostrarTenantSelector(false)
+                      setAlternandoTenant(true)
+                      setTimeout(() => {
+                        setTenantAtivo(t)
+                        setAlternandoTenant(false)
+                        setToastMessage(`Conectado à imobiliária ${t.nome}`)
+                        setTimeout(() => setToastMessage(''), 3000)
+                      }, 1200)
+                    }}
+                    className={`w-full flex items-center justify-between p-4 rounded-2xl border transition-all active:scale-[0.98] ${
+                      tenantAtivo.id === t.id ? 'border-primary bg-primary/5' : 'border-border bg-card'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">{t.logo}</span>
+                      <div className="text-left">
+                        <p className="text-sm font-semibold text-foreground">{t.nome}</p>
+                        <p className="text-xs text-muted-foreground font-mono">{t.creci}</p>
+                      </div>
+                    </div>
+                    {tenantAtivo.id === t.id && (
+                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-bold text-primary">Ativa</span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {/* Social Media Publishing Status Indicator */}
+      {publicandoRedes && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="flex flex-col items-center gap-4 text-center max-w-xs px-6">
+            <div className="relative flex size-20 items-center justify-center rounded-full bg-primary/10">
+              <Sparkles className="size-10 text-primary animate-pulse" />
+            </div>
+            <div>
+              <h4 className="font-serif text-lg font-bold text-foreground">Conectando APIs...</h4>
+              <p className="text-xs text-muted-foreground mt-1">Albert compilando fotos e gerando vídeos automatizados para Instagram Reels, TikTok e Shorts do YouTube.</p>
+            </div>
+            <div className="w-full flex flex-col gap-2 mt-2">
+              <div className="flex items-center gap-2 text-xs font-semibold text-teal-deep bg-teal-mid/10 p-2 rounded-xl border border-teal-mid/20">
+                <Tv className="size-4 text-pink-500" />
+                <span>Instagram: Gerando carrossel...</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-semibold text-teal-deep bg-teal-mid/10 p-2 rounded-xl border border-teal-mid/20">
+                <Play className="size-4 text-red-600" />
+                <span>YouTube Shorts: Renderizando fotos...</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-semibold text-teal-deep bg-teal-mid/10 p-2 rounded-xl border border-teal-mid/20 animate-pulse">
+                <Sparkles className="size-4 text-primary" />
+                <span>TikTok: Processando vídeo por IA...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -602,6 +820,16 @@ function ImovelDetail({
   const [msgWhatsapp, setMsgWhatsapp] = useState(`Olá ${imovel.proprietario?.nome}, tudo bem?\nSou da imobiliária e gostaria de falar sobre o seu imóvel (${imovel.codigo}).`)
   const [mostrarLigacao, setMostrarLigacao] = useState(false)
   const [mostrarAgendamento, setMostrarAgendamento] = useState(false)
+  const [abaDetalhe, setAbaDetalhe] = useState<'sobre' | 'leads'>('sobre')
+  const [reaquecendo, setReaquecendo] = useState(false)
+
+  const leadsInteressados = useMemo(() => {
+    return atendimentos.filter(a => 
+      a.interesse?.toLowerCase().includes(imovel.codigo.toLowerCase()) || 
+      a.interesse?.toLowerCase().includes(imovel.titulo.toLowerCase()) ||
+      a.timeline?.some(t => t.titulo.toLowerCase().includes(imovel.codigo.toLowerCase()) || t.descricao.toLowerCase().includes(imovel.codigo.toLowerCase()))
+    )
+  }, [imovel])
 
   const clientesCompativeis = atendimentos.filter(a => {
     if (!a.perfil) return false
@@ -729,189 +957,279 @@ function ImovelDetail({
               ))}
             </div>
 
-            {imovel.descricao && (
-              <div className="mt-6">
-                <h3 className="text-sm font-semibold text-foreground mb-2">Sobre o imóvel</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {imovel.descricao}
-                </p>
-              </div>
-            )}
-
-            <div className="mt-6 border-t border-border/50 pt-6">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Detalhes Técnicos</h3>
-              <div className="grid grid-cols-2 gap-y-4 gap-x-2">
-                {[
-                  { label: 'Operação', value: imovel.operacoes?.join(', ') },
-                  { label: 'Tipo', value: imovel.tipoImovel },
-                  { label: 'Finalidade', value: imovel.finalidade },
-                  { label: 'Situação', value: imovel.situacaoImovel },
-                  { label: 'Status', value: imovel.status },
-                  { label: 'CIB', value: imovel.cib },
-                  { label: 'CEP', value: imovel.cep },
-                  { label: 'Ano Construção', value: imovel.anoConstrucao },
-                  { label: 'Andar', value: imovel.andar },
-                  { label: 'Salas', value: imovel.salas },
-                  { label: 'Banheiros', value: imovel.banheiros },
-                  { label: 'Área Total', value: imovel.areaTotal ? `${imovel.areaTotal}m²` : null },
-                  { label: 'Exclusividade', value: imovel.tipoExclusividade && imovel.tipoExclusividade !== 'Nenhuma' ? `${imovel.tipoExclusividade} (Até ${imovel.validadeExclusividade})` : 'Nenhuma' },
-                ].filter(i => i.value).map((item) => (
-                  <div key={item.label}>
-                    <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{item.label}</p>
-                    <p className="text-sm font-medium text-foreground">{item.value}</p>
-                  </div>
-                ))}
-              </div>
+            {/* Tabs para Ficha vs Leads Interessados */}
+            <div className="flex border-b border-border my-6 bg-muted/30 p-1 rounded-xl">
+              <button
+                type="button"
+                onClick={() => setAbaDetalhe('sobre')}
+                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider text-center rounded-lg transition-all ${abaDetalhe === 'sobre' ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground'}`}
+              >
+                Ficha Técnica
+              </button>
+              <button
+                type="button"
+                onClick={() => setAbaDetalhe('leads')}
+                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider text-center rounded-lg transition-all relative ${abaDetalhe === 'leads' ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground'}`}
+              >
+                Leads Interessados
+                {(leadsInteressados.length > 0 || clientesCompativeis.length > 0) && (
+                  <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+                    {leadsInteressados.length || clientesCompativeis.length}
+                  </span>
+                )}
+              </button>
             </div>
 
-            {(imovel.condominio || imovel.iptu) && (
-              <div className="mt-6 flex gap-4">
-                {imovel.condominio && (
-                  <div className="flex-1 rounded-2xl border border-border bg-card p-3">
-                    <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">Condomínio</p>
-                    <p className="font-mono text-sm font-semibold text-foreground">{imovel.condominio}</p>
+            {abaDetalhe === 'sobre' ? (
+              <>
+                {imovel.descricao && (
+                  <div className="mt-2">
+                    <h3 className="text-sm font-semibold text-foreground mb-2">Sobre o imóvel</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {imovel.descricao}
+                    </p>
                   </div>
                 )}
-                {imovel.iptu && (
-                  <div className="flex-1 rounded-2xl border border-border bg-card p-3">
-                    <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">IPTU</p>
-                    <p className="font-mono text-sm font-semibold text-foreground">{imovel.iptu}</p>
-                  </div>
-                )}
-              </div>
-            )}
 
-            {imovel.tags && imovel.tags.length > 0 && (
-              <div className="mt-6 flex flex-wrap gap-2">
-                {imovel.tags.map(tag => (
-                  <span key={tag} className="rounded-full bg-primary/10 px-3 py-1.5 text-[11px] font-semibold text-primary">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {imovel.caracteristicas && imovel.caracteristicas.length > 0 && (
-              <div className="mt-6">
-                <h3 className="text-sm font-semibold text-foreground mb-3">Características</h3>
-                <ul className="grid grid-cols-2 gap-3">
-                  {imovel.caracteristicas.map(carac => (
-                    <li key={carac} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Check className="size-4 text-primary" strokeWidth={2} />
-                      {carac}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {imovel.proximidades && imovel.proximidades.length > 0 && (
-              <div className="mt-6 border-t border-border/50 pt-6">
-                <h3 className="text-sm font-semibold text-foreground mb-3">O que tem por perto</h3>
-                <ul className="flex flex-col gap-3">
-                  {imovel.proximidades.map(prox => (
-                    <li key={prox} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="size-4 text-teal-light" strokeWidth={1.5} />
-                      {prox}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {imovel.enderecoCompleto && (
-              <div className="mt-6 border-t border-border/50 pt-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-foreground">Localização</h3>
-                  <button type="button" className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-primary transition-brand active:opacity-70">
-                    <Navigation className="size-3.5" strokeWidth={2} />
-                    Como chegar
-                  </button>
-                </div>
-                <p className="text-sm text-muted-foreground mb-3">{imovel.enderecoCompleto}</p>
-                <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border shadow-soft mt-1">
-                  {/* Imagem estática simulando um mapa do google maps */}
-                  <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(imovel.enderecoCompleto)}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${encodeURIComponent(imovel.enderecoCompleto)}&key=YOUR_API_KEY`} alt="Mapa" className="w-full h-full object-cover bg-muted" onError={(e) => { e.currentTarget.src = 'https://developers.google.com/static/maps/images/landing/hero_geocoding_api.png' }} />
-                </div>
-              </div>
-            )}
-
-            {imovel.proprietario && (
-              <div className="mt-8 mb-6 border border-border rounded-3xl bg-card shadow-soft p-5 overflow-hidden">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-4">
-                  Proprietário
-                </p>
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-teal-shadow text-lg font-semibold text-white">
-                    {imovel.proprietario.nome.substring(0, 2).toUpperCase()}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground text-base">{imovel.proprietario.nome}</h4>
-                    <p className="text-xs text-muted-foreground mt-0.5">{imovel.proprietario.validade}</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 mb-3">
-                  <button
-                    type="button"
-                    onClick={() => setMostrarWhatsappModal(true)}
-                    className="flex-1 flex items-center justify-center gap-2 h-11 rounded-2xl bg-[#25D366] text-white text-xs font-semibold shadow-sm transition-brand active:scale-[0.98]"
-                  >
-                    <MessageCircle className="size-4" strokeWidth={2} /> WhatsApp
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMostrarLigacao(true)}
-                    className="flex-1 flex items-center justify-center gap-2 h-11 rounded-2xl border border-border bg-card text-foreground text-xs font-semibold shadow-sm transition-brand active:bg-muted"
-                  >
-                    <Phone className="size-4" strokeWidth={2} /> Ligar
-                  </button>
-                </div>
-
-                {upsellSucesso ? (
-                  <div className="w-full flex items-center gap-3 rounded-2xl bg-green-50 p-3 border border-green-200">
-                    <div className="flex size-8 items-center justify-center rounded-full bg-green-100 text-green-600">
-                      <CheckCircle2 className="size-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-green-800">Proprietário acionado</p>
-                      <p className="text-[10px] text-green-700 truncate">O Albert já iniciou contato via WhatsApp.</p>
-                    </div>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setMostrarUpsell(true)}
-                    className="w-full flex items-center justify-center gap-2 h-11 rounded-2xl bg-amber/15 text-amber-900 border border-amber/30 text-xs font-semibold shadow-sm transition-brand active:scale-[0.98]"
-                  >
-                    <Bot className="size-4" strokeWidth={2} /> Atualizar com Albert (IA)
-                  </button>
-                )}
-              </div>
-            )}
-
-            {clientesCompativeis.length > 0 && (
-              <div className="mt-6 border-t border-border/50 pt-6">
-                <h3 className="text-sm font-semibold text-foreground mb-4">Clientes com perfil compatível</h3>
-                <ul className="flex flex-col gap-3">
-                  {clientesCompativeis.map(cliente => (
-                    <li key={cliente.id} className="flex items-center justify-between rounded-2xl border border-border p-3">
-                      <div className="flex items-center gap-3">
-                        <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                          {cliente.iniciais}
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-foreground">{cliente.nome}</p>
-                          <p className="text-xs text-muted-foreground">{cliente.etapa}</p>
-                        </div>
+                <div className="mt-6 border-t border-border/50 pt-6">
+                  <h3 className="text-sm font-semibold text-foreground mb-4">Detalhes Técnicos</h3>
+                  <div className="grid grid-cols-2 gap-y-4 gap-x-2">
+                    {[
+                      { label: 'Operação', value: imovel.operacoes?.join(', ') },
+                      { label: 'Tipo', value: imovel.tipoImovel },
+                      { label: 'Finalidade', value: imovel.finalidade },
+                      { label: 'Situação', value: imovel.situacaoImovel },
+                      { label: 'Status', value: imovel.status },
+                      { label: 'CIB', value: imovel.cib },
+                      { label: 'CEP', value: imovel.cep },
+                      { label: 'Ano Construção', value: imovel.anoConstrucao },
+                      { label: 'Andar', value: imovel.andar },
+                      { label: 'Salas', value: imovel.salas },
+                      { label: 'Banheiros', value: imovel.banheiros },
+                      { label: 'Área Total', value: imovel.areaTotal ? `${imovel.areaTotal}m²` : null },
+                      { label: 'Exclusividade', value: imovel.tipoExclusividade && imovel.tipoExclusividade !== 'Nenhuma' ? `${imovel.tipoExclusividade} (Até ${imovel.validadeExclusividade})` : 'Nenhuma' },
+                    ].filter(i => i.value).map((item) => (
+                      <div key={item.label}>
+                        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{item.label}</p>
+                        <p className="text-sm font-medium text-foreground">{item.value}</p>
                       </div>
+                    ))}
+                  </div>
+                </div>
+
+                {(imovel.condominio || imovel.iptu) && (
+                  <div className="mt-6 flex gap-4">
+                    {imovel.condominio && (
+                      <div className="flex-1 rounded-2xl border border-border bg-card p-3">
+                        <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">Condomínio</p>
+                        <p className="font-mono text-sm font-semibold text-foreground">{imovel.condominio}</p>
+                      </div>
+                    )}
+                    {imovel.iptu && (
+                      <div className="flex-1 rounded-2xl border border-border bg-card p-3">
+                        <p className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">IPTU</p>
+                        <p className="font-mono text-sm font-semibold text-foreground">{imovel.iptu}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {imovel.tags && imovel.tags.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {imovel.tags.map(tag => (
+                      <span key={tag} className="rounded-full bg-primary/10 px-3 py-1.5 text-[11px] font-semibold text-primary">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {imovel.caracteristicas && imovel.caracteristicas.length > 0 && (
+                  <div className="mt-6">
+                    <h3 className="text-sm font-semibold text-foreground mb-3">Características</h3>
+                    <ul className="grid grid-cols-2 gap-3">
+                      {imovel.caracteristicas.map(carac => (
+                        <li key={carac} className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Check className="size-4 text-primary" strokeWidth={2} />
+                          {carac}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {imovel.proximidades && imovel.proximidades.length > 0 && (
+                  <div className="mt-6 border-t border-border/50 pt-6">
+                    <h3 className="text-sm font-semibold text-foreground mb-3">O que tem por perto</h3>
+                    <ul className="flex flex-col gap-3">
+                      {imovel.proximidades.map(prox => (
+                        <li key={prox} className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <MapPin className="size-4 text-teal-light" strokeWidth={1.5} />
+                          {prox}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {imovel.enderecoCompleto && (
+                  <div className="mt-6 border-t border-border/50 pt-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-foreground">Localização</h3>
+                      <button type="button" className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-primary transition-brand active:opacity-70">
+                        <Navigation className="size-3.5" strokeWidth={2} />
+                        Como chegar
+                      </button>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">{imovel.enderecoCompleto}</p>
+                    <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border shadow-soft mt-1">
+                      <img src={`https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(imovel.enderecoCompleto)}&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7C${encodeURIComponent(imovel.enderecoCompleto)}&key=YOUR_API_KEY`} alt="Mapa" className="w-full h-full object-cover bg-muted" onError={(e) => { e.currentTarget.src = 'https://developers.google.com/static/maps/images/landing/hero_geocoding_api.png' }} />
+                    </div>
+                  </div>
+                )}
+
+                {imovel.proprietario && (
+                  <div className="mt-8 mb-6 border border-border rounded-3xl bg-card shadow-soft p-5 overflow-hidden">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-4">
+                      Proprietário
+                    </p>
+                    <div className="flex items-center gap-4 mb-5">
+                      <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-teal-shadow text-lg font-semibold text-white">
+                        {imovel.proprietario.nome.substring(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground text-base">{imovel.proprietario.nome}</h4>
+                        <p className="text-xs text-muted-foreground mt-0.5">{imovel.proprietario.validade}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 mb-3">
                       <button
                         type="button"
-                        onClick={() => handleShare(cliente.nome)}
-                        className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand hover:text-primary active:scale-95"
+                        onClick={() => setMostrarWhatsappModal(true)}
+                        className="flex-1 flex items-center justify-center gap-2 h-11 rounded-2xl bg-[#25D366] text-white text-xs font-semibold shadow-sm transition-brand active:scale-[0.98]"
                       >
-                        <Share2 className="size-4" strokeWidth={1.5} />
+                        <MessageCircle className="size-4" strokeWidth={2} /> WhatsApp
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setMostrarLigacao(true)}
+                        className="flex-1 flex items-center justify-center gap-2 h-11 rounded-2xl border border-border bg-card text-foreground text-xs font-semibold shadow-sm transition-brand active:bg-muted"
+                      >
+                        <Phone className="size-4" strokeWidth={2} /> Ligar
+                      </button>
+                    </div>
+
+                    {upsellSucesso ? (
+                      <div className="w-full flex items-center gap-3 rounded-2xl bg-green-50 p-3 border border-green-200">
+                        <div className="flex size-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+                          <CheckCircle2 className="size-4" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-green-800">Proprietário acionado</p>
+                          <p className="text-[10px] text-green-700 truncate">O Albert já iniciou contato via WhatsApp.</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setMostrarUpsell(true)}
+                        className="w-full flex items-center justify-center gap-2 h-11 rounded-2xl bg-amber/15 text-amber-900 border border-amber/30 text-xs font-semibold shadow-sm transition-brand active:scale-[0.98]"
+                      >
+                        <Bot className="size-4" strokeWidth={2} /> Atualizar com Albert (IA)
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {clientesCompativeis.length > 0 && (
+                  <div className="mt-6 border-t border-border/50 pt-6">
+                    <h3 className="text-sm font-semibold text-foreground mb-4">Clientes com perfil compatível</h3>
+                    <ul className="flex flex-col gap-3">
+                      {clientesCompativeis.map(cliente => (
+                        <li key={cliente.id} className="flex items-center justify-between rounded-2xl border border-border p-3">
+                          <div className="flex items-center gap-3">
+                            <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                              {cliente.iniciais}
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-foreground">{cliente.nome}</p>
+                              <p className="text-xs text-muted-foreground">{cliente.etapa}</p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleShare(cliente.nome)}
+                            className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand hover:text-primary active:scale-95"
+                          >
+                            <Share2 className="size-4" strokeWidth={1.5} />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex flex-col gap-4 animate-in fade-in duration-200">
+                <div className="bg-gradient-to-r from-primary to-teal-deep text-primary-foreground rounded-3xl p-4 shadow-md flex flex-col gap-3 border border-primary/20 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-white/5 opacity-40 bg-[radial-gradient(circle_at_25%_10%,rgba(255,255,255,0.25),transparent)]" />
+                  <div className="flex items-center gap-2 relative z-10">
+                    <Sparkles className="size-4 text-[#a9ffd2] fill-[#a9ffd2] animate-pulse" />
+                    <span className="text-xs font-black uppercase tracking-wider text-[#a9ffd2]">Reaquecer com Albert IA</span>
+                  </div>
+                  <p className="text-xs opacity-90 relative z-10 leading-snug">Dispare propostas e follow-ups inteligentes personalizados para todos os leads interessados de uma só vez.</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setReaquecendo(true)
+                      setTimeout(() => {
+                        setReaquecendo(false)
+                        setToastMessage('Albert iniciou o reaquecimento via WhatsApp!')
+                        setTimeout(() => setToastMessage(''), 3000)
+                      }, 2500)
+                    }}
+                    className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-white text-primary text-xs font-black shadow-lg hover:shadow-xl transition-all active:scale-[0.98] relative z-10"
+                  >
+                    {reaquecendo ? (
+                      <span className="flex items-center gap-2">
+                        <svg className="size-4 animate-spin text-primary" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                        Analisando e gerando...
+                      </span>
+                    ) : (
+                      <>
+                        <Bot className="size-4" />
+                        Albert, reaquecer leads
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <ul className="flex flex-col gap-3 mt-2">
+                  {(leadsInteressados.length > 0 ? leadsInteressados : clientesCompativeis).map(lead => (
+                    <li key={lead.id} className="flex flex-col gap-2 rounded-2xl border border-border p-4 bg-card shadow-soft">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                            {lead.iniciais}
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-foreground">{lead.nome}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{lead.etapa} · {lead.interesse}</p>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleShare(lead.nome)}
+                          className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand hover:text-primary active:scale-95"
+                        >
+                          <Share2 className="size-4" />
+                        </button>
+                      </div>
+                      <div className="text-[10px] text-muted-foreground border-t border-border pt-2 mt-1 flex justify-between items-center">
+                        <span>Última interação: {lead.ultimaInteracao}</span>
+                        <span className="font-mono text-[9px] bg-primary/5 text-primary border border-primary/10 px-1.5 py-0.5 rounded">Interessado</span>
+                      </div>
                     </li>
                   ))}
                 </ul>
