@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Star, X, Search, Check, PlusCircle } from 'lucide-react'
+import { Star, X, Search, Check, PlusCircle, Bot, Mic, Sparkles, Clock, Loader2 } from 'lucide-react'
 import { type TipoAtividade, tipoAtividadeConfig, atendimentos, perfilVazio, imoveis, atividadesHoje } from '@/lib/app-data'
+import { useEffect, useRef } from 'react'
 
 const TIPOS: TipoAtividade[] = ['visita', 'reuniao', 'ligacao', 'prazo', 'pos-venda', 'albert']
 
@@ -31,6 +32,19 @@ export function FormNovaAtividade({
   const [imoveisSelecionados, setImoveisSelecionados] = useState<any[]>(defaultImoveis || [])
   const [buscaImovel, setBuscaImovel] = useState('')
 
+  // Albert Voice Assist States
+  const [albertAberto, setAlbertAberto] = useState(false)
+  const [albertStatus, setAlbertStatus] = useState<'idle' | 'gravando' | 'processando' | 'sucesso'>('idle')
+  const [albertTextoSimulado, setAlbertTextoSimulado] = useState('')
+  const [albertTimer, setAlbertTimer] = useState(0)
+  const albertIntervalRef = useRef<any>(null)
+  
+  useEffect(() => {
+    return () => {
+      if (albertIntervalRef.current) clearInterval(albertIntervalRef.current)
+    }
+  }, [])
+
   const clienteInicial = defaultClienteId ? atendimentos.find(a => a.id === defaultClienteId) : null
   const [clienteBusca, setClienteBusca] = useState(clienteInicial ? clienteInicial.nome : '')
   const [clienteIdSelecionado, setClienteIdSelecionado] = useState(defaultClienteId || '')
@@ -43,6 +57,45 @@ export function FormNovaAtividade({
   const atendimentosFiltrados = clienteBusca
     ? atendimentos.filter(a => a.nome.toLowerCase().includes(clienteBusca.toLowerCase()))
     : atendimentos
+
+  function startAlbertVoiceCapture() {
+    setAlbertStatus('gravando')
+    setAlbertTimer(0)
+    setAlbertTextoSimulado('')
+    
+    let count = 0
+    albertIntervalRef.current = setInterval(() => {
+      count++
+      setAlbertTimer(count)
+      if (count === 3) {
+        clearInterval(albertIntervalRef.current)
+        processAlbertVoiceCommand('Ligar para Ricardo Almeida amanhã às 15:00 para falar do contrato de compra e venda')
+      }
+    }, 1000)
+  }
+
+  function processAlbertVoiceCommand(commandText: string) {
+    setAlbertStatus('processando')
+    setAlbertTextoSimulado(commandText)
+    
+    setTimeout(() => {
+      setAlbertStatus('sucesso')
+      setTitulo('Ligar para Ricardo Almeida')
+      setDescricao('Conversar sobre o contrato de compra e venda e esclarecer dúvidas pendentes.')
+      setTipo('ligacao')
+      
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      const tomorrowStr = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`
+      setData(tomorrowStr)
+      setHora('15:00')
+      
+      setTimeout(() => {
+        setAlbertAberto(false)
+        setAlbertStatus('idle')
+      }, 1500)
+    }, 2000)
+  }
 
   function handleSalvar() {
     const clienteIndex = clienteIdSelecionado ? atendimentos.findIndex(a => a.id === clienteIdSelecionado) : -1
@@ -247,7 +300,17 @@ export function FormNovaAtividade({
 
             {/* Título */}
             <div>
-              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título *</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título *</label>
+                <button
+                  type="button"
+                  onClick={() => setAlbertAberto(true)}
+                  className="flex items-center gap-1 text-[10px] font-bold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1 rounded-lg transition-all active:scale-95 shadow-sm"
+                >
+                  <Bot className="size-3.5" />
+                  Falar com Albert
+                </button>
+              </div>
               <input
                 type="text"
                 value={titulo}
@@ -534,6 +597,78 @@ export function FormNovaAtividade({
           {aba === 'atividade' ? 'Salvar atividade' : aba === 'nota' ? 'Salvar nota' : 'Enviar e-mail'}
         </button>
       </div>
+
+      {/* Albert Voice Command Assistant Overlay */}
+      {albertAberto && (
+        <div className="absolute inset-0 z-50 flex flex-col justify-end">
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setAlbertAberto(false)} />
+          <div className="relative z-50 w-full rounded-t-[2.5rem] bg-zinc-900 px-6 py-8 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-300 text-white flex flex-col items-center mx-auto max-w-md">
+            <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-zinc-700" />
+            
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/20 text-primary mb-4">
+              <Bot className="size-8" />
+            </div>
+            <h3 className="font-serif text-lg font-semibold text-white text-center">Albert Assistente de Voz</h3>
+            <p className="text-xs text-zinc-400 text-center mt-1 mb-8 max-w-[280px]">
+              Diga o que você precisa agendar. A IA vai preencher o título, a descrição e a data da tarefa automaticamente.
+            </p>
+
+            {albertStatus === 'idle' && (
+              <button
+                type="button"
+                onClick={startAlbertVoiceCapture}
+                className="flex size-20 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-transform active:scale-90"
+              >
+                <Mic className="size-8" />
+              </button>
+            )}
+
+            {albertStatus === 'gravando' && (
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative flex size-20 items-center justify-center rounded-full bg-red-500 text-white transition-transform active:scale-90">
+                  <Mic className="size-8 animate-pulse" />
+                </div>
+                <p className="text-xs font-semibold text-red-400 mt-2 font-mono">Gravando... 0:0{albertTimer}</p>
+                <div className="flex flex-col gap-1.5 mt-2 bg-zinc-800/40 p-3 rounded-xl border border-zinc-750">
+                  <span className="text-[10px] uppercase font-bold text-zinc-500">Exemplos que você pode falar:</span>
+                  <button 
+                    type="button"
+                    onClick={() => processAlbertVoiceCommand('Ligar para Ricardo Almeida amanhã às 15:00 para falar do contrato de compra e venda')}
+                    className="text-xs text-left text-primary hover:underline"
+                  >
+                    "Ligar para Ricardo Almeida amanhã às 15:00..."
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => processAlbertVoiceCommand('Visita no imóvel MS-1042 hoje às 17h com André')}
+                    className="text-xs text-left text-primary hover:underline"
+                  >
+                    "Visita no imóvel MS-1042 hoje às 17h..."
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {albertStatus === 'processando' && (
+              <div className="flex flex-col items-center gap-3">
+                <Loader2 className="size-10 text-primary animate-spin" />
+                <p className="text-xs text-zinc-400 italic">"{albertTextoSimulado}"</p>
+                <p className="text-xs font-semibold text-primary">Processando áudio com Albert IA...</p>
+              </div>
+            )}
+
+            {albertStatus === 'sucesso' && (
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="flex size-14 items-center justify-center rounded-full bg-green-500/10 text-green-400">
+                  <Check className="size-8" />
+                </div>
+                <p className="text-sm font-semibold text-green-400">Atividade processada com sucesso!</p>
+                <p className="text-xs text-zinc-500">Formulário preenchido automaticamente.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

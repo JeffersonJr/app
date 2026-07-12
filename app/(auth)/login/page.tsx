@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Eye, EyeOff, Lock, Mail, ArrowRight, Sparkles, User, Phone, CheckCircle2, X } from 'lucide-react'
 import { maskPhone } from '@/lib/masks'
+import { atendimentos } from '@/lib/app-data'
 
 const CARGOS = [
   'Corretor de Imóveis',
@@ -28,6 +29,7 @@ export default function LoginPage() {
   const [cadCargo, setCadCargo] = useState<(typeof CARGOS)[number]>('Corretor de Imóveis')
   const [cadTelefone, setCadTelefone] = useState('')
   const [cadEmail, setCadEmail] = useState('')
+  const [cadCreci, setCadCreci] = useState('')
   const [cadSenha, setCadSenha] = useState('')
   const [cadMostrarSenha, setCadMostrarSenha] = useState(false)
 
@@ -46,9 +48,37 @@ export default function LoginPage() {
   async function handleCadastro(e: React.FormEvent) {
     e.preventDefault()
     setCarregando(true)
+    
+    // Inject lead into CRM
+    const novoLead = {
+      id: `l-lead-${Date.now()}`,
+      nome: cadNome,
+      telefone: cadTelefone,
+      email: cadEmail,
+      interesse: `Interesse no evolves CRM (CRECI: ${cadCreci})`,
+      valor: 'R$ 0',
+      status: 'aberto' as const,
+      temperatura: 'quente' as const,
+      etapa: 'qualificando' as const,
+      funilId: 'geral',
+      origem: 'WhatsApp' as const,
+      iniciais: cadNome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase(),
+      ultimaInteracao: 'Hoje',
+      dataEntrada: 'Hoje',
+      modo: 'venda' as const,
+      preAtendimento: true,
+      atividades: [],
+      timeline: []
+    }
+    atendimentos.push(novoLead)
+
     await new Promise((r) => setTimeout(r, 1500))
     setCarregando(false)
-    window.location.href = '/crm'
+    setMostrarCadastro(false)
+    
+    // Redirect to WhatsApp of Albert Comercial
+    const message = encodeURIComponent(`Olá Albert! Sou o corretor ${cadNome} (CRECI: ${cadCreci}) e gostaria de contratar o evolves CRM. Meu e-mail é ${cadEmail}.`)
+    window.open(`https://wa.me/5511999999999?text=${message}`, '_blank')
   }
 
   async function handleRecuperar(e: React.FormEvent) {
@@ -145,14 +175,13 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-8 flex items-center justify-center gap-1 text-sm">
-            <span className="text-muted-foreground font-medium">Ainda não tem conta?</span>
+          <div className="mt-8 flex items-center justify-center text-sm">
             <button 
               type="button" 
               onClick={() => setMostrarCadastro(true)} 
-              className="font-semibold text-primary hover:underline underline-offset-4 transition-all cursor-pointer"
+              className="font-bold text-primary hover:underline underline-offset-4 transition-all cursor-pointer flex items-center gap-1.5"
             >
-              Trial de 15 dias
+              Não tem conta? Fale com o Albert
             </button>
           </div>
         </div>
@@ -171,8 +200,8 @@ export default function LoginPage() {
               <X className="size-5" />
             </button>
             <div className="mb-6 pr-8">
-              <h2 className="font-serif text-2xl font-semibold text-foreground">Trial de 15 dias</h2>
-              <p className="text-sm text-muted-foreground mt-1">evolves CRM</p>
+              <h2 className="font-serif text-2xl font-semibold text-foreground">Falar com o Albert</h2>
+              <p className="text-sm text-muted-foreground mt-1">Evolves CRM Comercial</p>
             </div>
 
             <form onSubmit={handleCadastro} className="flex flex-col gap-4">
@@ -185,14 +214,7 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">Cargo *</label>
-                <select value={cadCargo} onChange={(e) => setCadCargo(e.target.value as any)} required className="h-14 w-full rounded-2xl border border-border bg-muted/30 px-4 text-sm font-medium text-foreground appearance-none transition-all focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/50">
-                  {CARGOS.map((c) => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">Telefone *</label>
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">WhatsApp *</label>
                 <div className="relative group">
                   <Phone className="absolute left-4 top-1/2 size-4.5 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" strokeWidth={1.5} />
                   <input type="tel" value={cadTelefone} onChange={(e) => setCadTelefone(maskPhone(e.target.value))} placeholder="(11) 99999-9999" required className="h-14 w-full rounded-2xl border border-border bg-muted/30 pl-11 pr-4 text-sm font-medium text-foreground transition-all focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/50" />
@@ -208,13 +230,10 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">Senha *</label>
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">Número do CRECI *</label>
                 <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 size-4.5 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" strokeWidth={1.5} />
-                  <input type={cadMostrarSenha ? 'text' : 'password'} value={cadSenha} onChange={(e) => setCadSenha(e.target.value)} placeholder="••••••••" required className="h-14 w-full rounded-2xl border border-border bg-muted/30 pl-11 pr-12 text-sm font-medium text-foreground transition-all focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/50" />
-                  <button type="button" onClick={() => setCadMostrarSenha(!cadMostrarSenha)} className="absolute right-3 top-1/2 -translate-y-1/2 flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted transition-colors focus-within:text-primary cursor-pointer">
-                    {cadMostrarSenha ? <EyeOff className="size-4.5" strokeWidth={1.5} /> : <Eye className="size-4.5" strokeWidth={1.5} />}
-                  </button>
+                  <Sparkles className="absolute left-4 top-1/2 size-4.5 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" strokeWidth={1.5} />
+                  <input type="text" value={cadCreci} onChange={(e) => setCadCreci(e.target.value)} placeholder="CRECI 12345-F" required className="h-14 w-full rounded-2xl border border-border bg-muted/30 pl-11 pr-4 text-sm font-medium text-foreground transition-all focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/50" />
                 </div>
               </div>
 
@@ -223,9 +242,9 @@ export default function LoginPage() {
                 {carregando ? (
                   <span className="flex items-center gap-2 relative z-10">
                     <svg className="size-5 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                    Iniciando...
+                    Enviando...
                   </span>
-                ) : <span className="relative z-10">Iniciar Trial</span>}
+                ) : <span className="relative z-10">Falar com o Comercial</span>}
               </button>
             </form>
           </div>

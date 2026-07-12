@@ -69,7 +69,7 @@ const AI_RESULTADOS = [
   },
 ]
 
-type Fase = 'upload' | 'analisando' | 'resultado' | 'modo' | 'escolha_modo_manual' | 'formulario_fast' | 'formulario'
+type Fase = 'upload' | 'analisando' | 'resultado' | 'modo' | 'escolha_modo_manual' | 'escolha_categoria' | 'formulario_fast' | 'formulario'
 
 function AccordionSection({ title, icon, isOpen, onToggle, children }: { title: string, icon: React.ReactNode, isOpen: boolean, onToggle: () => void, children: React.ReactNode }) {
   return (
@@ -102,6 +102,11 @@ type Foto = {
 
 export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { onClose: () => void, imovelParaEditar?: any, onSaveEdit?: (imovel: any) => void }) {
   const [fase, setFase] = useState<Fase>('upload')
+  const [cadastroTipoMode, setCadastroTipoMode] = useState<'fast' | 'completo' | null>(null)
+  const [transcricaoIA, setTranscricaoIA] = useState('Apartamento alto padrão localizado no bairro Jardins com 3 dormitórios, sacada ampla com vista livre, armários embutidos na cozinha e banheiros, ótima iluminação solar de manhã.')
+  const [exibindoTranscricao, setExibindoTranscricao] = useState(false)
+  const [albertGravandoAudio, setAlbertGravandoAudio] = useState(false)
+  const [albertAudioTimer, setAlbertAudioTimer] = useState(0)
   const [fotos, setFotos] = useState<Foto[]>([])
   const [progresso, setProgresso] = useState(0)
   const [progressoTexto, setProgressoTexto] = useState('')
@@ -125,6 +130,16 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
   const [statusImovel, setStatusImovel] = useState<(typeof STATUS_OPTIONS)[number]>('Livre')
   const [tipoExclusividade, setTipoExclusividade] = useState<'Nenhuma' | 'Venda' | 'Locação' | 'Ambas'>('Nenhuma')
   const [validadeExclusividade, setValidadeExclusividade] = useState('')
+
+  // Dynamic Industrial & Rural Fields
+  const [peDireito, setPeDireito] = useState('')
+  const [capacidadePiso, setCapacidadePiso] = useState('')
+  const [energiaTrifasica, setEnergiaTrifasica] = useState(false)
+  const [areaPatio, setAreaPatio] = useState('')
+  const [areaHectares, setAreaHectares] = useState('')
+  const [recursosHidricos, setRecursosHidricos] = useState('')
+  const [temCurral, setTemCurral] = useState(false)
+  const [temCasaSede, setTemCasaSede] = useState(false)
 
   // 2. Localização
   const [endereco, setEndereco] = useState('')
@@ -405,6 +420,52 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
     }, totalDelay + 400)
   }
 
+  function aplicarCorrecaoTranscricao() {
+    setFase('analisando')
+    setProgresso(0)
+    setProgressoTexto('Analisando transcrição corrigida...')
+    
+    const etapas = [
+      { texto: 'Analisando correções de texto...', delay: 600 },
+      { texto: 'Re-processando metragens e características...', delay: 800 },
+      { texto: 'Atualizando formulário...', delay: 500 }
+    ]
+
+    let totalDelay = 0
+    for (let i = 0; i < etapas.length; i++) {
+      totalDelay += etapas[i].delay
+      setTimeout(() => {
+        setProgresso(Math.round(((i + 1) / etapas.length) * 100))
+        setProgressoTexto(etapas[i].texto)
+      }, totalDelay)
+    }
+
+    setTimeout(() => {
+      setTitulo('Cobertura Mobiliada em Moema')
+      setValor('R$ 2.450.000')
+      setQuartos('4')
+      setArea('160')
+      setFase('formulario')
+      setExibindoTranscricao(false)
+      setIsIaGerado(true)
+    }, totalDelay + 200)
+  }
+
+  function toggleAlbertGravandoAudio() {
+    if (albertGravandoAudio) {
+      setAlbertGravandoAudio(false)
+      if ((window as any).albertAudioInterval) clearInterval((window as any).albertAudioInterval)
+      setTranscricaoIA(prev => `${prev} [Áudio complementar: O imóvel possui varanda gourmet e 3 vagas de garagem.]`)
+    } else {
+      setAlbertGravandoAudio(true)
+      setAlbertAudioTimer(0)
+      const timer = setInterval(() => {
+        setAlbertAudioTimer(t => t + 1)
+      }, 1000)
+      ;(window as any).albertAudioInterval = timer
+    }
+  }
+
   // ── Upsell IA ─────────────────────────────────────────────────────────────
   if (mostrarUpsell) {
     return <IAUpsellPage
@@ -548,7 +609,10 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
           <button
             id="tour-target-imoveis-fast"
             type="button"
-            onClick={() => setFase('formulario_fast')}
+            onClick={() => {
+              setCadastroTipoMode('fast')
+              setFase('escolha_categoria')
+            }}
             className="flex flex-col items-center gap-3 rounded-3xl border-2 border-primary/20 bg-primary/5 p-6 text-center transition-brand active:scale-[0.98] hover:border-primary/40 hover:bg-primary/10"
           >
             <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10">
@@ -563,7 +627,10 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
           <button
             id="tour-target-imoveis-completo"
             type="button"
-            onClick={() => setFase('formulario')}
+            onClick={() => {
+              setCadastroTipoMode('completo')
+              setFase('escolha_categoria')
+            }}
             className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-6 text-center shadow-soft transition-brand active:scale-[0.98] hover:border-border/80"
           >
             <div className="flex size-14 items-center justify-center rounded-2xl bg-muted">
@@ -588,6 +655,67 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
               <p className="text-base font-semibold text-foreground mb-1">Cadastro com IA</p>
               <p className="text-xs text-muted-foreground">Envie fotos e deixe a Inteligência Artificial preencher os dados para você.</p>
             </div>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Fase: Escolha Categoria / Tipo Condicional ────────────────────────────
+  if (fase === 'escolha_categoria') {
+    return (
+      <div className="flex flex-col h-full">
+        <div className="flex items-center justify-between mb-6">
+          <button type="button" onClick={() => setFase('escolha_modo_manual')} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
+            <ChevronLeft className="size-5" />
+          </button>
+          <h2 className="font-serif text-xl font-semibold text-foreground">Categoria do Imóvel</h2>
+          <div className="w-8" />
+        </div>
+
+        <div className="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full py-4">
+          <h3 className="text-base font-bold text-foreground text-center mb-6 leading-snug">
+            Qual a finalidade e qual o tipo de imóvel você deseja cadastrar?
+          </h3>
+
+          <div className="flex flex-col gap-5 bg-card border border-border p-5 rounded-3xl shadow-sm mb-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Finalidade</label>
+              <select
+                value={finalidade}
+                onChange={(e) => {
+                  const val = e.target.value as FinalidadeCategoria
+                  setFinalidade(val)
+                  setTipoImovel(TIPOS_POR_FINALIDADE[val][0])
+                }}
+                className="h-12 w-full rounded-xl border border-border bg-background px-3 text-sm font-semibold text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              >
+                {FINALIDADES.map((f) => (
+                  <option key={f} value={f}>{f}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tipo de Imóvel</label>
+              <select
+                value={tipoImovel}
+                onChange={(e) => setTipoImovel(e.target.value)}
+                className="h-12 w-full rounded-xl border border-border bg-background px-3 text-sm font-semibold text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              >
+                {TIPOS_POR_FINALIDADE[finalidade].map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setFase(cadastroTipoMode === 'fast' ? 'formulario_fast' : 'formulario')}
+            className="h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
+          >
+            Continuar para Formulário
           </button>
         </div>
       </div>
@@ -836,20 +964,90 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
-            <div>
-              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Dorms</label>
-              <input type="number" value={quartos} onChange={(e) => setQuartos(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+          {/* Dynamic Composition Fields */}
+          {finalidade === 'Residencial' && (
+            <div className="grid grid-cols-3 gap-2">
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Dorms</label>
+                <input type="number" value={quartos} onChange={(e) => setQuartos(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Suítes</label>
+                <input type="number" value={suites} onChange={(e) => setSuites(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Vagas</label>
+                <input type="number" value={vagas} onChange={(e) => setVagas(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
             </div>
-            <div>
-              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Suítes</label>
-              <input type="number" value={suites} onChange={(e) => setSuites(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+          )}
+
+          {finalidade === 'Comercial' && (
+            <div className="grid grid-cols-3 gap-2">
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Salas</label>
+                <input type="number" value={salas} onChange={(e) => setSalas(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Banheiros</label>
+                <input type="number" value={banheiros} onChange={(e) => setBanheiros(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Vagas</label>
+                <input type="number" value={vagas} onChange={(e) => setVagas(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
             </div>
-            <div>
-              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Vagas</label>
-              <input type="number" value={vagas} onChange={(e) => setVagas(e.target.value)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+          )}
+
+          {finalidade === 'Industrial' && (
+            <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Pé Direito (m)</label>
+                  <input type="text" value={peDireito} onChange={(e) => setPeDireito(e.target.value)} placeholder="Ex: 8" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Capac. Piso (t)</label>
+                  <input type="text" value={capacidadePiso} onChange={(e) => setCapacidadePiso(e.target.value)} placeholder="Ex: 5" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Pátio (m²)</label>
+                  <input type="text" value={areaPatio} onChange={(e) => setAreaPatio(e.target.value)} placeholder="Ex: 300" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+                <label className="flex items-center gap-2 mt-6 cursor-pointer select-none">
+                  <input type="checkbox" checked={energiaTrifasica} onChange={(e) => setEnergiaTrifasica(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+                  <span className="text-xs font-semibold text-foreground">Energia Trifásica</span>
+                </label>
+              </div>
             </div>
-          </div>
+          )}
+
+          {finalidade === 'Rural' && (
+            <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área (Hectares)</label>
+                  <input type="text" value={areaHectares} onChange={(e) => setAreaHectares(e.target.value)} placeholder="Ex: 45" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Recursos Hídricos</label>
+                  <input type="text" value={recursosHidricos} onChange={(e) => setRecursosHidricos(e.target.value)} placeholder="Ex: Rio, poço art." className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="checkbox" checked={temCurral} onChange={(e) => setTemCurral(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+                  <span className="text-xs font-semibold text-foreground">Possui Curral</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="checkbox" checked={temCasaSede} onChange={(e) => setTemCasaSede(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+                  <span className="text-xs font-semibold text-foreground">Possui Casa Sede</span>
+                </label>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-3 mt-2 border-t border-border/50 pt-4">
             <div>
@@ -906,24 +1104,66 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
 
       {isIaGerado && (
         <div className="mb-6 flex flex-col gap-3 rounded-2xl bg-teal-mid/10 p-4 border border-teal-mid/20">
-          <div className="flex items-center gap-3">
-            <Sparkles className="size-5 text-teal-mid shrink-0" strokeWidth={1.5} />
-            <div>
-              <p className="text-sm font-semibold text-teal-deep">IA concluiu a análise</p>
-              <p className="text-xs text-teal-deep/80">Confiança: 94% · Baseado nas fotos</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Sparkles className="size-5 text-teal-mid shrink-0" strokeWidth={1.5} />
+              <div>
+                <p className="text-sm font-semibold text-teal-deep">IA concluiu a análise</p>
+                <p className="text-xs text-teal-deep/80">Confiança: 94% · Baseado nas fotos/áudios</p>
+              </div>
             </div>
+            {exibindoTranscricao && (
+              <button
+                type="button"
+                onClick={() => setExibindoTranscricao(false)}
+                className="text-xs font-semibold text-teal-deep underline"
+              >
+                Minimizar
+              </button>
+            )}
           </div>
-          <div className="flex gap-2 mt-1">
-            <button type="button" onClick={() => iniciarAnaliseIA()} className="flex-1 rounded-xl bg-background/50 border border-teal-mid/20 py-2 text-xs font-semibold text-teal-deep hover:bg-teal-mid/20 transition-colors">
-              Analisar Novamente
-            </button>
-            <button type="button" onClick={() => {
-              setTitulo(''); setBairro(''); setCidade(''); setValor(''); setArea(''); setQuartos(''); setObservacoes('');
-              setIsIaGerado(false);
-            }} className="flex-1 rounded-xl border border-border bg-background py-2 text-xs font-semibold text-muted-foreground hover:bg-muted transition-colors">
-              Descartar
-            </button>
-          </div>
+
+          {exibindoTranscricao ? (
+            <div className="flex flex-col gap-3 mt-1 animate-in fade-in duration-200">
+              <label className="text-xs font-bold text-teal-deep uppercase tracking-wider">Transcrição Gerada</label>
+              <textarea
+                value={transcricaoIA}
+                onChange={(e) => setTranscricaoIA(e.target.value)}
+                className="w-full h-24 rounded-xl border border-teal-mid/20 bg-background/80 p-3 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary font-medium"
+              />
+              
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={toggleAlbertGravandoAudio}
+                  className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all active:scale-95 ${albertGravandoAudio ? 'bg-red-500 text-white border-red-500 animate-pulse' : 'bg-background/80 text-teal-deep border-teal-mid/20'}`}
+                >
+                  <Mic className="size-3.5" />
+                  {albertGravandoAudio ? `Parar (${albertAudioTimer}s)` : 'Adicionar Áudio'}
+                </button>
+                <button
+                  type="button"
+                  onClick={aplicarCorrecaoTranscricao}
+                  className="flex-1 rounded-xl bg-primary py-2 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/95 active:scale-95 transition-all text-center"
+                >
+                  Analisar e Preencher
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex gap-2 mt-1">
+              <button type="button" onClick={() => setExibindoTranscricao(true)} className="flex-1 rounded-xl bg-background/50 border border-teal-mid/20 py-2 text-xs font-semibold text-teal-deep hover:bg-teal-mid/20 transition-colors">
+                Analisar Novamente
+              </button>
+              <button type="button" onClick={() => {
+                setTitulo(''); setBairro(''); setCidade(''); setValor(''); setArea(''); setQuartos(''); setObservacoes('');
+                setIsIaGerado(false);
+                setExibindoTranscricao(false);
+              }} className="flex-1 rounded-xl border border-border bg-background py-2 text-xs font-semibold text-muted-foreground hover:bg-muted transition-colors">
+                Descartar
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -1170,6 +1410,54 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
               </div>
             </AccordionSection>
           )}
+
+        {/* BLOCO 3.5: ESPECIFICAÇÕES INDUSTRIAIS */}
+        {finalidade === 'Industrial' && (
+          <AccordionSection title="Características Industriais" icon={<LayoutGrid className="size-4" strokeWidth={2.5} />} isOpen={openSection === 35} onToggle={() => setOpenSection(openSection === 35 ? 0 : 35)}>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Pé Direito (m)</label>
+                <input type="text" value={peDireito} onChange={(e) => setPeDireito(e.target.value)} placeholder="Ex: 8" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Capac. Piso (t)</label>
+                <input type="text" value={capacidadePiso} onChange={(e) => setCapacidadePiso(e.target.value)} placeholder="Ex: 5" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área de Pátio (m²)</label>
+                <input type="text" value={areaPatio} onChange={(e) => setAreaPatio(e.target.value)} placeholder="Ex: 300" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <label className="flex items-center gap-2 mt-8 cursor-pointer select-none">
+                <input type="checkbox" checked={energiaTrifasica} onChange={(e) => setEnergiaTrifasica(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+                <span className="text-xs font-semibold text-foreground">Energia Trifásica</span>
+              </label>
+            </div>
+          </AccordionSection>
+        )}
+
+        {/* BLOCO 3.6: ESPECIFICAÇÕES RURAIS */}
+        {finalidade === 'Rural' && (
+          <AccordionSection title="Características Rurais" icon={<LayoutGrid className="size-4" strokeWidth={2.5} />} isOpen={openSection === 36} onToggle={() => setOpenSection(openSection === 36 ? 0 : 36)}>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Área Total (Hectares)</label>
+                <input type="text" value={areaHectares} onChange={(e) => setAreaHectares(e.target.value)} placeholder="Ex: 45" className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Recursos Hídricos</label>
+                <input type="text" value={recursosHidricos} onChange={(e) => setRecursosHidricos(e.target.value)} placeholder="Ex: Rio, poço art." className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              </div>
+              <label className="flex items-center gap-2 cursor-pointer select-none mt-4">
+                <input type="checkbox" checked={temCurral} onChange={(e) => setTemCurral(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+                <span className="text-xs font-semibold text-foreground">Possui Curral</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer select-none mt-4">
+                <input type="checkbox" checked={temCasaSede} onChange={(e) => setTemCasaSede(e.target.checked)} className="size-5 rounded border-border text-primary focus:ring-primary" />
+                <span className="text-xs font-semibold text-foreground">Possui Casa Sede</span>
+              </label>
+            </div>
+          </AccordionSection>
+        )}
 
         {/* BLOCO 4: MEDIDAS E VALORES */}
         <AccordionSection title="Medidas e Valores" icon={<Ruler className="size-4" strokeWidth={2.5} />} isOpen={openSection === 4} onToggle={() => setOpenSection(openSection === 4 ? 0 : 4)}>

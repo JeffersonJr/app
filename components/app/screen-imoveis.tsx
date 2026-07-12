@@ -64,6 +64,12 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
   const [mostrarMenuOrdenacao, setMostrarMenuOrdenacao] = useState(false)
   const [mostrarCadastroEmpreendimento, setMostrarCadastroEmpreendimento] = useState(false)
   const [favoritosIds, setFavoritosIds] = useState<Set<string>>(new Set())
+  const [buscasFavoritas, setBuscasFavoritas] = useState([
+    { id: '1', nome: 'Apts Jardins R$ 1M-', finalidade: 'Residencial', status: 'Livre', busca: 'Jardins' },
+    { id: '2', nome: 'Casas Alphaville', finalidade: 'Residencial', status: 'Livre', busca: 'Alphaville' },
+    { id: '3', nome: 'Comercial Centro', finalidade: 'Comercial', status: 'Livre', busca: 'Centro' },
+  ])
+  const [mostrarFavoritasPopover, setMostrarFavoritasPopover] = useState(false)
 
   const filtrosAplicados = useMemo(() => {
     const res: Record<string, string> = {}
@@ -201,6 +207,68 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
               className="h-12 w-full rounded-2xl border border-border bg-card pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring shadow-sm"
             />
           </div>
+          <button
+            type="button"
+            onClick={() => setMostrarFavoritasPopover(!mostrarFavoritasPopover)}
+            className={`flex size-10 relative items-center justify-center rounded-full border border-border bg-card shadow-sm transition-brand active:scale-95 text-amber`}
+          >
+            <Heart className="size-5 fill-amber text-amber" strokeWidth={1.5} />
+          </button>
+
+          {mostrarFavoritasPopover && (
+            <div className="absolute top-32 right-4 z-50 w-64 rounded-2xl border border-border bg-card p-4 shadow-xl animate-in fade-in slide-in-from-top-2">
+              <div className="flex items-center justify-between mb-3 border-b border-border pb-2">
+                <span className="text-xs font-bold text-foreground">Buscas Favoritas</span>
+                <button type="button" onClick={() => setMostrarFavoritasPopover(false)} className="text-muted-foreground hover:text-foreground">
+                  <X className="size-3.5" />
+                </button>
+              </div>
+              <div className="flex flex-col gap-1.5 max-h-48 overflow-y-auto mb-3">
+                {buscasFavoritas.map((bf) => (
+                  <button
+                    key={bf.id}
+                    type="button"
+                    onClick={() => {
+                      setFiltroFinalidade(bf.finalidade)
+                      setFiltroStatus(bf.status)
+                      setBusca(bf.busca)
+                      setMostrarFavoritasPopover(false)
+                    }}
+                    className="flex flex-col text-left p-2 rounded-xl hover:bg-muted transition-colors border border-transparent hover:border-border"
+                  >
+                    <span className="text-xs font-semibold text-foreground">{bf.nome}</span>
+                    <span className="text-[9px] text-muted-foreground">Filtro: {bf.finalidade} · {bf.busca}</span>
+                  </button>
+                ))}
+                {buscasFavoritas.length === 0 && (
+                  <p className="text-[11px] text-muted-foreground text-center py-2">Nenhuma busca salva.</p>
+                )}
+              </div>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  const nomeInput = prompt('Digite um nome para esta busca favorita:', busca || 'Busca Personalizada')
+                  if (nomeInput) {
+                    setBuscasFavoritas(prev => [
+                      ...prev,
+                      {
+                        id: Math.random().toString(),
+                        nome: nomeInput,
+                        finalidade: filtroFinalidade,
+                        status: filtroStatus,
+                        busca: busca
+                      }
+                    ])
+                  }
+                }}
+                className="w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl text-[11px] font-bold transition-all active:scale-95 text-center"
+              >
+                + Salvar Busca Atual
+              </button>
+            </div>
+          )}
+
           <button
             type="button"
             onClick={() => setMostrarFiltrosAvancados(true)}
