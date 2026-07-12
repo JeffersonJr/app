@@ -101,8 +101,8 @@ type Foto = {
 }
 
 export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { onClose: () => void, imovelParaEditar?: any, onSaveEdit?: (imovel: any) => void }) {
-  const [fase, setFase] = useState<Fase>('upload')
-  const [cadastroTipoMode, setCadastroTipoMode] = useState<'fast' | 'completo' | null>(null)
+  const [fase, setFase] = useState<Fase>('escolha_categoria')
+  const [cadastroTipoMode, setCadastroTipoMode] = useState<'fast' | 'completo' | 'ia' | null>(null)
   const [transcricaoIA, setTranscricaoIA] = useState('Apartamento alto padrão localizado no bairro Jardins com 3 dormitórios, sacada ampla com vista livre, armários embutidos na cozinha e banheiros, ótima iluminação solar de manhã.')
   const [exibindoTranscricao, setExibindoTranscricao] = useState(false)
   const [albertGravandoAudio, setAlbertGravandoAudio] = useState(false)
@@ -319,6 +319,30 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
     setFotos((prev) => [...prev, ...novasFotos])
   }
 
+  function resetFields() {
+    setTitulo('')
+    setOperacoes(['Venda'])
+    setCodigo('')
+    setCib('')
+    setSituacaoImovel('Pronto')
+    setStatusImovel('Livre')
+    setTipoExclusividade('Nenhuma')
+    setValidadeExclusividade('')
+    setPeDireito('')
+    setCapacidadePiso('')
+    setEnergiaTrifasica(false)
+    setAreaPatio('')
+    setAreaHectares('')
+    setRecursosHidricos('')
+    setCurral(false)
+    setSede(false)
+    setFotos([])
+    setValor('')
+    setArea('')
+    setQuartos('')
+    setObservacoes('')
+  }
+
   function handleSave() {
     if (imovelParaEditar && onSaveEdit) {
       onSaveEdit({
@@ -484,10 +508,11 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
     return (
       <div>
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-serif text-xl font-semibold text-foreground">Captar imóvel</h2>
-          <button type="button" onClick={onClose} aria-label="Fechar" className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
-            <X className="size-4" strokeWidth={1.5} />
+          <button type="button" onClick={() => setFase('escolha_modo_manual')} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
+            <ChevronLeft className="size-5" />
           </button>
+          <h2 className="font-serif text-xl font-semibold text-foreground">Captar imóvel com IA</h2>
+          <div className="w-8" />
         </div>
 
         {/* Banner IA */}
@@ -579,10 +604,10 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
           <button
             id="tour-target-preencher-manualmente"
             type="button"
-            onClick={() => setFase('escolha_modo_manual')}
+            onClick={() => setFase('escolha_categoria')}
             className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold text-muted-foreground transition-brand active:scale-[0.98]"
           >
-            Preencher manualmente
+            Alterar tipo/categoria de imóvel
           </button>
         </div>
       </div>
@@ -594,11 +619,16 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
     return (
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-between mb-6">
-          <button type="button" onClick={() => setFase('upload')} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
-            <X className="size-4" strokeWidth={1.5} />
+          <button type="button" onClick={() => setFase('escolha_categoria')} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
+            <ChevronLeft className="size-5" />
           </button>
-          <h2 className="font-serif text-xl font-semibold text-foreground">Modo de Cadastro</h2>
+          <h2 className="font-serif text-xl font-semibold text-foreground">Método de Cadastro</h2>
           <div className="w-8" />
+        </div>
+
+        <div className="bg-teal-mid/10 p-3 rounded-2xl border border-teal-mid/20 mb-5 flex flex-col gap-1">
+          <span className="text-[9px] font-bold text-teal-deep uppercase tracking-wider">Estrutura Travada</span>
+          <span className="text-xs font-semibold text-teal-deep">{finalidade} · {tipoImovel}</span>
         </div>
 
         <p className="text-sm text-muted-foreground mb-6 text-center">
@@ -611,9 +641,9 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             type="button"
             onClick={() => {
               setCadastroTipoMode('fast')
-              setFase('escolha_categoria')
+              setFase('formulario_fast')
             }}
-            className="flex flex-col items-center gap-3 rounded-3xl border-2 border-primary/20 bg-primary/5 p-6 text-center transition-brand active:scale-[0.98] hover:border-primary/40 hover:bg-primary/10"
+            className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-6 text-center shadow-soft transition-brand active:scale-[0.98] hover:border-border/80"
           >
             <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10">
               <Zap className="size-7 text-primary" strokeWidth={1.5} />
@@ -629,7 +659,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             type="button"
             onClick={() => {
               setCadastroTipoMode('completo')
-              setFase('escolha_categoria')
+              setFase('formulario')
             }}
             className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-6 text-center shadow-soft transition-brand active:scale-[0.98] hover:border-border/80"
           >
@@ -645,7 +675,10 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
           <button
             id="tour-target-imoveis-ia"
             type="button"
-            onClick={() => setFase('upload')}
+            onClick={() => {
+              setCadastroTipoMode('ia')
+              setFase('upload')
+            }}
             className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-gradient-to-br from-primary/5 to-teal-deep/5 p-6 text-center shadow-soft transition-brand active:scale-[0.98] hover:border-primary/30"
           >
             <div className="flex size-14 items-center justify-center rounded-2xl bg-teal-shadow/20">
@@ -653,7 +686,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             </div>
             <div>
               <p className="text-base font-semibold text-foreground mb-1">Cadastro com IA</p>
-              <p className="text-xs text-muted-foreground">Envie fotos e deixe a Inteligência Artificial preencher os dados para você.</p>
+              <p className="text-xs text-muted-foreground">Envie fotos/áudios e deixe o Albert processar de acordo com o contexto.</p>
             </div>
           </button>
         </div>
@@ -666,8 +699,8 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
     return (
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-between mb-6">
-          <button type="button" onClick={() => setFase('escolha_modo_manual')} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
-            <ChevronLeft className="size-5" />
+          <button type="button" onClick={onClose} className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-brand active:scale-95">
+            <X className="size-4" strokeWidth={1.5} />
           </button>
           <h2 className="font-serif text-xl font-semibold text-foreground">Categoria do Imóvel</h2>
           <div className="w-8" />
@@ -685,6 +718,7 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
                 value={finalidade}
                 onChange={(e) => {
                   const val = e.target.value as FinalidadeCategoria
+                  resetFields()
                   setFinalidade(val)
                   setTipoImovel(TIPOS_POR_FINALIDADE[val][0])
                 }}
@@ -700,7 +734,10 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
               <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Tipo de Imóvel</label>
               <select
                 value={tipoImovel}
-                onChange={(e) => setTipoImovel(e.target.value)}
+                onChange={(e) => {
+                  resetFields()
+                  setTipoImovel(e.target.value)
+                }}
                 className="h-12 w-full rounded-xl border border-border bg-background px-3 text-sm font-semibold text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 {TIPOS_POR_FINALIDADE[finalidade].map((t) => (
@@ -712,10 +749,10 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
 
           <button
             type="button"
-            onClick={() => setFase(cadastroTipoMode === 'fast' ? 'formulario_fast' : 'formulario')}
+            onClick={() => setFase('escolha_modo_manual')}
             className="h-12 w-full rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-brand active:scale-[0.98]"
           >
-            Continuar para Formulário
+            Continuar para Método de Cadastro
           </button>
         </div>
       </div>
@@ -746,6 +783,12 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
 
         <p className="mt-6 font-serif text-xl font-semibold text-foreground">IA analisando imóvel</p>
         <p className="mt-2 text-sm text-muted-foreground">{progressoTexto || 'Iniciando análise...'}</p>
+        
+        {/* Contexto travado guiando a IA */}
+        <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-teal-mid/10 px-3 py-1 text-[11px] font-bold text-teal-deep border border-teal-mid/20">
+          <Sparkles className="size-3 text-teal-mid animate-pulse animate-duration-1000" />
+          Contexto = Imóvel {finalidade} - {tipoImovel} (IA Focada)
+        </div>
 
         {/* Barra de progresso */}
         <div className="mt-6 w-full max-w-xs">
