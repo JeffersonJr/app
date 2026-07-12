@@ -278,6 +278,27 @@ export function FormNovaAtividade({
       <div className="flex flex-col gap-4">
         {aba === 'atividade' && (
           <>
+            {/* AI Assistant Premium Banner Card */}
+            <div className="bg-gradient-to-r from-primary to-teal-deep text-primary-foreground rounded-3xl p-4 shadow-md flex items-center justify-between gap-3 border border-primary/20 relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/5 opacity-40 bg-[radial-gradient(circle_at_25%_10%,rgba(255,255,255,0.25),transparent)]" />
+              <div className="flex-1 relative z-10">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#a9ffd2] flex items-center gap-1.5 opacity-95">
+                  <Sparkles className="size-3 text-[#a9ffd2] fill-[#a9ffd2] animate-pulse" />
+                  Albert Assistente de IA
+                </span>
+                <h4 className="text-sm font-bold mt-1 leading-snug">Criar por comando de voz</h4>
+                <p className="text-[10px] opacity-80 mt-0.5 leading-tight">Diga o que fazer e o Albert preenche os campos automaticamente.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAlbertAberto(true)}
+                className="shrink-0 flex items-center justify-center gap-1.5 text-xs font-black bg-white text-primary px-3.5 py-2.5 rounded-2xl shadow-lg hover:shadow-xl transition-all active:scale-95 hover:bg-white/95"
+              >
+                <Mic className="size-4 animate-bounce" />
+                Falar agora
+              </button>
+            </div>
+
             {/* Tipo */}
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipo de atividade</label>
@@ -302,14 +323,6 @@ export function FormNovaAtividade({
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Título *</label>
-                <button
-                  type="button"
-                  onClick={() => setAlbertAberto(true)}
-                  className="flex items-center gap-1 text-[10px] font-bold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1 rounded-lg transition-all active:scale-95 shadow-sm"
-                >
-                  <Bot className="size-3.5" />
-                  Falar com Albert
-                </button>
               </div>
               <input
                 type="text"

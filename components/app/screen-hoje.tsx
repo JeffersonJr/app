@@ -172,7 +172,12 @@ export function ScreenHoje({
                     >
                       {atv.titulo}
                     </p>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
+                    {atv.descricao && (
+                      <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">
+                        {atv.descricao}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
                       <span className={`size-1.5 rounded-full ${atv.concluida ? 'bg-muted-foreground' : 'bg-primary'}`} />
                       {atv.cliente}
                     </p>
