@@ -77,8 +77,8 @@ export default function LoginPage() {
     setMostrarCadastro(false)
     
     // Redirect to WhatsApp of Albert Comercial
-    const message = encodeURIComponent(`Olá Albert! Sou o corretor ${cadNome} (CRECI: ${cadCreci}) e gostaria de contratar o evolves CRM. Meu e-mail é ${cadEmail}.`)
-    window.open(`https://wa.me/5511999999999?text=${message}`, '_blank')
+    const message = encodeURIComponent(`Olá Albert! Vim pelo aplicativo Evolves CRM. Sou o corretor(a) ${cadNome} (CRECI: ${cadCreci}) e gostaria de mais informações para contratar a plataforma. Meu e-mail é ${cadEmail}.`)
+    window.open(`https://wa.me/5513997591781?text=${message}`, '_blank')
   }
 
   async function handleRecuperar(e: React.FormEvent) {
