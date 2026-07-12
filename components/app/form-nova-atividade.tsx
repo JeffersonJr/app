@@ -261,19 +261,21 @@ export function FormNovaAtividade({
         </button>
       </div>
 
-      <div className="flex gap-2 rounded-2xl bg-muted p-1 mb-6">
-        {(['nota', 'atividade', 'email'] as const).map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setAba(t)}
-            className={`flex-1 rounded-xl py-2 text-xs font-semibold uppercase tracking-wider transition-brand ${aba === t ? 'bg-card text-primary shadow-sm' : 'text-muted-foreground'
-              }`}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
+      {defaultClienteId && (
+        <div className="flex gap-2 rounded-2xl bg-muted p-1 mb-6">
+          {(['nota', 'atividade', 'email'] as const).map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setAba(t)}
+              className={`flex-1 rounded-xl py-2 text-xs font-semibold uppercase tracking-wider transition-brand ${aba === t ? 'bg-card text-primary shadow-sm' : 'text-muted-foreground'
+                }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="flex flex-col gap-4">
         {aba === 'atividade' && (
