@@ -48,6 +48,13 @@ export function AtividadeDetalheSheet({
   const [avaliacaoImpressao, setAvaliacaoImpressao] = useState('')
   const [avaliacoesSalvas, setAvaliacoesSalvas] = useState<Record<string, { reacao: string; impressao: string }>>({})
 
+  // Evaluation Audio Recording States
+  const [evalGravando, setEvalGravando] = useState(false)
+  const [evalTempoGravacao, setEvalTempoGravacao] = useState(0)
+  const [evalAudioUrl, setEvalAudioUrl] = useState<string | null>(null)
+  const [evalTranscrevendo, setEvalTranscrevendo] = useState(false)
+  const evalTimerRef = useRef<any>(null)
+
   useEffect(() => {
     // Reset all state when a new atividade is opened
     setFeedback('')
@@ -68,6 +75,11 @@ export function AtividadeDetalheSheet({
     setAvaliacaoReacao(null)
     setAvaliacaoImpressao('')
     setAvaliacoesSalvas({})
+    setEvalGravando(false)
+    setEvalTempoGravacao(0)
+    setEvalAudioUrl(null)
+    setEvalTranscrevendo(false)
+    if (evalTimerRef.current) clearInterval(evalTimerRef.current)
     if (atividade?.tipo === 'visita') {
       setAgendarProxima(true)
       const inicialVisitados: Record<string, boolean> = {}
@@ -128,6 +140,39 @@ export function AtividadeDetalheSheet({
     return `${minutes}:${seconds.toString().padStart(2, '0')}`
   }
 
+  // Property Evaluation Audio Recording Helpers
+  function startEvalRecording() {
+    setEvalGravando(true)
+    setEvalTempoGravacao(0)
+    setEvalAudioUrl(null)
+    setEvalTranscrevendo(false)
+    evalTimerRef.current = setInterval(() => {
+      setEvalTempoGravacao(prev => prev + 1)
+    }, 1000)
+  }
+
+  function stopEvalRecording() {
+    if (evalTimerRef.current) clearInterval(evalTimerRef.current)
+    setEvalGravando(false)
+    setEvalAudioUrl('mock-eval-audio.mp3')
+    setEvalTranscrevendo(true)
+    
+    setTimeout(() => {
+      setEvalTranscrevendo(false)
+      const transQuotes = [
+        "Cliente gostou muito do tamanho das salas e do acabamento geral, mas achou a garagem um pouco apertada.",
+        "Adorou a iluminação natural na suíte principal, porém a cozinha precisa de algumas reformas.",
+        "Achou o imóvel bem localizado e ventilado, ideal para a família."
+      ]
+      setAvaliacaoImpressao(transQuotes[Math.floor(Math.random() * transQuotes.length)])
+    }, 1500)
+  }
+
+  function deleteEvalRecording() {
+    setEvalAudioUrl(null)
+    setEvalTempoGravacao(0)
+  }
+
   // Visit Property Evaluation Flow Helpers
   function iniciarAvaliacoes() {
     if (!atividade || !atividade.imoveisVisitados) {
@@ -163,6 +208,12 @@ export function AtividadeDetalheSheet({
       [imvAtual.id]: novaAvaliacao
     }
     setAvaliacoesSalvas(novasAvaliacoes)
+
+    // Reset evaluation audio states for the next property
+    setEvalAudioUrl(null)
+    setEvalTempoGravacao(0)
+    setEvalTranscrevendo(false)
+    if (evalTimerRef.current) clearInterval(evalTimerRef.current)
 
     // Go to next or finish
     if (indiceAvaliacaoAtual + 1 < imoveisAvaliacaoPendentes.length) {
@@ -309,6 +360,71 @@ export function AtividadeDetalheSheet({
                 </div>
 
                 <p className="text-sm font-semibold text-foreground mb-2">Impressões gerais e anotações</p>
+                
+                {/* Property Evaluation Audio Recorder & Transcriber */}
+                <div className="mb-4 p-3 rounded-2xl border border-border bg-muted/20 flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                      <Volume2 className="size-3.5 text-primary" />
+                      Gravar Comentários (Voz)
+                    </span>
+                    {evalAudioUrl && (
+                      <button
+                        type="button"
+                        onClick={deleteEvalRecording}
+                        className="text-red-500 hover:text-red-750 transition-colors"
+                        title="Remover áudio"
+                      >
+                        <Trash2 className="size-4" />
+                      </button>
+                    )}
+                  </div>
+
+                  {!evalGravando && !evalAudioUrl && (
+                    <button
+                      type="button"
+                      onClick={startEvalRecording}
+                      className="flex w-full h-11 items-center justify-center gap-2 rounded-xl border border-primary/20 bg-primary/5 text-primary text-xs font-bold transition-all hover:bg-primary/10 active:scale-[0.98]"
+                    >
+                      <Mic className="size-4" />
+                      Gravar Comentário por Voz
+                    </button>
+                  )}
+
+                  {evalGravando && (
+                    <div className="flex items-center justify-between bg-red-550/10 border border-red-500/20 rounded-xl px-4 py-2">
+                      <div className="flex items-center gap-2">
+                        <span className="size-2.5 rounded-full bg-red-500 animate-ping" />
+                        <span className="text-xs font-semibold text-red-700">Gravando...</span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="font-mono text-xs font-bold text-red-700">{formatTime(evalTempoGravacao)}</span>
+                        <button
+                          type="button"
+                          onClick={stopEvalRecording}
+                          className="bg-red-500 text-white rounded-lg px-3 py-1 text-[11px] font-bold shadow-sm active:scale-95 transition-all"
+                        >
+                          Parar
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {evalTranscrevendo && (
+                    <div className="flex items-center justify-center gap-2 py-2 text-xs text-primary font-semibold">
+                      <svg className="size-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                      Transcrevendo áudio com Albert IA...
+                    </div>
+                  )}
+
+                  {evalAudioUrl && !evalTranscrevendo && (
+                    <div className="flex items-center gap-2 text-[10px] text-green-600 font-semibold bg-green-500/10 border border-green-500/20 rounded-xl px-3 py-1.5">
+                      <CheckCircle2 className="size-3.5" />
+                      Áudio gravado e transcrito automaticamente abaixo!
+                    </div>
+                  )}
+                </div>
+
                 <textarea
                   value={avaliacaoImpressao}
                   onChange={(e) => setAvaliacaoImpressao(e.target.value)}
