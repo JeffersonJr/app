@@ -26,9 +26,7 @@ export default function Page() {
   const [toastMessage, setToastMessage] = useState('')
 
   useEffect(() => {
-    if (isFirstLogin) {
-      startTour('general')
-    }
+    // startTour('general')
   }, [isFirstLogin, startTour])
 
   // Um lead do funil abre o perfil do cliente correspondente

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Calendar, CheckCircle2, ChevronRight, Clock, MessageSquare, Target, User, X, PartyPopper, Phone, MessageCircle, MapPin, FileText as DocumentIcon, Search, ArrowUp, ArrowDown, Pencil } from 'lucide-react'
+import { Calendar, CheckCircle2, ChevronRight, Clock, MessageSquare, Target, User, X, PartyPopper, Phone, MessageCircle, MapPin, FileText as DocumentIcon, Search, ArrowUp, ArrowDown, Pencil, Mic, PhoneOff } from 'lucide-react'
 import { type Atividade, isAtividadeAtrasada, tipoAtividadeConfig, imoveis, atendimentos } from '@/lib/app-data'
 import { useEffect } from 'react'
 import confetti from 'canvas-confetti'
@@ -32,6 +32,7 @@ export function AtividadeDetalheSheet({
   const [buscandoImovel, setBuscandoImovel] = useState(false)
   const [buscaImovelTexto, setBuscaImovelTexto] = useState('')
   const [editando, setEditando] = useState(false)
+  const [mostrarLigacao, setMostrarLigacao] = useState(false)
 
   useEffect(() => {
     // Reset all state when a new atividade is opened
@@ -42,6 +43,7 @@ export function AtividadeDetalheSheet({
     setNovaHora('')
     setEmojiFeedback(null)
     setEditando(false)
+    setMostrarLigacao(false)
     if (atividade?.tipo === 'visita') {
       setAgendarProxima(true)
       const inicialVisitados: Record<string, boolean> = {}
@@ -234,24 +236,49 @@ export function AtividadeDetalheSheet({
                 </div>
 
                 {atividade.tipo === 'ligacao' && atividade.telefone && (
-                  <a
-                    href={`tel:${atividade.telefone.replace(/\D/g, '')}`}
-                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-500/10 py-3.5 text-sm font-semibold text-indigo-600 transition-colors hover:bg-indigo-500/20 active:scale-[0.98]"
-                  >
-                    <Phone className="size-4.5" />
-                    Ligar para {atividade.telefone}
-                  </a>
+                  <div className="mt-6 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 p-5 shadow-sm">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-primary mb-2">Ligação com Lead</p>
+                    <div className="flex items-center justify-between gap-4 mb-4">
+                      <div>
+                        <p className="text-lg font-bold text-foreground">{atividade.telefone}</p>
+                        <p className="text-xs text-muted-foreground">Chamada local via operadora</p>
+                      </div>
+                      <span className="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary animate-pulse">
+                        <Phone className="size-5" />
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setMostrarLigacao(true)}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/95 active:scale-[0.98] shadow-sm"
+                    >
+                      <Phone className="size-4" strokeWidth={2} />
+                      Iniciar Ligação
+                    </button>
+                  </div>
                 )}
                 {atividade.tipo === 'whatsapp' && atividade.whatsapp && (
-                  <a
-                    href={`https://wa.me/55${atividade.whatsapp.replace(/\D/g, '')}?text=Olá,%20${atividade.cliente}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-green-500/10 py-3.5 text-sm font-semibold text-green-600 transition-colors hover:bg-green-500/20 active:scale-[0.98]"
-                  >
-                    <MessageCircle className="size-4.5" />
-                    Enviar WhatsApp
-                  </a>
+                  <div className="mt-6 rounded-2xl border border-green-200 bg-gradient-to-br from-[#25D366]/5 to-[#25D366]/10 p-5 shadow-sm">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#25D366] mb-2">Mensagem de WhatsApp</p>
+                    <div className="flex items-center justify-between gap-4 mb-4">
+                      <div>
+                        <p className="text-lg font-bold text-foreground">{atividade.whatsapp}</p>
+                        <p className="text-xs text-muted-foreground">Abrir chat direto com lead</p>
+                      </div>
+                      <span className="flex size-10 items-center justify-center rounded-full bg-[#25D366]/20 text-[#25D366]">
+                        <MessageCircle className="size-5" />
+                      </span>
+                    </div>
+                    <a
+                      href={`https://wa.me/55${atividade.whatsapp.replace(/\D/g, '')}?text=Olá,%20${atividade.cliente}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 text-sm font-semibold text-white transition-all hover:bg-[#25D366]/95 active:scale-[0.98] shadow-sm text-center"
+                    >
+                      <MessageCircle className="size-4" strokeWidth={2} />
+                      Abrir WhatsApp
+                    </a>
+                  </div>
                 )}
 
                 {atividade.tipo === 'visita' && (
@@ -521,6 +548,31 @@ export function AtividadeDetalheSheet({
             )}
           </div>
         )}
+      {/* Calling Screen overlay (simulated) */}
+      {mostrarLigacao && (
+        <div className="absolute inset-0 z-[100] bg-zinc-900 flex flex-col justify-between rounded-t-3xl sm:rounded-3xl animate-in fade-in slide-in-from-bottom">
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="mb-8 flex size-24 items-center justify-center rounded-full bg-zinc-850 text-4xl text-zinc-300 font-bold border border-zinc-700 shadow-xl">
+              {atividade.cliente.substring(0, 2).toUpperCase()}
+            </div>
+            <h2 className="text-2xl font-serif font-semibold text-white mb-2">{atividade.cliente}</h2>
+            <p className="text-zinc-400 font-medium animate-pulse">Chamando...</p>
+            <p className="text-zinc-500 text-sm mt-1">{atividade.telefone}</p>
+          </div>
+          <div className="p-10 flex items-center justify-center gap-8 pb-16">
+            <button type="button" className="flex size-14 items-center justify-center rounded-full bg-zinc-800 text-white transition-transform active:scale-90 border border-zinc-700">
+              <Mic className="size-6" />
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setMostrarLigacao(false)}
+              className="flex size-16 items-center justify-center rounded-full bg-red-500 text-white transition-transform active:scale-90 shadow-lg shadow-red-500/20"
+            >
+              <PhoneOff className="size-7" />
+            </button>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   )
