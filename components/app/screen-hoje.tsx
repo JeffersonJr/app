@@ -33,6 +33,7 @@ export function ScreenHoje({
   onVerAtividades?: () => void
 }) {
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
+  const [toastMsg, setToastMsg] = useState('')
   const getHojeStr = () => {
     const d = new Date()
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
@@ -309,7 +310,23 @@ export function ScreenHoje({
           // Aqui enviamos o ID do lead principal para demonstração.
           onVerAtendimento?.('l1')
         }}
+        onGerarTermo={(atividadeId) => {
+          const atv = localAtividades.find(a => a.id === atividadeId)
+          const clienteNome = atv ? atv.cliente : 'Cliente'
+          setToastMsg(`Termo para ${clienteNome} gerado com sucesso!`)
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(`https://evolves.com.br/assinatura-termo/doc_39482`)
+          }
+          setTimeout(() => setToastMsg(''), 3000)
+        }}
       />
+
+      {toastMsg && (
+        <div className="fixed top-[calc(1.5rem+env(safe-area-inset-top))] left-1/2 -translate-x-1/2 z-[100] px-4 py-2.5 rounded-full bg-teal-mid text-white text-xs font-semibold shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-top-5 flex items-center gap-1.5">
+          <CheckCircle2 className="size-4" />
+          {toastMsg}
+        </div>
+      )}
     </div>
   )
 }
