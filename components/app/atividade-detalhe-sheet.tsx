@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Calendar, CheckCircle2, ChevronRight, Clock, MessageSquare, Target, User, X, PartyPopper, Phone, MessageCircle, MapPin, FileText as DocumentIcon, Search, ArrowUp, ArrowDown, Pencil, Mic, PhoneOff } from 'lucide-react'
+import { Calendar, CheckCircle2, ChevronRight, Clock, MessageSquare, Target, User, X, PartyPopper, Phone, MessageCircle, MapPin, FileText as DocumentIcon, Search, ArrowUp, ArrowDown, Pencil, Mic, PhoneOff, Play, Pause, Trash2, Volume2 } from 'lucide-react'
 import { type Atividade, isAtividadeAtrasada, tipoAtividadeConfig, imoveis, atendimentos } from '@/lib/app-data'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import confetti from 'canvas-confetti'
 import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
 
@@ -34,6 +34,20 @@ export function AtividadeDetalheSheet({
   const [editando, setEditando] = useState(false)
   const [mostrarLigacao, setMostrarLigacao] = useState(false)
 
+  // Audio Recording States
+  const [gravando, setGravando] = useState(false)
+  const [audioUrl, setAudioUrl] = useState<string | null>(null)
+  const [tempoGravacao, setTempoGravacao] = useState(0)
+  const [audioTocando, setAudioTocando] = useState(false)
+  const timerRef = useRef<any>(null)
+
+  // Visit Property Evaluation Flow States
+  const [imoveisAvaliacaoPendentes, setImoveisAvaliacaoPendentes] = useState<any[]>([])
+  const [indiceAvaliacaoAtual, setIndiceAvaliacaoAtual] = useState<number | null>(null)
+  const [avaliacaoReacao, setAvaliacaoReacao] = useState<'gostou' | 'neutro' | 'nao_gostou' | null>(null)
+  const [avaliacaoImpressao, setAvaliacaoImpressao] = useState('')
+  const [avaliacoesSalvas, setAvaliacoesSalvas] = useState<Record<string, { reacao: string; impressao: string }>>({})
+
   useEffect(() => {
     // Reset all state when a new atividade is opened
     setFeedback('')
@@ -44,6 +58,16 @@ export function AtividadeDetalheSheet({
     setEmojiFeedback(null)
     setEditando(false)
     setMostrarLigacao(false)
+    setGravando(false)
+    setAudioUrl(null)
+    setTempoGravacao(0)
+    setAudioTocando(false)
+    if (timerRef.current) clearInterval(timerRef.current)
+    setImoveisAvaliacaoPendentes([])
+    setIndiceAvaliacaoAtual(null)
+    setAvaliacaoReacao(null)
+    setAvaliacaoImpressao('')
+    setAvaliacoesSalvas({})
     if (atividade?.tipo === 'visita') {
       setAgendarProxima(true)
       const inicialVisitados: Record<string, boolean> = {}
@@ -76,8 +100,83 @@ export function AtividadeDetalheSheet({
     setVisitadosLocais(prev => ({ ...prev }))
   }
 
-  function handleConcluir() {
-    // Save the visited status back to the activity object
+  // Audio Recording Helpers
+  function startRecording() {
+    setGravando(true)
+    setTempoGravacao(0)
+    setAudioUrl(null)
+    timerRef.current = setInterval(() => {
+      setTempoGravacao(prev => prev + 1)
+    }, 1000)
+  }
+
+  function stopRecording() {
+    if (timerRef.current) clearInterval(timerRef.current)
+    setGravando(false)
+    setAudioUrl('mock-audio-feedback.mp3')
+  }
+
+  function deleteRecording() {
+    setAudioUrl(null)
+    setTempoGravacao(0)
+    setAudioTocando(false)
+  }
+
+  function formatTime(secs: number) {
+    const minutes = Math.floor(secs / 60)
+    const seconds = secs % 60
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
+
+  // Visit Property Evaluation Flow Helpers
+  function iniciarAvaliacoes() {
+    if (!atividade || !atividade.imoveisVisitados) {
+      realizarConclusao()
+      return
+    }
+
+    const visitados = atividade.imoveisVisitados.filter(imv => visitadosLocais[imv.id])
+    if (visitados.length === 0) {
+      realizarConclusao()
+      return
+    }
+
+    // Start with the first visited property
+    setImoveisAvaliacaoPendentes(visitados)
+    setIndiceAvaliacaoAtual(0)
+    setAvaliacaoReacao(null)
+    setAvaliacaoImpressao('')
+  }
+
+  function handleSalvarAvaliacao() {
+    if (indiceAvaliacaoAtual === null) return
+    const imvAtual = imoveisAvaliacaoPendentes[indiceAvaliacaoAtual]
+    
+    // Save current evaluation
+    const novaAvaliacao = {
+      reacao: avaliacaoReacao || 'neutro',
+      impressao: avaliacaoImpressao.trim()
+    }
+    
+    const novasAvaliacoes = {
+      ...avaliacoesSalvas,
+      [imvAtual.id]: novaAvaliacao
+    }
+    setAvaliacoesSalvas(novasAvaliacoes)
+
+    // Go to next or finish
+    if (indiceAvaliacaoAtual + 1 < imoveisAvaliacaoPendentes.length) {
+      setIndiceAvaliacaoAtual(indiceAvaliacaoAtual + 1)
+      setAvaliacaoReacao(null)
+      setAvaliacaoImpressao('')
+    } else {
+      // All evaluated! Complete the activity!
+      setIndiceAvaliacaoAtual(null)
+      realizarConclusao(novasAvaliacoes)
+    }
+  }
+
+  function realizarConclusao(avaliacoes = avaliacoesSalvas) {
     if (atividade?.imoveisVisitados) {
       atividade.imoveisVisitados.forEach(imv => {
         if (visitadosLocais[imv.id]) imv.visitado = true
@@ -85,9 +184,31 @@ export function AtividadeDetalheSheet({
     }
 
     let finalFeedback = feedback
+    
+    // Append audio note info if present
+    if (audioUrl) {
+      finalFeedback = finalFeedback 
+        ? `${finalFeedback}\n\n[Nota de áudio gravada: ${audioUrl} (${formatTime(tempoGravacao)})]` 
+        : `[Nota de áudio gravada: ${audioUrl} (${formatTime(tempoGravacao)})]`
+    }
+
     if (emojiFeedback) {
       const emojiMap = { ruim: '👎 Ruim', neutra: '😐 Neutra', boa: '👍 Boa' }
       finalFeedback = finalFeedback ? `[${emojiMap[emojiFeedback]}] ${finalFeedback}` : `[${emojiMap[emojiFeedback]}]`
+    }
+
+    // Append property evaluations to the feedback
+    const avaliacoesTexto = Object.entries(avaliacoes).map(([id, info]) => {
+      const imovelInfo = atividade?.imoveisVisitados?.find(imv => imv.id === id)
+      const nomeImovel = imovelInfo ? imovelInfo.nome : 'Imóvel'
+      const reacaoEmoji = info.reacao === 'gostou' ? '👍 Gostou' : info.reacao === 'nao_gostou' ? '👎 Não Gostou' : '😐 Neutro'
+      return `\n- ${nomeImovel}: ${reacaoEmoji}${info.impressao ? ` | Obs: "${info.impressao}"` : ''}`
+    }).join('')
+
+    if (avaliacoesTexto) {
+      finalFeedback = finalFeedback 
+        ? `${finalFeedback}\n\nAvaliação dos imóveis visitados:${avaliacoesTexto}` 
+        : `Avaliação dos imóveis visitados:${avaliacoesTexto}`
     }
 
     setSucesso(true)
@@ -100,6 +221,14 @@ export function AtividadeDetalheSheet({
     setTimeout(() => {
       onConcluir(atividade!.id, true, finalFeedback, agendarProxima)
     }, 1500)
+  }
+
+  function handleConcluir() {
+    if (atividade?.tipo === 'visita') {
+      iniciarAvaliacoes()
+    } else {
+      realizarConclusao()
+    }
   }
 
   function handleDesfazerConclusao() {
@@ -141,7 +270,61 @@ export function AtividadeDetalheSheet({
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto px-6 py-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
-            {sucesso ? (
+            {indiceAvaliacaoAtual !== null && imoveisAvaliacaoPendentes[indiceAvaliacaoAtual] ? (
+              <div className="flex flex-col py-6 animate-in fade-in duration-200">
+                <div className="flex items-center justify-between border-b border-border pb-4 mb-4">
+                  <div className="flex-1 min-w-0 pr-2">
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-primary">Avaliação de Imóvel ({indiceAvaliacaoAtual + 1} de {imoveisAvaliacaoPendentes.length})</span>
+                    <h2 className="font-serif text-lg font-bold text-foreground mt-0.5 truncate">{imoveisAvaliacaoPendentes[indiceAvaliacaoAtual].nome}</h2>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground bg-muted px-2.5 py-1 rounded-full font-semibold truncate shrink-0 max-w-[150px]">{imoveisAvaliacaoPendentes[indiceAvaliacaoAtual].endereco}</span>
+                </div>
+
+                <p className="text-sm font-semibold text-foreground mb-3">O cliente gostou do imóvel?</p>
+                <div className="flex gap-3 mb-6">
+                  <button 
+                    type="button" 
+                    onClick={() => setAvaliacaoReacao('gostou')} 
+                    className={`flex-1 flex flex-col items-center justify-center gap-1.5 p-3 rounded-2xl border transition-all active:scale-[0.98] ${avaliacaoReacao === 'gostou' ? 'border-green-500 bg-green-50 text-green-700 font-semibold' : 'border-border bg-card hover:bg-muted text-muted-foreground'}`}
+                  >
+                    <span className="text-3xl">👍</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Gostou</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setAvaliacaoReacao('neutro')} 
+                    className={`flex-1 flex flex-col items-center justify-center gap-1.5 p-3 rounded-2xl border transition-all active:scale-[0.98] ${avaliacaoReacao === 'neutro' ? 'border-amber bg-amber/10 text-[#8a5a1e] font-semibold' : 'border-border bg-card hover:bg-muted text-muted-foreground'}`}
+                  >
+                    <span className="text-3xl">😐</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Neutro</span>
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setAvaliacaoReacao('nao_gostou')} 
+                    className={`flex-1 flex flex-col items-center justify-center gap-1.5 p-3 rounded-2xl border transition-all active:scale-[0.98] ${avaliacaoReacao === 'nao_gostou' ? 'border-red-500 bg-red-50 text-red-700 font-semibold' : 'border-border bg-card hover:bg-muted text-muted-foreground'}`}
+                  >
+                    <span className="text-3xl">👎</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Não Gostou</span>
+                  </button>
+                </div>
+
+                <p className="text-sm font-semibold text-foreground mb-2">Impressões gerais e anotações</p>
+                <textarea
+                  value={avaliacaoImpressao}
+                  onChange={(e) => setAvaliacaoImpressao(e.target.value)}
+                  placeholder="Ex: Achou a cozinha pequena, mas adorou a área de lazer..."
+                  className="w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary h-28 mb-6"
+                />
+
+                <button
+                  type="button"
+                  onClick={handleSalvarAvaliacao}
+                  className="w-full h-12 bg-primary text-primary-foreground font-semibold text-sm rounded-2xl transition-all hover:bg-primary/95 active:scale-98 shadow-md"
+                >
+                  {indiceAvaliacaoAtual + 1 === imoveisAvaliacaoPendentes.length ? 'Finalizar Avaliações' : 'Próximo Imóvel'}
+                </button>
+              </div>
+            ) : sucesso ? (
               <div className="flex flex-col items-center justify-center py-10 animate-in zoom-in duration-300">
                 <div className="flex size-20 items-center justify-center rounded-full bg-teal-mid/10 text-teal-deep mb-4">
                   <CheckCircle2 className="size-10" />
@@ -449,6 +632,79 @@ export function AtividadeDetalheSheet({
                       <span className="text-[10px] font-semibold uppercase tracking-wide">Boa</span>
                     </button>
                   </div>
+                  {/* Audio Recording UI Component */}
+                  <div className="mt-3 mb-3 p-3 rounded-2xl border border-border bg-muted/20 flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                        <Volume2 className="size-3.5 text-primary" />
+                        Feedback por Áudio
+                      </span>
+                      {audioUrl && (
+                        <button
+                          type="button"
+                          onClick={deleteRecording}
+                          className="text-red-500 hover:text-red-750 transition-colors"
+                          title="Remover áudio"
+                        >
+                          <Trash2 className="size-4" />
+                        </button>
+                      )}
+                    </div>
+
+                    {!gravando && !audioUrl && (
+                      <button
+                        type="button"
+                        onClick={startRecording}
+                        className="flex w-full h-11 items-center justify-center gap-2 rounded-xl border border-primary/20 bg-primary/5 text-primary text-xs font-bold transition-all hover:bg-primary/10 active:scale-[0.98]"
+                      >
+                        <Mic className="size-4" />
+                        Gravar Feedback Falado
+                      </button>
+                    )}
+
+                    {gravando && (
+                      <div className="flex items-center justify-between bg-red-550/10 border border-red-500/20 rounded-xl px-4 py-2">
+                        <div className="flex items-center gap-2">
+                          <span className="size-2.5 rounded-full bg-red-500 animate-ping" />
+                          <span className="text-xs font-semibold text-red-700">Gravando áudio...</span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span className="font-mono text-xs font-bold text-red-700">{formatTime(tempoGravacao)}</span>
+                          <button
+                            type="button"
+                            onClick={stopRecording}
+                            className="bg-red-500 text-white rounded-lg px-3 py-1 text-[11px] font-bold shadow-sm active:scale-95 transition-all"
+                          >
+                            Parar
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {audioUrl && (
+                      <div className="flex items-center gap-3 bg-primary/5 border border-primary/25 rounded-xl px-4 py-2">
+                        <button
+                          type="button"
+                          onClick={() => setAudioTocando(!audioTocando)}
+                          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm active:scale-90 transition-all"
+                        >
+                          {audioTocando ? <Pause className="size-4" /> : <Play className="size-4" />}
+                        </button>
+                        <div className="flex-1">
+                          <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-primary rounded-full transition-all duration-300" 
+                              style={{ width: audioTocando ? '100%' : '20%' }} 
+                            />
+                          </div>
+                        </div>
+                        <span className="font-mono text-xs font-semibold text-muted-foreground">
+                          {audioTocando ? '0:00' : formatTime(tempoGravacao)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
                   <textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}

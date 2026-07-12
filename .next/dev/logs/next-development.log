@@ -21,3 +21,7 @@
 {"timestamp":"00:04:36.836","source":"Browser","level":"ERROR","message":"./components/app/atividade-detalhe-sheet.tsx:578:1\nUnexpected token. Did you mean `{'}'}` or `&rbrace;`?\n  576 |     </div>\n  577 |   )\n> 578 | }\n      | ^\n  579 |\n\nParsing ecmascript source code failed\n\nImport traces:\n  Client Component Browser:\n    ./components/app/atividade-detalhe-sheet.tsx [Client Component Browser]\n    ./components/app/screen-hoje.tsx [Client Component Browser]\n    ./app/crm/page.tsx [Client Component Browser]\n    ./app/crm/page.tsx [Server Component]\n\n  Client Component SSR:\n    ./components/app/atividade-detalhe-sheet.tsx [Client Component SSR]\n    ./components/app/screen-hoje.tsx [Client Component SSR]\n    ./app/crm/page.tsx [Client Component SSR]\n    ./app/crm/page.tsx [Server Component]"}
 {"timestamp":"00:04:45.679","source":"Server","level":"LOG","message":"✓ Compiled in 865ms"}
 {"timestamp":"00:04:46.308","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:07:47.878","source":"Server","level":"LOG","message":"✓ Compiled in 246ms"}
+{"timestamp":"00:08:11.467","source":"Server","level":"LOG","message":"✓ Compiled in 267ms"}
+{"timestamp":"00:08:43.124","source":"Server","level":"LOG","message":"✓ Compiled in 607ms"}
+{"timestamp":"00:09:15.309","source":"Server","level":"LOG","message":"✓ Compiled in 277ms"}
