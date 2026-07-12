@@ -68,9 +68,23 @@ export default function LoginPage() {
       modo: 'venda' as const,
       preAtendimento: true,
       atividades: [],
-      timeline: []
+      timeline: [],
+      notas: [],
+      documentos: [],
+      emails: [],
+      imoveisEnviados: [],
+      perfil: {
+        tipo: '',
+        dormitorios: '',
+        vagas: '',
+        bairros: [],
+        valorMin: '',
+        valorMax: '',
+        observacoes: ''
+      },
+      albert: { ativo: false, dia: '', hora: '', instrucoes: '' }
     }
-    atendimentos.push(novoLead)
+    atendimentos.push(novoLead as any)
 
     await new Promise((r) => setTimeout(r, 1500))
     setCarregando(false)
