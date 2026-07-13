@@ -695,6 +695,10 @@ export const atividadesHoje: Atividade[] = [
   },
   { id: 'a3', hora: '17:30', titulo: 'Enviar documentação do MS-1108', cliente: 'Beatriz Rocha', whatsapp: '(11) 96543-2109', tipo: 'whatsapp', concluida: false },
   { id: 'a4', hora: '09:00', titulo: 'Reunião de equipe — metas da semana', cliente: 'Equipe Central', tipo: 'reuniao', concluida: true },
+  { id: 'a5', hora: '10:00', titulo: 'Retornar contato sobre cobertura duplex', cliente: 'Dona Raimunda', telefone: '(11) 93333-3333', tipo: 'ligacao', concluida: false, descricao: 'Ficou de confirmar se a filha vai acompanhar a visita no sábado.' },
+  { id: 'a6', hora: '14:15', titulo: 'Enviar fotos atualizadas do empreendimento', cliente: 'Marcos Oliver', whatsapp: '(11) 92222-2222', tipo: 'whatsapp', concluida: false, descricao: 'Marcos quer ver fotos da evolução da fachada e acabamentos.' },
+  { id: 'a7', hora: '16:00', titulo: 'Ligar para sondar interesse no Lançamento', cliente: 'Carlos Henrique', telefone: '(11) 94444-4444', tipo: 'ligacao', concluida: false, descricao: 'Lead do portal interessado no decorado.' },
+  { id: 'a8', hora: '18:00', titulo: 'Alinhar proposta com o proprietário', cliente: 'Roberto Silveira', tipo: 'tarefa', concluida: false, descricao: 'Apresentar a proposta de permuta enviada pelo cliente André Souza.' },
 ]
 
 export const tempConfig: Record<Temperatura, { label: string; dot: string; chip: string; bg: string }> = {
