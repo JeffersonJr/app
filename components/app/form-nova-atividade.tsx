@@ -278,26 +278,49 @@ export function FormNovaAtividade({
       <div className="flex flex-col gap-4">
         {aba === 'atividade' && (
           <>
-            {/* AI Assistant Premium Banner Card */}
-            <div className="bg-gradient-to-r from-primary to-teal-deep text-primary-foreground rounded-3xl p-4 shadow-md flex items-center justify-between gap-3 border border-primary/20 relative overflow-hidden">
+            {/* AI Assistant Premium Banner Card (Inline) */}
+            <button
+              type="button"
+              onClick={startAlbertVoiceCapture}
+              disabled={albertStatus !== 'idle'}
+              className={`w-full relative overflow-hidden rounded-2xl p-4 text-left transition-all active:scale-[0.98] disabled:opacity-90 border ${albertStatus === 'idle' ? 'bg-gradient-to-r from-primary to-teal-deep text-primary-foreground shadow-md border-primary/20' : 'bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border-primary/40'}`}
+            >
               <div className="absolute inset-0 bg-white/5 opacity-40 bg-[radial-gradient(circle_at_25%_10%,rgba(255,255,255,0.25),transparent)]" />
-              <div className="flex-1 relative z-10">
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#a9ffd2] flex items-center gap-1.5 opacity-95">
-                  <Sparkles className="size-3 text-[#a9ffd2] fill-[#a9ffd2] animate-pulse" />
-                  Albert Assistente de IA
-                </span>
-                <h4 className="text-sm font-bold mt-1 leading-snug">Criar por comando de voz</h4>
-                <p className="text-[10px] opacity-80 mt-0.5 leading-tight">Diga o que fazer e o Albert preenche os campos automaticamente.</p>
+              
+              <div className="flex items-center gap-4 relative z-10">
+                <div className={`flex size-12 shrink-0 items-center justify-center rounded-full shadow-lg transition-all duration-300 ${
+                  albertStatus === 'gravando' ? 'animate-pulse scale-110 bg-red-500 text-white shadow-red-500/30' :
+                  albertStatus === 'processando' ? 'bg-primary text-primary-foreground shadow-primary/30' :
+                  albertStatus === 'sucesso' ? 'bg-green-500 text-white shadow-green-500/30' :
+                  'bg-white text-primary hover:scale-105 shadow-xl'
+                }`}>
+                  {albertStatus === 'processando' ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : albertStatus === 'sucesso' ? (
+                    <Check className="size-5" />
+                  ) : (
+                    <Mic className={`size-5 ${albertStatus === 'idle' ? 'animate-bounce' : ''}`} />
+                  )}
+                </div>
+                <div>
+                  <span className={`text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 opacity-95 ${albertStatus === 'idle' ? 'text-[#a9ffd2]' : 'text-primary'}`}>
+                    {albertStatus === 'idle' && <Sparkles className="size-3 text-[#a9ffd2] fill-[#a9ffd2] animate-pulse" />}
+                    {albertStatus === 'gravando' ? 'Gravando...' : albertStatus === 'processando' ? 'Processando com IA...' : albertStatus === 'sucesso' ? 'Pronto!' : 'Albert Assistente de IA'}
+                  </span>
+                  <h4 className={`text-sm font-bold mt-1 leading-snug ${albertStatus !== 'idle' ? 'text-foreground' : ''}`}>
+                    {albertStatus === 'gravando' ? `Ouvindo (${albertTimer}s)` : albertStatus === 'processando' ? 'Extraindo dados...' : albertStatus === 'sucesso' ? 'Campos preenchidos!' : 'Criar por comando de voz'}
+                  </h4>
+                  <p className={`text-[10px] opacity-80 mt-0.5 leading-tight ${albertStatus !== 'idle' ? 'text-muted-foreground' : ''}`}>
+                    {albertStatus === 'gravando' ? 'Fale a atividade, data e pessoa...' : albertStatus === 'processando' ? 'O Albert está lendo seu áudio' : albertStatus === 'sucesso' ? 'Revise os dados abaixo' : 'Diga o que fazer e o Albert preenche os campos automaticamente.'}
+                  </p>
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setAlbertAberto(true)}
-                className="shrink-0 flex items-center justify-center gap-1.5 text-xs font-black bg-white text-primary px-3.5 py-2.5 rounded-2xl shadow-lg hover:shadow-xl transition-all active:scale-95 hover:bg-white/95"
-              >
-                <Mic className="size-4 animate-bounce" />
-                Falar agora
-              </button>
-            </div>
+              
+              {/* Animated listening wave background */}
+              {albertStatus === 'gravando' && (
+                <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,transparent_0%,rgba(239,68,68,0.1)_50%,transparent_100%)] animate-pulse bg-[length:200%_100%]" />
+              )}
+            </button>
 
             {/* Tipo */}
             <div>
@@ -610,78 +633,6 @@ export function FormNovaAtividade({
           {aba === 'atividade' ? 'Salvar atividade' : aba === 'nota' ? 'Salvar nota' : 'Enviar e-mail'}
         </button>
       </div>
-
-      {/* Albert Voice Command Assistant Overlay */}
-      {albertAberto && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end">
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setAlbertAberto(false)} />
-          <div className="relative z-50 w-full rounded-t-[2.5rem] bg-zinc-900 px-6 py-8 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-300 text-white flex flex-col items-center mx-auto max-w-[600px]">
-            <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-zinc-700" />
-            
-            <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/20 text-primary mb-4">
-              <Bot className="size-8" />
-            </div>
-            <h3 className="font-serif text-lg font-semibold text-white text-center">Albert Assistente de Voz</h3>
-            <p className="text-xs text-zinc-400 text-center mt-1 mb-8 max-w-[280px]">
-              Diga o que você precisa agendar. A IA vai preencher o título, a descrição e a data da tarefa automaticamente.
-            </p>
-
-            {albertStatus === 'idle' && (
-              <button
-                type="button"
-                onClick={startAlbertVoiceCapture}
-                className="flex size-20 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-transform active:scale-90"
-              >
-                <Mic className="size-8" />
-              </button>
-            )}
-
-            {albertStatus === 'gravando' && (
-              <div className="flex flex-col items-center gap-4">
-                <div className="relative flex size-20 items-center justify-center rounded-full bg-red-500 text-white transition-transform active:scale-90">
-                  <Mic className="size-8 animate-pulse" />
-                </div>
-                <p className="text-xs font-semibold text-red-400 mt-2 font-mono">Gravando... 0:0{albertTimer}</p>
-                <div className="flex flex-col gap-1.5 mt-2 bg-zinc-800/40 p-3 rounded-xl border border-zinc-750">
-                  <span className="text-[10px] uppercase font-bold text-zinc-500">Exemplos que você pode falar:</span>
-                  <button 
-                    type="button"
-                    onClick={() => processAlbertVoiceCommand('Ligar para Ricardo Almeida amanhã às 15:00 para falar do contrato de compra e venda')}
-                    className="text-xs text-left text-primary hover:underline"
-                  >
-                    "Ligar para Ricardo Almeida amanhã às 15:00..."
-                  </button>
-                  <button 
-                    type="button"
-                    onClick={() => processAlbertVoiceCommand('Visita no imóvel MS-1042 hoje às 17h com André')}
-                    className="text-xs text-left text-primary hover:underline"
-                  >
-                    "Visita no imóvel MS-1042 hoje às 17h..."
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {albertStatus === 'processando' && (
-              <div className="flex flex-col items-center gap-3">
-                <Loader2 className="size-10 text-primary animate-spin" />
-                <p className="text-xs text-zinc-400 italic">"{albertTextoSimulado}"</p>
-                <p className="text-xs font-semibold text-primary">Processando áudio com Albert IA...</p>
-              </div>
-            )}
-
-            {albertStatus === 'sucesso' && (
-              <div className="flex flex-col items-center gap-2 text-center">
-                <div className="flex size-14 items-center justify-center rounded-full bg-green-500/10 text-green-400">
-                  <Check className="size-8" />
-                </div>
-                <p className="text-sm font-semibold text-green-400">Atividade processada com sucesso!</p>
-                <p className="text-xs text-zinc-500">Formulário preenchido automaticamente.</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
