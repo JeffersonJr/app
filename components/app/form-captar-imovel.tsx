@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Camera, MapPin, Search, ChevronLeft, ChevronDown, Check, X, Building2, UploadCloud, Link as LinkIcon, Sparkles, Wand2, Calendar, FileText, CheckCircle2, Home, Store, Factory, TreePine, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Info, Monitor, Trash2, RotateCw, ChevronRight, Bot } from 'lucide-react'
+import { Camera, MapPin, Search, ChevronLeft, ChevronDown, Check, X, Building2, UploadCloud, Link as LinkIcon, Sparkles, Wand2, Calendar, FileText, CheckCircle2, Home, Store, Factory, TreePine, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Info, Monitor, Trash2, RotateCw, ChevronRight, Bot, Zap, Mic } from 'lucide-react'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { SearchableTagSelect } from '@/components/app/searchable-tag-select'
