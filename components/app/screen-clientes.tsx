@@ -7,10 +7,12 @@ import {
   MessageCircle,
   Phone,
   Search,
-  PlusCircle
+  PlusCircle,
+  SlidersHorizontal
 } from 'lucide-react'
 import { clientes, tempConfig, type Cliente, type EventoTimeline } from '@/lib/app-data'
 import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
+import { FiltrosClientesSheet, type FiltrosClientes } from '@/components/app/filtros-clientes-sheet'
 
 const segmentos = ['Todos', 'Comprador', 'Locatário', 'Proprietário'] as const
 
@@ -25,16 +27,50 @@ export function ScreenClientes({
 }) {
   const [segmento, setSegmento] = useState<(typeof segmentos)[number]>('Todos')
   const [busca, setBusca] = useState('')
+  const [mostrarFiltros, setMostrarFiltros] = useState(false)
+  const [filtrosAtuais, setFiltrosAtuais] = useState<FiltrosClientes>({
+    dataCriacaoIntervalo: 'Qualquer',
+    origem: [],
+    status: [],
+  })
 
   const clienteAberto = clientes.find((c) => c.id === clienteAbertoId) ?? null
 
   const lista = useMemo(() => {
     return clientes.filter((c) => {
+      // Filtro de Busca e Segmento (Tabs)
       const matchSeg = segmento === 'Todos' || c.tipo === segmento
       const q = busca.trim().toLowerCase()
-      return matchSeg && (!q || c.nome.toLowerCase().includes(q))
+      const matchBusca = (!q || c.nome.toLowerCase().includes(q))
+      
+      // Filtro Avançado: Origem
+      const matchOrigem = filtrosAtuais.origem.length === 0 || (c.origem && filtrosAtuais.origem.includes(c.origem))
+      
+      // Filtro Avançado: Status
+      const matchStatus = filtrosAtuais.status.length === 0 || (c.status && filtrosAtuais.status.includes(c.status))
+      
+      // Filtro Avançado: Data de Criação (simulada)
+      let matchData = true
+      if (filtrosAtuais.dataCriacaoIntervalo !== 'Qualquer' && c.dataCriacao) {
+        // Num app real faríamos o diff de datas. Como temos dados mockados, vamos simular uma regra básica.
+        // O cliente c.dataCriacao está no formato YYYY-MM-DD
+        const dataCli = new Date(c.dataCriacao)
+        const hoje = new Date()
+        const diffMs = hoje.getTime() - dataCli.getTime()
+        const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+        switch (filtrosAtuais.dataCriacaoIntervalo) {
+          case 'Hoje': matchData = diffDias <= 0; break;
+          case 'Esta semana': matchData = diffDias <= 7; break;
+          case 'Este mês': matchData = diffDias <= 30; break;
+          case 'Últimos 30 dias': matchData = diffDias <= 30; break;
+          case 'Este ano': matchData = diffDias <= 365; break;
+        }
+      }
+
+      return matchSeg && matchBusca && matchOrigem && matchStatus && matchData
     })
-  }, [segmento, busca, clientes.length]) // Add clientes.length to trigger re-render on mutation
+  }, [segmento, busca, clientes.length, filtrosAtuais])
 
   function handleCriarCliente() {
     const novoId = `c${Date.now()}`
@@ -67,19 +103,31 @@ export function ScreenClientes({
         </p>
       </header>
 
-      <div className="relative">
-        <Search
-          className="absolute left-4 top-1/2 size-4.5 -translate-y-1/2 text-muted-foreground"
-          strokeWidth={1.5}
-        />
-        <input
-          type="search"
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          placeholder="Buscar por nome..."
-          aria-label="Buscar clientes"
-          className="h-12 w-full rounded-2xl border border-border bg-card pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-        />
+      <div className="flex gap-2 relative">
+        <div className="relative flex-1">
+          <Search
+            className="absolute left-4 top-1/2 size-4.5 -translate-y-1/2 text-muted-foreground"
+            strokeWidth={1.5}
+          />
+          <input
+            type="search"
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            placeholder="Buscar por nome..."
+            aria-label="Buscar clientes"
+            className="h-12 w-full rounded-2xl border border-border bg-card pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
+        <button 
+          onClick={() => setMostrarFiltros(true)}
+          className={`shrink-0 flex items-center justify-center size-12 rounded-2xl border transition-all active:scale-95 ${
+            filtrosAtuais.origem.length > 0 || filtrosAtuais.status.length > 0 || filtrosAtuais.dataCriacaoIntervalo !== 'Qualquer'
+              ? 'border-primary bg-primary/10 text-primary shadow-sm'
+              : 'border-border bg-card text-foreground hover:bg-muted/50'
+          }`}
+        >
+          <SlidersHorizontal className="size-5" />
+        </button>
       </div>
 
       <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-5 px-5">
@@ -158,6 +206,18 @@ export function ScreenClientes({
           </li>
         )}
       </ul>
+      
+      {/* Sheet de Filtros */}
+      {mostrarFiltros && (
+        <FiltrosClientesSheet
+          filtrosAtuais={filtrosAtuais}
+          onApply={(f) => {
+            setFiltrosAtuais(f)
+            setMostrarFiltros(false)
+          }}
+          onClose={() => setMostrarFiltros(false)}
+        />
+      )}
     </div>
   )
 }

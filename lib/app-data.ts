@@ -659,15 +659,18 @@ export type Cliente = {
   temperatura: Temperatura
   ultimoContato: string
   timeline: { data: string; evento: string; tipo: string }[]
+  dataCriacao?: string
+  origem?: string
+  status?: 'aberto' | 'ganho' | 'perdido'
 }
 
 export const clientes: Cliente[] = [
-  { id: 'c1', nome: 'Mariana Costa', iniciais: 'MC', tipo: 'Comprador', telefone: '(11) 98765-4321', email: 'mariana.costa@email.com', temperatura: 'quente', ultimoContato: 'há 12 min', timeline: [{ data: 'Hoje, 09:32', evento: 'Respondeu no WhatsApp — quer visitar sábado', tipo: 'whatsapp' }, { data: 'Ontem, 16:10', evento: 'Recebeu ficha do imóvel MS-1042', tipo: 'envio' }, { data: 'Seg, 11:45', evento: 'Lead captado via Portal ZAP', tipo: 'origem' }] },
-  { id: 'c2', nome: 'Paulo Henrique', iniciais: 'PH', tipo: 'Comprador', telefone: '(11) 97654-3210', email: 'paulo.h@email.com', temperatura: 'quente', ultimoContato: 'há 40 min', timeline: [{ data: 'Hoje, 08:50', evento: 'Visita confirmada para hoje às 15h', tipo: 'visita' }, { data: 'Qui, 14:20', evento: 'Ligação — alinhou expectativa de valor', tipo: 'ligacao' }] },
-  { id: 'c3', nome: 'Beatriz Rocha', iniciais: 'BR', tipo: 'Comprador', telefone: '(11) 96543-2109', email: 'bia.rocha@email.com', temperatura: 'quente', ultimoContato: 'há 30 min', timeline: [{ data: 'Hoje, 10:05', evento: 'Proposta aceita — aguardando documentação', tipo: 'proposta' }, { data: 'Ter, 09:00', evento: 'Segunda visita ao imóvel MS-1108', tipo: 'visita' }] },
-  { id: 'c4', nome: 'Ricardo Almeida', iniciais: 'RA', tipo: 'Comprador', telefone: '(11) 95432-1098', email: 'ricardo.almeida@email.com', temperatura: 'morno', ultimoContato: 'há 2 h', timeline: [{ data: 'Hoje, 08:15', evento: 'Solicitou mais opções em Alphaville', tipo: 'whatsapp' }] },
-  { id: 'c5', nome: 'Fernanda Lima', iniciais: 'FL', tipo: 'Locatário', telefone: '(11) 94321-0987', email: 'fe.lima@email.com', temperatura: 'frio', ultimoContato: 'ontem', timeline: [{ data: 'Ontem, 17:40', evento: 'Lead captado por indicação', tipo: 'origem' }] },
-  { id: 'c6', nome: 'Carlos Nogueira', iniciais: 'CN', tipo: 'Proprietário', telefone: '(11) 93210-9876', email: 'carlos.nog@email.com', temperatura: 'morno', ultimoContato: 'há 3 dias', timeline: [{ data: 'Qua, 10:30', evento: 'Autorização de venda renovada — 90 dias', tipo: 'documento' }] },
+  { id: 'c1', nome: 'Mariana Costa', iniciais: 'MC', tipo: 'Comprador', telefone: '(11) 98765-4321', email: 'mariana.costa@email.com', temperatura: 'quente', ultimoContato: 'há 12 min', timeline: [{ data: 'Hoje, 09:32', evento: 'Respondeu no WhatsApp — quer visitar sábado', tipo: 'whatsapp' }, { data: 'Ontem, 16:10', evento: 'Recebeu ficha do imóvel MS-1042', tipo: 'envio' }, { data: 'Seg, 11:45', evento: 'Lead captado via Portal ZAP', tipo: 'origem' }], dataCriacao: '2026-07-10', origem: 'Portal ZAP', status: 'aberto' },
+  { id: 'c2', nome: 'Paulo Henrique', iniciais: 'PH', tipo: 'Comprador', telefone: '(11) 97654-3210', email: 'paulo.h@email.com', temperatura: 'quente', ultimoContato: 'há 40 min', timeline: [{ data: 'Hoje, 08:50', evento: 'Visita confirmada para hoje às 15h', tipo: 'visita' }, { data: 'Qui, 14:20', evento: 'Ligação — alinhou expectativa de valor', tipo: 'ligacao' }], dataCriacao: '2026-07-11', origem: 'Indicação', status: 'aberto' },
+  { id: 'c3', nome: 'Beatriz Rocha', iniciais: 'BR', tipo: 'Comprador', telefone: '(11) 96543-2109', email: 'bia.rocha@email.com', temperatura: 'quente', ultimoContato: 'há 30 min', timeline: [{ data: 'Hoje, 10:05', evento: 'Proposta aceita — aguardando documentação', tipo: 'proposta' }, { data: 'Ter, 09:00', evento: 'Segunda visita ao imóvel MS-1108', tipo: 'visita' }], dataCriacao: '2026-06-25', origem: 'Instagram', status: 'ganho' },
+  { id: 'c4', nome: 'Ricardo Almeida', iniciais: 'RA', tipo: 'Comprador', telefone: '(11) 95432-1098', email: 'ricardo.almeida@email.com', temperatura: 'morno', ultimoContato: 'há 2 h', timeline: [{ data: 'Hoje, 08:15', evento: 'Solicitou mais opções em Alphaville', tipo: 'whatsapp' }], dataCriacao: '2026-07-12', origem: 'Google Ads', status: 'aberto' },
+  { id: 'c5', nome: 'Fernanda Lima', iniciais: 'FL', tipo: 'Locatário', telefone: '(11) 94321-0987', email: 'fe.lima@email.com', temperatura: 'frio', ultimoContato: 'ontem', timeline: [{ data: 'Ontem, 17:40', evento: 'Lead captado por indicação', tipo: 'origem' }], dataCriacao: '2026-05-15', origem: 'Indicação', status: 'perdido' },
+  { id: 'c6', nome: 'Carlos Nogueira', iniciais: 'CN', tipo: 'Proprietário', telefone: '(11) 93210-9876', email: 'carlos.nog@email.com', temperatura: 'morno', ultimoContato: 'há 3 dias', timeline: [{ data: 'Qua, 10:30', evento: 'Autorização de venda renovada — 90 dias', tipo: 'documento' }], dataCriacao: '2026-01-10', origem: 'Passante', status: 'aberto' },
 ]
 
 export type Atividade = {
