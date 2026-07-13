@@ -984,23 +984,41 @@ export function ScreenHoje({
               ) : roletaAtividades[indiceRoleta] && (
                 <div className="relative w-full max-w-md flex items-center justify-center">
                   
-                  {/* Next card preview (deck effect) */}
-                  {roletaAtividades[indiceRoleta + 1] && !roletaEfeitoFrup && (
-                    <div className="absolute w-[95%] max-w-md bg-card/60 border-2 border-border/40 rounded-3xl p-6 flex flex-col gap-5 z-0 translate-y-6 opacity-40 blur-[1px] pointer-events-none">
-                      <div className="flex items-center justify-between border-b border-border/30 pb-3">
-                        <span className="h-4 w-16 bg-muted rounded-md" />
-                        <span className="h-4 w-10 bg-muted rounded-md" />
-                      </div>
-                      <div>
-                        <div className="h-6 w-32 bg-muted rounded-md mb-2" />
-                        <div className="h-12 w-full bg-muted/40 rounded-2xl" />
-                      </div>
-                      <div className="flex gap-2">
-                        <div className="flex-1 h-12 rounded-2xl bg-muted" />
-                        <div className="size-12 rounded-2xl bg-muted" />
-                      </div>
-                    </div>
-                  )}
+                  {/* Next cards preview (deck effect) */}
+                  {!roletaEfeitoFrup &&
+                    [1, 2, 3].map((offset) => {
+                      if (!roletaAtividades[indiceRoleta + offset]) return null
+                      
+                      const scale = 1 - offset * 0.05
+                      const translateY = offset * 18 // 18px, 36px, 54px downward
+                      const opacity = 1 - offset * 0.25
+                      
+                      return (
+                        <div 
+                          key={offset}
+                          className="absolute w-full max-w-md bg-card border-2 border-border/60 rounded-3xl p-6 flex flex-col gap-5 pointer-events-none transition-all duration-300"
+                          style={{
+                            transform: `translateY(${translateY}px) scale(${scale})`,
+                            opacity: opacity,
+                            zIndex: -offset,
+                          }}
+                        >
+                          <div className="flex items-center justify-between border-b border-border/30 pb-3">
+                            <span className="h-4 w-16 bg-muted rounded-md" />
+                            <span className="h-4 w-10 bg-muted rounded-md" />
+                          </div>
+                          <div>
+                            <div className="h-6 w-32 bg-muted rounded-md mb-2" />
+                            <div className="h-12 w-full bg-muted/40 rounded-2xl" />
+                          </div>
+                          <div className="flex gap-2">
+                            <div className="flex-1 h-12 rounded-2xl bg-muted" />
+                            <div className="size-12 rounded-2xl bg-muted" />
+                          </div>
+                        </div>
+                      )
+                    })
+                  }
 
                   {/* Visual Background Indicators for Swipe Actions */}
                   <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl transition-opacity duration-200">
