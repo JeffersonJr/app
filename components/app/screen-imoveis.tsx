@@ -71,7 +71,6 @@ export function ScreenImoveis({
   const [selecionadosPublicacao, setSelecionadosPublicacao] = useState<Set<string>>(new Set())
   const [publicandoRedes, setPublicandoRedes] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
-  const [contextoAlbert, setContextoAlbert] = useState('')
 
   const [abaAtiva, setAbaAtiva] = useState<'imoveis' | 'empreendimentos'>('imoveis')
   const [filtro, setFiltro] = useState<(typeof filtros)[number]>('Todos')
@@ -767,7 +766,7 @@ function ImovelDetail({
   const [toastMessage, setToastMessage] = useState('')
   const [editMode, setEditMode] = useState(false)
   const [mostrarUpsell, setMostrarUpsell] = useState(false)
-  const [contextoAlbert, setContextoAlbert] = useState('')
+  const [contextosAlbertPorLead, setContextosAlbertPorLead] = useState<Record<string, string>>({})
   const [upsellSucesso, setUpsellSucesso] = useState(false)
   const [buscaLeadShare, setBuscaLeadShare] = useState('')
   const [mostrarNovoLead, setMostrarNovoLead] = useState(false)
@@ -1138,18 +1137,7 @@ function ImovelDetail({
                     <Sparkles className="size-4 text-[#a9ffd2] fill-[#a9ffd2] animate-pulse" />
                     <span className="text-xs font-black uppercase tracking-wider text-[#a9ffd2]">Reaquecer com Albert IA</span>
                   </div>
-                  <p className="text-xs opacity-90 relative z-10 leading-snug">Dispare propostas e follow-ups inteligentes personalizados para todos os leads interessados de uma só vez.</p>
-                  
-                  <div className="relative z-10 w-full mt-1">
-                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-white/90">Contexto para o Albert</label>
-                    <textarea 
-                      value={contextoAlbert}
-                      onChange={(e) => setContextoAlbert(e.target.value)}
-                      placeholder="Ex: Diga que o proprietário baixou o valor e aceita permuta..."
-                      className="w-full h-20 resize-none rounded-xl border border-white/20 bg-black/20 p-2.5 text-xs text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/40"
-                    />
-                  </div>
-
+                  <p className="text-xs opacity-90 relative z-10 leading-snug">Dispare propostas e follow-ups inteligentes, agora com um contexto único e personalizado para cada lead.</p>
                   <button
                     type="button"
                     onClick={() => {
@@ -1205,6 +1193,15 @@ function ImovelDetail({
                       <div className="text-[10px] text-muted-foreground border-t border-border pt-2 mt-1 flex justify-between items-center">
                         <span>Última interação: {lead.ultimaInteracao}</span>
                         <span className="font-mono text-[9px] bg-primary/5 text-primary border border-primary/10 px-1.5 py-0.5 rounded">Interessado</span>
+                      </div>
+                      
+                      <div className="mt-2">
+                        <textarea 
+                          value={contextosAlbertPorLead[lead.id] || ''}
+                          onChange={(e) => setContextosAlbertPorLead(prev => ({...prev, [lead.id]: e.target.value}))}
+                          placeholder="Instruções para o Albert com este lead específico..."
+                          className="w-full h-16 resize-none rounded-xl border border-border bg-muted/30 p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/50"
+                        />
                       </div>
                     </li>
                   ))}
