@@ -588,9 +588,14 @@ export function ScreenImoveis({
                     }}
                   >
                     <div className="relative aspect-[4/3]">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={emp.foto} alt={emp.nome} className="h-full w-full object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <Image
+                        src={emp.foto || '/placeholder.svg'}
+                        alt={`Foto do empreendimento: ${emp.nome}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 480px) 100vw, 420px"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-0" />
                       {/* Status badge */}
                       <span className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm ${statusColor}`}>
                         {emp.status}
