@@ -15,6 +15,7 @@ import { ScreenDesempenho } from '../../components/app/screen-desempenho'
 import { clientes, funil } from '@/lib/app-data'
 import { useOnboarding } from '@/lib/contexts/OnboardingContext'
 import { useEffect } from 'react'
+import { SimulatedWifiScreen, SimulatedLigacaoScreen, SimulatedWhatsappScreen } from '@/components/app/simulated-screens'
 
 export default function Page() {
   const { isFirstLogin, startTour } = useOnboarding()
@@ -32,6 +33,16 @@ export default function Page() {
   const [atendimentoAbertoId, setAtendimentoAbertoId] = useState<string | null>(null)
   const [notificacoesAbertas, setNotificacoesAbertas] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
+
+  const [simulatedScreen, setSimulatedScreen] = useState<{tipo: 'wifi' | 'ligacao' | 'whatsapp', params?: any} | null>(null)
+
+  useEffect(() => {
+    const handleSimulate = (e: any) => {
+      setSimulatedScreen(e.detail)
+    }
+    window.addEventListener('open-simulated-screen', handleSimulate)
+    return () => window.removeEventListener('open-simulated-screen', handleSimulate)
+  }, [])
 
   useEffect(() => {
     // startTour('general')
@@ -126,7 +137,7 @@ export default function Page() {
               onVerPerfil={() => setTab('perfil')}
               onVerAtendimento={abrirAtendimentoPorId}
               onAbrirNovaAtividade={(clienteId?: string) => {
-                setQuickAddAcao('atividade')
+                setQuickAddAcao('nova-atividade')
                 setQuickAddDefaultCliente(clienteId)
                 setQuickAddAberto(true)
               }}
@@ -183,6 +194,24 @@ export default function Page() {
           onAtividadeCriada={(id) => abrirAtendimentoPorId(id)}
         />
       )}
+
+      {simulatedScreen?.tipo === 'wifi' && (
+        <SimulatedWifiScreen onClose={() => setSimulatedScreen(null)} />
+      )}
+      {simulatedScreen?.tipo === 'ligacao' && (
+        <SimulatedLigacaoScreen 
+          onClose={() => setSimulatedScreen(null)} 
+          contatoNome={simulatedScreen.params?.nome} 
+          contatoTelefone={simulatedScreen.params?.telefone} 
+        />
+      )}
+      {simulatedScreen?.tipo === 'whatsapp' && (
+        <SimulatedWhatsappScreen 
+          onClose={() => setSimulatedScreen(null)} 
+          contatoNome={simulatedScreen.params?.nome} 
+        />
+      )}
+
         {notificacoesAbertas && (
           <NotificacoesPanel
             onClose={() => setNotificacoesAbertas(false)}

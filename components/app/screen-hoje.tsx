@@ -792,8 +792,9 @@ export function ScreenHoje({
                   </button>
                   <button
                     onClick={() => {
-                      // Mock function to "open" Wi-Fi settings
-                      alert('Abrindo configurações de Wi-Fi do dispositivo...')
+                      if (typeof window !== 'undefined') {
+                        window.dispatchEvent(new CustomEvent('open-simulated-screen', { detail: { tipo: 'wifi' } }))
+                      }
                     }}
                     className="w-full flex items-center justify-center gap-2 rounded-xl bg-card border border-border h-12 text-sm font-bold text-foreground transition-all active:scale-95"
                   >

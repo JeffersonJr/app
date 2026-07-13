@@ -626,6 +626,8 @@ export function ScreenImoveis({
                             {selecionadosPublicacao.has(emp.id) && <Check className="size-2.5 text-white" strokeWidth={3} />}
                           </div>
                         </div>
+                      </div>
+                      <div className="absolute left-3 top-3 z-10">
                         <span className="rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
                           {emp.finalidade}
                         </span>

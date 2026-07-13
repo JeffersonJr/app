@@ -615,7 +615,11 @@ export function AtividadeDetalheSheet({
                     </div>
                     <button
                       type="button"
-                      onClick={() => setMostrarLigacao(true)}
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          window.dispatchEvent(new CustomEvent('open-simulated-screen', { detail: { tipo: 'ligacao', params: { nome: atividade.cliente, telefone: atividade.telefone } } }))
+                        }
+                      }}
                       className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/95 active:scale-[0.98] shadow-sm"
                     >
                       <Phone className="size-4" strokeWidth={2} />
@@ -635,15 +639,18 @@ export function AtividadeDetalheSheet({
                         <MessageCircle className="size-5" />
                       </span>
                     </div>
-                    <a
-                      href={`https://wa.me/55${atividade.whatsapp.replace(/\D/g, '')}?text=Olá,%20${atividade.cliente}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          window.dispatchEvent(new CustomEvent('open-simulated-screen', { detail: { tipo: 'whatsapp', params: { nome: atividade.cliente } } }))
+                        }
+                      }}
                       className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 text-sm font-semibold text-white transition-all hover:bg-[#25D366]/95 active:scale-[0.98] shadow-sm text-center"
                     >
                       <MessageCircle className="size-4" strokeWidth={2} />
                       Abrir WhatsApp
-                    </a>
+                    </button>
                   </div>
                 )}
 
@@ -1077,31 +1084,7 @@ export function AtividadeDetalheSheet({
             )}
           </div>
         )}
-      {/* Calling Screen overlay (simulated) */}
-      {mostrarLigacao && (
-        <div className="absolute inset-0 z-[100] bg-zinc-900 flex flex-col justify-between rounded-t-3xl sm:rounded-3xl animate-in fade-in slide-in-from-bottom">
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="mb-8 flex size-24 items-center justify-center rounded-full bg-zinc-850 text-4xl text-zinc-300 font-bold border border-zinc-700 shadow-xl">
-              {atividade.cliente.substring(0, 2).toUpperCase()}
-            </div>
-            <h2 className="text-2xl font-serif font-semibold text-white mb-2">{atividade.cliente}</h2>
-            <p className="text-zinc-400 font-medium animate-pulse">Chamando...</p>
-            <p className="text-zinc-500 text-sm mt-1">{atividade.telefone}</p>
-          </div>
-          <div className="p-10 flex items-center justify-center gap-8 pb-16">
-            <button type="button" className="flex size-14 items-center justify-center rounded-full bg-zinc-800 text-white transition-transform active:scale-90 border border-zinc-700">
-              <Mic className="size-6" />
-            </button>
-            <button 
-              type="button" 
-              onClick={() => setMostrarLigacao(false)}
-              className="flex size-16 items-center justify-center rounded-full bg-red-500 text-white transition-transform active:scale-90 shadow-lg shadow-red-500/20"
-            >
-              <PhoneOff className="size-7" />
-            </button>
-          </div>
-        </div>
-      )}
+
       </div>
     </div>
   )
