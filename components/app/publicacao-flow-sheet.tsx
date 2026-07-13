@@ -113,13 +113,13 @@ export function PublicacaoFlowSheet({
   const [passo, setPasso] = useState<Passo>('selecionar-redes')
   const [redesSelecionadas, setRedesSelecionadas] = useState<Set<string>>(new Set(['instagram', 'tiktok']))
   const [legendas, setLegendas] = useState<Record<string, string>>({})
-  const [formatosSelecionados, setFormatosSelecionados] = useState<Record<string, string>>({
-    instagram: 'Carrossel',
-    tiktok: 'Vídeo',
-    youtube: 'Shorts',
-    whatsapp: 'Mensagem',
-    olx: 'Anúncio',
-    zap: 'Portal',
+  const [formatosSelecionados, setFormatosSelecionados] = useState<Record<string, string[]>>({
+    instagram: ['Carrossel'],
+    tiktok: ['Vídeo'],
+    youtube: ['Shorts'],
+    whatsapp: ['Mensagem'],
+    olx: ['Anúncio'],
+    zap: ['Portal'],
   })
   const [gerandoLegenda, setGerandoLegenda] = useState<string | null>(null)
   const [progressoPublicacao, setProgressoPublicacao] = useState<Record<string, 'aguardando' | 'publicando' | 'concluido' | 'erro'>>({})
@@ -134,8 +134,43 @@ export function PublicacaoFlowSheet({
       newSet.delete(id)
     } else {
       newSet.add(id)
+      // Seleciona o primeiro formato por padrão, caso a rede não tenha nenhum selecionado
+      if (!formatosSelecionados[id] || formatosSelecionados[id].length === 0) {
+        const redeObj = redes.find(r => r.id === id)
+        if (redeObj && redeObj.formatos.length > 0) {
+          setFormatosSelecionados(prev => ({ ...prev, [id]: [redeObj.formatos[0]] }))
+        }
+      }
     }
     setRedesSelecionadas(newSet)
+  }
+
+  function toggleFormato(idRede: string, formato: string, e: React.MouseEvent) {
+    e.stopPropagation()
+    const newFormatos = { ...formatosSelecionados }
+    const atuais = newFormatos[idRede] || []
+    
+    let novos
+    if (atuais.includes(formato)) {
+      novos = atuais.filter(f => f !== formato)
+    } else {
+      novos = [...atuais, formato]
+    }
+    newFormatos[idRede] = novos
+    setFormatosSelecionados(newFormatos)
+
+    // Se selecionou formato e a rede não tá ativa, ativa ela
+    if (novos.length > 0 && !redesSelecionadas.has(idRede)) {
+      const nr = new Set(redesSelecionadas)
+      nr.add(idRede)
+      setRedesSelecionadas(nr)
+    }
+    // Se removeu todos os formatos, desativa a rede (desde que não seja a única)
+    if (novos.length === 0 && redesSelecionadas.has(idRede) && redesSelecionadas.size > 1) {
+      const nr = new Set(redesSelecionadas)
+      nr.delete(idRede)
+      setRedesSelecionadas(nr)
+    }
   }
 
   function gerarLegendaIA(redeId: string) {
@@ -259,10 +294,24 @@ export function PublicacaoFlowSheet({
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-sm text-foreground">{rede.nome}</p>
                       <p className="text-xs text-muted-foreground mt-0.5 leading-snug line-clamp-2">{rede.descricao}</p>
-                      <div className="flex gap-1 mt-1.5 flex-wrap">
-                        {rede.formatos.map(f => (
-                          <span key={f} className="text-[10px] font-semibold bg-muted px-2 py-0.5 rounded-full text-muted-foreground">{f}</span>
-                        ))}
+                      <div className="flex gap-1.5 mt-2 flex-wrap">
+                        {rede.formatos.map(f => {
+                          const selecionado = (formatosSelecionados[rede.id] || []).includes(f)
+                          return (
+                            <button
+                              key={f}
+                              type="button"
+                              onClick={(e) => toggleFormato(rede.id, f, e)}
+                              className={`text-[10px] font-semibold px-2.5 py-1 rounded-full transition-all border ${
+                                selecionado 
+                                  ? 'bg-primary text-primary-foreground border-primary'
+                                  : 'bg-transparent text-muted-foreground border-muted-foreground/30 hover:border-muted-foreground/60'
+                              }`}
+                            >
+                              {f}
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
                     <div className={`flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
@@ -310,13 +359,11 @@ export function PublicacaoFlowSheet({
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">{rede.nome}</p>
-                    <select
-                      value={formatosSelecionados[rede.id]}
-                      onChange={e => setFormatosSelecionados(prev => ({ ...prev, [rede.id]: e.target.value }))}
-                      className="mt-0.5 text-xs bg-muted border border-border rounded-lg px-2 py-1 text-foreground focus:outline-none"
-                    >
-                      {rede.formatos.map(f => <option key={f} value={f}>{f}</option>)}
-                    </select>
+                    <div className="flex gap-1 mt-1 flex-wrap">
+                      {(formatosSelecionados[rede.id] || []).map(f => (
+                        <span key={f} className="text-[10px] bg-muted border border-border rounded-lg px-2 py-0.5 text-foreground">{f}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -331,12 +378,12 @@ export function PublicacaoFlowSheet({
                       <p className="text-[10px] text-muted-foreground">{rede.nome}</p>
                     </div>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${rede.bgCor} ${rede.cor}`}>
-                      {formatosSelecionados[rede.id]}
+                      {(formatosSelecionados[rede.id] || []).join(', ')}
                     </span>
                   </div>
 
                   <div className={`relative bg-muted overflow-hidden ${
-                    rede.id === 'tiktok' || (rede.id === 'youtube' && formatosSelecionados[rede.id] === 'Shorts') ? 'aspect-[9/16]' : 'aspect-[4/3]'
+                    rede.id === 'tiktok' || (rede.id === 'youtube' && (formatosSelecionados[rede.id] || []).includes('Shorts')) || (rede.id === 'instagram' && (formatosSelecionados[rede.id] || []).includes('Reels')) ? 'aspect-[9/16]' : 'aspect-[4/3]'
                   }`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={itens[0]?.foto} alt="preview" className="w-full h-full object-cover" />
@@ -350,7 +397,7 @@ export function PublicacaoFlowSheet({
                       </div>
                     )}
 
-                    {rede.id === 'instagram' && formatosSelecionados[rede.id] === 'Carrossel' && (
+                    {rede.id === 'instagram' && (formatosSelecionados[rede.id] || []).includes('Carrossel') && (
                       <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
                         {[0, 1, 2].map(i => (
                           <div key={i} className={`h-1.5 rounded-full ${i === 0 ? 'w-4 bg-white' : 'w-1.5 bg-white/50'}`} />

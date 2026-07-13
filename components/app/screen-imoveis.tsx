@@ -468,11 +468,14 @@ export function ScreenImoveis({
                       className="object-cover"
                       sizes="(max-width: 480px) 100vw, 420px"
                     />
-                    <span
-                      className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm ${statusStyle[im.status]}`}
-                    >
-                      {im.status}
-                    </span>
+                    <div className="absolute left-3 top-3 z-10 flex flex-col items-start gap-1.5">
+                      <span className={`rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm shadow-sm ${statusStyle[im.status]}`}>
+                        {im.status}
+                      </span>
+                      <span className="rounded-full bg-teal-shadow/80 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm shadow-sm">
+                        {im.codigo}
+                      </span>
+                    </div>
                     
                     <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
                       <div className="flex size-8 items-center justify-center rounded-full bg-background shadow-md border border-border selection-checkbox hover:bg-muted/50" onClick={(e) => {
@@ -494,9 +497,6 @@ export function ScreenImoveis({
                           <Heart className="size-3.5 fill-current" strokeWidth={1.5} />
                         </span>
                       )}
-                      <span className="rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm shadow-sm">
-                        {im.codigo}
-                      </span>
                     </div>
                   </div>
                   <div className="p-4">
@@ -596,10 +596,15 @@ export function ScreenImoveis({
                         sizes="(max-width: 480px) 100vw, 420px"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-0" />
-                      {/* Status badge */}
-                      <span className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm ${statusColor}`}>
-                        {emp.status}
-                      </span>
+                      {/* Status e Código */}
+                      <div className="absolute left-3 top-3 z-10 flex flex-col items-start gap-1.5">
+                        <span className={`rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm shadow-sm ${statusColor}`}>
+                          {emp.status}
+                        </span>
+                        <span className="rounded-full bg-teal-shadow/80 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm shadow-sm">
+                          {emp.codigo}
+                        </span>
+                      </div>
                       {/* Badges e Seleção */}
                       <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
                         <div className="flex size-6 items-center justify-center rounded-full bg-background shadow-md selection-checkbox hover:bg-muted/50" onClick={(e) => {
