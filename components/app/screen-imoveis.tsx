@@ -585,7 +585,7 @@ export function ScreenImoveis({
                       setEmpreendimentoSelecionado(emp)
                     }}
                   >
-                    <div className="relative aspect-[16/9]">
+                    <div className="relative aspect-[4/3]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={emp.foto} alt={emp.nome} className="h-full w-full object-cover" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
