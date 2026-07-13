@@ -114,7 +114,11 @@ export default function Page() {
             <ScreenHoje
               onVerFunil={() => setTab('negocios')}
               onVerCliente={(id) => {
-                setClienteAbertoId(id)
+                const leadInFunil = funil.flatMap((e) => e.leads).find((l) => l.id === id)
+                const client = leadInFunil 
+                  ? clientes.find((c) => c.nome === leadInFunil.nome)
+                  : (clientes.find((c) => c.id === id) || clientes.find((c) => c.nome === id))
+                setClienteAbertoId(client ? client.id : id)
                 setTab('clientes')
               }}
               onVerPerfil={() => setTab('perfil')}

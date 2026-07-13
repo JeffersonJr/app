@@ -119,7 +119,7 @@ export function GanhoPerdidoSheet({
   }
 
   return (
-    <div className="absolute inset-0 z-50 flex flex-col justify-end">
+    <div className="fixed inset-0 z-50 flex flex-col justify-end">
       <div
         className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
         onClick={!sucesso ? onClose : undefined}
