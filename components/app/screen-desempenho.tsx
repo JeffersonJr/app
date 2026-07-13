@@ -3,6 +3,7 @@
 // screen-desempenho.tsx
 import { useState } from 'react'
 import { ChevronLeft, Filter, TrendingUp, Users, Target, Clock, ArrowRight, CheckCircle2, Wallet, X, Calendar } from 'lucide-react'
+import { funis } from '@/lib/app-data'
 
 export function ScreenDesempenho({
   onBack
@@ -11,6 +12,21 @@ export function ScreenDesempenho({
 }) {
   const [showFiltros, setShowFiltros] = useState(false)
   const [periodo, setPeriodo] = useState('Este mês')
+  const [funilId, setFunilId] = useState(funis[0].id)
+
+  const funilSelecionado = funis.find(f => f.id === funilId) || funis[0]
+  
+  // Fake metrics factor to make the charts look different per funnel
+  const funilFactor = funilId === 'principal' ? 1 : funilId === 'alto-padrao' ? 0.35 : 1.8
+  
+  const metricsColorMap = [
+    { bg: 'bg-blue-500', text: 'text-blue-500', bgLight: 'bg-blue-500/10' },
+    { bg: 'bg-indigo-500', text: 'text-indigo-500', bgLight: 'bg-indigo-500/10' },
+    { bg: 'bg-amber-500', text: 'text-amber-500', bgLight: 'bg-amber-500/10' },
+    { bg: 'bg-emerald-500', text: 'text-emerald-500', bgLight: 'bg-emerald-500/10' },
+    { bg: 'bg-purple-500', text: 'text-purple-500', bgLight: 'bg-purple-500/10' },
+    { bg: 'bg-rose-500', text: 'text-rose-500', bgLight: 'bg-rose-500/10' },
+  ]
 
   return (
     <div className="flex flex-col gap-6 px-5 pt-4 pb-28">
@@ -61,91 +77,77 @@ export function ScreenDesempenho({
 
         <div className="flex flex-col rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
           <TrendingUp className="size-5 text-amber mb-3" />
-          <p className="font-sans text-2xl font-bold tracking-tight text-foreground mb-1">14</p>
+          <p className="font-sans text-2xl font-bold tracking-tight text-foreground mb-1">{Math.round(14 * funilFactor)}</p>
           <p className="text-[11px] font-medium text-muted-foreground">Vendas fechadas</p>
         </div>
 
         <div className="flex flex-col rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
           <Wallet className="size-5 text-[#2B5250] mb-3" />
-          <p className="font-sans text-2xl font-bold tracking-tight text-foreground mb-1">R$ 142k</p>
+          <p className="font-sans text-2xl font-bold tracking-tight text-foreground mb-1">R$ {Math.round(142 * funilFactor)}k</p>
           <p className="text-[11px] font-medium text-muted-foreground">Comissões ganhas</p>
         </div>
       </section>
 
       {/* Funil de Vendas */}
       <section>
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-          <Users className="size-4" />
-          Funil de Vendas
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+            <Users className="size-4" />
+            Funil de Vendas
+          </h2>
+          <select 
+            value={funilId}
+            onChange={(e) => setFunilId(e.target.value)}
+            className="bg-card text-foreground text-xs font-semibold rounded-lg px-2 py-1 outline-none border border-border shadow-sm focus:ring-1 focus:ring-primary"
+          >
+            {funis.map(f => (
+              <option key={f.id} value={f.id}>{f.nome}</option>
+            ))}
+          </select>
+        </div>
         <div className="flex flex-col gap-2 relative">
           {/* Fundo decorativo do funil */}
           <div className="absolute inset-0 bg-gradient-to-b from-muted/30 to-transparent rounded-3xl -z-10" />
 
-          {/* Etapa 1 */}
-          <div className="flex items-center gap-4 rounded-[1.25rem] border border-border/60 bg-card p-4 shadow-soft relative overflow-hidden mx-0 z-10">
-            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div>
-            <div className="flex flex-col min-w-[70px]">
-              <span className="font-sans text-2xl font-bold text-foreground">120</span>
-              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Leads</span>
-            </div>
-            <ArrowRight className="size-4 text-muted-foreground/30 shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground truncate">Novos Leads</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">100% do total</p>
-            </div>
-          </div>
+          {funilSelecionado.etapas?.map((etapa, idx) => {
+            const isLast = idx === (funilSelecionado.etapas?.length || 0) - 1
+            const isFirst = idx === 0
+            
+            // Mock diminishing funnel numbers
+            const baseCounts = [120, 85, 42, 14, 5, 2]
+            const count = Math.round((baseCounts[idx] || 10) * funilFactor)
+            const prevCount = idx > 0 ? Math.round((baseCounts[idx - 1] || 10) * funilFactor) : count
+            const conversao = isFirst ? 100 : Math.round((count / Math.max(1, prevCount)) * 100)
+            
+            const color = metricsColorMap[idx % metricsColorMap.length]
+            const marginX = idx * 2
 
-          {/* Etapa 2 */}
-          <div className="flex items-center gap-4 rounded-[1.25rem] border border-border/60 bg-card p-4 shadow-soft relative overflow-hidden mx-2 sm:mx-4 z-10">
-            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500"></div>
-            <div className="flex flex-col min-w-[70px]">
-              <span className="font-sans text-2xl font-bold text-foreground">85</span>
-              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Leads</span>
-            </div>
-            <ArrowRight className="size-4 text-muted-foreground/30 shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground truncate">Em Atendimento</p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[11px] text-muted-foreground">Conversão</span>
-                <span className="text-[11px] font-semibold text-indigo-500 bg-indigo-500/10 px-1.5 py-0.5 rounded">70%</span>
+            return (
+              <div key={etapa.id} className="flex items-center gap-4 rounded-[1.25rem] border border-border/60 bg-card p-4 shadow-soft relative overflow-hidden z-10" style={{ margin: `0 ${marginX}px` }}>
+                <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${color.bg}`}></div>
+                <div className="flex flex-col min-w-[70px]">
+                  <span className="font-sans text-2xl font-bold text-foreground">{count}</span>
+                  <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">{isLast ? 'Fechou' : 'Leads'}</span>
+                </div>
+                {isLast ? (
+                  <CheckCircle2 className={`size-4 ${color.text} shrink-0`} />
+                ) : (
+                  <ArrowRight className="size-4 text-muted-foreground/30 shrink-0" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-foreground truncate">{etapa.label}</p>
+                  {isFirst ? (
+                    <p className="text-[11px] text-muted-foreground mt-0.5">100% do total</p>
+                  ) : (
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className="text-[11px] text-muted-foreground">{isLast ? 'Conv. final' : 'Conversão'}</span>
+                      <span className={`text-[11px] font-semibold ${color.text} ${color.bgLight} px-1.5 py-0.5 rounded`}>{conversao}%</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </div>
-
-          {/* Etapa 3 */}
-          <div className="flex items-center gap-4 rounded-[1.25rem] border border-border/60 bg-card p-4 shadow-soft relative overflow-hidden mx-4 sm:mx-8 z-10">
-            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-500"></div>
-            <div className="flex flex-col min-w-[70px]">
-              <span className="font-sans text-2xl font-bold text-foreground">42</span>
-              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Leads</span>
-            </div>
-            <ArrowRight className="size-4 text-muted-foreground/30 shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground truncate">Em Proposta</p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[11px] text-muted-foreground">Conversão</span>
-                <span className="text-[11px] font-semibold text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">49%</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Etapa 4 */}
-          <div className="flex items-center gap-4 rounded-[1.25rem] border border-border/60 bg-card p-4 shadow-soft relative overflow-hidden mx-6 sm:mx-12 z-10">
-            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
-            <div className="flex flex-col min-w-[70px]">
-              <span className="font-sans text-2xl font-bold text-foreground">14</span>
-              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Fechou</span>
-            </div>
-            <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground truncate">Ganho</p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[11px] text-muted-foreground">Conv. final</span>
-                <span className="text-[11px] font-semibold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded">11%</span>
-              </div>
-            </div>
-          </div>
+            )
+          })}
         </div>
       </section>
 

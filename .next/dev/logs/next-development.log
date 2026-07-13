@@ -48,3 +48,4 @@
 {"timestamp":"01:35:04.153","source":"Browser","level":"ERROR","message":"\u001b[31mUncaught NotFoundError: Failed to execute 'releasePointerCapture' on 'Element': No active pointer with the given id is found.\u001b[39m\n\u001b[31m    at <unknown> (file:///Users/jefferson/Documents/GitHub/app/.next/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js:3826:7907)\n    at p (file:///Users/jefferson/Documents/GitHub/app/.next/dev/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js:3826:9791)\u001b[39m"}
 {"timestamp":"02:16:50.878","source":"Server","level":"LOG","message":"✓ Compiled in 2.9s"}
 {"timestamp":"02:20:10.498","source":"Server","level":"LOG","message":"✓ Compiled in 548ms"}
+{"timestamp":"02:24:52.071","source":"Server","level":"LOG","message":"✓ Compiled in 633ms"}
