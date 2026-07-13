@@ -278,11 +278,10 @@ export function PublicacaoFlowSheet({
               {redes.map(rede => {
                 const selecionada = redesSelecionadas.has(rede.id)
                 return (
-                  <button
+                  <div
                     key={rede.id}
-                    type="button"
                     onClick={() => toggleRede(rede.id)}
-                    className={`flex items-center gap-4 rounded-2xl p-4 border-2 text-left transition-all active:scale-[0.98] ${
+                    className={`flex items-center cursor-pointer gap-4 rounded-2xl p-4 border-2 text-left transition-all active:scale-[0.98] ${
                       selecionada
                         ? 'border-primary bg-primary/5 shadow-sm'
                         : 'border-border bg-card hover:border-primary/30'
@@ -319,7 +318,7 @@ export function PublicacaoFlowSheet({
                     }`}>
                       {selecionada && <Check className="size-3.5 text-white" strokeWidth={3} />}
                     </div>
-                  </button>
+                  </div>
                 )
               })}
             </div>
