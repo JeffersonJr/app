@@ -345,7 +345,7 @@ export function AtendimentoDetail({
       setLocalTimeline((prev) => [evento, ...prev])
     }
 
-    if (agendarProxima) {
+    if (statusConcluida) {
       setMostrarNovaAtividade(true)
     }
     setAtividadeSelecionada(null)

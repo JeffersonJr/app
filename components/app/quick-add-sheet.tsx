@@ -20,7 +20,7 @@ const acoes = [
 
 import { useOnboarding } from '@/lib/contexts/OnboardingContext'
 
-export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }: { onClose: () => void, onAtividadeCriada?: (atendimentoId: string) => void, defaultAcao?: Acao }) {
+export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null, defaultClienteId }: { onClose: () => void, onAtividadeCriada?: (atendimentoId: string) => void, defaultAcao?: Acao, defaultClienteId?: string }) {
   const [acaoAtiva, setAcaoAtiva] = useState<Acao>(defaultAcao)
 
   function handleSelect(id: Acao) {
@@ -84,7 +84,7 @@ export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }
           <FormNovoLead onClose={() => { setAcaoAtiva(null); onClose() }} onSalvar={onAtividadeCriada} />
         )}
         {acaoAtiva === 'nova-atividade' && (
-          <FormNovaAtividade onClose={() => { setAcaoAtiva(null); onClose() }} onSalvar={onAtividadeCriada} />
+          <FormNovaAtividade onClose={() => { setAcaoAtiva(null); onClose() }} onSalvar={onAtividadeCriada} defaultClienteId={defaultClienteId} />
         )}
         {acaoAtiva === 'novo-negocio' && (
           <FormNovoNegocio onClose={() => { setAcaoAtiva(null); onClose() }} onSalvar={onAtividadeCriada} />

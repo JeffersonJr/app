@@ -27,6 +27,7 @@ export default function Page() {
   const [tab, setTab] = useState<TabId>('hoje')
   const [quickAddAberto, setQuickAddAberto] = useState(false)
   const [quickAddAcao, setQuickAddAcao] = useState<any>(null)
+  const [quickAddDefaultCliente, setQuickAddDefaultCliente] = useState<string | undefined>()
   const [clienteAbertoId, setClienteAbertoId] = useState<string | null>(null)
   const [atendimentoAbertoId, setAtendimentoAbertoId] = useState<string | null>(null)
   const [notificacoesAbertas, setNotificacoesAbertas] = useState(false)
@@ -124,8 +125,9 @@ export default function Page() {
               }}
               onVerPerfil={() => setTab('perfil')}
               onVerAtendimento={abrirAtendimentoPorId}
-              onAbrirNovaAtividade={() => {
+              onAbrirNovaAtividade={(clienteId?: string) => {
                 setQuickAddAcao('atividade')
+                setQuickAddDefaultCliente(clienteId)
                 setQuickAddAberto(true)
               }}
               onVerAtividades={() => setTab('atividades')}
@@ -173,7 +175,14 @@ export default function Page() {
           onQuickAdd={() => { setQuickAddAcao(null); setQuickAddAberto(true); }}
         />
 
-        {quickAddAberto && <QuickAddSheet onClose={() => setQuickAddAberto(false)} onAtividadeCriada={abrirAtendimentoPorId} defaultAcao={quickAddAcao} />}
+        {quickAddAberto && (
+        <QuickAddSheet
+          onClose={() => { setQuickAddAberto(false); setQuickAddAcao(null); setQuickAddDefaultCliente(undefined); }}
+          defaultAcao={quickAddAcao}
+          defaultClienteId={quickAddDefaultCliente}
+          onAtividadeCriada={(id) => abrirAtendimentoPorId(id)}
+        />
+      )}
         {notificacoesAbertas && (
           <NotificacoesPanel
             onClose={() => setNotificacoesAbertas(false)}

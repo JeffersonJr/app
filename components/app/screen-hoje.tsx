@@ -27,7 +27,7 @@ import {
   MapPinOff,
   Wifi,
 } from 'lucide-react'
-import { atividadesHoje, funil, tempConfig, tipoAtividadeConfig, isAtividadeAtrasada } from '@/lib/app-data'
+import { atividadesHoje, funil, tempConfig, tipoAtividadeConfig, isAtividadeAtrasada, atendimentos } from '@/lib/app-data'
 import { AtividadeDetalheSheet } from '@/components/app/atividade-detalhe-sheet'
 
 export function ScreenHoje({
@@ -46,7 +46,7 @@ export function ScreenHoje({
   onVerCliente: (id: string) => void
   onVerPerfil?: () => void
   onVerAtendimento?: (id: string) => void
-  onAbrirNovaAtividade?: () => void
+  onAbrirNovaAtividade?: (clienteId?: string) => void
   onVerAtividades?: () => void
   onVerDesempenho: () => void
   tenantAtivo: any
@@ -214,6 +214,12 @@ export function ScreenHoje({
         setRoletaFinalizada(true)
       } else {
         setIndiceRoleta(nextIndex)
+      }
+      
+      // Auto-open Nova Atividade after completing one
+      if (onAbrirNovaAtividade) {
+        const clienteId = atendimentos.find(a => a.nome === currentTask?.cliente)?.id
+        onAbrirNovaAtividade(clienteId)
       }
     }, 300)
   }
@@ -602,8 +608,11 @@ export function ScreenHoje({
           if (atvGlob) atvGlob.concluida = statusConcluida
           setAtividadeSelecionada(null)
 
-          if (agendar && onAbrirNovaAtividade) {
-            onAbrirNovaAtividade()
+          if (statusConcluida) {
+            if (onAbrirNovaAtividade) {
+              const clienteId = atendimentos.find(a => a.nome === atvGlob?.cliente)?.id
+              onAbrirNovaAtividade(clienteId)
+            }
           }
         }}
         onVerNegocio={(cliente) => {
