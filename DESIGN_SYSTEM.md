@@ -30,8 +30,21 @@ A barra inferior coordena o roteamento falso do App (Single Page Architecture). 
 ### 4. Gravador e Transcritor de Áudio Universal
 - **Comportamento:** Sempre que um áudio é gravado (Conclusão de tarefas, Modo Roleta, Avaliação de Imóvel Visitado, Negócio Ganho/Perdido), o Albert IA transcreve o áudio em tempo real e insere em um campo de texto (`textarea`) completamente editável. O usuário pode validar e corrigir a transcrição antes de salvar no banco.
 
+### 5. Meu Desempenho (`ScreenDesempenho`)
+- **Visualização de Funil:** Usa um layout em cascata (step-by-step) para representar visualmente as conversões entre as etapas de vendas.
+- **Métricas e Filtros:** Um componente dedicado para exibição do progresso de metas com gráficos simplificados, suporte a filtro por período.
+
+### 6. Publicação Omni-channel Automatizada (`PublicacaoFlowSheet`)
+- **Fluxo com IA:** Interface multi-etapas que simula geração de posts para Instagram, TikTok e YouTube com auxílio do Albert IA.
+
+## Layout, Z-index e Overlays
+- **Bottom Sheets e Modais:** Componentes que devem sobrepor a tela inteira DEVEM usar `fixed inset-0` (em vez de `absolute inset-0`), juntamente com `z-50`, para garantir que não fiquem restritos ao contexto de overflow (`overflow-y-auto`) do elemento pai.
+
+## Boas Práticas Técnicas
+- **Evitando Mismatch de Hidratação (React 418):** Lógica dependente do tempo local (ex: `new Date().getHours()`, `isAtividadeAtrasada`) gera erros em SSR se calculada no primeiro render. Utilizamos a abordagem padrão com um estado booleano `isClient` para aguardar a hidratação antes de exibir as classes/dados tempo-dependentes no cliente.
+
 ## Gerenciamento de Estado (Mock)
 A fonte da verdade é `lib/app-data.ts`.
 - **Comunicação de Atualização:** Notificação global via `CustomEvent` através de `window.dispatchEvent(new CustomEvent('app-data-updated'))`.
 - **Helpers Importantes:**
-  - `isAtividadeAtrasada(dataStr, horaStr)`: Utilizado universalmente no sistema para calcular se um agendamento já passou.
+  - `isAtividadeAtrasada(dataStr, horaStr)`: Utilizado universalmente no sistema para calcular se um agendamento já passou. Deve ser usado junto de uma flag `isClient` se chamado durante o render.

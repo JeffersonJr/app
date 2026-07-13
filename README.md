@@ -29,6 +29,9 @@ Acesse [http://localhost:3000](http://localhost:3000) no seu navegador para ver 
 - **Agenda de Atividades:** Planejamento e acompanhamento de tarefas e visitas, com sistema de navegação por datas e destaque automático para atividades em atraso.
 - **Roteiros de Visita:** Atividades do tipo "visita" permitem anexar múltiplos imóveis, reordenar a rota, gerar termos de visita e navegar até o local via Google Maps.
 - **Acesso Rápido:** Botão "+" global para inserir leads, tarefas e negócios rapidamente em qualquer tela.
+- **Publicação Omni-channel:** Ferramenta integrada de postagem em lote para múltiplas redes sociais, alimentada por IA geradora de legendas e vídeos.
+- **Meu Desempenho:** Dashboard em tempo real do progresso das metas com visualização interativa do funil de conversão.
+- **Multi-Tenant Rápido:** Alternância instantânea de contexto de corretora ("estilo Nubank") na home do aplicativo.
 
 ## Estado Global
 Os dados do aplicativo (clientes, imóveis, configurações de funil, atividades) estão localizados no arquivo `lib/app-data.ts`.

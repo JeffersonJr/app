@@ -30,6 +30,17 @@ Este documento registra e estrutura os requisitos arquiteturais e de interface p
 
 ---
 
-## 5. Próximos Passos (Novo Backlog)
+## [CONCLUÍDO] 5. Meu Desempenho (Dashboard & Funil de Vendas)
+* **Status:** Concluído e integrado.
+* **Interface:** Tela de performance consolidada com métricas principais (progresso da meta, comissões) e um funil visual em cascata mostrando a conversão entre as etapas de vendas.
+* **Filtros:** Adicionado bottom sheet de filtros com seleção de período (este mês, mês passado) e datas personalizadas.
+
+## [CONCLUÍDO] 6. Dinâmica de Check-in por Tenant
+* **Status:** Concluído e integrado.
+* **Comportamento:** Habilidade de ligar/desligar a função de "Check-in/Check-out" na home dependendo de configurações específicas da imobiliária (Evolves e Lopes habilitados, Remax desabilitado).
+
+## 7. Próximos Passos (Novo Backlog)
 * **Inteligência de Roteamento de Visitas:** Sugerir dinamicamente a melhor rota com base na localização atual do corretor e tráfego.
 * **Relatórios Avançados por Imobiliária:** Comparativos de performance de conversão de leads por parceiro imobiliário no perfil.
+* **Solicitação de Documentos:** Fluxo para solicitar documentos de clientes diretamente via WhatsApp ou assistente virtual Albert dentro dos cards de negócios.
+* **Refinamento de UI (Público):** Criação de botão flutuante global na home/imóveis para atalho de "Publicar", e exibição fixa do checkbox de multi-seleção de imóveis na visualização de grid.
