@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   Bell,
   Calendar,
@@ -19,6 +19,7 @@ import {
   ChevronDown,
   Sparkles,
   Mic,
+  Loader2,
   Bot,
   X,
   Trophy,
@@ -81,6 +82,9 @@ export function ScreenHoje({
   const [swipeExitDirection, setSwipeExitDirection] = useState<'left' | 'right' | 'up' | null>(null)
   const [acaoAlbertRoleta, setAcaoAlbertRoleta] = useState<any>(null)
   const [textoAlbertRoleta, setTextoAlbertRoleta] = useState('')
+  const [albertVozRoleta, setAlbertVozRoleta] = useState<'idle' | 'gravando' | 'processando'>('idle')
+  const [albertVozTimerRoleta, setAlbertVozTimerRoleta] = useState(0)
+  const albertVozIntervalRef = useRef<any>(null)
 
   // Check-in/out Rodízio states
   const [checkinStatus, setCheckinStatus] = useState<'pendente' | 'erro' | 'sucesso'>('pendente')
@@ -955,13 +959,71 @@ export function ScreenHoje({
                     </p>
                     
                     <div>
-                      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">O que o Albert deve fazer?</label>
-                      <textarea
-                        value={textoAlbertRoleta}
-                        onChange={(e) => setTextoAlbertRoleta(e.target.value)}
-                        placeholder="Ex: Diga que eu liguei e vou retornar mais tarde."
-                        className="h-28 w-full resize-none rounded-2xl border border-border bg-background p-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">O que o Albert deve fazer?</label>
+                        <button
+                          type="button"
+                          disabled={albertVozRoleta !== 'idle'}
+                          onClick={() => {
+                            setAlbertVozRoleta('gravando')
+                            setAlbertVozTimerRoleta(0)
+                            let count = 0
+                            albertVozIntervalRef.current = setInterval(() => {
+                              count++
+                              setAlbertVozTimerRoleta(count)
+                              if (count >= 3) {
+                                clearInterval(albertVozIntervalRef.current)
+                                setAlbertVozRoleta('processando')
+                                setTimeout(() => {
+                                  setTextoAlbertRoleta('Diga para o cliente que tentei contato mas não foi possível falar agora. Solicite que ele me ligue de volta no período da tarde.')
+                                  setAlbertVozRoleta('idle')
+                                }, 1500)
+                              }
+                            }, 1000)
+                          }}
+                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all active:scale-95 ${
+                            albertVozRoleta === 'gravando' ? 'bg-red-500 text-white animate-pulse' :
+                            albertVozRoleta === 'processando' ? 'bg-primary/20 text-primary' :
+                            'bg-primary/10 text-primary hover:bg-primary/20'
+                          }`}
+                        >
+                          {albertVozRoleta === 'processando' ? (
+                            <Loader2 className="size-3 animate-spin" />
+                          ) : (
+                            <Mic className={`size-3 ${albertVozRoleta === 'gravando' ? 'animate-pulse' : ''}`} />
+                          )}
+                          {albertVozRoleta === 'gravando' ? `Gravando ${albertVozTimerRoleta}s` : albertVozRoleta === 'processando' ? 'Transcrevendo...' : 'Gravar voz'}
+                        </button>
+                      </div>
+                      <div className="relative">
+                        <textarea
+                          value={textoAlbertRoleta}
+                          onChange={(e) => setTextoAlbertRoleta(e.target.value)}
+                          placeholder="Ex: Diga que eu liguei e vou retornar mais tarde."
+                          className={`h-28 w-full resize-none rounded-2xl border bg-background p-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                            albertVozRoleta === 'gravando' ? 'border-red-400 ring-2 ring-red-400/30' :
+                            albertVozRoleta === 'processando' ? 'border-primary/50 ring-2 ring-primary/20' :
+                            'border-border'
+                          }`}
+                        />
+                        {albertVozRoleta === 'gravando' && (
+                          <div className="absolute inset-0 rounded-2xl bg-red-500/5 pointer-events-none flex items-center justify-center">
+                            <div className="flex gap-1 items-end h-8">
+                              {[3,6,4,7,5,8,4,6,3,5,7,4].map((h, i) => (
+                                <div key={i} className={`w-1 rounded-full bg-red-400 animate-pulse`} style={{ height: `${h * 3}px`, animationDelay: `${i * 80}ms` }} />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {albertVozRoleta === 'processando' && (
+                          <div className="absolute inset-0 rounded-2xl bg-primary/5 pointer-events-none flex items-center justify-center">
+                            <div className="flex items-center gap-2 text-primary">
+                              <Loader2 className="size-4 animate-spin" />
+                              <span className="text-xs font-medium">Transcrevendo áudio...</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
   
                     <div className="flex gap-3 mt-4">
@@ -970,6 +1032,8 @@ export function ScreenHoje({
                         onClick={() => {
                           setAcaoAlbertRoleta(null)
                           setTextoAlbertRoleta('')
+                          setAlbertVozRoleta('idle')
+                          clearInterval(albertVozIntervalRef.current)
                         }}
                         className="flex-1 h-12 rounded-2xl border border-border bg-card text-muted-foreground text-xs font-bold transition-all active:scale-95"
                       >
@@ -980,7 +1044,6 @@ export function ScreenHoje({
                         onClick={() => {
                           setToastMsg('Ação enviada para o Albert!')
                           setTimeout(() => setToastMsg(''), 3000)
-                          // Advance roulette
                           concluirTarefaRoleta()
                         }}
                         disabled={!textoAlbertRoleta.trim()}

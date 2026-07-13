@@ -93,3 +93,6 @@
 {"timestamp":"02:45:01.352","source":"Browser","level":"ERROR","message":"./components/app/screen-imoveis.tsx:682:15\nUnexpected token. Did you mean `{'}'}` or `&rbrace;`?\n  680 |                 </li>\n  681 |               )\n> 682 |             })}\n      |               ^\n  683 |           </ul>\n  684 |         )\n  685 |       )}\n\nParsing ecmascript source code failed\n\nImport traces:\n  Client Component Browser:\n    ./components/app/screen-imoveis.tsx [Client Component Browser]\n    ./app/crm/page.tsx [Client Component Browser]\n    ./app/crm/page.tsx [Server Component]\n\n  Client Component SSR:\n    ./components/app/screen-imoveis.tsx [Client Component SSR]\n    ./app/crm/page.tsx [Client Component SSR]\n    ./app/crm/page.tsx [Server Component] \"\""}
 {"timestamp":"02:48:27.962","source":"Server","level":"LOG","message":"✓ Compiled in 813ms"}
 {"timestamp":"02:50:22.321","source":"Server","level":"LOG","message":"✓ Compiled in 428ms"}
+{"timestamp":"02:53:22.319","source":"Server","level":"LOG","message":"✓ Compiled in 550ms"}
+{"timestamp":"02:53:58.404","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"02:54:09.175","source":"Server","level":"LOG","message":"✓ Compiled in 459ms"}
