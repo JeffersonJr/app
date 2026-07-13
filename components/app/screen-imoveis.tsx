@@ -770,7 +770,6 @@ function ImovelDetail({
       (a.interesse?.toLowerCase() || '').includes(imovel.codigo.toLowerCase()) || 
       (a.interesse?.toLowerCase() || '').includes(imovel.titulo.toLowerCase()) ||
       a.timeline?.some(t => 
-        (t.titulo?.toLowerCase() || '').includes(imovel.codigo.toLowerCase()) || 
         (t.descricao?.toLowerCase() || '').includes(imovel.codigo.toLowerCase())
       )
     )
