@@ -200,21 +200,19 @@ export function ScreenImoveis({
         </div>
 
         {/* Multi-Selection Mode Trigger */}
-        {abaAtiva === 'imoveis' && (
-          <button
-            type="button"
-            onClick={() => {
-              setModoSelecao(prev => {
-                if (prev) setSelecionadosPublicacao(new Set())
-                return !prev
-              })
-            }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${modoSelecao ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
-          >
-            <Share2 className="size-3.5" />
-            {modoSelecao ? 'Cancelar' : 'Divulgar'}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => {
+            setModoSelecao(prev => {
+              if (prev) setSelecionadosPublicacao(new Set())
+              return !prev
+            })
+          }}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${modoSelecao ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+        >
+          <Share2 className="size-3.5" />
+          {modoSelecao ? 'Cancelar' : 'Divulgar'}
+        </button>
       </div>
 
 
@@ -223,7 +221,11 @@ export function ScreenImoveis({
         <div className="flex items-center justify-between">
           <div className="flex rounded-full bg-muted/50 p-1">
             <button
-              onClick={() => setAbaAtiva('imoveis')}
+              onClick={() => {
+                setAbaAtiva('imoveis')
+                setSelecionadosPublicacao(new Set())
+                setModoSelecao(false)
+              }}
               className={`relative flex-1 rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${abaAtiva === 'imoveis'
                 ? 'bg-background text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
@@ -232,7 +234,11 @@ export function ScreenImoveis({
               Imóveis
             </button>
             <button
-              onClick={() => setAbaAtiva('empreendimentos')}
+              onClick={() => {
+                setAbaAtiva('empreendimentos')
+                setSelecionadosPublicacao(new Set())
+                setModoSelecao(false)
+              }}
               className={`relative flex-1 rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${abaAtiva === 'empreendimentos'
                 ? 'bg-background text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
@@ -585,8 +591,25 @@ export function ScreenImoveis({
                 <li key={emp.id}>
                   <button
                     type="button"
-                    onClick={() => setEmpreendimentoSelecionado(emp)}
-                    className="w-full overflow-hidden rounded-[1.25rem] border-transparent bg-card shadow-soft text-left transition-brand active:scale-[0.98]"
+                    onClick={() => {
+                      if (modoSelecao) {
+                        setSelecionadosPublicacao(prev => {
+                          const next = new Set(prev)
+                          if (next.has(emp.id)) {
+                            next.delete(emp.id)
+                          } else {
+                            if (next.size >= 10) return prev
+                            next.add(emp.id)
+                          }
+                          return next
+                        })
+                      } else {
+                        setEmpreendimentoSelecionado(emp)
+                      }
+                    }}
+                    className={`w-full overflow-hidden rounded-[1.25rem] border-2 bg-card shadow-soft text-left transition-all active:scale-[0.98] ${
+                      modoSelecao && selecionadosPublicacao.has(emp.id) ? 'border-primary ring-2 ring-primary/20' : 'border-transparent'
+                    }`}
                   >
                     <div className="relative aspect-[16/9]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -596,10 +619,20 @@ export function ScreenImoveis({
                       <span className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm ${statusColor}`}>
                         {emp.status}
                       </span>
-                      {/* Finalidade badge */}
-                      <span className="absolute right-3 top-3 rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
-                        {emp.finalidade}
-                      </span>
+                      {/* Selection circle or finalidade badge */}
+                      {modoSelecao ? (
+                        <div className="absolute right-3 top-3 z-10 flex size-6 items-center justify-center rounded-full bg-background shadow-md">
+                          <div className={`size-4 rounded-full border transition-all ${
+                            selecionadosPublicacao.has(emp.id) ? 'border-primary bg-primary flex items-center justify-center' : 'border-muted-foreground/30 bg-transparent'
+                          }`}>
+                            {selecionadosPublicacao.has(emp.id) && <Check className="size-2.5 text-white" strokeWidth={3} />}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="absolute right-3 top-3 rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+                          {emp.finalidade}
+                        </span>
+                      )}
                       {/* Nome + local over image */}
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <p className="font-serif text-base font-bold text-white leading-tight">{emp.nome}</p>
