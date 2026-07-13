@@ -36,7 +36,7 @@ import {
 } from 'lucide-react'
 import { imoveis, type Imovel, atendimentos } from '@/lib/app-data'
 import { empreendimentosMock, type Empreendimento } from '@/lib/empreendimentos-data'
-import { FiltrosAvancadosImoveisSheet } from '@/components/app/filtros-avancados-imoveis-sheet'
+import { FiltrosAvancadosImoveisSheet, defaultFiltrosAvancadosImoveis, type FiltrosAvancadosImoveis } from '@/components/app/filtros-avancados-imoveis-sheet'
 import { FormCaptarImovel } from '@/components/app/form-captar-imovel'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { FormCaptarEmpreendimento } from '@/components/app/form-captar-empreendimento'
@@ -81,8 +81,7 @@ export function ScreenImoveis({
   const [empreendimentoSelecionado, setEmpreendimentoSelecionado] = useState<Empreendimento | null>(null)
 
   const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false)
-  const [filtroFinalidade, setFiltroFinalidade] = useState('Todas')
-  const [filtroStatus, setFiltroStatus] = useState('Todos')
+  const [filtrosAvancados, setFiltrosAvancados] = useState<FiltrosAvancadosImoveis>(defaultFiltrosAvancadosImoveis)
 
   const [ordenacao, setOrdenacao] = useState<'padrao' | 'menor-preco' | 'maior-preco' | 'maior-area'>('padrao')
   const [mostrarMenuOrdenacao, setMostrarMenuOrdenacao] = useState(false)
@@ -97,10 +96,11 @@ export function ScreenImoveis({
 
   const filtrosAplicados = useMemo(() => {
     const res: Record<string, string> = {}
-    if (filtroFinalidade !== 'Todas') res.finalidade = filtroFinalidade
-    if (filtroStatus !== 'Todos') res.status = filtroStatus
+    if (filtrosAvancados.finality !== 'Todas') res.finalidade = filtrosAvancados.finality
+    if (filtrosAvancados.statuses.length > 0) res.status = filtrosAvancados.statuses.join(', ')
+    // Outros podem ser adicionados se for necessário mostrar chips visuais na UI
     return res
-  }, [filtroFinalidade, filtroStatus])
+  }, [filtrosAvancados])
 
   const lista = useMemo(() => {
     let baseImoveis = imoveis
@@ -120,9 +120,11 @@ export function ScreenImoveis({
         im.bairro.toLowerCase().includes(q) ||
         im.codigo.toLowerCase().includes(q)
 
-      const matchAdvFinalidade = filtroFinalidade === 'Todas' || im.finalidade === filtroFinalidade
-      const matchAdvStatus = filtroStatus === 'Todos' || im.status === filtroStatus
+      const matchAdvFinalidade = filtrosAvancados.finality === 'Todas' || im.finalidade === filtrosAvancados.finality
+      const matchAdvStatus = filtrosAvancados.statuses.length === 0 || filtrosAvancados.statuses.includes(im.status)
 
+      // Add basic filtering for new fields if they have matching data in the Imovel type (just finality and status for now as mock data doesn't have all new fields)
+      
       return matchFiltro && matchBusca && matchAdvFinalidade && matchAdvStatus
     })
 
@@ -144,7 +146,7 @@ export function ScreenImoveis({
       return [...filtrados].sort((a, b) => (b.area || 0) - (a.area || 0))
     }
     return filtrados
-  }, [filtro, busca, filtroFinalidade, filtroStatus, ordenacao, tenantAtivo])
+  }, [filtro, busca, filtrosAvancados, ordenacao, tenantAtivo])
 
   const listaEmpreendimentos = useMemo(() => {
     return empreendimentosMock.filter((emp) => {
@@ -302,8 +304,7 @@ export function ScreenImoveis({
                     key={bf.id}
                     type="button"
                     onClick={() => {
-                      setFiltroFinalidade(bf.finalidade)
-                      setFiltroStatus(bf.status)
+                      setFiltrosAvancados(prev => ({ ...prev, finality: bf.finalidade, statuses: bf.status === 'Todos' ? [] : [bf.status] }))
                       setBusca(bf.busca)
                       setMostrarFavoritasPopover(false)
                     }}
@@ -328,8 +329,8 @@ export function ScreenImoveis({
                       {
                         id: Math.random().toString(),
                         nome: nomeInput,
-                        finalidade: filtroFinalidade,
-                        status: filtroStatus,
+                        finalidade: filtrosAvancados.finality,
+                        status: filtrosAvancados.statuses.length > 0 ? filtrosAvancados.statuses[0] : 'Todos',
                         busca: busca
                       }
                     ])
@@ -677,13 +678,15 @@ export function ScreenImoveis({
         )
       )}
 
+      {/* Filtros Avançados */}
       {mostrarFiltrosAvancados && (
         <FiltrosAvancadosImoveisSheet
+          filtrosAtuais={filtrosAvancados}
+          onApply={(f) => {
+            setFiltrosAvancados(f)
+            setMostrarFiltrosAvancados(false)
+          }}
           onClose={() => setMostrarFiltrosAvancados(false)}
-          filtroFinalidade={filtroFinalidade}
-          setFiltroFinalidade={setFiltroFinalidade}
-          filtroStatus={filtroStatus}
-          setFiltroStatus={setFiltroStatus}
         />
       )}
 

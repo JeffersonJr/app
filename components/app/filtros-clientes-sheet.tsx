@@ -115,25 +115,18 @@ export function FiltrosClientesSheet({
           {/* Origem */}
           <div className="flex flex-col gap-3">
             <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Origem de Captação</h3>
-            <div className="flex flex-wrap gap-2">
-              {ORIGEM_OPCOES.map((opt) => {
-                const selecionado = origem.includes(opt)
-                return (
-                  <button
-                    key={opt}
-                    onClick={() => setOrigem(toggleArray(origem, opt))}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
-                      selecionado 
-                        ? 'bg-primary/10 text-primary border-primary shadow-sm' 
-                        : 'bg-card text-foreground border-border hover:border-primary/50'
-                    }`}
-                  >
-                    {selecionado && <Check className="size-3" strokeWidth={3} />}
-                    {opt}
-                  </button>
-                )
-              })}
-            </div>
+            <select
+              value={origem.length > 0 ? origem[0] : 'Qualquer'}
+              onChange={(e) => setOrigem(e.target.value === 'Qualquer' ? [] : [e.target.value])}
+              className="h-12 w-full rounded-xl border border-border bg-card px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            >
+              <option value="Qualquer">Qualquer origem</option>
+              {ORIGEM_OPCOES.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
           </div>
           
         </div>
