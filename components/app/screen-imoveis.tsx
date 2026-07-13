@@ -37,6 +37,7 @@ import {
 import { imoveis, type Imovel, atendimentos } from '@/lib/app-data'
 import { empreendimentosMock, type Empreendimento } from '@/lib/empreendimentos-data'
 import { FiltrosAvancadosImoveisSheet, defaultFiltrosAvancadosImoveis, type FiltrosAvancadosImoveis } from '@/components/app/filtros-avancados-imoveis-sheet'
+import { FiltrosAvancadosEmpreendimentosSheet, defaultFiltrosAvancadosEmpreendimentos, type FiltrosAvancadosEmpreendimentos } from '@/components/app/filtros-avancados-empreendimentos-sheet'
 import { FormCaptarImovel } from '@/components/app/form-captar-imovel'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { FormCaptarEmpreendimento } from '@/components/app/form-captar-empreendimento'
@@ -82,6 +83,7 @@ export function ScreenImoveis({
 
   const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false)
   const [filtrosAvancados, setFiltrosAvancados] = useState<FiltrosAvancadosImoveis>(defaultFiltrosAvancadosImoveis)
+  const [filtrosAvancadosEmp, setFiltrosAvancadosEmp] = useState<FiltrosAvancadosEmpreendimentos>(defaultFiltrosAvancadosEmpreendimentos)
 
   const [ordenacao, setOrdenacao] = useState<'padrao' | 'menor-preco' | 'maior-preco' | 'maior-area'>('padrao')
   const [mostrarMenuOrdenacao, setMostrarMenuOrdenacao] = useState(false)
@@ -152,7 +154,7 @@ export function ScreenImoveis({
     return empreendimentosMock.filter((emp) => {
       const matchFiltro =
         filtro === 'Todos' ||
-        (filtro === 'Favoritos' ? false : emp.finalidade === filtro || emp.status === filtro)
+        (filtro === 'Favoritos' ? favoritosIds.has(emp.id) : emp.status === filtro)
       
       const q = busca.trim().toLowerCase()
       const matchBusca =
@@ -160,10 +162,13 @@ export function ScreenImoveis({
         emp.nome.toLowerCase().includes(q) ||
         emp.bairro.toLowerCase().includes(q) ||
         emp.cidade.toLowerCase().includes(q)
-      
-      return matchFiltro && matchBusca
+        
+      const matchAdvName = !filtrosAvancadosEmp.name || emp.nome.toLowerCase().includes(filtrosAvancadosEmp.name.toLowerCase())
+      const matchAdvStatus = filtrosAvancadosEmp.general_status === 'Todos' || emp.status === filtrosAvancadosEmp.general_status
+
+      return matchFiltro && matchBusca && matchAdvName && matchAdvStatus
     })
-  }, [filtro, busca])
+  }, [filtro, busca, filtrosAvancadosEmp, tenantAtivo])
 
   if (selecionado) {
     return (
@@ -678,12 +683,24 @@ export function ScreenImoveis({
         )
       )}
 
-      {/* Filtros Avançados */}
-      {mostrarFiltrosAvancados && (
+      {/* Filtros Avançados Imoveis */}
+      {mostrarFiltrosAvancados && abaAtiva === 'imoveis' && (
         <FiltrosAvancadosImoveisSheet
           filtrosAtuais={filtrosAvancados}
           onApply={(f) => {
             setFiltrosAvancados(f)
+            setMostrarFiltrosAvancados(false)
+          }}
+          onClose={() => setMostrarFiltrosAvancados(false)}
+        />
+      )}
+
+      {/* Filtros Avançados Empreendimentos */}
+      {mostrarFiltrosAvancados && abaAtiva === 'empreendimentos' && (
+        <FiltrosAvancadosEmpreendimentosSheet
+          filtrosAtuais={filtrosAvancadosEmp}
+          onApply={(f) => {
+            setFiltrosAvancadosEmp(f)
             setMostrarFiltrosAvancados(false)
           }}
           onClose={() => setMostrarFiltrosAvancados(false)}

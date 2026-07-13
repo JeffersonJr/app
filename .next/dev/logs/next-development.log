@@ -30,3 +30,7 @@
 {"timestamp":"00:50:39.938","source":"Server","level":"LOG","message":"✓ Compiled in 881ms"}
 {"timestamp":"00:51:14.276","source":"Server","level":"LOG","message":"✓ Compiled in 760ms"}
 {"timestamp":"00:51:47.962","source":"Server","level":"LOG","message":"✓ Compiled in 360ms"}
+{"timestamp":"01:13:23.211","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"01:15:59.956","source":"Server","level":"LOG","message":"✓ Compiled in 1250ms"}
+{"timestamp":"01:16:36.229","source":"Server","level":"LOG","message":"✓ Compiled in 1228ms"}
+{"timestamp":"01:17:18.601","source":"Server","level":"LOG","message":"✓ Compiled in 213ms"}
