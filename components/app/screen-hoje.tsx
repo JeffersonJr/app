@@ -1154,12 +1154,22 @@ export function ScreenHoje({
                     <div className="flex gap-2">
                       <button
                         type="button"
+                        onClick={() => {
+                          if (typeof window !== 'undefined') {
+                            window.dispatchEvent(new CustomEvent('open-simulated-screen', { detail: { tipo: 'ligacao', params: { nome: roletaAtividades[indiceRoleta]?.cliente, telefone: roletaAtividades[indiceRoleta]?.telefone } } }))
+                          }
+                        }}
                         className="flex-1 flex items-center justify-center gap-2 h-12 rounded-2xl bg-primary text-primary-foreground text-xs font-bold shadow-md transition-all active:scale-95"
                       >
                         <Phone className="size-4" /> Ligar agora
                       </button>
                       <button
                         type="button"
+                        onClick={() => {
+                          if (typeof window !== 'undefined') {
+                            window.dispatchEvent(new CustomEvent('open-simulated-screen', { detail: { tipo: 'whatsapp', params: { nome: roletaAtividades[indiceRoleta]?.cliente } } }))
+                          }
+                        }}
                         className="flex-1 flex items-center justify-center gap-2 h-12 rounded-2xl bg-[#25D366] text-white text-xs font-bold shadow-md transition-all active:scale-95"
                       >
                         <MessageCircle className="size-4" /> WhatsApp
