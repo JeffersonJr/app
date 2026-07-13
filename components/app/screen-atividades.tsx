@@ -24,7 +24,7 @@ export function ScreenAtividades() {
       let dataAtv = a.data;
       if (!dataAtv || dataAtv === 'Hoje') dataAtv = getHojeStr();
       else if (dataAtv === 'Amanhã') dataAtv = getAmanhaStr();
-      
+
       return dataAtv === dataFiltro
     }).sort((a, b) => {
       const getT = (atv: Atividade) => {

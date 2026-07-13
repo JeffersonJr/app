@@ -40,6 +40,7 @@ import { FiltrosAvancadosImoveisSheet } from '@/components/app/filtros-avancados
 import { FormCaptarImovel } from '@/components/app/form-captar-imovel'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { FormCaptarEmpreendimento } from '@/components/app/form-captar-empreendimento'
+import { PublicacaoFlowSheet } from '@/components/app/publicacao-flow-sheet'
 import { FormNovoLead } from '@/components/app/form-novo-lead'
 import { EmpreendimentoDetail } from '@/components/app/empreendimento-detail'
 import { FormNovaAtividade } from '@/components/app/form-nova-atividade'
@@ -70,6 +71,7 @@ export function ScreenImoveis({
   // Social Media Multi-Selection States
   const [selecionadosPublicacao, setSelecionadosPublicacao] = useState<Set<string>>(new Set())
   const [publicandoRedes, setPublicandoRedes] = useState(false)
+  const [mostrarPublicacaoFlow, setMostrarPublicacaoFlow] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
 
   const [abaAtiva, setAbaAtiva] = useState<'imoveis' | 'empreendimentos'>('imoveis')
@@ -695,56 +697,49 @@ export function ScreenImoveis({
               Cancelar
             </button>
             <button
-              onClick={() => {
-                setPublicandoRedes(true)
-                setTimeout(() => {
-                  setPublicandoRedes(false)
-                  setSelecionadosPublicacao(new Set())
-                  setToastMessage(`${selecionadosPublicacao.size} itens publicados com sucesso nas redes sociais!`)
-                  setTimeout(() => setToastMessage(''), 3000)
-                }, 2000)
-              }}
+              onClick={() => setMostrarPublicacaoFlow(true)}
               className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-lg transition-all active:scale-95"
             >
-              {publicandoRedes ? (
-                <svg className="size-5 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-              ) : (
-                <Share2 className="size-5" />
-              )}
-              {publicandoRedes ? 'Publicando...' : `Publicar ${selecionadosPublicacao.size} item(ns)`}
+              <Share2 className="size-5" />
+              Publicar {selecionadosPublicacao.size} item(ns)
             </button>
           </div>
         </div>
       )}
 
-      {/* Social Media Publishing Status Indicator */}
-      {publicandoRedes && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="flex flex-col items-center gap-4 text-center max-w-xs px-6">
-            <div className="relative flex size-20 items-center justify-center rounded-full bg-primary/10">
-              <Sparkles className="size-10 text-primary animate-pulse" />
-            </div>
-            <div>
-              <h4 className="font-serif text-lg font-bold text-foreground">Conectando APIs...</h4>
-              <p className="text-xs text-muted-foreground mt-1">Albert compilando fotos e gerando vídeos automatizados para Instagram Reels, TikTok e Shorts do YouTube.</p>
-            </div>
-            <div className="w-full flex flex-col gap-2 mt-2">
-              <div className="flex items-center gap-2 text-xs font-semibold text-teal-deep bg-teal-mid/10 p-2 rounded-xl border border-teal-mid/20">
-                <Tv className="size-4 text-pink-500" />
-                <span>Instagram: Gerando carrossel...</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-teal-deep bg-teal-mid/10 p-2 rounded-xl border border-teal-mid/20">
-                <Play className="size-4 text-red-600" />
-                <span>YouTube Shorts: Renderizando fotos...</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-teal-deep bg-teal-mid/10 p-2 rounded-xl border border-teal-mid/20 animate-pulse">
-                <Sparkles className="size-4 text-primary" />
-                <span>TikTok: Processando vídeo por IA...</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Publication Flow */}
+      {mostrarPublicacaoFlow && (() => {
+        const todosItens = [
+          ...lista.filter(im => selecionadosPublicacao.has(im.id)).map(im => ({
+            id: im.id,
+            titulo: im.titulo,
+            foto: im.foto || '/placeholder.svg',
+            tipo: 'imovel' as const,
+            preco: im.preco,
+            bairro: im.bairro,
+            cidade: im.cidade,
+          })),
+          ...listaEmpreendimentos.filter(emp => selecionadosPublicacao.has(emp.id)).map(emp => ({
+            id: emp.id,
+            titulo: emp.nome,
+            foto: emp.foto || '/placeholder.svg',
+            tipo: 'empreendimento' as const,
+            bairro: emp.bairro,
+            cidade: emp.cidade,
+          }))
+        ]
+        return (
+          <PublicacaoFlowSheet
+            itens={todosItens}
+            onClose={() => {
+              setMostrarPublicacaoFlow(false)
+              setSelecionadosPublicacao(new Set())
+              setToastMessage('Itens publicados com sucesso!')
+              setTimeout(() => setToastMessage(''), 3000)
+            }}
+          />
+        )
+      })()}
     </div>
   )
 }

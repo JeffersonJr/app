@@ -380,9 +380,8 @@ export function ScreenPerfil({
                 <div className="flex gap-3">
                   <button
                     onClick={() => setFontSize('pequena')}
-                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${
-                      fontSize === 'pequena' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
-                    }`}
+                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${fontSize === 'pequena' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
+                      }`}
                   >
                     <span className="block text-sm font-bold mb-1">Aa</span>
                     <span className="text-xs">Pequena</span>
@@ -390,9 +389,8 @@ export function ScreenPerfil({
                   </button>
                   <button
                     onClick={() => setFontSize('media')}
-                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${
-                      fontSize === 'media' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
-                    }`}
+                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${fontSize === 'media' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
+                      }`}
                   >
                     <span className="block text-base font-bold mb-1">Aa</span>
                     <span className="text-xs">Média</span>
@@ -400,9 +398,8 @@ export function ScreenPerfil({
                   </button>
                   <button
                     onClick={() => setFontSize('grande')}
-                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${
-                      fontSize === 'grande' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
-                    }`}
+                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${fontSize === 'grande' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
+                      }`}
                   >
                     <span className="block text-lg font-bold mb-1">Aa</span>
                     <span className="text-xs">Grande</span>

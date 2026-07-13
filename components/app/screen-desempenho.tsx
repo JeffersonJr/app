@@ -48,7 +48,7 @@ export function ScreenDesempenho({
               <p className="text-xs font-semibold text-primary">Vendas ({periodo})</p>
             </div>
           </div>
-          
+
           <div className="flex items-end justify-between mb-2">
             <p className="font-sans text-[2rem] leading-none font-bold tracking-tight text-foreground">92%</p>
             <p className="text-sm font-semibold text-foreground">R$ 9.2M <span className="text-muted-foreground font-medium text-xs">/ 10M</span></p>
@@ -80,7 +80,7 @@ export function ScreenDesempenho({
         <div className="flex flex-col gap-2 relative">
           {/* Fundo decorativo do funil */}
           <div className="absolute inset-0 bg-gradient-to-b from-muted/30 to-transparent rounded-3xl -z-10" />
-          
+
           {/* Etapa 1 */}
           <div className="flex items-center gap-4 rounded-[1.25rem] border border-border/60 bg-card p-4 shadow-soft relative overflow-hidden mx-0 z-10">
             <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div>
@@ -94,7 +94,7 @@ export function ScreenDesempenho({
               <p className="text-[11px] text-muted-foreground mt-0.5">100% do total</p>
             </div>
           </div>
-          
+
           {/* Etapa 2 */}
           <div className="flex items-center gap-4 rounded-[1.25rem] border border-border/60 bg-card p-4 shadow-soft relative overflow-hidden mx-2 sm:mx-4 z-10">
             <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500"></div>
@@ -154,14 +154,14 @@ export function ScreenDesempenho({
           <Clock className="size-4" />
           Métricas de Tempo
         </h2>
-        
+
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col rounded-2xl border border-border/60 bg-card p-4 shadow-soft">
             <span className="text-[11px] font-medium text-muted-foreground mb-1">Primeiro contato</span>
             <p className="font-sans text-xl font-bold text-foreground">12 min</p>
             <p className="text-[10px] font-semibold text-emerald-500 mt-1">↓ 2 min (ótimo)</p>
           </div>
-          
+
           <div className="flex flex-col rounded-2xl border border-border/60 bg-card p-4 shadow-soft">
             <span className="text-[11px] font-medium text-muted-foreground mb-1">Tempo de fechamento</span>
             <p className="font-sans text-xl font-bold text-foreground">28 dias</p>
@@ -198,9 +198,8 @@ export function ScreenDesempenho({
                         key={p}
                         type="button"
                         onClick={() => setPeriodo(p)}
-                        className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${
-                          periodo === p ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted/50 text-muted-foreground hover:bg-muted'
-                        }`}
+                        className={`rounded-xl px-4 py-2 text-sm font-medium transition-colors ${periodo === p ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                          }`}
                       >
                         {p}
                       </button>

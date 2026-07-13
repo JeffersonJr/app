@@ -130,7 +130,7 @@ export function AtendimentoDetail({
   const [sheetGanhoPerdido, setSheetGanhoPerdido] = useState<'ganho' | 'perdido' | null>(null)
   const [expandedTimelineItemId, setExpandedTimelineItemId] = useState<string | null>(null)
   const [confirmacaoEtapa, setConfirmacaoEtapa] = useState<{ id: string, etapaId: string, nomeDaEtapa: string } | null>(null)
-  
+
   // States for Document Request Flow
   const [solicitarDocs, setSolicitarDocs] = useState(false)
   const [docsSelecionadosParaSolicitar, setDocsSelecionadosParaSolicitar] = useState<Set<string>>(new Set())
@@ -173,7 +173,7 @@ export function AtendimentoDetail({
   const [termoAberto, setTermoAberto] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [toastMensagem, setToastMensagem] = useState<string | null>(null)
-  
+
   const [abaImoveis, setAbaImoveis] = useState<'imoveis' | 'empreendimentos'>('imoveis')
 
   const imoveisEmVisitaAtiva = new Set<string>()
@@ -944,7 +944,7 @@ export function AtendimentoDetail({
                 </button>
               </div>
             </div>
-            
+
             {solicitarDocs && (
               <div className="mb-6 rounded-2xl bg-amber-500/10 p-4 border border-amber-500/20 animate-in fade-in zoom-in-95 duration-200">
                 <div className="flex items-center justify-between mb-3">
@@ -973,7 +973,7 @@ export function AtendimentoDetail({
                   })}
                 </div>
                 <div className="flex gap-2">
-                  <button 
+                  <button
                     disabled={docsSelecionadosParaSolicitar.size === 0}
                     onClick={() => {
                       setToastMensagem(`Solicitação enviada via WhatsApp para ${atendimento.nome}!`)
@@ -985,7 +985,7 @@ export function AtendimentoDetail({
                   >
                     <MessageCircle className="size-4" /> Via WhatsApp
                   </button>
-                  <button 
+                  <button
                     disabled={docsSelecionadosParaSolicitar.size === 0}
                     onClick={() => {
                       setToastMensagem(`O Albert vai cobrar ${atendimento.nome} pelos documentos.`)

@@ -67,9 +67,8 @@ function TabButton({
       type="button"
       onClick={() => onChange(tab.id)}
       aria-current={active ? 'page' : undefined}
-      className={`flex min-w-16 flex-col items-center gap-1 px-2 py-2.5 transition-brand ${
-        active ? 'text-primary' : 'text-muted-foreground'
-      }`}
+      className={`flex min-w-16 flex-col items-center gap-1 px-2 py-2.5 transition-brand ${active ? 'text-primary' : 'text-muted-foreground'
+        }`}
     >
       <Icon className="size-6" strokeWidth={active ? 2 : 1.5} />
       <span className={`text-[10px] leading-none ${active ? 'font-semibold' : 'font-medium'}`}>

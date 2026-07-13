@@ -36,7 +36,7 @@ export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }
         onClick={onClose}
         className="absolute inset-0 bg-teal-shadow/50 backdrop-blur-[2px]"
       />
-      <div 
+      <div
         id="tour-target-quickadd-menu"
         className="relative rounded-t-3xl bg-card px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh] overflow-y-auto"
       >
