@@ -85,6 +85,13 @@ export function ScreenHoje({
   const [mostrarCheckinModal, setMostrarCheckinModal] = useState(false)
   const [habilitadoRodizio, setHabilitadoRodizio] = useState(false)
 
+  // Saudação calculada no cliente para evitar hydration mismatch
+  const [saudacao, setSaudacao] = useState('Bom dia')
+  useEffect(() => {
+    const h = new Date().getHours()
+    setSaudacao(h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite')
+  }, [])
+
   const getHojeStr = () => {
     const d = new Date()
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
@@ -261,8 +268,6 @@ export function ScreenHoje({
   }
 
 
-  const horaAtual = new Date().getHours()
-  const saudacao = horaAtual < 12 ? 'Bom dia' : horaAtual < 18 ? 'Boa tarde' : 'Boa noite'
 
   return (
     <div className="flex flex-col gap-6 px-5 pt-4 pb-28">
