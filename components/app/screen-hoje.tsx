@@ -82,9 +82,10 @@ export function ScreenHoje({
   const [acaoAlbertRoleta, setAcaoAlbertRoleta] = useState<any>(null)
   const [textoAlbertRoleta, setTextoAlbertRoleta] = useState('')
 
-  // Check-in Rodízio states
+  // Check-in/out Rodízio states
   const [checkinStatus, setCheckinStatus] = useState<'pendente' | 'erro' | 'sucesso'>('pendente')
   const [mostrarCheckinModal, setMostrarCheckinModal] = useState(false)
+  const [mostrarCheckoutModal, setMostrarCheckoutModal] = useState(false)
   const [habilitadoRodizio, setHabilitadoRodizio] = useState(false)
 
   // Saudação e hidratação calculadas no cliente para evitar mismatch
@@ -309,12 +310,7 @@ export function ScreenHoje({
           {tenantAtivo.hasCheckin !== false && (
             habilitadoRodizio ? (
               <button
-                onClick={() => {
-                  setHabilitadoRodizio(false)
-                  setCheckinStatus('pendente')
-                  setToastMsg('Você saiu do rodízio.')
-                  setTimeout(() => setToastMsg(''), 3000)
-                }}
+                onClick={() => setMostrarCheckoutModal(true)}
                 className="flex items-center gap-1.5 text-[10px] font-black text-white bg-green-500 px-3 py-1.5 rounded-xl hover:bg-red-500 transition-colors shadow-sm group"
               >
                 <Target className="size-3 group-hover:hidden" strokeWidth={3} />
@@ -626,6 +622,47 @@ export function ScreenHoje({
           setTimeout(() => setToastMsg(''), 3000)
         }}
       />
+
+      {/* Modal de Checkout (Out of Zone Example) */}
+      {mostrarCheckoutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setMostrarCheckoutModal(false)} />
+          <div className="relative w-full max-w-sm rounded-3xl bg-card p-6 shadow-2xl border border-border animate-in fade-in zoom-in-95 text-center">
+            
+            <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-amber/10 text-amber">
+              <MapPinOff className="size-6" strokeWidth={2} />
+            </div>
+            <h3 className="font-serif text-xl font-bold mb-2">Sinal Perdido</h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              Você saiu da zona da imobiliária ou área habilitada para o checkin do rodízio.
+            </p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  // Apenas fecha o modal, mantém o rodízio
+                  setMostrarCheckoutModal(false)
+                }}
+                className="w-full rounded-xl bg-primary h-12 text-sm font-bold text-primary-foreground transition-all active:scale-95"
+              >
+                Ainda estou na imobiliária
+              </button>
+              <button
+                onClick={() => {
+                  // Faz o checkout real
+                  setHabilitadoRodizio(false)
+                  setCheckinStatus('pendente')
+                  setMostrarCheckoutModal(false)
+                  setToastMsg('Você saiu do rodízio.')
+                  setTimeout(() => setToastMsg(''), 3000)
+                }}
+                className="w-full rounded-xl bg-card border border-border h-12 text-sm font-bold text-foreground transition-all active:scale-95"
+              >
+                Estou fora da imobiliária (Fazer checkout)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {toastMsg && (
         <div className="fixed top-[calc(1.5rem+env(safe-area-inset-top))] left-1/2 -translate-x-1/2 z-[100] px-4 py-2.5 rounded-full bg-teal-mid text-white text-xs font-semibold shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-top-5 flex items-center gap-1.5">
