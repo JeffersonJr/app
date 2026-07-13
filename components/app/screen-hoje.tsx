@@ -207,23 +207,39 @@ export function ScreenHoje({
 
       {/* Gamification: Modo Roleta Activation trigger banner */}
       {pendentes.length > 3 && (
-        <div className="bg-gradient-to-r from-amber to-amber-deep text-ink rounded-3xl p-4 shadow-md flex flex-col gap-3 border border-amber/20 relative overflow-hidden animate-in zoom-in-95 duration-300">
-          <div className="absolute inset-0 bg-white/5 opacity-40 bg-[radial-gradient(circle_at_25%_10%,rgba(255,255,255,0.25),transparent)]" />
-          <div className="flex items-center gap-2 relative z-10">
-            <Zap className="size-4 text-primary-foreground fill-primary-foreground animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-primary-foreground">Limpeza de Mesa Turbo</span>
+        <div className="bg-gradient-to-br from-teal-deep to-[#0c2e2c] text-white rounded-3xl p-5 shadow-[0_15px_30px_rgba(15,61,59,0.25)] border border-teal-light/20 relative overflow-hidden animate-in zoom-in-95 duration-300">
+          {/* Radial light glow behind logo */}
+          <div className="absolute top-0 right-0 size-32 bg-amber/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute inset-0 bg-white/[0.02] opacity-40 bg-[radial-gradient(circle_at_25%_10%,rgba(255,255,255,0.15),transparent)]" />
+          
+          <div className="flex items-start justify-between relative z-10">
+            <div className="flex flex-col gap-1.5 max-w-[80%]">
+              <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-amber/15 text-amber border border-amber/20">
+                <Zap className="size-3.5 fill-amber animate-pulse" />
+                <span className="text-[9px] font-black uppercase tracking-wider">Modo Hércules Ativo</span>
+              </div>
+              <h3 className="font-serif text-lg font-black text-white leading-snug mt-1">
+                Você tem {pendentes.length} pendências acumuladas!
+              </h3>
+              <p className="text-xs text-teal-light/80 leading-relaxed font-light mt-0.5">
+                Não deixe acumular. Entre no fluxo contínuo e liquide sua fila de atividades de forma ultra rápida com Albert IA.
+              </p>
+            </div>
+            
+            {/* Visual game-like indicator badge */}
+            <div className="flex flex-col items-center justify-center bg-white/5 border border-white/10 rounded-2xl p-3 shrink-0">
+              <span className="text-2xl animate-bounce">🔥</span>
+              <span className="font-mono text-xs font-bold text-amber mt-1">+{pendentes.length}</span>
+            </div>
           </div>
-          <div className="relative z-10">
-            <h3 className="text-sm font-bold text-primary-foreground mb-0.5">Você tem {pendentes.length} atividades acumuladas!</h3>
-            <p className="text-xs opacity-90 text-primary-foreground/90 leading-snug">Ative o Modo Roleta para executar e liquidar todas as tarefas pendentes uma atrás da outra em fluxo contínuo ultra rápido!</p>
-          </div>
+
           <button
             type="button"
             onClick={iniciarModoRoleta}
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-primary-foreground text-xs font-black shadow-lg hover:shadow-xl transition-all active:scale-[0.98] relative z-10"
+            className="w-full flex items-center justify-center gap-2 h-12 rounded-2xl bg-gradient-to-r from-amber to-amber-deep text-ink text-xs font-black shadow-lg shadow-amber/20 hover:shadow-xl transition-all active:scale-[0.98] mt-4 relative z-10"
           >
-            <Flame className="size-4 animate-bounce text-amber fill-amber" />
-            Ativar Modo Roleta (Modo Hércules)
+            <Flame className="size-4 animate-pulse fill-ink" />
+            Entrar no Modo Roleta
           </button>
         </div>
       )}
