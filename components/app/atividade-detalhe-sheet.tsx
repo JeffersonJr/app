@@ -39,6 +39,7 @@ export function AtividadeDetalheSheet({
   const [audioUrl, setAudioUrl] = useState<string | null>(null)
   const [tempoGravacao, setTempoGravacao] = useState(0)
   const [audioTocando, setAudioTocando] = useState(false)
+  const [transcrevendo, setTranscrevendo] = useState(false)
   const timerRef = useRef<any>(null)
 
   // Visit Property Evaluation Flow States
@@ -142,6 +143,16 @@ export function AtividadeDetalheSheet({
     if (timerRef.current) clearInterval(timerRef.current)
     setGravando(false)
     setAudioUrl('mock-audio-feedback.mp3')
+    setTranscrevendo(true)
+    setTimeout(() => {
+      setTranscrevendo(false)
+      const quotes = [
+        "Conversa com o cliente foi muito produtiva. Ele demonstrou interesse em fechar a proposta.",
+        "Ligação realizada com sucesso. Deixei recado sobre a nova documentação necessária.",
+        "Reunião finalizada. Ficou acordado o envio da proposta formal por e-mail amanhã."
+      ]
+      setFeedback(quotes[Math.floor(Math.random() * quotes.length)])
+    }, 1500)
   }
 
   function deleteRecording() {
@@ -942,27 +953,40 @@ export function AtividadeDetalheSheet({
                       </div>
                     )}
 
-                    {audioUrl && (
-                      <div className="flex items-center gap-3 bg-primary/5 border border-primary/25 rounded-xl px-4 py-2">
-                        <button
-                          type="button"
-                          onClick={() => setAudioTocando(!audioTocando)}
-                          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm active:scale-90 transition-all"
-                        >
-                          {audioTocando ? <Pause className="size-4" /> : <Play className="size-4" />}
-                        </button>
-                        <div className="flex-1">
-                          <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-primary rounded-full transition-all duration-300" 
-                              style={{ width: audioTocando ? '100%' : '20%' }} 
-                            />
-                          </div>
-                        </div>
-                        <span className="font-mono text-xs font-semibold text-muted-foreground">
-                          {audioTocando ? '0:00' : formatTime(tempoGravacao)}
-                        </span>
+                    {transcrevendo && (
+                      <div className="flex items-center justify-center gap-2 py-2 text-xs text-primary font-semibold">
+                        <svg className="size-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                        Transcrevendo áudio com Albert IA...
                       </div>
+                    )}
+
+                    {audioUrl && !transcrevendo && (
+                      <>
+                        <div className="flex items-center gap-3 bg-primary/5 border border-primary/25 rounded-xl px-4 py-2">
+                          <button
+                            type="button"
+                            onClick={() => setAudioTocando(!audioTocando)}
+                            className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm active:scale-90 transition-all"
+                          >
+                            {audioTocando ? <Pause className="size-4" /> : <Play className="size-4" />}
+                          </button>
+                          <div className="flex-1">
+                            <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-primary rounded-full transition-all duration-300" 
+                                style={{ width: audioTocando ? '100%' : '20%' }} 
+                              />
+                            </div>
+                          </div>
+                          <span className="font-mono text-xs font-semibold text-muted-foreground">
+                            {audioTocando ? '0:00' : formatTime(tempoGravacao)}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] text-green-600 font-semibold bg-green-500/10 border border-green-500/20 rounded-xl px-3 py-1.5">
+                          <CheckCircle2 className="size-3.5" />
+                          Áudio gravado e transcrito automaticamente abaixo!
+                        </div>
+                      </>
                     )}
                   </div>
 

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Sparkles, Calendar, HeartHandshake, Database, ArrowRight, Bot, MessageCircle, Home, Target, MapPin, Users, Briefcase, Plane, Star } from 'lucide-react'
+import { Sparkles, Calendar, HeartHandshake, Database, ArrowRight, Bot, MessageCircle, Home, Target, MapPin, Users, Briefcase, Plane, Star, Flame, Phone, CheckCircle2 } from 'lucide-react'
 
 export const metadata = {
   title: 'Funcionalidades | evolves CRM',
@@ -188,6 +188,77 @@ export default function FeaturesPage() {
 
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature 4: Modo Roleta & Omni-Channel & Multi-Tenant */}
+      <section className="py-20 px-6 bg-ink text-white border-t border-white/5">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="bg-white/5 rounded-3xl p-8 flex items-center justify-center">
+            {/* CSS App Mockup - Modo Roleta / Hercules Mode */}
+            <div className="relative w-full max-w-[300px] h-[450px] bg-[#1E3A3A] rounded-3xl shadow-2xl p-5 flex flex-col gap-4 border border-white/10">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div className="flex items-center gap-1.5">
+                  <Flame className="w-4 h-4 text-amber animate-pulse" />
+                  <span className="text-[10px] font-black text-white uppercase tracking-wider">Modo Roleta (Insane)</span>
+                </div>
+                <span className="text-[9px] font-mono bg-white/15 px-2 py-0.5 rounded-full text-white">Task 1/6</span>
+              </div>
+              <div className="flex-1 flex flex-col justify-center gap-3">
+                <h4 className="font-serif text-lg font-bold text-white">Dona Raimunda</h4>
+                <p className="text-xs text-white/70 bg-white/5 p-3 rounded-xl border border-white/10 leading-relaxed">
+                  Você ficou de: <b>Retornar contato sobre cobertura duplex</b>
+                </p>
+                <div className="flex gap-2 mt-2">
+                  <button className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl bg-primary text-white text-xs font-bold shadow-md"><Phone className="w-3.5 h-3.5" /> Ligar agora</button>
+                  <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-green-500 text-white"><MessageCircle className="w-4 h-4" /></button>
+                </div>
+                <div className="border-t border-white/10 pt-3 mt-1 flex flex-col gap-2">
+                  <span className="text-[9px] font-bold text-teal-light uppercase tracking-wider">Feedback por Voz</span>
+                  <div className="flex items-center gap-1.5 text-[9px] text-[#25D366] font-semibold bg-[#25D366]/10 border border-[#25D366]/20 rounded-xl p-2">
+                    <CheckCircle2 className="w-3 h-3 animate-pulse" />
+                    Áudio gravado e transcrito automaticamente!
+                  </div>
+                </div>
+              </div>
+              <button className="w-full h-10 rounded-xl bg-amber text-ink text-xs font-black shadow-md flex items-center justify-center gap-2">
+                Concluir e Próxima (Frup)
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium text-sm mb-6">
+              Recursos de Gamificação & Escala
+            </div>
+            <h2 className="text-3xl font-bold mb-4">Modo Roleta & Multi-Tenant</h2>
+            <p className="text-slate-300 text-lg mb-6 leading-relaxed font-light">
+              Desenvolvemos funcionalidades exclusivas para acelerar a produtividade do corretor em momentos de alta demanda.
+            </p>
+            <ul className="space-y-4 text-slate-300">
+              <li className="flex gap-3">
+                <Flame className="w-5 h-5 text-amber shrink-0 animate-bounce" />
+                <div>
+                  <h4 className="font-bold text-white text-sm">Modo Roleta (Modo Hércules)</h4>
+                  <p className="text-xs text-white/70">Execute e liquide tarefas pendentes uma atrás da outra em tela cheia com feedback por voz editável e transições fluidas ("Frup").</p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <Sparkles className="w-5 h-5 text-primary shrink-0 animate-pulse" />
+                <div>
+                  <h4 className="font-bold text-white text-sm">Divulgação Omni-Channel e Reaquecimento IA</h4>
+                  <p className="text-xs text-white/70">Selecione até 10 Imóveis ou Empreendimentos e publique-os nas redes sociais em lote, ou reaqueça leads com propostas automáticas via Albert IA.</p>
+                </div>
+              </li>
+              <li className="flex gap-3">
+                <Home className="w-5 h-5 text-teal-light shrink-0" />
+                <div>
+                  <h4 className="font-bold text-white text-sm">Troca de Imobiliária (Estilo Nubank)</h4>
+                  <p className="text-xs text-white/70">Alterne instantaneamente de imobiliária parceira ativa no cabeçalho da Home para carregar carteiras isoladas sem login/logout.</p>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
