@@ -116,7 +116,7 @@ export default function Page() {
               onVerFunil={() => setTab('negocios')}
               onVerCliente={(id) => {
                 const leadInFunil = funil.flatMap((e) => e.leads).find((l) => l.id === id)
-                const client = leadInFunil 
+                const client = leadInFunil
                   ? clientes.find((c) => c.nome === leadInFunil.nome)
                   : (clientes.find((c) => c.id === id) || clientes.find((c) => c.nome === id))
                 setClienteAbertoId(client ? client.id : id)

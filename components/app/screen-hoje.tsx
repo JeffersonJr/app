@@ -85,9 +85,11 @@ export function ScreenHoje({
   const [mostrarCheckinModal, setMostrarCheckinModal] = useState(false)
   const [habilitadoRodizio, setHabilitadoRodizio] = useState(false)
 
-  // Saudação calculada no cliente para evitar hydration mismatch
+  // Saudação e hidratação calculadas no cliente para evitar mismatch
+  const [isClient, setIsClient] = useState(false)
   const [saudacao, setSaudacao] = useState('Bom dia')
   useEffect(() => {
+    setIsClient(true)
     const h = new Date().getHours()
     setSaudacao(h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite')
   }, [])
@@ -106,7 +108,13 @@ export function ScreenHoje({
     return false
   }
 
-  const [localAtividades, setLocalAtividades] = useState(() => atividadesHoje.filter(a => isHoje(a.data)))
+  // Inicializamos as atividades primeiro com tudo, depois filtramos no cliente para evitar mismatch
+  const [localAtividades, setLocalAtividades] = useState<typeof atividadesHoje>([])
+  useEffect(() => {
+    if (isClient) {
+      setLocalAtividades(atividadesHoje.filter(a => isHoje(a.data)))
+    }
+  }, [isClient])
   const leadsQuentes = funil
     .flatMap((estagio) => estagio.leads.map((lead) => ({ ...lead, estagio: estagio.nome })))
     .filter((lead) => lead.temperatura === 'quente')
@@ -474,12 +482,12 @@ export function ScreenHoje({
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <span className={`font-mono text-xs font-bold ${atv.concluida ? 'text-muted-foreground' : (isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'text-red-500' : 'text-primary')}`}>
+                    <span className={`font-mono text-xs font-bold ${atv.concluida ? 'text-muted-foreground' : (isClient && isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'text-red-500' : 'text-primary')}`}>
                       {atv.hora}
                     </span>
                     {!atv.concluida && (
-                      <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-md ${isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'text-red-500 bg-red-500/10 border border-red-500/20' : 'text-teal-mid bg-teal-mid/10'}`}>
-                        {isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'ATRASADA' : 'HOJE'}
+                      <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-md ${isClient && isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'text-red-500 bg-red-500/10 border border-red-500/20' : 'text-teal-mid bg-teal-mid/10'}`}>
+                        {isClient && isAtividadeAtrasada(atv.data || 'Hoje', atv.hora) ? 'ATRASADA' : 'HOJE'}
                       </span>
                     )}
                   </div>
