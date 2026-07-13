@@ -20,3 +20,5 @@
 {"timestamp":"00:24:41.717","source":"Server","level":"ERROR","message":"[browser] \"<button> cannot contain a nested <button>.\\nSee this log for the ancestor stack trace.\" \"\""}
 {"timestamp":"00:24:41.717","source":"Browser","level":"ERROR","message":"<button> cannot contain a nested <button>.\nSee this log for the ancestor stack trace. \"\""}
 {"timestamp":"00:25:30.830","source":"Server","level":"LOG","message":"✓ Compiled in 438ms"}
+{"timestamp":"00:39:06.733","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:43:31.260","source":"Server","level":"LOG","message":"✓ Compiled in 1426ms"}

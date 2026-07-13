@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   ChevronRight,
   ChevronLeft,
+  ChevronUp,
   Circle,
   Flame,
   Phone,
@@ -1025,8 +1026,28 @@ export function ScreenHoje({
                       transition: startX && currentX ? 'none' : 'all 0.3s ease-out',
                       opacity: roletaEfeitoFrup ? 0 : 1
                     }}
-                    className={`w-full bg-card border-2 border-border/80 rounded-3xl p-6 flex flex-col gap-5 relative z-10 ${roletaEfeitoFrup ? 'pointer-events-none' : ''}`}
+                    className={`w-full bg-card border-2 border-border/80 rounded-3xl p-6 flex flex-col gap-5 relative z-10 overflow-hidden ${roletaEfeitoFrup ? 'pointer-events-none' : ''}`}
                   >
+                  {/* Swipe Stamps */}
+                  <div 
+                    className="absolute top-10 right-8 border-[4px] border-green-500 text-green-500 font-black text-3xl uppercase tracking-widest rounded-lg px-4 py-2 rotate-12 pointer-events-none transition-opacity z-50 bg-background/50 backdrop-blur-sm"
+                    style={{ opacity: (startX && currentX && (currentX - startX) > 40) ? Math.min(((currentX - startX) - 40) / 100, 1) : 0 }}
+                  >
+                    Concluir
+                  </div>
+                  <div 
+                    className="absolute top-10 left-8 border-[4px] border-red-500 text-red-500 font-black text-3xl uppercase tracking-widest rounded-lg px-4 py-2 -rotate-12 pointer-events-none transition-opacity z-50 bg-background/50 backdrop-blur-sm"
+                    style={{ opacity: (startX && currentX && (currentX - startX) < -40) ? Math.min(((-40 - (currentX - startX))) / 100, 1) : 0 }}
+                  >
+                    Pular
+                  </div>
+                  <div 
+                    className="absolute bottom-[20%] left-1/2 -translate-x-1/2 border-[4px] border-amber-500 text-amber-500 font-black text-2xl uppercase tracking-widest rounded-lg px-4 py-2 pointer-events-none transition-opacity z-50 bg-background/50 backdrop-blur-sm"
+                    style={{ opacity: (startY && currentY && (currentY - startY) < -40 && Math.abs(currentY - startY) > Math.abs(currentX - startX)) ? Math.min(((-40 - (currentY - startY))) / 100, 1) : 0 }}
+                  >
+                    Remarcar
+                  </div>
+
                   {/* Visual card badge */}
                   <div className="flex items-center justify-between border-b border-border/50 pb-3">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#2B5250] bg-[#2B5250]/10 px-2 py-0.5 rounded-md">
@@ -1140,6 +1161,13 @@ export function ScreenHoje({
                       Concluir
                       <ChevronRight className="size-4" />
                     </button>
+                  </div>
+                  
+                  {/* Gesture Hints */}
+                  <div className="flex justify-between items-center text-[9px] font-bold text-muted-foreground/60 uppercase tracking-widest pt-1 px-2 select-none pointer-events-none">
+                    <span className="flex items-center gap-1"><ChevronLeft size={14} className="-ml-1" /> Pular</span>
+                    <span className="flex items-center gap-1 flex-col justify-center translate-y-1"><ChevronUp size={14} className="-mb-1.5" /> Remarcar</span>
+                    <span className="flex items-center gap-1 text-primary/70">Concluir <ChevronRight size={14} className="-mr-1" /></span>
                   </div>
                 </div>
               </div>
