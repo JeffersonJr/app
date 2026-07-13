@@ -524,43 +524,43 @@ export function FormNovaAtividade({
                   className="h-12 w-full rounded-2xl border border-border bg-background pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
-              {buscaImovel && (
-                <div className="mt-2 w-full max-h-40 overflow-y-auto rounded-2xl border border-border bg-card p-2 shadow-sm">
-                  {imoveis
-                    .filter(i =>
-                      !imoveisSelecionados.find(s => s.id === i.id) &&
-                      (i.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
-                        i.codigo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
-                        i.bairro.toLowerCase().includes(buscaImovel.toLowerCase()))
-                    )
-                    .map(i => (
-                      <button
-                        key={i.id}
-                        type="button"
-                        onClick={() => {
-                          setImoveisSelecionados([...imoveisSelecionados, i])
-                          setBuscaImovel('')
-                        }}
-                        className="flex w-full items-center gap-3 rounded-xl p-2 text-left hover:bg-muted"
-                      >
-                        <img src={i.foto} alt={i.titulo} className="size-10 rounded-lg object-cover" />
-                        <div className="flex flex-col overflow-hidden">
-                          <span className="truncate text-sm font-semibold text-foreground">{i.titulo}</span>
-                          <span className="text-[10px] text-muted-foreground">{i.codigo} · {i.bairro}</span>
-                        </div>
-                        <PlusCircle className="ml-auto size-4 text-muted-foreground" />
-                      </button>
-                    ))}
-                  {imoveis.filter(i =>
+              <div className="mt-2 w-full max-h-48 overflow-y-auto rounded-2xl border border-border bg-card p-2 shadow-sm">
+                {imoveis
+                  .filter(i =>
                     !imoveisSelecionados.find(s => s.id === i.id) &&
-                    (i.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
+                    (!buscaImovel || 
+                      i.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
                       i.codigo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
                       i.bairro.toLowerCase().includes(buscaImovel.toLowerCase()))
-                  ).length === 0 && (
-                      <p className="p-3 text-center text-xs text-muted-foreground">Nenhum imóvel encontrado.</p>
-                    )}
-                </div>
-              )}
+                  )
+                  .map(i => (
+                    <button
+                      key={i.id}
+                      type="button"
+                      onClick={() => {
+                        setImoveisSelecionados([...imoveisSelecionados, i])
+                        setBuscaImovel('')
+                      }}
+                      className="flex w-full items-center gap-3 rounded-xl p-2 text-left hover:bg-muted transition-colors"
+                    >
+                      <img src={i.foto} alt={i.titulo} className="size-10 rounded-lg object-cover" />
+                      <div className="flex flex-col overflow-hidden">
+                        <span className="truncate text-sm font-semibold text-foreground">{i.titulo}</span>
+                        <span className="text-[10px] text-muted-foreground">{i.codigo} · {i.bairro}</span>
+                      </div>
+                      <PlusCircle className="ml-auto size-4 text-muted-foreground" />
+                    </button>
+                  ))}
+                {imoveis.filter(i =>
+                  !imoveisSelecionados.find(s => s.id === i.id) &&
+                  (!buscaImovel || 
+                    i.titulo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
+                    i.codigo.toLowerCase().includes(buscaImovel.toLowerCase()) ||
+                    i.bairro.toLowerCase().includes(buscaImovel.toLowerCase()))
+                ).length === 0 && (
+                    <p className="p-3 text-center text-xs text-muted-foreground">Nenhum imóvel disponível.</p>
+                  )}
+              </div>
               {imoveisSelecionados.length > 0 && (
                 <div className="mt-3 flex flex-col gap-2">
                   {imoveisSelecionados.map((i) => (

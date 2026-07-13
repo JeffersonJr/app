@@ -6,10 +6,12 @@ import {
   Calendar,
   CheckCircle2,
   ChevronRight,
+  ChevronLeft,
   Circle,
   Flame,
   Phone,
   Target,
+  TrendingUp,
   CalendarDays,
   Users2,
   MessageCircle,
@@ -20,6 +22,8 @@ import {
   X,
   Trophy,
   Zap,
+  MapPin,
+  MapPinOff,
 } from 'lucide-react'
 import { atividadesHoje, funil, tempConfig, tipoAtividadeConfig, isAtividadeAtrasada } from '@/lib/app-data'
 import { AtividadeDetalheSheet } from '@/components/app/atividade-detalhe-sheet'
@@ -31,6 +35,7 @@ export function ScreenHoje({
   onVerAtendimento,
   onAbrirNovaAtividade,
   onVerAtividades,
+  onVerDesempenho,
   tenantAtivo,
   setTenantAtivo,
   tenants,
@@ -41,6 +46,7 @@ export function ScreenHoje({
   onVerAtendimento?: (id: string) => void
   onAbrirNovaAtividade?: () => void
   onVerAtividades?: () => void
+  onVerDesempenho: () => void
   tenantAtivo: any
   setTenantAtivo: (t: any) => void
   tenants: any[]
@@ -62,6 +68,22 @@ export function ScreenHoje({
   const [gravandoAudioRoleta, setGravandoAudioRoleta] = useState(false)
   const [timerAudioRoleta, setTimerAudioRoleta] = useState(0)
   const [roletaEfeitoFrup, setRoletaEfeitoFrup] = useState(false)
+  const [historicoRoleta, setHistoricoRoleta] = useState<{tarefa: any, acao: 'concluido' | 'pulado' | 'remarcado'}[]>([])
+  const [startX, setStartX] = useState(0)
+  const [currentX, setCurrentX] = useState(0)
+  const [startY, setStartY] = useState(0)
+  const [currentY, setCurrentY] = useState(0)
+  const [remarcarAtividade, setRemarcarAtividade] = useState<any>(null)
+  const [novaDataRemarcar, setNovaDataRemarcar] = useState('')
+  const [novaHoraRemarcar, setNovaHoraRemarcar] = useState('')
+  const [swipeExitDirection, setSwipeExitDirection] = useState<'left' | 'right' | 'up' | null>(null)
+  const [acaoAlbertRoleta, setAcaoAlbertRoleta] = useState<any>(null)
+  const [textoAlbertRoleta, setTextoAlbertRoleta] = useState('')
+
+  // Check-in Rodízio states
+  const [checkinStatus, setCheckinStatus] = useState<'pendente' | 'erro' | 'sucesso'>('pendente')
+  const [mostrarCheckinModal, setMostrarCheckinModal] = useState(false)
+  const [habilitadoRodizio, setHabilitadoRodizio] = useState(false)
 
   const getHojeStr = () => {
     const d = new Date()
@@ -102,6 +124,15 @@ export function ScreenHoje({
     setIndiceRoleta(0)
     setRoletaFinalizada(false)
     setFeedbackAudioRoleta('')
+    setHistoricoRoleta([])
+    setStartX(0)
+    setCurrentX(0)
+    setStartY(0)
+    setCurrentY(0)
+    setRemarcarAtividade(null)
+    setAcaoAlbertRoleta(null)
+    setTextoAlbertRoleta('')
+    setSwipeExitDirection(null)
     
     // Set funny message based on task count
     if (list.length > 20) {
@@ -149,10 +180,14 @@ export function ScreenHoje({
       window.dispatchEvent(new CustomEvent('app-data-updated'))
     }
 
-    // Apply "Frup" slide transition
+    setHistoricoRoleta(prev => [...prev, { tarefa: currentTask, acao: 'concluido' }])
+
+    // Apply swipe exit animation
+    setSwipeExitDirection('right')
     setRoletaEfeitoFrup(true)
     setTimeout(() => {
       setRoletaEfeitoFrup(false)
+      setSwipeExitDirection(null)
       setFeedbackAudioRoleta('')
       
       const nextIndex = indiceRoleta + 1
@@ -162,26 +197,67 @@ export function ScreenHoje({
       } else {
         setIndiceRoleta(nextIndex)
       }
-    }, 450)
+    }, 300)
   }
 
-  // Skip task to the end of the stack in Roleta Mode
+  // Skip task in Roleta Mode
   function pularTarefaRoleta() {
-    if (roletaAtividades.length <= 1) return
+    if (roletaAtividades.length === 0) return
     const currentTask = roletaAtividades[indiceRoleta]
     
+    setHistoricoRoleta(prev => [...prev, { tarefa: currentTask, acao: 'pulado' }])
+
+    setSwipeExitDirection('left')
     setRoletaEfeitoFrup(true)
     setTimeout(() => {
       setRoletaEfeitoFrup(false)
+      setSwipeExitDirection(null)
       setFeedbackAudioRoleta('')
       
-      setRoletaAtividades(prev => {
-        const next = [...prev]
-        next.splice(indiceRoleta, 1)
-        next.push(currentTask)
-        return next
-      })
-    }, 450)
+      const nextIndex = indiceRoleta + 1
+      if (nextIndex >= roletaAtividades.length) {
+        setRoletaFinalizada(true)
+      } else {
+        setIndiceRoleta(nextIndex)
+      }
+    }, 300)
+  }
+
+  // Remarcar task in Roleta Mode
+  function confirmarRemarcar() {
+    if (!remarcarAtividade) return
+    
+    const globalIdx = atividadesHoje.findIndex(a => a.id === remarcarAtividade.id)
+    if (globalIdx !== -1) {
+      atividadesHoje[globalIdx].data = novaDataRemarcar || 'Hoje'
+      atividadesHoje[globalIdx].hora = novaHoraRemarcar || '12:00'
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('app-data-updated'))
+    }
+
+    setHistoricoRoleta(prev => [...prev, { tarefa: remarcarAtividade, acao: 'remarcado' }])
+
+    setRemarcarAtividade(null)
+    setNovaDataRemarcar('')
+    setNovaHoraRemarcar('')
+    setAcaoAlbertRoleta(null)
+    setTextoAlbertRoleta('')
+
+    setSwipeExitDirection('up')
+    setRoletaEfeitoFrup(true)
+    setTimeout(() => {
+      setRoletaEfeitoFrup(false)
+      setSwipeExitDirection(null)
+      setFeedbackAudioRoleta('')
+      
+      const nextIndex = indiceRoleta + 1
+      if (nextIndex >= roletaAtividades.length) {
+        setRoletaFinalizada(true)
+      } else {
+        setIndiceRoleta(nextIndex)
+      }
+    }, 300)
   }
 
 
@@ -206,13 +282,39 @@ export function ScreenHoje({
             </h1>
           </div>
         </button>
-        <button
-          type="button"
-          onClick={() => setMostrarTenantSelector(true)}
-          className="text-[10px] font-black text-primary bg-primary/10 px-3 py-1.5 rounded-xl hover:bg-primary/20 transition-all"
-        >
-          Alterar
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setMostrarTenantSelector(true)}
+            className="text-[10px] font-black text-primary bg-primary/10 px-3 py-1.5 rounded-xl hover:bg-primary/20 transition-all"
+          >
+            Alterar
+          </button>
+          
+          {habilitadoRodizio ? (
+            <button
+              onClick={() => {
+                setHabilitadoRodizio(false)
+                setCheckinStatus('pendente')
+                setToastMsg('Você saiu do rodízio.')
+                setTimeout(() => setToastMsg(''), 3000)
+              }}
+              className="flex items-center gap-1.5 text-[10px] font-black text-white bg-green-500 px-3 py-1.5 rounded-xl hover:bg-red-500 transition-colors shadow-sm group"
+            >
+              <Target className="size-3 group-hover:hidden" strokeWidth={3} />
+              <X className="size-3 hidden group-hover:block" strokeWidth={3} />
+              <span className="group-hover:hidden">Rodízio ON <span className="font-medium opacity-80">(Sair)</span></span>
+              <span className="hidden group-hover:block">Fazer Check-out</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => setMostrarCheckinModal(true)}
+              className="text-[10px] font-black text-white bg-primary px-3 py-1.5 rounded-xl hover:bg-primary/90 transition-all shadow-sm"
+            >
+              Check-in
+            </button>
+          )}
+        </div>
       </div>
 
       <header className="flex flex-col gap-1">
@@ -276,15 +378,18 @@ export function ScreenHoje({
           </p>
         </button>
 
-        {/* Atividades hoje */}
+        {/* Meu desempenho */}
         <button
-          onClick={() => document.getElementById('secao-agenda')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          onClick={onVerDesempenho}
           className="flex flex-col text-left rounded-3xl border border-border/60 bg-card p-5 shadow-soft transition-transform active:scale-95 hover:border-primary/30"
         >
-          <span className="mb-2 block text-[13px] font-medium text-muted-foreground">Atividades hoje</span>
-          <p className="font-sans text-[2.5rem] leading-none font-bold tracking-tight text-foreground mb-1.5">{localAtividades.length}</p>
+          <div className="flex items-center justify-between mb-2 w-full">
+            <span className="text-[13px] font-medium text-muted-foreground">Meu desempenho</span>
+            <TrendingUp className="size-4 text-primary" strokeWidth={2} />
+          </div>
+          <p className="font-sans text-[2.5rem] leading-none font-bold tracking-tight text-foreground mb-1.5">92%</p>
           <p className="font-mono text-[11px] font-medium tracking-wide text-[#2B5250]">
-            {pendentes.length} restantes
+            da meta atingida
           </p>
         </button>
 
@@ -570,36 +675,103 @@ export function ScreenHoje({
         </div>
       )}
 
+      {/* Check-in Rodízio Modal */}
+      {mostrarCheckinModal && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-sm rounded-3xl bg-card border border-border shadow-2xl p-6 text-center">
+            {checkinStatus === 'pendente' && (
+              <>
+                <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <MapPin className="size-6" strokeWidth={2} />
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">Check-in de Plantão</h3>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Para entrar no rodízio de leads, precisamos validar sua localização na imobiliária.
+                </p>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      // Simula erro na primeira vez
+                      setCheckinStatus('erro')
+                    }}
+                    className="w-full rounded-xl bg-primary h-12 text-sm font-bold text-primary-foreground transition-all active:scale-95"
+                  >
+                    Fazer Check-in
+                  </button>
+                  <button
+                    onClick={() => setMostrarCheckinModal(false)}
+                    className="w-full rounded-xl bg-card border border-border h-12 text-sm font-bold text-foreground transition-all active:scale-95"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </>
+            )}
+
+            {checkinStatus === 'erro' && (
+              <>
+                <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-red-500/10 text-red-500">
+                  <MapPinOff className="size-6" strokeWidth={2} />
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">Localização não encontrada</h3>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Não conseguimos identificar sua localização na sede. Por favor, conecte no Wi-Fi da imobiliária e tente novamente.
+                </p>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      // Simula sucesso na segunda tentativa
+                      setCheckinStatus('sucesso')
+                    }}
+                    className="w-full rounded-xl bg-primary h-12 text-sm font-bold text-primary-foreground transition-all active:scale-95"
+                  >
+                    Tentar Novamente
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCheckinStatus('pendente')
+                      setMostrarCheckinModal(false)
+                    }}
+                    className="w-full rounded-xl bg-card border border-border h-12 text-sm font-bold text-foreground transition-all active:scale-95"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </>
+            )}
+
+            {checkinStatus === 'sucesso' && (
+              <>
+                <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-green-500/10 text-green-500">
+                  <CheckCircle2 className="size-6" strokeWidth={2} />
+                </div>
+                <h3 className="font-serif text-xl font-bold mb-2">Você está no Rodízio!</h3>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Check-in realizado com sucesso. Você já está habilitado para receber novos leads.
+                </p>
+                <button
+                  onClick={() => {
+                    setHabilitadoRodizio(true)
+                    setCheckinStatus('pendente')
+                    setMostrarCheckinModal(false)
+                  }}
+                  className="w-full rounded-xl bg-green-500 h-12 text-sm font-bold text-white transition-all active:scale-95"
+                >
+                  OK, Entendi
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Gamification Fullscreen: MODO ROLETA */}
       {modoRoleta && (
         <div className="fixed inset-0 z-[100] bg-background flex flex-col animate-in fade-in duration-300">
-          {/* Header do Modo Roleta */}
-          <div className="bg-primary text-primary-foreground p-5 pt-[calc(1.5rem+env(safe-area-inset-top))] flex items-center justify-between border-b border-white/10 shadow-lg">
-            <div className="flex items-center gap-2">
-              <Flame className="size-5 text-amber fill-amber animate-pulse" />
-              <div>
-                <h2 className="text-sm font-black uppercase tracking-wider">Modo Roleta</h2>
-                <p className="text-[10px] text-primary-foreground/75 font-medium">{mensagemGamificada}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-mono font-bold bg-white/10 px-2.5 py-1 rounded-full">
-                {indiceRoleta + 1} / {roletaAtividades.length}
-              </span>
-              <button
-                type="button"
-                onClick={() => setModoRoleta(false)}
-                className="flex size-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:scale-90 transition-all text-white"
-              >
-                <X className="size-4" />
-              </button>
-            </div>
-          </div>
-
           {/* Área Principal de Cartões */}
           <div className="flex-1 p-6 flex flex-col justify-center items-center relative overflow-hidden bg-gradient-to-b from-primary/5 to-background">
             {roletaFinalizada ? (
-              <div className="flex flex-col items-center text-center p-6 max-w-sm animate-in zoom-in-95 duration-500">
+              <div className="flex flex-col items-center text-center p-6 max-w-md animate-in zoom-in-95 duration-500">
                 <div className="relative mb-6">
                   <div className="absolute inset-0 size-24 bg-amber/20 rounded-full blur-xl animate-pulse" />
                   <div className="relative flex size-24 items-center justify-center rounded-full bg-amber/10 text-amber border-2 border-amber">
@@ -608,56 +780,285 @@ export function ScreenHoje({
                 </div>
                 <h3 className="font-serif text-2xl font-black text-foreground mb-3">Mesa Limpa, Guerreiro!</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                  Parabéns! Você concluiu todas as tarefas da pilha e limpou sua mesa. Nenhuma atividade pendente!
+                  Você passou por todas as tarefas da pilha. Veja o seu resumo:
                 </p>
+                <ul className="w-full mb-6 flex flex-col gap-2 max-h-48 overflow-y-auto">
+                  {historicoRoleta.map((h, i) => (
+                    <li key={i} className="flex items-center justify-between bg-background p-2 rounded-xl border border-border/50">
+                      <span className="text-xs font-semibold text-foreground truncate flex-1 text-left">{h.tarefa.titulo}</span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${h.acao === 'concluido' ? 'bg-green-500/10 text-green-600' : h.acao === 'remarcado' ? 'bg-blue-500/10 text-blue-600' : 'bg-muted text-muted-foreground'}`}>
+                        {h.acao === 'concluido' ? 'Concluído' : h.acao === 'remarcado' ? 'Remarcado' : 'Pulado'}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
                 <button
                   type="button"
                   onClick={() => setModoRoleta(false)}
                   className="w-full h-13 rounded-2xl bg-primary text-primary-foreground text-sm font-bold shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2"
                 >
-                  Voltar para a Home
+                  Finalizar
                 </button>
               </div>
             ) : (
-              roletaAtividades[indiceRoleta] && (
-                <div
-                  className={`w-full max-w-sm bg-card border-2 border-border/80 rounded-3xl shadow-2xl p-6 flex flex-col gap-5 transition-all duration-300 relative overflow-hidden ${
-                    roletaEfeitoFrup ? 'transform translate-x-[150%] rotate-12 opacity-0 pointer-events-none' : 'scale-100 opacity-100'
-                  }`}
-                >
+              remarcarAtividade ? (
+                <div className="relative w-full max-w-md flex justify-center">
+                  <div className={`w-full max-w-md bg-card border-2 border-primary/50 rounded-3xl shadow-2xl p-6 flex flex-col gap-5 transition-all duration-300 ${roletaEfeitoFrup ? 'opacity-0 -translate-y-[150%] pointer-events-none' : 'animate-in zoom-in-95 duration-300'}`}>
+                    <div className="flex items-center gap-3 text-primary mb-2">
+                    <Calendar className="size-6" />
+                    <h3 className="font-serif text-xl font-bold">Remarcar Tarefa</h3>
+                  </div>
+                  <p className="text-sm font-semibold text-foreground mb-4">
+                    {remarcarAtividade.titulo}
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <button type="button" onClick={() => {
+                      const d = new Date(); d.setDate(d.getDate() + 1);
+                      setNovaDataRemarcar(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+                    }} className="h-10 rounded-xl border border-border bg-background text-xs font-semibold text-muted-foreground hover:bg-muted active:scale-95 transition-all">
+                      Amanhã
+                    </button>
+                    <button type="button" onClick={() => {
+                      const d = new Date(); d.setDate(d.getDate() + 7);
+                      setNovaDataRemarcar(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+                    }} className="h-10 rounded-xl border border-border bg-background text-xs font-semibold text-muted-foreground hover:bg-muted active:scale-95 transition-all">
+                      Semana que vem
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Data Exata</label>
+                    <input
+                      type="date"
+                      value={novaDataRemarcar}
+                      onChange={(e) => setNovaDataRemarcar(e.target.value)}
+                      className="h-12 w-full rounded-2xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Nova Hora</label>
+                    <input
+                      type="time"
+                      value={novaHoraRemarcar}
+                      onChange={(e) => setNovaHoraRemarcar(e.target.value)}
+                      className="h-12 w-full rounded-2xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 mt-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setRemarcarAtividade(null)
+                        setNovaDataRemarcar('')
+                        setNovaHoraRemarcar('')
+                      }}
+                      className="flex-1 h-12 rounded-2xl border border-border bg-card text-muted-foreground text-xs font-bold transition-all active:scale-95"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={confirmarRemarcar}
+                      disabled={!novaDataRemarcar || !novaHoraRemarcar}
+                      className="flex-[2] h-12 rounded-2xl bg-primary text-primary-foreground text-xs font-bold transition-all active:scale-95 disabled:opacity-50"
+                    >
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
+                </div>
+              ) : acaoAlbertRoleta ? (
+                <div className="relative w-full max-w-md flex justify-center">
+                  <div className={`w-full max-w-md bg-card border-2 border-primary/50 rounded-3xl shadow-2xl p-6 flex flex-col gap-5 transition-all duration-300 ${roletaEfeitoFrup ? 'opacity-0 -translate-y-[150%] pointer-events-none' : 'animate-in zoom-in-95 duration-300'}`}>
+                    <div className="flex items-center gap-3 text-primary mb-2">
+                      <Bot className="size-6" />
+                      <h3 className="font-serif text-xl font-bold">Ação com Albert</h3>
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">
+                      {acaoAlbertRoleta.cliente}
+                    </p>
+                    
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">O que o Albert deve fazer?</label>
+                      <textarea
+                        value={textoAlbertRoleta}
+                        onChange={(e) => setTextoAlbertRoleta(e.target.value)}
+                        placeholder="Ex: Diga que eu liguei e vou retornar mais tarde."
+                        className="h-28 w-full resize-none rounded-2xl border border-border bg-background p-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+  
+                    <div className="flex gap-3 mt-4">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAcaoAlbertRoleta(null)
+                          setTextoAlbertRoleta('')
+                        }}
+                        className="flex-1 h-12 rounded-2xl border border-border bg-card text-muted-foreground text-xs font-bold transition-all active:scale-95"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setToastMsg('Ação enviada para o Albert!')
+                          setTimeout(() => setToastMsg(''), 3000)
+                          // Advance roulette
+                          concluirTarefaRoleta()
+                        }}
+                        disabled={!textoAlbertRoleta.trim()}
+                        className="flex-[2] h-12 rounded-2xl bg-primary text-primary-foreground text-xs font-bold transition-all active:scale-95 disabled:opacity-50"
+                      >
+                        Enviar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : roletaAtividades[indiceRoleta] && (
+                <div className="relative w-full max-w-md flex items-center justify-center">
+                  
+                  {/* Next card preview (deck effect) */}
+                  {roletaAtividades[indiceRoleta + 1] && !roletaEfeitoFrup && (
+                    <div className="absolute w-[95%] max-w-md bg-card/60 border-2 border-border/40 rounded-3xl p-6 flex flex-col gap-5 z-0 translate-y-6 opacity-40 blur-[1px] pointer-events-none">
+                      <div className="flex items-center justify-between border-b border-border/30 pb-3">
+                        <span className="h-4 w-16 bg-muted rounded-md" />
+                        <span className="h-4 w-10 bg-muted rounded-md" />
+                      </div>
+                      <div>
+                        <div className="h-6 w-32 bg-muted rounded-md mb-2" />
+                        <div className="h-12 w-full bg-muted/40 rounded-2xl" />
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="flex-1 h-12 rounded-2xl bg-muted" />
+                        <div className="size-12 rounded-2xl bg-muted" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Visual Background Indicators for Swipe Actions */}
+                  <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl transition-opacity duration-200">
+                    {(() => {
+                      if (!startX || !currentX || !startY || !currentY) return null;
+                      const diffX = currentX - startX;
+                      const diffY = currentY - startY;
+                      
+                      if (Math.abs(diffY) > Math.abs(diffX) && diffY < -30) {
+                        return (
+                          <div className="w-full h-full bg-blue-500/20 border-2 border-blue-500/50 flex flex-col items-center justify-end pb-8 text-blue-600">
+                            <Calendar className="size-12 mb-2" />
+                            <span className="font-bold text-sm uppercase tracking-wider">Remarcar</span>
+                          </div>
+                        )
+                      } else if (diffX > 30) {
+                        return (
+                          <div className="w-full h-full bg-green-500/20 border-2 border-green-500/50 flex items-center justify-start pl-8 text-green-600">
+                            <span className="font-bold text-sm uppercase tracking-wider mr-2">Concluir</span>
+                            <ChevronRight className="size-12" />
+                          </div>
+                        )
+                      } else if (diffX < -30) {
+                        return (
+                          <div className="w-full h-full bg-amber-500/20 border-2 border-amber-500/50 flex items-center justify-end pr-8 text-amber-600">
+                            <ChevronLeft className="size-12 mr-2" />
+                            <span className="font-bold text-sm uppercase tracking-wider">Pular</span>
+                          </div>
+                        )
+                      }
+                      return null;
+                    })()}
+                  </div>
+
+                  <div
+                    onTouchStart={(e) => {
+                      setStartX(e.touches[0].clientX)
+                      setStartY(e.touches[0].clientY)
+                    }}
+                    onTouchMove={(e) => {
+                      setCurrentX(e.touches[0].clientX)
+                      setCurrentY(e.touches[0].clientY)
+                    }}
+                    onTouchEnd={() => {
+                      if (startX && currentX && startY && currentY) {
+                        const diffX = currentX - startX
+                        const diffY = currentY - startY
+                        
+                        if (Math.abs(diffY) > Math.abs(diffX) && diffY < -80) {
+                          setRemarcarAtividade(roletaAtividades[indiceRoleta])
+                          const now = new Date()
+                          setNovaDataRemarcar(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`)
+                        } else if (diffX > 80) {
+                          concluirTarefaRoleta()
+                        } else if (diffX < -80) {
+                          pularTarefaRoleta()
+                        }
+                      }
+                      setStartX(0)
+                      setCurrentX(0)
+                      setStartY(0)
+                      setCurrentY(0)
+                    }}
+                    style={{
+                      transform: roletaEfeitoFrup 
+                        ? swipeExitDirection === 'left' ? 'translateX(-150%) rotate(-12deg)'
+                        : swipeExitDirection === 'right' ? 'translateX(150%) rotate(12deg)'
+                        : swipeExitDirection === 'up' ? 'translateY(-150%)'
+                        : 'scale(0.9)'
+                        : `translate(${startX && currentX ? currentX - startX : 0}px, ${startY && currentY ? currentY - startY : 0}px) rotate(${(startX && currentX ? currentX - startX : 0) * 0.05}deg)`,
+                      transition: startX && currentX ? 'none' : 'all 0.3s ease-out',
+                      opacity: roletaEfeitoFrup ? 0 : 1
+                    }}
+                    className={`w-full bg-card border-2 border-border/80 rounded-3xl p-6 flex flex-col gap-5 relative z-10 ${roletaEfeitoFrup ? 'pointer-events-none' : ''}`}
+                  >
                   {/* Visual card badge */}
                   <div className="flex items-center justify-between border-b border-border/50 pb-3">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#2B5250] bg-[#2B5250]/10 px-2 py-0.5 rounded-md">
                       {roletaAtividades[indiceRoleta].tipo}
                     </span>
                     <span className="text-[10px] font-semibold text-muted-foreground">
-                      {roletaAtividades[indiceRoleta].hora}
+                      Tarefa {indiceRoleta + 1} de {roletaAtividades.length}
                     </span>
                   </div>
 
                   {/* Task context content */}
                   <div>
-                    <h4 className="font-serif text-xl font-bold text-foreground mb-2">
-                      {roletaAtividades[indiceRoleta].cliente}
-                    </h4>
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-serif text-xl font-bold text-foreground">
+                        {roletaAtividades[indiceRoleta].cliente}
+                      </h4>
+                      <span className="text-3xl font-black text-foreground">
+                        {roletaAtividades[indiceRoleta].hora}
+                      </span>
+                    </div>
                     <p className="text-sm text-muted-foreground leading-relaxed bg-muted/40 p-3 rounded-2xl border border-border/40">
                       Você ficou de: <span className="font-semibold text-foreground">{roletaAtividades[indiceRoleta].titulo}</span>
                     </p>
                   </div>
 
                   {/* Call and Chat CTAs */}
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        className="flex-1 flex items-center justify-center gap-2 h-12 rounded-2xl bg-primary text-primary-foreground text-xs font-bold shadow-md transition-all active:scale-95"
+                      >
+                        <Phone className="size-4" /> Ligar agora
+                      </button>
+                      <button
+                        type="button"
+                        className="flex-1 flex items-center justify-center gap-2 h-12 rounded-2xl bg-[#25D366] text-white text-xs font-bold shadow-md transition-all active:scale-95"
+                      >
+                        <MessageCircle className="size-4" /> WhatsApp
+                      </button>
+                    </div>
                     <button
                       type="button"
-                      className="flex-1 flex items-center justify-center gap-2 h-12 rounded-2xl bg-primary text-primary-foreground text-xs font-bold shadow-md transition-all active:scale-95"
+                      onClick={() => setAcaoAlbertRoleta(roletaAtividades[indiceRoleta])}
+                      className="w-full flex items-center justify-center gap-2 h-12 rounded-2xl bg-amber-500/15 text-amber-900 border border-amber-500/30 text-xs font-bold shadow-sm transition-all active:scale-95"
                     >
-                      <Phone className="size-4" /> Ligar agora
-                    </button>
-                    <button
-                      type="button"
-                      className="flex size-12 items-center justify-center rounded-2xl bg-green-500 text-white shadow-md transition-all active:scale-95"
-                    >
-                      <MessageCircle className="size-5" />
+                      <Bot className="size-4" strokeWidth={2} /> Ação com Albert
                     </button>
                   </div>
 
@@ -726,7 +1127,18 @@ export function ScreenHoje({
                     </button>
                   </div>
                 </div>
+              </div>
               )
+            )}
+            
+            {!roletaFinalizada && (
+              <button
+                type="button"
+                onClick={() => setModoRoleta(false)}
+                className="mt-8 rounded-full bg-muted/80 px-6 py-2.5 text-xs font-bold text-muted-foreground shadow-sm hover:bg-muted active:scale-95 flex items-center gap-2 z-10"
+              >
+                <X className="size-4" /> Sair do Modo Roleta
+              </button>
             )}
           </div>
         </div>

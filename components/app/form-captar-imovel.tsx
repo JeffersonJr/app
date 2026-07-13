@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Camera, CheckCircle2, Sparkles, X, Zap, FileText, MapPin, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Search, Info, Monitor, Trash2, RotateCw, ChevronLeft, ChevronRight, Bot } from 'lucide-react'
+import { Camera, MapPin, Search, ChevronLeft, ChevronDown, Check, X, Building2, UploadCloud, Link as LinkIcon, Sparkles, Wand2, Calendar, FileText, CheckCircle2, Home, Store, Factory, TreePine, LayoutGrid, Ruler, Tag, UserCircle, ImageIcon, Lock, Megaphone, Info, Monitor, Trash2, RotateCw, ChevronRight, Bot } from 'lucide-react'
 import { featureFlags } from '@/lib/feature-flags'
 import { IAUpsellPage } from '@/components/app/ia-upsell-page'
 import { SearchableTagSelect } from '@/components/app/searchable-tag-select'
@@ -334,8 +334,8 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
     setAreaPatio('')
     setAreaHectares('')
     setRecursosHidricos('')
-    setCurral(false)
-    setSede(false)
+    setTemCurral(false)
+    setTemCasaSede(false)
     setFotos([])
     setValor('')
     setArea('')
@@ -979,9 +979,25 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Finalidade</label>
-              <select value={finalidade} onChange={(e) => setFinalidade(e.target.value as FinalidadeCategoria)} className="h-12 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
-                {FINALIDADES.map((fin) => <option key={fin} value={fin}>{fin}</option>)}
-              </select>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                {(['Residencial', 'Comercial', 'Industrial', 'Rural'] as FinalidadeCategoria[]).map((fin) => {
+                  const Icon = fin === 'Residencial' ? Home : fin === 'Comercial' ? Store : fin === 'Industrial' ? Factory : TreePine;
+                  return (
+                    <button
+                      key={fin}
+                      type="button"
+                      onClick={() => {
+                        setFinalidade(fin)
+                        setTipoImovel(TIPOS_POR_FINALIDADE[fin][0])
+                      }}
+                      className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl border p-2 transition-colors ${finalidade === fin ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground hover:bg-muted'}`}
+                    >
+                      <Icon className="size-4" />
+                      <span className="text-[10px] font-semibold">{fin}</span>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipo</label>
@@ -1236,22 +1252,37 @@ export function FormCaptarImovel({ onClose, imovelParaEditar, onSaveEdit }: { on
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Finalidade</label>
-              <select value={finalidade} onChange={(e) => {
-                const newFin = e.target.value as FinalidadeCategoria
-                setFinalidade(newFin)
-                setTipoImovel(TIPOS_POR_FINALIDADE[newFin][0])
-              }} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none ${finalidade ? 'border-teal-mid/40' : 'border-border'}`}>
-                {FINALIDADES.map((f) => <option key={f} value={f}>{f}</option>)}
-              </select>
+              <div className="grid grid-cols-4 gap-2">
+                {(['Residencial', 'Comercial', 'Industrial', 'Rural'] as FinalidadeCategoria[]).map((fin) => {
+                  const Icon = fin === 'Residencial' ? Home : fin === 'Comercial' ? Store : fin === 'Industrial' ? Factory : TreePine;
+                  return (
+                    <button
+                      key={fin}
+                      type="button"
+                      onClick={() => {
+                        setFinalidade(fin)
+                        setTipoImovel(TIPOS_POR_FINALIDADE[fin][0])
+                      }}
+                      className={`flex flex-col items-center justify-center gap-1.5 rounded-2xl border py-2.5 transition-colors ${finalidade === fin ? 'border-primary bg-primary/10 text-primary shadow-sm' : 'border-border bg-card text-muted-foreground hover:bg-muted'}`}
+                    >
+                      <Icon className="size-5" />
+                      <span className="text-[10px] font-semibold">{fin}</span>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipo</label>
-              <select value={tipoImovel} onChange={(e) => setTipoImovel(e.target.value)} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none ${tipoImovel ? 'border-teal-mid/40' : 'border-border'}`}>
-                {TIPOS_POR_FINALIDADE[finalidade].map((t) => <option key={t} value={t}>{t}</option>)}
-              </select>
+              <div className="relative">
+                <select value={tipoImovel} onChange={(e) => setTipoImovel(e.target.value)} className={`h-12 w-full rounded-2xl border bg-background px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring appearance-none pr-10 ${tipoImovel ? 'border-teal-mid/40' : 'border-border'}`}>
+                  {TIPOS_POR_FINALIDADE[finalidade].map((t) => <option key={t} value={t}>{t}</option>)}
+                </select>
+                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+              </div>
             </div>
           </div>
 

@@ -11,12 +11,20 @@ export function ScreenAtividades() {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
   }
 
+  const getAmanhaStr = () => {
+    const d = new Date()
+    d.setDate(d.getDate() + 1)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  }
+
   const [dataFiltro, setDataFiltro] = useState(getHojeStr())
 
   const carregarAtividades = () => {
     const list = [...atividadesHoje].filter(a => {
-      // Se não tem data ou é 'Hoje', assumimos que é a data atual
-      const dataAtv = a.data && a.data !== 'Hoje' && a.data !== 'Amanhã' ? a.data : getHojeStr()
+      let dataAtv = a.data;
+      if (!dataAtv || dataAtv === 'Hoje') dataAtv = getHojeStr();
+      else if (dataAtv === 'Amanhã') dataAtv = getAmanhaStr();
+      
       return dataAtv === dataFiltro
     }).sort((a, b) => {
       const getT = (atv: Atividade) => {
@@ -58,6 +66,7 @@ export function ScreenAtividades() {
 
   const formatarDataExibicao = (dataStr: string) => {
     if (dataStr === getHojeStr()) return 'Hoje'
+    if (dataStr === getAmanhaStr()) return 'Amanhã'
     const [y, m, d] = dataStr.split('-')
     return `${d}/${m}/${y}`
   }

@@ -129,6 +129,12 @@ export function AtendimentoDetail({
   const [atividadeSelecionada, setAtividadeSelecionada] = useState<any>(null)
   const [sheetGanhoPerdido, setSheetGanhoPerdido] = useState<'ganho' | 'perdido' | null>(null)
   const [expandedTimelineItemId, setExpandedTimelineItemId] = useState<string | null>(null)
+  const [confirmacaoEtapa, setConfirmacaoEtapa] = useState<{ id: string, etapaId: string, nomeDaEtapa: string } | null>(null)
+  
+  // States for Document Request Flow
+  const [solicitarDocs, setSolicitarDocs] = useState(false)
+  const [docsSelecionadosParaSolicitar, setDocsSelecionadosParaSolicitar] = useState<Set<string>>(new Set())
+  const documentosSugeridos = ['RG', 'CPF', 'Comprovante de Residência', 'Certidão de Casamento', 'Holerite', 'Imposto de Renda']
 
   useEffect(() => {
     const handleUpdate = () => {
@@ -217,13 +223,11 @@ export function AtendimentoDetail({
   const imoveisExibidos = abaImoveis === 'imoveis' ? (
     buscaManualImoveis
       ? imoveis.filter(im => im.titulo.toLowerCase().includes(buscaManualImoveis.toLowerCase()) || im.codigo.toLowerCase().includes(buscaManualImoveis.toLowerCase()))
-      : imoveisCompativeis.length > 0
-        ? imoveisCompativeis
-        : imoveis.filter(im => im.finalidade === atendimento.perfil.finalidade || true).slice(0, 2)
+      : imoveis
   ) : (
     buscaManualImoveis
       ? empreendimentosMock.filter(emp => emp.nome.toLowerCase().includes(buscaManualImoveis.toLowerCase()) || emp.codigo.toLowerCase().includes(buscaManualImoveis.toLowerCase()))
-      : empreendimentosMock.slice(0, 3)
+      : empreendimentosMock
   )
 
   function handleSave4Q() {
@@ -506,7 +510,12 @@ export function AtendimentoDetail({
           <button
             type="button"
             disabled={etapaIdx <= 0}
-            onClick={() => etapaIdx > 0 && onEtapaChange?.(atendimento.id, etapasFunil[etapaIdx - 1].id)}
+            onClick={() => {
+              if (etapaIdx > 0) {
+                const prev = etapasFunil[etapaIdx - 1]
+                setConfirmacaoEtapa({ id: atendimento.id, etapaId: prev.id, nomeDaEtapa: prev.label })
+              }
+            }}
             className="flex size-8 items-center justify-center rounded-full bg-teal-shadow/40 text-teal-light disabled:opacity-30"
           >
             <ChevronLeft className="size-4" strokeWidth={2} />
@@ -525,7 +534,12 @@ export function AtendimentoDetail({
           <button
             type="button"
             disabled={etapaIdx >= etapasFunil.length - 1}
-            onClick={() => etapaIdx < etapasFunil.length - 1 && onEtapaChange?.(atendimento.id, etapasFunil[etapaIdx + 1].id)}
+            onClick={() => {
+              if (etapaIdx < etapasFunil.length - 1) {
+                const next = etapasFunil[etapaIdx + 1]
+                setConfirmacaoEtapa({ id: atendimento.id, etapaId: next.id, nomeDaEtapa: next.label })
+              }
+            }}
             className="flex size-8 items-center justify-center rounded-full bg-teal-shadow/40 text-teal-light disabled:opacity-30"
           >
             <ChevronRight className="size-4" strokeWidth={2} />
@@ -765,7 +779,7 @@ export function AtendimentoDetail({
             </ul>
 
             {mostrarNovaAtividade && (
-              <div className="absolute inset-0 z-50 flex flex-col justify-end">
+              <div className="fixed inset-0 z-[60] flex flex-col justify-end">
                 <button type="button" onClick={() => setMostrarNovaAtividade(false)} className="absolute inset-0 bg-teal-shadow/40 backdrop-blur-[2px]" />
                 <div className="relative flex flex-col rounded-t-3xl bg-card shadow-2xl animate-in slide-in-from-bottom duration-200 max-h-[90dvh]">
                   <div className="flex justify-center pt-3 pb-1 shrink-0"><div className="h-1 w-10 rounded-full bg-border" /></div>
@@ -921,10 +935,72 @@ export function AtendimentoDetail({
           <div>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-serif text-lg font-semibold">Documentos</h2>
-              <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
-                <Plus className="size-3.5" strokeWidth={2} /> Anexar
-              </button>
+              <div className="flex gap-2">
+                <button type="button" onClick={() => setSolicitarDocs(true)} className="flex items-center gap-1 rounded-full bg-amber/10 px-3 py-1.5 text-xs font-semibold text-amber-600 transition-brand active:scale-95">
+                  <Bot className="size-3.5" strokeWidth={2} /> Requisitar
+                </button>
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary transition-brand active:scale-95">
+                  <Plus className="size-3.5" strokeWidth={2} /> Anexar
+                </button>
+              </div>
             </div>
+            
+            {solicitarDocs && (
+              <div className="mb-6 rounded-2xl bg-amber-500/10 p-4 border border-amber-500/20 animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold text-amber-900">Quais documentos pedir ao cliente?</h3>
+                  <button onClick={() => { setSolicitarDocs(false); setDocsSelecionadosParaSolicitar(new Set()); }} className="text-amber-900/50 hover:text-amber-900">
+                    <X className="size-4" />
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {documentosSugeridos.map(doc => {
+                    const isSelected = docsSelecionadosParaSolicitar.has(doc)
+                    return (
+                      <button
+                        key={doc}
+                        onClick={() => {
+                          const novoSet = new Set(docsSelecionadosParaSolicitar)
+                          if (isSelected) novoSet.delete(doc)
+                          else novoSet.add(doc)
+                          setDocsSelecionadosParaSolicitar(novoSet)
+                        }}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${isSelected ? 'bg-amber-500 text-white border-amber-500' : 'bg-background text-foreground border-border'}`}
+                      >
+                        {doc}
+                      </button>
+                    )
+                  })}
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    disabled={docsSelecionadosParaSolicitar.size === 0}
+                    onClick={() => {
+                      setToastMensagem(`Solicitação enviada via WhatsApp para ${atendimento.nome}!`)
+                      setSolicitarDocs(false)
+                      setDocsSelecionadosParaSolicitar(new Set())
+                      setTimeout(() => setToastMensagem(''), 3000)
+                    }}
+                    className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl bg-[#25D366] text-white text-xs font-bold disabled:opacity-50"
+                  >
+                    <MessageCircle className="size-4" /> Via WhatsApp
+                  </button>
+                  <button 
+                    disabled={docsSelecionadosParaSolicitar.size === 0}
+                    onClick={() => {
+                      setToastMensagem(`O Albert vai cobrar ${atendimento.nome} pelos documentos.`)
+                      setSolicitarDocs(false)
+                      setDocsSelecionadosParaSolicitar(new Set())
+                      setTimeout(() => setToastMensagem(''), 3000)
+                    }}
+                    className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl bg-amber-500 text-white text-xs font-bold disabled:opacity-50"
+                  >
+                    <Bot className="size-4" /> O Albert pede
+                  </button>
+                </div>
+              </div>
+            )}
+
             <input type="file" ref={fileInputRef} onChange={handleUploadDoc} className="hidden" />
             {localDocumentos.length === 0 ? (
               <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border py-10 text-center">
@@ -1239,6 +1315,39 @@ export function AtendimentoDetail({
                 setImoveisSelecionados([])
               }}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal for Stage Change */}
+      {confirmacaoEtapa && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
+          <div className="w-full max-w-sm rounded-[1.25rem] bg-card border border-border shadow-2xl p-6 text-center animate-in zoom-in-95 duration-200">
+            <h2 className="font-serif text-xl font-bold mb-2">Atenção</h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Você deseja mover <strong>{atendimento.nome}</strong> para a etapa <strong>{confirmacaoEtapa.nomeDaEtapa}</strong>?
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setConfirmacaoEtapa(null)}
+                className="flex-1 rounded-xl bg-muted px-4 py-3 text-sm font-semibold text-muted-foreground transition-brand active:scale-95"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onEtapaChange?.(confirmacaoEtapa.id, confirmacaoEtapa.etapaId)
+                  setConfirmacaoEtapa(null)
+                  setToastMensagem(`Etapa alterada para ${confirmacaoEtapa.nomeDaEtapa}`)
+                  setTimeout(() => setToastMensagem(''), 3000)
+                }}
+                className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-brand active:scale-95"
+              >
+                Confirmar
+              </button>
+            </div>
           </div>
         </div>
       )}

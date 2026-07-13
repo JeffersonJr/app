@@ -11,6 +11,7 @@ import { ScreenNegocios } from '@/components/app/screen-negocios'
 import { TabBar, type TabId } from '@/components/app/tab-bar'
 import { NotificacoesPanel } from '@/components/app/notificacoes-panel'
 import { ScreenPerfil } from '@/components/app/screen-perfil'
+import { ScreenDesempenho } from '@/components/app/screen-desempenho'
 import { clientes, funil } from '@/lib/app-data'
 import { useOnboarding } from '@/lib/contexts/OnboardingContext'
 import { useEffect } from 'react'
@@ -128,6 +129,7 @@ export default function Page() {
                 setQuickAddAberto(true)
               }}
               onVerAtividades={() => setTab('atividades')}
+              onVerDesempenho={() => setTab('desempenho')}
               tenantAtivo={tenantAtivo}
               setTenantAtivo={setTenantAtivo}
               tenants={tenants}
@@ -141,6 +143,7 @@ export default function Page() {
             />
           )}
           {tab === 'atividades' && <ScreenAtividades />}
+          {tab === 'desempenho' && <ScreenDesempenho onBack={() => setTab('hoje')} />}
           {tab === 'imoveis' && (
             <ScreenImoveis
               onCaptar={() => { setQuickAddAcao('captar-imovel'); setQuickAddAberto(true); }}

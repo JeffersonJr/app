@@ -21,7 +21,7 @@ export function AtividadeDetalheSheet({
   onGerarTermo?: (atividadeId: string) => void
 }) {
   const [feedback, setFeedback] = useState('')
-  const [agendarProxima, setAgendarProxima] = useState(false)
+  const [agendarProxima, setAgendarProxima] = useState(true)
   const [remarcando, setRemarcando] = useState(false)
   const [novaData, setNovaData] = useState('')
   const [novaHora, setNovaHora] = useState('')
@@ -998,18 +998,6 @@ export function AtividadeDetalheSheet({
                   />
                 </div>
 
-                <label className="mt-4 flex items-center gap-3 rounded-2xl border border-border bg-background p-4 cursor-pointer hover:bg-muted/50 transition-colors">
-                  <input
-                    type="checkbox"
-                    checked={agendarProxima}
-                    onChange={(e) => setAgendarProxima(e.target.checked)}
-                    className="size-5 rounded border-border text-primary focus:ring-primary"
-                  />
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-foreground">Agendar próxima atividade</span>
-                    <span className="text-xs text-muted-foreground">Continuar o fluxo com este cliente</span>
-                  </div>
-                </label>
 
                 {atividade.tipo === 'visita' && !atividade.concluida && onGerarTermo && (
                   <div className="mt-6 mb-2">

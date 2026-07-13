@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Bell, ChevronRight, HelpCircle, LogOut, ShieldCheck, Target, X, Lock, KeyRound, Smartphone, RefreshCcw, BookOpen } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Bell, ChevronRight, HelpCircle, LogOut, ShieldCheck, Target, X, Lock, KeyRound, Smartphone, RefreshCcw, BookOpen, Type, CheckCircle2 } from 'lucide-react'
 import { useOnboarding } from '@/lib/contexts/OnboardingContext'
 
 export function ScreenPerfil({
@@ -13,10 +13,21 @@ export function ScreenPerfil({
 }) {
   const { startTour } = useOnboarding()
   const [showSecurity, setShowSecurity] = useState(false)
+  const [showAparencia, setShowAparencia] = useState(false)
+  const [fontSize, setFontSize] = useState<'pequena' | 'media' | 'grande'>('media')
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
   const [newPassword, setNewPassword] = useState('')
   const [temAtualizacao, setTemAtualizacao] = useState(true)
   const [mensagemAtualizacao, setMensagemAtualizacao] = useState('')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const html = document.documentElement
+      if (fontSize === 'pequena') html.style.fontSize = '14px'
+      else if (fontSize === 'media') html.style.fontSize = '16px'
+      else if (fontSize === 'grande') html.style.fontSize = '18px'
+    }
+  }, [fontSize])
 
   const handleAtualizar = () => {
     setTemAtualizacao(false)
@@ -160,6 +171,20 @@ export function ScreenPerfil({
                   <ShieldCheck className="size-[22px] text-foreground" strokeWidth={1.5} />
                 </div>
                 <span className="font-semibold text-[15px] text-foreground">Segurança & privacidade</span>
+              </div>
+              <ChevronRight className="size-5 text-muted-foreground" strokeWidth={1.5} />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowAparencia(true)}
+              className="flex w-full items-center justify-between border-b border-border/60 p-4 transition-brand active:bg-muted/50"
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex size-10 items-center justify-center rounded-full bg-[#f4ece3]">
+                  <Type className="size-[22px] text-foreground" strokeWidth={1.5} />
+                </div>
+                <span className="font-semibold text-[15px] text-foreground">Aparência e Texto</span>
               </div>
               <ChevronRight className="size-5 text-muted-foreground" strokeWidth={1.5} />
             </button>
@@ -329,6 +354,84 @@ export function ScreenPerfil({
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Aparência */}
+      {showAparencia && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-background/80 backdrop-blur-sm sm:items-center">
+          <div className="w-full max-w-md animate-in slide-in-from-bottom-5 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-300">
+            <div className="rounded-t-3xl sm:rounded-3xl bg-card border border-border shadow-2xl p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-serif text-xl font-bold">Aparência</h2>
+                <button
+                  type="button"
+                  onClick={() => setShowAparencia(false)}
+                  className="rounded-full bg-muted p-2 text-muted-foreground transition-brand hover:text-foreground active:scale-95"
+                >
+                  <X className="size-5" />
+                </button>
+              </div>
+
+              <div className="mb-6">
+                <label className="mb-3 block text-sm font-semibold text-foreground">Tamanho da Fonte</label>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setFontSize('pequena')}
+                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${
+                      fontSize === 'pequena' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
+                    }`}
+                  >
+                    <span className="block text-sm font-bold mb-1">Aa</span>
+                    <span className="text-xs">Pequena</span>
+                    {fontSize === 'pequena' && <CheckCircle2 className="mx-auto mt-2 size-4" />}
+                  </button>
+                  <button
+                    onClick={() => setFontSize('media')}
+                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${
+                      fontSize === 'media' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
+                    }`}
+                  >
+                    <span className="block text-base font-bold mb-1">Aa</span>
+                    <span className="text-xs">Média</span>
+                    {fontSize === 'media' && <CheckCircle2 className="mx-auto mt-2 size-4" />}
+                  </button>
+                  <button
+                    onClick={() => setFontSize('grande')}
+                    className={`flex-1 rounded-2xl border p-4 text-center transition-all ${
+                      fontSize === 'grande' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground'
+                    }`}
+                  >
+                    <span className="block text-lg font-bold mb-1">Aa</span>
+                    <span className="text-xs">Grande</span>
+                    {fontSize === 'grande' && <CheckCircle2 className="mx-auto mt-2 size-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Preview */}
+              <div className="mb-6 rounded-2xl bg-muted/30 p-4 border border-border">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Preview de Visualização</h4>
+                <div className="flex items-center gap-3 bg-card p-3 rounded-xl shadow-sm border border-border">
+                  <div className="size-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+                    <Target className="size-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">Exemplo de Texto</p>
+                    <p className="text-sm text-muted-foreground mt-0.5">Veja como as fontes ficam no app.</p>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowAparencia(false)}
+                className="w-full rounded-2xl bg-primary py-3.5 text-sm font-bold text-primary-foreground shadow-sm transition-brand active:scale-[0.98]"
+              >
+                Concluir
+              </button>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import { Building2, Home, Plus, TrendingUp, Users, CalendarDays, User } from 'lucide-react'
 
-export type TabId = 'hoje' | 'negocios' | 'atividades' | 'imoveis' | 'clientes' | 'perfil'
+export type TabId = 'hoje' | 'negocios' | 'atividades' | 'imoveis' | 'clientes' | 'perfil' | 'desempenho'
 
 const tabs: { id: TabId; label: string; icon: any }[] = [
   { id: 'hoje', label: 'Home', icon: Home },

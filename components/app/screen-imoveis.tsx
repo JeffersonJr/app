@@ -68,10 +68,10 @@ export function ScreenImoveis({
   const { startTour } = useOnboarding()
 
   // Social Media Multi-Selection States
-  const [modoSelecao, setModoSelecao] = useState(false)
   const [selecionadosPublicacao, setSelecionadosPublicacao] = useState<Set<string>>(new Set())
   const [publicandoRedes, setPublicandoRedes] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
+  const [contextoAlbert, setContextoAlbert] = useState('')
 
   const [abaAtiva, setAbaAtiva] = useState<'imoveis' | 'empreendimentos'>('imoveis')
   const [filtro, setFiltro] = useState<(typeof filtros)[number]>('Todos')
@@ -145,6 +145,23 @@ export function ScreenImoveis({
     return filtrados
   }, [filtro, busca, filtroFinalidade, filtroStatus, ordenacao, tenantAtivo])
 
+  const listaEmpreendimentos = useMemo(() => {
+    return empreendimentosMock.filter((emp) => {
+      const matchFiltro =
+        filtro === 'Todos' ||
+        (filtro === 'Favoritos' ? false : emp.finalidade === filtro || emp.status === filtro)
+      
+      const q = busca.trim().toLowerCase()
+      const matchBusca =
+        !q ||
+        emp.nome.toLowerCase().includes(q) ||
+        emp.bairro.toLowerCase().includes(q) ||
+        emp.cidade.toLowerCase().includes(q)
+      
+      return matchFiltro && matchBusca
+    })
+  }, [filtro, busca])
+
   if (selecionado) {
     return (
       <ImovelDetail
@@ -199,23 +216,7 @@ export function ScreenImoveis({
           </div>
         </div>
 
-        {/* Multi-Selection Mode Trigger */}
-        <button
-          type="button"
-          onClick={() => {
-            setModoSelecao(prev => {
-              if (prev) setSelecionadosPublicacao(new Set())
-              return !prev
-            })
-          }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${modoSelecao ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
-        >
-          <Share2 className="size-3.5" />
-          {modoSelecao ? 'Cancelar' : 'Divulgar'}
-        </button>
       </div>
-
-
 
       <header className="glass-header -mx-5 px-5 pb-4 pt-1">
         <div className="flex items-center justify-between">
@@ -224,7 +225,6 @@ export function ScreenImoveis({
               onClick={() => {
                 setAbaAtiva('imoveis')
                 setSelecionadosPublicacao(new Set())
-                setModoSelecao(false)
               }}
               className={`relative flex-1 rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${abaAtiva === 'imoveis'
                 ? 'bg-background text-foreground shadow-sm'
@@ -237,7 +237,6 @@ export function ScreenImoveis({
               onClick={() => {
                 setAbaAtiva('empreendimentos')
                 setSelecionadosPublicacao(new Set())
-                setModoSelecao(false)
               }}
               className={`relative flex-1 rounded-full px-4 py-1.5 text-sm font-semibold transition-all ${abaAtiva === 'empreendimentos'
                 ? 'bg-background text-foreground shadow-sm'
@@ -450,32 +449,16 @@ export function ScreenImoveis({
           <ul className="flex flex-col gap-4">
             {lista.map((im) => (
               <li key={im.id}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (modoSelecao) {
-                      setSelecionadosPublicacao(prev => {
-                        const newSet = new Set(prev)
-                        if (newSet.has(im.id)) {
-                          newSet.delete(im.id)
-                        } else {
-                          if (newSet.size >= 10) {
-                            setToastMessage('Limite de 10 imóveis atingido!')
-                            setTimeout(() => setToastMessage(''), 3000)
-                          } else {
-                            newSet.add(im.id)
-                          }
-                        }
-                        return newSet
-                      })
-                    } else {
+                <div
+                    key={im.id}
+                    className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-[1.25rem] border bg-card shadow-soft transition-all hover:-translate-y-1 hover:shadow-lg ${
+                      selecionadosPublicacao.has(im.id) ? 'border-primary ring-2 ring-primary/20' : 'border-transparent'
+                    }`}
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest('.selection-checkbox')) return;
                       setSelecionado(im)
-                    }
-                  }}
-                  className={`w-full overflow-hidden rounded-[1.25rem] border bg-card shadow-soft text-left transition-brand active:scale-[0.98] ${
-                    modoSelecao && selecionadosPublicacao.has(im.id) ? 'border-primary ring-2 ring-primary/20' : 'border-transparent'
-                  }`}
-                >
+                    }}
+                  >
                   <div className="relative aspect-[4/3]">
                     <Image
                       src={im.foto || '/placeholder.svg'}
@@ -490,26 +473,30 @@ export function ScreenImoveis({
                       {im.status}
                     </span>
                     
-                    {modoSelecao ? (
-                      <div className="absolute right-3 top-3 z-10 flex size-8 items-center justify-center rounded-full bg-background shadow-md border border-border">
+                    <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
+                      <div className="flex size-8 items-center justify-center rounded-full bg-background shadow-md border border-border selection-checkbox hover:bg-muted/50" onClick={(e) => {
+                        e.stopPropagation()
+                        const newSet = new Set(selecionadosPublicacao)
+                        if (newSet.has(im.id)) newSet.delete(im.id)
+                        else newSet.add(im.id)
+                        setSelecionadosPublicacao(newSet)
+                      }}>
                         <div className={`size-4.5 rounded-md flex items-center justify-center transition-all ${
                           selecionadosPublicacao.has(im.id) ? 'bg-primary text-primary-foreground' : 'border-2 border-muted-foreground/50'
                         }`}>
                           {selecionadosPublicacao.has(im.id) && <Check className="size-3" strokeWidth={3} />}
                         </div>
                       </div>
-                    ) : (
-                      <div className="absolute right-3 top-3 flex items-center gap-1.5">
-                        {favoritosIds.has(im.id) && (
-                          <span className="flex size-6 items-center justify-center rounded-full bg-rose-500/90 text-white backdrop-blur-sm shadow-sm">
-                            <Heart className="size-3.5 fill-current" strokeWidth={1.5} />
-                          </span>
-                        )}
-                        <span className="rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
-                          {im.codigo}
+                      
+                      {favoritosIds.has(im.id) && (
+                        <span className="flex size-6 items-center justify-center rounded-full bg-rose-500/90 text-white backdrop-blur-sm shadow-sm">
+                          <Heart className="size-3.5 fill-current" strokeWidth={1.5} />
                         </span>
-                      </div>
-                    )}
+                      )}
+                      <span className="rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm shadow-sm">
+                        {im.codigo}
+                      </span>
+                    </div>
                   </div>
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-3">
@@ -543,7 +530,7 @@ export function ScreenImoveis({
                       </span>
                     </div>
                   </div>
-                </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -552,7 +539,7 @@ export function ScreenImoveis({
 
       {/* Aba Empreendimentos */}
       {abaAtiva === 'empreendimentos' && (
-        empreendimentosMock.length === 0 ? (
+        listaEmpreendimentos.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-5 py-12 text-center">
             <div className="flex size-20 items-center justify-center rounded-3xl bg-primary/10">
               <Building2 className="size-10 text-primary" strokeWidth={1.5} />
@@ -572,7 +559,7 @@ export function ScreenImoveis({
           </div>
         ) : (
           <ul className="flex flex-col gap-4">
-            {empreendimentosMock.map(emp => {
+            {listaEmpreendimentos.map(emp => {
               const statusColor =
                 emp.status === 'Lançamento' ? 'bg-primary/90 text-white' :
                   emp.status === 'Em Obras' ? 'bg-amber/90 text-ink' :
@@ -589,27 +576,15 @@ export function ScreenImoveis({
 
               return (
                 <li key={emp.id}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (modoSelecao) {
-                        setSelecionadosPublicacao(prev => {
-                          const next = new Set(prev)
-                          if (next.has(emp.id)) {
-                            next.delete(emp.id)
-                          } else {
-                            if (next.size >= 10) return prev
-                            next.add(emp.id)
-                          }
-                          return next
-                        })
-                      } else {
-                        setEmpreendimentoSelecionado(emp)
-                      }
-                    }}
-                    className={`w-full overflow-hidden rounded-[1.25rem] border-2 bg-card shadow-soft text-left transition-all active:scale-[0.98] ${
-                      modoSelecao && selecionadosPublicacao.has(emp.id) ? 'border-primary ring-2 ring-primary/20' : 'border-transparent'
+                  <div
+                    key={emp.id}
+                    className={`group relative flex cursor-pointer flex-col overflow-hidden rounded-[1.25rem] border bg-card shadow-soft transition-all hover:-translate-y-1 hover:shadow-lg ${
+                      selecionadosPublicacao.has(emp.id) ? 'border-primary ring-2 ring-primary/20' : 'border-transparent'
                     }`}
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest('.selection-checkbox')) return;
+                      setEmpreendimentoSelecionado(emp)
+                    }}
                   >
                     <div className="relative aspect-[16/9]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -619,20 +594,26 @@ export function ScreenImoveis({
                       <span className={`absolute left-3 top-3 rounded-full px-3 py-1 text-[11px] font-semibold backdrop-blur-sm ${statusColor}`}>
                         {emp.status}
                       </span>
-                      {/* Selection circle or finalidade badge */}
-                      {modoSelecao ? (
-                        <div className="absolute right-3 top-3 z-10 flex size-6 items-center justify-center rounded-full bg-background shadow-md">
+                      {/* Badges e Seleção */}
+                      <div className="absolute right-3 top-3 z-10 flex items-center gap-1.5">
+                        <div className="flex size-6 items-center justify-center rounded-full bg-background shadow-md selection-checkbox hover:bg-muted/50" onClick={(e) => {
+                          e.stopPropagation()
+                          const newSet = new Set(selecionadosPublicacao)
+                          if (newSet.has(emp.id)) newSet.delete(emp.id)
+                          else newSet.add(emp.id)
+                          setSelecionadosPublicacao(newSet)
+                        }}>
                           <div className={`size-4 rounded-full border transition-all ${
                             selecionadosPublicacao.has(emp.id) ? 'border-primary bg-primary flex items-center justify-center' : 'border-muted-foreground/30 bg-transparent'
                           }`}>
                             {selecionadosPublicacao.has(emp.id) && <Check className="size-2.5 text-white" strokeWidth={3} />}
                           </div>
                         </div>
-                      ) : (
-                        <span className="absolute right-3 top-3 rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
+                        <span className="rounded-full bg-teal-shadow/70 px-3 py-1 font-mono text-[11px] font-medium text-white backdrop-blur-sm">
                           {emp.finalidade}
                         </span>
-                      )}
+                      </div>
+                      
                       {/* Nome + local over image */}
                       <div className="absolute bottom-0 left-0 right-0 p-4">
                         <p className="font-serif text-base font-bold text-white leading-tight">{emp.nome}</p>
@@ -677,7 +658,7 @@ export function ScreenImoveis({
                         </span>
                       </div>
                     </div>
-                  </button>
+                  </div>
                 </li>
               )
             })}
@@ -705,36 +686,37 @@ export function ScreenImoveis({
       )}
 
       {/* Floating Multi-Selection Action Bar */}
-      {modoSelecao && (
-        <div className="fixed bottom-24 left-4 right-4 z-50 rounded-2xl bg-card border border-border/80 shadow-2xl p-4 flex items-center justify-between gap-4 animate-in slide-in-from-bottom-5 duration-200">
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-foreground">{selecionadosPublicacao.size} / 10 selecionados</span>
-            <span className="text-[10px] text-muted-foreground">Selecione para postagem social</span>
-          </div>
-          <div className="flex gap-2">
+      {selecionadosPublicacao.size > 0 && (
+        <div className="fixed bottom-24 left-0 right-0 z-40 flex justify-center px-4 animate-in slide-in-from-bottom-10 fade-in duration-300">
+          <div className="flex items-center bg-card shadow-2xl rounded-full border border-border/50 p-2 overflow-hidden gap-2">
             <button
-              type="button"
-              disabled={selecionadosPublicacao.size === 0}
+              onClick={() => setSelecionadosPublicacao(new Set())}
+              className="px-4 py-3 rounded-full text-xs font-bold text-muted-foreground hover:bg-muted transition-all active:scale-95"
+            >
+              Cancelar
+            </button>
+            <button
               onClick={() => {
                 setPublicandoRedes(true)
                 setTimeout(() => {
                   setPublicandoRedes(false)
-                  setModoSelecao(false)
                   setSelecionadosPublicacao(new Set())
-                  setToastMessage('Publicado com sucesso no Instagram, TikTok e YouTube!')
+                  setToastMessage(`${selecionadosPublicacao.size} itens publicados com sucesso nas redes sociais!`)
                   setTimeout(() => setToastMessage(''), 3000)
-                }, 3000)
+                }, 2000)
               }}
-              className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-sm transition-all active:scale-95 disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-lg transition-all active:scale-95"
             >
-              <Sparkles className="size-3.5" />
-              Publicar
+              {publicandoRedes ? (
+                <svg className="size-5 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+              ) : (
+                <Share2 className="size-5" />
+              )}
+              {publicandoRedes ? 'Publicando...' : `Publicar ${selecionadosPublicacao.size} item(ns)`}
             </button>
           </div>
         </div>
       )}
-
-
 
       {/* Social Media Publishing Status Indicator */}
       {publicandoRedes && (
@@ -785,6 +767,7 @@ function ImovelDetail({
   const [toastMessage, setToastMessage] = useState('')
   const [editMode, setEditMode] = useState(false)
   const [mostrarUpsell, setMostrarUpsell] = useState(false)
+  const [contextoAlbert, setContextoAlbert] = useState('')
   const [upsellSucesso, setUpsellSucesso] = useState(false)
   const [buscaLeadShare, setBuscaLeadShare] = useState('')
   const [mostrarNovoLead, setMostrarNovoLead] = useState(false)
@@ -1156,6 +1139,17 @@ function ImovelDetail({
                     <span className="text-xs font-black uppercase tracking-wider text-[#a9ffd2]">Reaquecer com Albert IA</span>
                   </div>
                   <p className="text-xs opacity-90 relative z-10 leading-snug">Dispare propostas e follow-ups inteligentes personalizados para todos os leads interessados de uma só vez.</p>
+                  
+                  <div className="relative z-10 w-full mt-1">
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-white/90">Contexto para o Albert</label>
+                    <textarea 
+                      value={contextoAlbert}
+                      onChange={(e) => setContextoAlbert(e.target.value)}
+                      placeholder="Ex: Diga que o proprietário baixou o valor e aceita permuta..."
+                      className="w-full h-20 resize-none rounded-xl border border-white/20 bg-black/20 p-2.5 text-xs text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/40"
+                    />
+                  </div>
+
                   <button
                     type="button"
                     onClick={() => {
@@ -1182,6 +1176,11 @@ function ImovelDetail({
                   </button>
                 </div>
 
+                <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-4">
+                  <h3 className="text-sm font-semibold text-foreground">
+                    {(leadsInteressados.length > 0 ? leadsInteressados : clientesCompativeis).length} lead(s) interessado(s)
+                  </h3>
+                </div>
                 <ul className="flex flex-col gap-3 mt-2">
                   {(leadsInteressados.length > 0 ? leadsInteressados : clientesCompativeis).map(lead => (
                     <li key={lead.id} className="flex flex-col gap-2 rounded-2xl border border-border p-4 bg-card shadow-soft">
