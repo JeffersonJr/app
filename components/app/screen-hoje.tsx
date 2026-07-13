@@ -165,6 +165,25 @@ export function ScreenHoje({
     }, 450)
   }
 
+  // Skip task to the end of the stack in Roleta Mode
+  function pularTarefaRoleta() {
+    if (roletaAtividades.length <= 1) return
+    const currentTask = roletaAtividades[indiceRoleta]
+    
+    setRoletaEfeitoFrup(true)
+    setTimeout(() => {
+      setRoletaEfeitoFrup(false)
+      setFeedbackAudioRoleta('')
+      
+      setRoletaAtividades(prev => {
+        const next = [...prev]
+        next.splice(indiceRoleta, 1)
+        next.push(currentTask)
+        return next
+      })
+    }, 450)
+  }
+
 
   const horaAtual = new Date().getHours()
   const saudacao = horaAtual < 12 ? 'Bom dia' : horaAtual < 18 ? 'Boa tarde' : 'Boa noite'
@@ -688,15 +707,24 @@ export function ScreenHoje({
                     )}
                   </div>
 
-                  {/* Conclude Action */}
-                  <button
-                    type="button"
-                    onClick={concluirTarefaRoleta}
-                    className="w-full h-12 rounded-2xl bg-[#2B5250] text-white text-xs font-bold transition-all active:scale-95 shadow-md flex items-center justify-center gap-2"
-                  >
-                    Concluir e Próxima
-                    <ChevronRight className="size-4" />
-                  </button>
+                  {/* Actions Row (Skip & Conclude) */}
+                  <div className="flex gap-2.5">
+                    <button
+                      type="button"
+                      onClick={pularTarefaRoleta}
+                      className="flex-1 h-12 rounded-2xl border border-border bg-card text-muted-foreground text-xs font-bold transition-all active:bg-muted"
+                    >
+                      Pular
+                    </button>
+                    <button
+                      type="button"
+                      onClick={concluirTarefaRoleta}
+                      className="flex-[2] h-12 rounded-2xl bg-[#2B5250] text-white text-xs font-bold transition-all active:scale-95 shadow-md flex items-center justify-center gap-2"
+                    >
+                      Concluir
+                      <ChevronRight className="size-4" />
+                    </button>
+                  </div>
                 </div>
               )
             )}
