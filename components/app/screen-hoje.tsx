@@ -25,6 +25,7 @@ import {
   Zap,
   MapPin,
   MapPinOff,
+  Wifi,
 } from 'lucide-react'
 import { atividadesHoje, funil, tempConfig, tipoAtividadeConfig, isAtividadeAtrasada } from '@/lib/app-data'
 import { AtividadeDetalheSheet } from '@/components/app/atividade-detalhe-sheet'
@@ -742,6 +743,16 @@ export function ScreenHoje({
                     className="w-full rounded-xl bg-primary h-12 text-sm font-bold text-primary-foreground transition-all active:scale-95"
                   >
                     Tentar Novamente
+                  </button>
+                  <button
+                    onClick={() => {
+                      // Mock function to "open" Wi-Fi settings
+                      alert('Abrindo configurações de Wi-Fi do dispositivo...')
+                    }}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-card border border-border h-12 text-sm font-bold text-foreground transition-all active:scale-95"
+                  >
+                    <Wifi className="size-4 text-muted-foreground" />
+                    Configurações de Wi-Fi
                   </button>
                   <button
                     onClick={() => {
