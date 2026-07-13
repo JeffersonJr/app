@@ -615,7 +615,7 @@ export function FormNovaAtividade({
       {albertAberto && (
         <div className="fixed inset-0 z-50 flex flex-col justify-end">
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setAlbertAberto(false)} />
-          <div className="relative z-50 w-full rounded-t-[2.5rem] bg-zinc-900 px-6 py-8 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-300 text-white flex flex-col items-center mx-auto max-w-md">
+          <div className="relative z-50 w-full rounded-t-[2.5rem] bg-zinc-900 px-6 py-8 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-300 text-white flex flex-col items-center mx-auto max-w-[600px]">
             <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-zinc-700" />
             
             <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/20 text-primary mb-4">

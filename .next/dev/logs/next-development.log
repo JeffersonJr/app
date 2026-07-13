@@ -1,14 +1,9 @@
-{"timestamp":"00:00:00.791","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:01.673","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:00:17.235","source":"Server","level":"LOG","message":"✓ Compiled in 1270ms"}
-{"timestamp":"00:00:46.723","source":"Server","level":"WARN","message":"⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from \"192.168.0.38\".\nCross-origin access to Next.js dev resources is blocked by default for safety.\n\nTo allow this host in development, add it to \"allowedDevOrigins\" in next.config.js and restart the dev server:\n\n// next.config.js\nmodule.exports = {\n  allowedDevOrigins: ['192.168.0.38'],\n}\n\nRead more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins"}
-{"timestamp":"00:02:03.265","source":"Server","level":"LOG","message":"✓ Compiled in 349ms"}
-{"timestamp":"00:03:18.946","source":"Server","level":"LOG","message":"✓ Compiled in 350ms"}
-{"timestamp":"00:03:40.298","source":"Server","level":"LOG","message":"✓ Compiled in 77ms"}
-{"timestamp":"00:06:04.171","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:06:37.965","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:09:51.963","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:17:37.460","source":"Server","level":"LOG","message":"✓ Compiled in 464ms"}
-{"timestamp":"00:17:58.532","source":"Server","level":"LOG","message":"✓ Compiled in 513ms"}
-{"timestamp":"00:18:16.557","source":"Server","level":"LOG","message":"✓ Compiled in 182ms"}
-{"timestamp":"00:18:25.485","source":"Server","level":"LOG","message":"✓ Compiled in 109ms"}
+{"timestamp":"00:00:01.254","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:01.286","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:03.758","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:03.839","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"00:00:15.592","source":"Server","level":"LOG","message":"✓ Compiled in 491ms"}
+{"timestamp":"00:00:24.690","source":"Server","level":"LOG","message":"✓ Compiled in 118ms"}
+{"timestamp":"00:00:34.818","source":"Server","level":"LOG","message":"✓ Compiled in 102ms"}
+{"timestamp":"00:00:44.505","source":"Server","level":"LOG","message":"✓ Compiled in 103ms"}
+{"timestamp":"00:00:55.090","source":"Server","level":"LOG","message":"✓ Compiled in 302ms"}

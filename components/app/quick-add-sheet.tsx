@@ -28,7 +28,7 @@ export function QuickAddSheet({ onClose, onAtividadeCriada, defaultAcao = null }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col justify-end mx-auto max-w-md">
+    <div className="fixed inset-0 z-50 flex flex-col justify-end">
       <button
         id="tour-target-quickadd-backdrop"
         type="button"

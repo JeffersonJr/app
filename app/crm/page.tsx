@@ -66,9 +66,9 @@ export default function Page() {
   }
 
   return (
-    <main className="flex min-h-dvh justify-center bg-background">
+    <main className="flex min-h-dvh bg-background w-full">
       {/* Container principal */}
-      <div className="relative flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background sm:border-x sm:border-border">
+      <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-background">
 
         {/* Header global com logo evolves e notificações */}
         <div className="glass-header flex items-center justify-between px-5 py-3">

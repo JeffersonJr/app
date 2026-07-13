@@ -124,7 +124,7 @@ export function GanhoPerdidoSheet({
         className="absolute inset-0 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200"
         onClick={!sucesso ? onClose : undefined}
       />
-      <div className="relative z-50 w-full rounded-t-[2.5rem] bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-300 mx-auto max-w-md">
+      <div className="relative z-50 w-full rounded-t-[2.5rem] bg-card p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl animate-in slide-in-from-bottom duration-300 mx-auto max-w-[600px]">
         <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-border" />
         
         {sucesso ? (
