@@ -291,28 +291,30 @@ export function ScreenHoje({
             Alterar
           </button>
           
-          {habilitadoRodizio ? (
-            <button
-              onClick={() => {
-                setHabilitadoRodizio(false)
-                setCheckinStatus('pendente')
-                setToastMsg('Você saiu do rodízio.')
-                setTimeout(() => setToastMsg(''), 3000)
-              }}
-              className="flex items-center gap-1.5 text-[10px] font-black text-white bg-green-500 px-3 py-1.5 rounded-xl hover:bg-red-500 transition-colors shadow-sm group"
-            >
-              <Target className="size-3 group-hover:hidden" strokeWidth={3} />
-              <X className="size-3 hidden group-hover:block" strokeWidth={3} />
-              <span className="group-hover:hidden">Rodízio ON <span className="font-medium opacity-80">(Sair)</span></span>
-              <span className="hidden group-hover:block">Fazer Check-out</span>
-            </button>
-          ) : (
-            <button
-              onClick={() => setMostrarCheckinModal(true)}
-              className="text-[10px] font-black text-white bg-primary px-3 py-1.5 rounded-xl hover:bg-primary/90 transition-all shadow-sm"
-            >
-              Check-in
-            </button>
+          {tenantAtivo.hasCheckin !== false && (
+            habilitadoRodizio ? (
+              <button
+                onClick={() => {
+                  setHabilitadoRodizio(false)
+                  setCheckinStatus('pendente')
+                  setToastMsg('Você saiu do rodízio.')
+                  setTimeout(() => setToastMsg(''), 3000)
+                }}
+                className="flex items-center gap-1.5 text-[10px] font-black text-white bg-green-500 px-3 py-1.5 rounded-xl hover:bg-red-500 transition-colors shadow-sm group"
+              >
+                <Target className="size-3 group-hover:hidden" strokeWidth={3} />
+                <X className="size-3 hidden group-hover:block" strokeWidth={3} />
+                <span className="group-hover:hidden">Rodízio ON <span className="font-medium opacity-80">(Sair)</span></span>
+                <span className="hidden group-hover:block">Fazer Check-out</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => setMostrarCheckinModal(true)}
+                className="text-[10px] font-black text-white bg-primary px-3 py-1.5 rounded-xl hover:bg-primary/90 transition-all shadow-sm"
+              >
+                Check-in
+              </button>
+            )
           )}
         </div>
       </div>

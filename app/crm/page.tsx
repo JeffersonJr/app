@@ -19,9 +19,9 @@ import { useEffect } from 'react'
 export default function Page() {
   const { isFirstLogin, startTour } = useOnboarding()
   const tenants = [
-    { id: 'evolves-prime', nome: 'Evolves Prime', creci: 'CRECI 4321-J', logo: '💼' },
-    { id: 'lopes-imob', nome: 'Lopes Imobiliária', creci: 'CRECI 9876-J', logo: '🏢' },
-    { id: 'remax-parceria', nome: 'Remax Parceria', creci: 'CRECI 7755-J', logo: '🏠' }
+    { id: 'evolves-prime', nome: 'Evolves Prime', creci: 'CRECI 4321-J', logo: '💼', hasCheckin: true },
+    { id: 'lopes-imob', nome: 'Lopes Imobiliária', creci: 'CRECI 9876-J', logo: '🏢', hasCheckin: true },
+    { id: 'remax-parceria', nome: 'Remax Parceria', creci: 'CRECI 7755-J', logo: '🏠', hasCheckin: false }
   ]
   const [tenantAtivo, setTenantAtivo] = useState(tenants[0])
   const [tab, setTab] = useState<TabId>('hoje')
