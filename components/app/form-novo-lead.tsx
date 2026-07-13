@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, PlusCircle } from 'lucide-react'
+import { X, PlusCircle, Mic, Loader2 } from 'lucide-react'
 import { maskPhone } from '@/lib/masks'
 import { atendimentos, perfilVazio } from '@/lib/app-data'
 
@@ -19,6 +19,25 @@ export function FormNovoLead({ onClose, onSalvar, defaultName }: { onClose: () =
   const [emails, setEmails] = useState<string[]>([''])
   const [origem, setOrigem] = useState<(typeof ORIGENS)[number]>('Portal: Zap Imóveis')
   const [temperatura, setTemperatura] = useState<(typeof TEMPERATURAS)[number]>('morno')
+
+  const [isListening, setIsListening] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const handleSimulateAudio = () => {
+    setIsListening(true)
+    setTimeout(() => {
+      setIsListening(false)
+      setIsProcessing(true)
+      setTimeout(() => {
+        setIsProcessing(false)
+        setNome('Carlos Mendes')
+        setTelefones([{ numero: '(11) 98765-4321', isWhatsapp: true }])
+        setEmails(['carlos.mendes@email.com'])
+        setOrigem('Whatsapp')
+        setTemperatura('quente')
+      }, 1500)
+    }, 2500)
+  }
 
   function handleSalvar() {
     if (!nome) return
@@ -67,11 +86,46 @@ export function FormNovoLead({ onClose, onSalvar, defaultName }: { onClose: () =
           type="button"
           onClick={onClose}
           aria-label="Fechar"
-          className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
+          className="flex size-8 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted-foreground/20 active:scale-95"
         >
           <X className="size-4" strokeWidth={1.5} />
         </button>
       </div>
+
+      {/* AI Audio Banner */}
+      <button
+        type="button"
+        onClick={handleSimulateAudio}
+        disabled={isListening || isProcessing}
+        className="mb-5 w-full relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border border-primary/20 p-4 text-left transition-all hover:border-primary/40 active:scale-[0.98] disabled:opacity-90"
+      >
+        <div className="flex items-center gap-4 relative z-10">
+          <div className={`flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 ${isListening ? 'animate-pulse scale-110 bg-red-500 shadow-red-500/30' : ''}`}>
+            {isProcessing ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : (
+              <Mic className="size-5" />
+            )}
+          </div>
+          <div>
+            <h3 className="font-semibold text-foreground text-sm">
+              {isListening ? 'Ouvindo...' : isProcessing ? 'Analisando áudio...' : 'Cadastrar por Voz (Albert)'}
+            </h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {isListening 
+                ? 'Fale o nome, telefone e detalhes...' 
+                : isProcessing
+                ? 'Extraindo dados com IA...'
+                : 'Fale com a IA e ela preenche tudo para você.'}
+            </p>
+          </div>
+        </div>
+        
+        {/* Animated listening wave background */}
+        {isListening && (
+          <div className="absolute inset-0 z-0 bg-[linear-gradient(90deg,transparent_0%,rgba(239,68,68,0.1)_50%,transparent_100%)] animate-pulse bg-[length:200%_100%]" />
+        )}
+      </button>
 
       <div className="flex flex-col gap-4">
         <div>
