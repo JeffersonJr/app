@@ -54,18 +54,18 @@ const statusStyle: Record<Imovel['status'], string> = {
   Proposta: 'bg-teal-shadow/90 text-white',
 }
 
-export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
+export function ScreenImoveis({ 
+  onCaptar, 
+  tenantAtivo, 
+  setTenantAtivo, 
+  tenants 
+}: { 
+  onCaptar?: () => void;
+  tenantAtivo: any;
+  setTenantAtivo: (t: any) => void;
+  tenants: any[];
+}) {
   const { startTour } = useOnboarding()
-  
-  // Tenant Switching States
-  const tenants = [
-    { id: 'evolves-prime', nome: 'Evolves Prime', creci: 'CRECI 4321-J', logo: '💼' },
-    { id: 'lopes-imob', nome: 'Lopes Imobiliária', creci: 'CRECI 9876-J', logo: '🏢' },
-    { id: 'remax-parceria', nome: 'Remax Parceria', creci: 'CRECI 7755-J', logo: '🏠' }
-  ]
-  const [tenantAtivo, setTenantAtivo] = useState(tenants[0])
-  const [mostrarTenantSelector, setMostrarTenantSelector] = useState(false)
-  const [alternandoTenant, setAlternandoTenant] = useState(false)
 
   // Social Media Multi-Selection States
   const [modoSelecao, setModoSelecao] = useState(false)
@@ -187,22 +187,17 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
           {toastMessage}
         </div>
       )}
-      {/* Multi-Tenant Switcher */}
+      {/* Multi-Tenant Static Badge */}
       <div className="flex items-center justify-between border-b border-border/40 pb-3 mb-1 animate-in fade-in duration-300">
-        <button
-          type="button"
-          onClick={() => setMostrarTenantSelector(true)}
-          className="flex items-center gap-2 hover:opacity-85 transition-all text-left"
-        >
+        <div className="flex items-center gap-2 text-left">
           <span className="text-2xl">{tenantAtivo.logo}</span>
           <div>
-            <h1 className="text-sm font-bold text-foreground flex items-center gap-1">
+            <h1 className="text-sm font-bold text-foreground">
               {tenantAtivo.nome}
-              <ChevronDown className="size-4 text-primary shrink-0" />
             </h1>
             <p className="text-[10px] text-muted-foreground font-mono">{tenantAtivo.creci}</p>
           </div>
-        </button>
+        </div>
 
         {/* Multi-Selection Mode Trigger */}
         {abaAtiva === 'imoveis' && (
@@ -222,14 +217,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
         )}
       </div>
 
-      {alternandoTenant && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="flex flex-col items-center gap-3">
-            <span className="text-4xl animate-bounce">{tenantAtivo.logo}</span>
-            <span className="text-sm font-semibold text-foreground">Alternando para {tenantAtivo.nome}...</span>
-          </div>
-        </div>
-      )}
+
 
       <header className="glass-header -mx-5 px-5 pb-4 pt-1">
         <div className="flex items-center justify-between">
@@ -713,53 +701,7 @@ export function ScreenImoveis({ onCaptar }: { onCaptar?: () => void }) {
         </div>
       )}
 
-      {/* Tenant Switcher Modal */}
-      {mostrarTenantSelector && (
-        <div className="fixed inset-0 z-50 flex flex-col justify-end">
-          <button
-            type="button"
-            onClick={() => setMostrarTenantSelector(false)}
-            className="absolute inset-0 bg-teal-shadow/55 backdrop-blur-[2px]"
-          />
-          <div className="relative rounded-t-3xl bg-card p-6 shadow-2xl animate-in slide-in-from-bottom duration-250 max-h-[80vh] overflow-y-auto z-10">
-            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-border" />
-            <h3 className="font-serif text-lg font-bold text-foreground mb-4">Alternar Imobiliária Parceira</h3>
-            <ul className="flex flex-col gap-2">
-              {tenants.map(t => (
-                <li key={t.id}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMostrarTenantSelector(false)
-                      setAlternandoTenant(true)
-                      setTimeout(() => {
-                        setTenantAtivo(t)
-                        setAlternandoTenant(false)
-                        setToastMessage(`Conectado à imobiliária ${t.nome}`)
-                        setTimeout(() => setToastMessage(''), 3000)
-                      }, 1200)
-                    }}
-                    className={`w-full flex items-center justify-between p-4 rounded-2xl border transition-all active:scale-[0.98] ${
-                      tenantAtivo.id === t.id ? 'border-primary bg-primary/5' : 'border-border bg-card'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl">{t.logo}</span>
-                      <div className="text-left">
-                        <p className="text-sm font-semibold text-foreground">{t.nome}</p>
-                        <p className="text-xs text-muted-foreground font-mono">{t.creci}</p>
-                      </div>
-                    </div>
-                    {tenantAtivo.id === t.id && (
-                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-bold text-primary">Ativa</span>
-                    )}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+
 
       {/* Social Media Publishing Status Indicator */}
       {publicandoRedes && (

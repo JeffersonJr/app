@@ -17,6 +17,12 @@ import { useEffect } from 'react'
 
 export default function Page() {
   const { isFirstLogin, startTour } = useOnboarding()
+  const tenants = [
+    { id: 'evolves-prime', nome: 'Evolves Prime', creci: 'CRECI 4321-J', logo: '💼' },
+    { id: 'lopes-imob', nome: 'Lopes Imobiliária', creci: 'CRECI 9876-J', logo: '🏢' },
+    { id: 'remax-parceria', nome: 'Remax Parceria', creci: 'CRECI 7755-J', logo: '🏠' }
+  ]
+  const [tenantAtivo, setTenantAtivo] = useState(tenants[0])
   const [tab, setTab] = useState<TabId>('hoje')
   const [quickAddAberto, setQuickAddAberto] = useState(false)
   const [quickAddAcao, setQuickAddAcao] = useState<any>(null)
@@ -118,6 +124,9 @@ export default function Page() {
                 setQuickAddAberto(true)
               }}
               onVerAtividades={() => setTab('atividades')}
+              tenantAtivo={tenantAtivo}
+              setTenantAtivo={setTenantAtivo}
+              tenants={tenants}
             />
           )}
           {tab === 'negocios' && (
@@ -128,7 +137,14 @@ export default function Page() {
             />
           )}
           {tab === 'atividades' && <ScreenAtividades />}
-          {tab === 'imoveis' && <ScreenImoveis onCaptar={() => { setQuickAddAcao('captar-imovel'); setQuickAddAberto(true); }} />}
+          {tab === 'imoveis' && (
+            <ScreenImoveis
+              onCaptar={() => { setQuickAddAcao('captar-imovel'); setQuickAddAberto(true); }}
+              tenantAtivo={tenantAtivo}
+              setTenantAtivo={setTenantAtivo}
+              tenants={tenants}
+            />
+          )}
           {tab === 'clientes' && (
             <ScreenClientes
               clienteAbertoId={clienteAbertoId}
